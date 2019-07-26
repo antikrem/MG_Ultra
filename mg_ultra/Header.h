@@ -1,2 +1,0 @@
-/*A type of container similar to a stack
-If an added item is already in the stack it gets pulled up*/
