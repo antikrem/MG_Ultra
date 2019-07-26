@@ -1,0 +1,72 @@
+/*Facilitates the scripting of components*/
+#ifndef __SCRIPTABLE_CLASS__
+#define __SCRIPTABLE_CLASS__
+
+#include "global_funcs.h"
+#include "script_master.h"
+
+
+//Allows the overwritting of registerToLua
+class ScriptableOverride {
+protected:
+	bool invalidBind = false;
+
+	virtual void registerToLua(kaguya::State& state) = 0;
+};
+
+/*ScriptableClass allows an inherited class to be used in lua
+Set derived class as template, overwrite register
+additionally, takes another template parameter B, which is a base
+*/
+template <class T>
+class ScriptableClass : public ScriptableOverride {
+private:
+	static bool scriptInitialised;
+protected:
+
+	void registerToLua(kaguya::State& state) override {
+		invalidBind = true;
+	}
+	
+	//Registers the class and allows for scripting
+	//requires registerToLua(kaguya::State& state) is overwritten
+	//Can be called as much as wanted, with little overhead
+	void makeScriptable() {
+		if (scriptInitialised) {
+			return;
+		}
+
+		//get reference to kaguya
+		kaguya::State& kaguya = getKaguya();
+		
+		registerToLua(kaguya);
+
+		//check if bind was done
+		if (invalidBind) {
+			string a("A class was bound for scripting but registration was not overwritten, the class is: ");
+			string b(typeid(T).name());
+			err::logMessage(a + b);
+		}
+
+		scriptInitialised = true;
+	}
+};
+template <class T> bool ScriptableClass<T>::scriptInitialised(false);
+
+/*Forces a class to become scripted
+The class must have inherited Scriptable class and over written registerToLua
+The class must also have a default constructor*/
+template <class T>
+void forceLuaRegistration() {
+	if (is_base_of<ScriptableClass, T>) {
+		T temporary;
+		temporary.makeScriptable();
+	}
+	else {
+		string a("A class was forced to bind when it has not inherited ScriptableClass, the class is: ");
+		string b(typeid(T).name());
+		err::logMessage(a + b);
+	}
+}
+
+#endif

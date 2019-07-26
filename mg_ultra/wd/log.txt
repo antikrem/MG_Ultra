@@ -1,0 +1,13 @@
+LOG FILE FOR mgULTRA-INDEV INSTANCE RAN ON: Sat Jul 27 04:01:31 2019
+
+GRAPHICS: Initialising graphics subsystems...
+GRAPHICS: Compilling shader program: base...
+GRAPHICS: Shader compilation done
+GRAPHICS: Shader program base loaded
+GRAPHICS: Subsystem initialised... Entering render loop
+<<quit()
+>>Exiting from console... 
+Ending Log...
+SAFELY EXITED AT: Sat Jul 27 04:01:57 2019
+
+Cycles waited:28992
