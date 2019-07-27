@@ -19,6 +19,10 @@ private:
 	atomic<bool> visible;
 
 public:
+	ComponentGraphics() {
+		visible.store(false);
+	}
+
 	ComponentGraphics(string animationSet) {
 		visible.store(true);
 		setAniamtionSet(animationSet, true);
