@@ -140,7 +140,7 @@ string str_kit::getContentsOfFile(string location) {
 }
 
 //takes a string and a bool ptr, returns int, and sets ptr to true/false, valid with null ptr
-int stringToInt(string& str, bool* valid) {
+int str_kit::stringToInt(string& str, bool* valid) {
 	int value = 0;
 	try {
 		value = stoi(str, nullptr, 10);
@@ -158,7 +158,7 @@ int stringToInt(string& str, bool* valid) {
 }
 
 //takes a string and a bool ptr, returns float, and sets ptr to true/false, valid with null ptr
-float stringToFloat(string& str, bool* valid) {
+float str_kit::stringToFloat(string& str, bool* valid) {
 	float value = 0;
 	try {
 		value = stof(str, nullptr);
