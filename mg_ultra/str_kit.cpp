@@ -139,6 +139,41 @@ string str_kit::getContentsOfFile(string location) {
 	return str;
 }
 
+//takes a string and a bool ptr, returns int, and sets ptr to true/false, valid with null ptr
+int stringToInt(string& str, bool* valid) {
+	int value = 0;
+	try {
+		value = stoi(str, nullptr, 10);
+		if (valid) {
+			*valid = true;
+		}
+		return value;
+	} 
+	catch(invalid_argument) {
+		if (valid) {
+			*valid = false;
+		}
+	}
+	return 0;
+}
+
+//takes a string and a bool ptr, returns float, and sets ptr to true/false, valid with null ptr
+float stringToFloat(string& str, bool* valid) {
+	float value = 0;
+	try {
+		value = stof(str, nullptr);
+		if (valid) {
+			*valid = true;
+		}
+		return value;
+	}
+	catch (invalid_argument) {
+		if (valid) {
+			*valid = false;
+		}
+	}
+	return 0;
+}
 
 string str_kit::createBranchFromVector(vector<string> list) {
 	string message = "";

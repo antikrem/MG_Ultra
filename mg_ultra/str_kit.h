@@ -38,6 +38,12 @@ namespace str_kit {
 	//Takes a file position and returns a string of all the content, errors will flip getErrorCode()
 	string getContentsOfFile(string location);
 
+	//takes a string and a bool ptr, returns int, and sets ptr to true/false and returns 0 on failure, valid with null ptr
+	int stringToInt(string& str, bool* valid);
+
+	//takes a string and a bool ptr, returns float, and sets ptr to true/false and returns 0.0 on failure, valid with null ptr
+	float stringToFloat(string& str, bool* valid);
+
 	//Takes a vector of strings and creates a tree
 	string createBranchFromVector(vector<string> list);
 
