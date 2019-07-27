@@ -61,7 +61,8 @@ class ECSMaster {
 	master3: main gameloop
 		-system_script
 
-
+	master4: loading
+		-system_loader
 	
 	*/
 	void createBasicSystems() {
@@ -91,6 +92,9 @@ class ECSMaster {
 		scriptSystem->setScriptMaster(scriptMaster);
 
 		//ring 4
+		master = newSystemsMaster();
+		master->setTimer(300);
+		master->createSystem<SystemLoader>(registar);
 	}
 
 public:
@@ -113,7 +117,7 @@ public:
 		registar->addToBase("state", string("none"));
 		registar->addToBase("campaign", string("none"));
 		registar->addToBase("level", 0);
-		registar->addToBase("next_state", string("title"));
+		registar->addToBase("next_state", string("none"));
 		registar->addToBase("next_campaign", string("none"));
 		registar->addToBase("next_level", 0);
 
@@ -162,18 +166,75 @@ public:
 		delete scriptMaster;
 	}
 
+	
+private:
+
+	void handleLoadRequest(vector<string>& data) {
+		
+		//single flag is for switching to simple states like title
+		if (data.size() == 1) {
+			if (data[0] == "title") {
+				registar->update("next_state", data[0]);
+			}
+			else {
+				err::logMessage("EVENT: error loading next state, invalid single state " + data[0]);
+				return;
+			}
+
+		}
+		//3 flag is for switching a a level, 1 is campaign name, 2 is level number
+		else if (data.size() == 3) {
+			if not(data[0] == "level") {
+				err::logMessage("EVENT: error loading next state, invalid triple state " + data[0] + ", only valid state is \"level\" ");
+				return;
+			}
+			
+			string campaign = data[1];
+			//set second section
+			bool valid;
+			int level = str_kit::stringToInt(data[2], &valid);
+			
+			if not(valid) {
+				err::logMessage("EVENT: level value is invalid, provided value is: " + data[2]);
+				return;
+			}
+
+			//values valid, set next_states
+			registar->update("next_state", data[0]);
+			registar->update("next_campaign", campaign);
+			registar->update("next_level", level);
+
+		}
+		else {
+			err::logMessage("EVENT: error loading next state, invalid number of state parameters: " + str_kit::reconstituteVectorIntoString(data, " "));
+			return;
+		}
+		registar->update("load_request", true);
+	}
+
 	void handleEvents() {
 		Event event(EV_noEvent);
 		while (g_events::pollEvents( &event )) {
+
 			switch (event.type) {
+
 			case EV_noEvent:
-				return;
+				break;
+
 			case EV_quit:
 				executing = false;
 				break;
+
+			case EV_loadNextState:
+				//set next load request flags
+				handleLoadRequest(event.data);
+				break;
 			}
+
 		}
 	}
+
+public:
 
 	void gameloop() {
 		while (executing) {
