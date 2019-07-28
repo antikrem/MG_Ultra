@@ -32,7 +32,7 @@ vector<string> str_kit::splitOnToken(string line, char token) {
 	return returnVec;
 }
 
-bool str_kit::isADigit(string line) {
+bool str_kit::isADigit(const string& line) {
 	for (auto character : line) {
 		if ((int)character < 48 || (int)character > 57)
 			return false;
@@ -40,7 +40,7 @@ bool str_kit::isADigit(string line) {
 	return true;
 }
 
-bool str_kit::stringCompareAtLocation(string base, int location, string token) {
+bool str_kit::stringCompareAtLocation(const string& base, int location, const string& token) {
 	//check basic conditions, token.size() + location <= base.size()
 	if (location + token.size() > base.size()) {
 		return false;
@@ -72,17 +72,15 @@ string str_kit::convertToScoreString(float value, bool whole) {
 	return score + "%";
 }
 
-string str_kit::replaceToken(string str, string token, string replacement) {
-	string rstr = str;
-
-	size_t location = rstr.find(token);
+string str_kit::replaceToken(string str, const string& token, const string& replacement) {
+	size_t location = str.find(token);
 
 	while (location != string::npos) {
-		rstr.replace(location, token.size(), replacement);
-		location = rstr.find(token, location + token.size());
+		str.replace(location, token.size(), replacement);
+		location = str.find(token, location + token.size());
 	}
 
-	return rstr;
+	return str;
 }
 
 string str_kit::reconstituteVectorIntoString(vector<string> input, string filler, int ignorePreceding) {
@@ -107,7 +105,7 @@ string str_kit::reconstituteVectorIntoString(vector<string> input, string filler
 	return str;
 }
 
-string str_kit::intVectorToString(vector<int> input, string filler) {
+string str_kit::intVectorToString(vector<int> input, const string& filler) {
 	string str;
 	bool flip = false;
 	for (auto i : input) {
@@ -122,7 +120,7 @@ string str_kit::intVectorToString(vector<int> input, string filler) {
 	return str;
 }
 
-string str_kit::getContentsOfFile(string location) {
+string str_kit::getContentsOfFile(const string& location) {
 	string str;
 	ifstream file(location, std::ios::in);
 	if (file.is_open()) {
