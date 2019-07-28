@@ -128,6 +128,7 @@
     <ClCompile Include="global_funcs.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="os_kit.cpp" />
     <ClCompile Include="pool.cpp" />
     <ClCompile Include="registar.cpp" />
     <ClCompile Include="script_master.cpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="component_health.h" />
     <ClInclude Include="component_position.h" />
     <ClInclude Include="input.h" />
+    <ClInclude Include="os_kit.h" />
     <ClInclude Include="reader.h" />
     <ClInclude Include="registar.h" />
     <ClInclude Include="scriptable_class.h" />
@@ -185,8 +187,8 @@
     <ClInclude Include="vec_kit.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="scripts\library.lua" />
-    <None Include="scripts\library_ex.lua" />
+    <None Include="wd\scripts\library.lua" />
+    <None Include="wd\scripts\library_ex.lua" />
     <None Include="wd\shaders\base.frag" />
     <None Include="wd\shaders\base.vert" />
   </ItemGroup>

@@ -18,4 +18,7 @@
 #include "system_game_state_control.h"
 #include "system_script.h"
 
+//ring 4 - loading
+#include "system_loader.h"
+
 #endif

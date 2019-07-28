@@ -12,7 +12,7 @@ iterating cycle and counter at game loop speed
 class SystemGameStateControl : public System {
 public:
 	SystemGameStateControl() {
-		debugName = "s_gamestate";
+		debugName = "s_gamestate_control";
 		//empty system
 		cacheOnly = true;
 		cachedTarget = 0;
@@ -23,12 +23,18 @@ public:
 		//system game state controller is forced to set cycle and cycle_progress to false
 		//then quick exit
 		bool load_request = false;
+		bool loading = false;
 		registar->get("load_request", &load_request);
+		registar->get("loading", &loading);
+
 		if (load_request) {
 			registar->update("cycle", -1);
 			registar->update("cycle_progress", false);
 			registar->update("load_request", false);
 			registar->update("loading", true);
+			return;
+		}
+		else if (loading) {
 			return;
 		}
 

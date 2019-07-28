@@ -71,6 +71,7 @@ end
 EventNone = 0
 EventQuit = 1
 EventStateChange = 2
+EventCallback = 3
 
 --Emits an event to the event que, 
 function emit_event(eventType, ...) 

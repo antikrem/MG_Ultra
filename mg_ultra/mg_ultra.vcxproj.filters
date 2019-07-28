@@ -78,6 +78,9 @@
     <ClCompile Include="events.cpp">
       <Filter>Source Files\ECS</Filter>
     </ClCompile>
+    <ClCompile Include="os_kit.cpp">
+      <Filter>Source Files\Support</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="graphics_state.h">
@@ -224,19 +227,22 @@
     <ClInclude Include="events.h">
       <Filter>Header Files\ECS</Filter>
     </ClInclude>
+    <ClInclude Include="os_kit.h">
+      <Filter>Header Files\Support</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="scripts\library.lua">
-      <Filter>Resource Files\scripts</Filter>
-    </None>
-    <None Include="scripts\library_ex.lua">
-      <Filter>Resource Files\scripts</Filter>
-    </None>
     <None Include="wd\shaders\base.vert">
       <Filter>Resource Files\shaders</Filter>
     </None>
     <None Include="wd\shaders\base.frag">
       <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="wd\scripts\library_ex.lua">
+      <Filter>Resource Files\scripts</Filter>
+    </None>
+    <None Include="wd\scripts\library.lua">
+      <Filter>Resource Files\scripts</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
