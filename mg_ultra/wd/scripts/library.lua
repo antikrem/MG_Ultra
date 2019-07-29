@@ -67,6 +67,16 @@ function typeof(a)
 	print(t)
 end
 
+--checks element is in the provided list of elements
+function check_element_in_set(element, ...)
+	for i = 1,#{...} do
+		if (element == select(i, ...)) then
+			return true;
+		end
+	end
+	return false;
+end
+
 --definitions for events
 EventNone = 0
 EventQuit = 1
@@ -74,7 +84,13 @@ EventStateChange = 2
 EventCallback = 3
 
 --Emits an event to the event que, 
-function emit_event(eventType, ...) 
+function emit_event(eventType, ...)
+	--check event is valid
+	if not check_element_in_set(eventType, EventNone, EventQuit, EventStateChange, EventCallback) then
+		print("EVENT: error, invalid event type submitted with emit_event")
+		return
+	end
+
 	setEvent(eventType)
 	--otherwise general print
 	for i = 1,#{...} do
