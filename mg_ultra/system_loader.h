@@ -31,9 +31,30 @@ ent [string] - ent table look up
 #include "registar.h"
 #include "os_kit.h"
 
+enum SL_LT_Target {
+	SL_LT_cycle,
+	SL_LT_counter,
+	SL_LT_callback,
+	SL_LT_immediate,
+};
+
 class SystemLoader : public System {
 	map<int, Entity*> cycleEnt;
 
+	//transfers ents from 
+	void transferBufferedEntsToGame(EntityPool* pool) {
+		//get cycle
+		int cycle;
+		registar->get("cycle", &cycle);
+		
+		//get ents equal to cycle
+		for (auto it = cycleEnt.begin(); it != cycleEnt.end() && it->first < cycle; it = cycleEnt.begin()) {
+			pool->addEnt(it->second);
+			cycleEnt.erase(it);
+		}
+	}
+
+	//clears all ents in future queue
 	void deleteAllFutureEnts() {
 		for (auto i : cycleEnt) {
 			delete i.second;
@@ -48,7 +69,10 @@ class SystemLoader : public System {
 
 		if (state == "title") {
 			//check load sequence is valid
-
+			if not(os_kit::fileExists("sequences\\title\\load_table.txt")) {
+				err::logMessage("LOAD: error, failed to load title sequence as the load_table is not found at: sequences\\title\\load_table.txt");
+				return "";
+			}
 			return "sequences\\title\\load_table.txt";
 		}
 		else if (state == "level") {
@@ -60,6 +84,7 @@ class SystemLoader : public System {
 			string path = "campaigns\\" + campaign + "\\" + to_string(level) + "\\load_table.txt";
 
 			if not(os_kit::fileExists(path)) {
+				err::logMessage("LOAD: error, failed to load requested parameters for last load state event, expected " + path);
 				return "";
 			}
 			else {
@@ -67,10 +92,12 @@ class SystemLoader : public System {
 			}
 		}
 
+		err::logMessage("LOAD: error, failed to load, requested state parameter invalid: " + state);
 		return "";
 	}
 
 	bool parseLoadTable(string filepath) {
+
 
 	}
 
@@ -80,9 +107,21 @@ public:
 		//empty system
 		cacheOnly = true;
 		cachedTarget = 0;
+
+
+		auto newEnt = new Entity(0);
+		auto newComponent = new ComponentPosition(0, 0, -3);
+		newEnt->addComponent(newComponent->pullForEntity());
+		auto newComponent1 = new ComponentGraphics("default");
+		newEnt->addComponent(newComponent1->pullForEntity());
+		auto newComponent2 = new ComponentAnimation();
+		newEnt->addComponent(newComponent2->pullForEntity());
+		cycleEnt[3000] = newEnt;
 	}
 
 	void precycle(EntityPool* pool) override {
+		//push current cycle of ents
+		transferBufferedEntsToGame(pool);
 
 
 
@@ -102,11 +141,8 @@ public:
 		string path = generateLoadTable();
 		//empty path is an error
 		if (path == "") {
-			err::logMessage("LOAD: error, failed to load requested parameters for last load state event");
 			return;
 		}
-
-
 
 		registar->update("loading", false);
 
