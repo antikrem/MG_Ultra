@@ -173,6 +173,21 @@ float str_kit::stringToFloat(string& str, bool* valid) {
 	return 0;
 }
 
+bool str_kit::isTrivialString(string str) {
+	if not(str.size()) {
+		return true;
+	}
+	//check if its a commented line
+	else if (str.size() >= 2 && str[0] == '/' && str[1] == '/') {
+		return true;
+	}
+	//check for lines with non-important characters only
+	if (str.find_first_not_of(" \t\n\v\f\r") == std::string::npos) {
+		return true;
+	}
+	return false;
+}
+
 string str_kit::createBranchFromVector(vector<string> list) {
 	string message = "";
 	if not(list.size())

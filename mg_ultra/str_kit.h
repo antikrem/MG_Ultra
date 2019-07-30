@@ -44,8 +44,13 @@ namespace str_kit {
 	//takes a string and a bool ptr, returns float, and sets ptr to true/false and returns 0.0 on failure, valid with null ptr
 	float stringToFloat(string& str, bool* valid);
 
+	//Computes if a string is trivial, which includes empty string, stings beginning with "//" and strings with only space
+	bool isTrivialString(string str);
+
 	//Takes a vector of strings and creates a tree
 	string createBranchFromVector(vector<string> list);
+
+
 
 }
 
