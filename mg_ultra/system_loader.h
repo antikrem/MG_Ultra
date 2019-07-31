@@ -98,7 +98,17 @@ class SystemLoader : public System {
 
 	bool parseLoadTable(string filepath) {
 
+		string line;
+		ifstream table(filepath);
+		while (getline(table, line)) {
+			if (str_kit::isTrivialString(line)) {
+				continue;
+			}
 
+			
+
+
+		}
 	}
 
 public:
