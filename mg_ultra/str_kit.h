@@ -19,6 +19,12 @@ namespace str_kit {
 	/*checks if the string is a digit*/
 	bool isADigit(const string& line);
 
+	/*check if the string can be parsed to a signed int*/
+	bool isInt(const string& str);
+
+	/*check if the string can be parsed to a float*/
+	bool isFloat(const string& str);
+
 	/*Checks if a section of a string is equal to another string, safe to go over
 	e.g. "str_kit" with "_k" will be valid at location 3*/
 	bool stringCompareAtLocation(const string& base, int location, const string& token);

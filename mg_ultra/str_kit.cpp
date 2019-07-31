@@ -41,6 +41,26 @@ bool str_kit::isADigit(const string& line) {
 	return true;
 }
 
+bool str_kit::isInt(const string& str) {
+	try {
+		stoi(str);
+	}
+	catch (invalid_argument e) {
+		return false;
+	}
+	return true;
+}
+
+bool str_kit::isFloat(const string& str) {
+	try {
+		stof(str);
+	}
+	catch (invalid_argument e) {
+		return false;
+	}
+	return true;
+}
+
 bool str_kit::stringCompareAtLocation(const string& base, int location, const string& token) {
 	//check basic conditions, token.size() + location <= base.size()
 	if (location + token.size() > base.size()) {
