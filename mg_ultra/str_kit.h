@@ -45,7 +45,22 @@ namespace str_kit {
 	float stringToFloat(string& str, bool* valid);
 
 	//Computes if a string is trivial, which includes empty string, stings beginning with "//" and strings with only space
-	bool isTrivialString(string str);
+	bool isTrivialString(string& str);
+
+	//Safely checks if the start of the string is equal to a token
+	//slightly more effective that stringCompareAtLocation, easier to use anyway
+	bool compareStart(string a, string b);
+
+	enum LexicalAnalysisResult {
+		LAR_valid,
+		LAR_idFail,
+		LAR_lexLengthFail,
+		LAR_lexTypeFail
+	};
+
+	//Lexical analysis, checks string for keyword, then attempts to fit the remaining 
+	//parameters with lex str, i: interger, f: float, s: string
+	LexicalAnalysisResult lexicalAnalysis(string line, string id, string lex);
 
 	//Takes a vector of strings and creates a tree
 	string createBranchFromVector(vector<string> list);

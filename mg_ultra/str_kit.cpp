@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <algorithm>
 
 int lastOperation = EXIT_SUCCESS;
 
@@ -173,7 +174,7 @@ float str_kit::stringToFloat(string& str, bool* valid) {
 	return 0;
 }
 
-bool str_kit::isTrivialString(string str) {
+bool str_kit::isTrivialString(string& str) {
 	if not(str.size()) {
 		return true;
 	}
@@ -186,6 +187,30 @@ bool str_kit::isTrivialString(string str) {
 		return true;
 	}
 	return false;
+}
+
+bool str_kit::compareStart(string a, string b) {
+	size_t size = min(a.size(), b.size());
+	for (size_t i = 0; i < size; i++) {
+		if (a[i] != b[i]) {
+			return false;
+		}
+	}
+	return true;
+}
+
+str_kit::LexicalAnalysisResult str_kit::lexicalAnalysis(string line, string id, string lex) {
+	if (!compareStart(line, id)) {
+		return LAR_idFail;
+	}
+	vector<string> vec = splitOnToken(line, ' ');
+	
+	//
+	if (vec.size() != lex.size()+1) {
+		return LAR_lexLengthFail;
+	}
+
+
 }
 
 string str_kit::createBranchFromVector(vector<string> list) {
