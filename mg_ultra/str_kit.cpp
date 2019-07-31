@@ -138,6 +138,34 @@ string str_kit::getContentsOfFile(const string& location) {
 	return str;
 }
 
+string str_kit::trimString(string str) {
+	//trim start
+	while (str.size() && (
+		str[0] == ' ' ||
+		str[0] == '\t' ||
+		str[0] == '\n' ||
+		str[0] == '\v' ||
+		str[0] == '\f' ||
+		str[0] == '\r'
+		)
+		) {
+		str.erase(0, 1);
+	}
+	//trim end
+	while (str.size() && (
+		str.back() == ' ' ||
+		str.back() == '\t' ||
+		str.back() == '\n' ||
+		str.back() == '\v' ||
+		str.back() == '\f' ||
+		str.back() == '\r'
+		)
+		) {
+		str.pop_back();
+	}
+	return str;
+}
+
 //takes a string and a bool ptr, returns int, and sets ptr to true/false, valid with null ptr
 int str_kit::stringToInt(string& str, bool* valid) {
 	int value = 0;
@@ -205,12 +233,14 @@ str_kit::LexicalAnalysisResult str_kit::lexicalAnalysis(string line, string id, 
 	}
 	vector<string> vec = splitOnToken(line, ' ');
 	
-	//
+	//check if the number of parameters is correct
 	if (vec.size() != lex.size()+1) {
 		return LAR_lexLengthFail;
 	}
 
 
+
+	return LAR_idFail;
 }
 
 string str_kit::createBranchFromVector(vector<string> list) {

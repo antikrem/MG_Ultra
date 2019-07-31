@@ -38,6 +38,9 @@ namespace str_kit {
 	//Takes a file position and returns a string of all the content, errors will flip getErrorCode()
 	string getContentsOfFile(const string& location);
 
+	//removes all trivial whitespacing from start to end of line
+	string trimString(string str);
+
 	//takes a string and a bool ptr, returns int, and sets ptr to true/false and returns 0 on failure, valid with null ptr
 	int stringToInt(string& str, bool* valid);
 
