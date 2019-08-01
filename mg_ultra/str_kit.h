@@ -61,15 +61,21 @@ namespace str_kit {
 	bool compareStart(string a, string b);
 
 	enum LexicalAnalysisResult {
-		LAR_valid,
 		LAR_idFail,
+		LAR_valid,
 		LAR_lexLengthFail,
-		LAR_lexTypeFail
+		LAR_lexTypeFail,
+		LAR_invalidIDString
 	};
 
 	//Lexical analysis, checks string for keyword, then attempts to fit the remaining 
 	//parameters with lex str, i: interger, f: float, s: string
 	LexicalAnalysisResult lexicalAnalysis(string line, string id, string lex);
+	
+	//converts string to int, no error checking
+	//optionally, set param to a non-negative int to choose a value from a space split vec
+	int qStringToInt(string line, int param = -1);
+
 
 	//Takes a vector of strings and creates a tree
 	string createBranchFromVector(vector<string> list);

@@ -258,9 +258,40 @@ str_kit::LexicalAnalysisResult str_kit::lexicalAnalysis(string line, string id, 
 		return LAR_lexLengthFail;
 	}
 
+	//check if lex is fine
+	for (unsigned int i = 1; i < vec.size(); i++) {
+		char idChar = lex[i - 1];
+		if (idChar == 'i') {
+			if (!isInt(vec[i])) {
+				return LAR_lexTypeFail;
+			}
+		} 
+		else if (idChar == 'f') {
+			if (!isFloat(vec[i])) {
+				return LAR_lexTypeFail;
+			}
+		}
+		else if (idChar == 's') {
+			pass;
+		}
+		else {
+			return LAR_invalidIDString;
+		}
+	}
 
+	return LAR_valid;
+}
 
-	return LAR_idFail;
+int str_kit::qStringToInt(string line, int param) {
+	string str;
+	if (param < 0) {
+		str = line;
+	}
+	else {
+		vector<string> vec = splitOnToken(line, ' ');
+		str = vec[param];
+	}
+	return stoi(str);;
 }
 
 string str_kit::createBranchFromVector(vector<string> list) {
