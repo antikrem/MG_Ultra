@@ -50,15 +50,13 @@ end
 --second parameter is campaign name, valid on title state
 --third parameter is level number, valid on title state
 function load_state(...)
-	state = select(1, ...)
-	campaign = select(2, ...)
-	level = select(3, ...)
-	
-	register:update("next_state", state)
-	if campaign then
-		register:update("next_campaign", campaign)
-	end
-	if level then
-		register:update("next_level", level)
-	end
+	emit_event(EventStateChange, ...)
+end
+
+--Test
+function test() 
+	load_state("level", "ascent", 1)
+
+
+
 end
