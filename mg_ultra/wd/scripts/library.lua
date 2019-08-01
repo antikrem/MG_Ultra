@@ -92,7 +92,7 @@ function emit_event(eventType, ...)
 	end
 
 	setEvent(eventType)
-	--otherwise general print
+	--set values
 	for i = 1,#{...} do
 		addEventData( select(i, ...) )
 	end
