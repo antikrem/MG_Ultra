@@ -50,13 +50,11 @@ end
 --second parameter is campaign name, valid on title state
 --third parameter is level number, valid on title state
 function load_state(...)
+	--Handling erreoneos event parameters will be handled by the engine's event handler
 	emit_event(EventStateChange, ...)
 end
 
 --Test
 function test() 
 	load_state("level", "ascent", 1)
-
-
-
 end
