@@ -294,6 +294,18 @@ int str_kit::qStringToInt(string line, int param) {
 	return stoi(str);;
 }
 
+float str_kit::qStringToFloat(string line, int param) {
+	string str;
+	if (param < 0) {
+		str = line;
+	}
+	else {
+		vector<string> vec = splitOnToken(line, ' ');
+		str = vec[param];
+	}
+	return stof(str);;
+}
+
 string str_kit::createBranchFromVector(vector<string> list) {
 	string message = "";
 	if not(list.size())

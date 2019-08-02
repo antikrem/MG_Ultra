@@ -76,6 +76,9 @@ namespace str_kit {
 	//optionally, set param to a non-negative int to choose a value from a space split vec
 	int qStringToInt(string line, int param = -1);
 
+	//converts string to int, no error checking
+	//optionally, set param to a non-negative int to choose a value from a space split vec
+	float qStringToFloat(string line, int param = -1);
 
 	//Takes a vector of strings and creates a tree
 	string createBranchFromVector(vector<string> list);
