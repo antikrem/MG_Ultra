@@ -24,7 +24,7 @@ class ComponentAnimation : public Component {
 	//level 2: one time single animation that will play to end
 	unsigned int animationMap[3] = { 1, 0, 0 };
 
-	//if truem the switch animation is reset
+	//if true the switch animation is reset, used to change switch animation when a different switch is set
 	atomic<bool> switchReset = false;
 
 public:
