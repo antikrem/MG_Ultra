@@ -83,7 +83,7 @@ public:
 
 	void cacheFail(EntityPool* pool) override {
 		//create a console entity
-		auto newEnt = new Entity(1);
+		auto newEnt = new Entity(ETConsole);
 		auto newComponent = new ComponentPosition(-800, 800, 2);
 		newEnt->addComponent(newComponent->pullForEntity());
 		auto newComponent1 = new ComponentConsole();
