@@ -42,6 +42,11 @@ class ScriptMaster {
 	void executeScriptUnit(ScriptUnit scriptUnit) {
 		ScriptSources source = scriptUnit.getSource();
 
+		//create entity environment
+		if (scriptUnit.numberOfAttachedEnts()) {
+			kaguya["this"] = scriptUnit.getAttachedInt(0);
+		}
+
 		if (source == SS_commandLine) {
 			kaguya.dostring(scriptUnit.getScript());
 			vector<string> buffer = pullScriptErrors();
@@ -54,6 +59,11 @@ class ScriptMaster {
 		}
 		else if (source == SS_file) {
 			quickLoadAndExecute(scriptUnit.getScript());
+		}
+
+		//clear old environment
+		if (scriptUnit.numberOfAttachedEnts()) {
+			kaguya["this"] = nullptr;
 		}
 	}
 
