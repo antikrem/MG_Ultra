@@ -81,6 +81,20 @@ public:
 		return true;
 	}
 
+	//alternative method to addEnt to add a shared ptr
+	bool addEnt(shared_ptr<Entity> ent, bool cacheEnt = false) {
+		unique_lock<shared_mutex> lck(lock);
+		largestID++;
+		list[largestID] = ent;
+		if (cacheEnt) {
+			if (cache.count(ent->getType())) {
+				return false;
+			}
+			cache[ent->getType()] = list[largestID];
+		}
+		return true;
+	}
+
 	//On failure, returns null, may fail with a valid id, as that id could have be deleted
 	shared_ptr<Entity> getEnt(int id) {
 		shared_lock<shared_mutex> lck(lock);
