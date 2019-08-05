@@ -41,6 +41,21 @@ public:
 		return scriptSource;
 	}
 
+	//attach an ent
+	void attachEntity(shared_ptr<Entity> ptr) {
+		attachedEnts.push_back(ptr);
+	}
+
+	//get size of attached ents
+	int numberOfAttachedEnts() {
+		return attachedEnts.size();
+	}
+
+	//returns a copy of the shared pointer pointed by index
+	shared_ptr<Entity>& getAttachedInt(int i) {
+		return attachedEnts[i];
+	}
+
 };
 
 
