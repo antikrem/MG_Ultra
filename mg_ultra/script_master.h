@@ -41,10 +41,12 @@ class ScriptMaster {
 
 	void executeScriptUnit(ScriptUnit scriptUnit) {
 		ScriptSources source = scriptUnit.getSource();
-
+		//explicit vector of shared pointers
+		vector<shared_ptr<Entity>> copies;
 		//create entity environment
 		if (scriptUnit.numberOfAttachedEnts()) {
-			kaguya["this"] = scriptUnit.getAttachedInt(0);
+			copies.push_back(scriptUnit.getAttachedInt(0));
+			kaguya["this"] = copies[0].get();
 		}
 
 		if (source == SS_commandLine) {
