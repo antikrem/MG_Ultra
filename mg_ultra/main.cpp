@@ -24,7 +24,6 @@ void glfwErrorCallback(int error, const char* description) {
 }
 
 int main() {
-
 	//start error logger
 	err::primeErrorFile();
 

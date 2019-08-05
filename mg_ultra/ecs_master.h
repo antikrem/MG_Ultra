@@ -128,6 +128,7 @@ public:
 		
 		//TESTING
 		//add some entities 
+		/*
 		{
 			auto newEnt = new Entity(0);
 			auto newComponent = new ComponentPosition(0, 0, -3);
@@ -138,7 +139,7 @@ public:
 			newEnt->addComponent(newComponent2->pullForEntity());
 			entityPool->addEnt(newEnt, true);
 		}
-		
+		*/
 		/*
 		//add text ent
 		auto newEnt = new Entity(0);
@@ -185,7 +186,7 @@ private:
 		//3 flag is for switching a a level, 1 is campaign name, 2 is level number
 		else if (data.size() == 3) {
 			if not(data[0] == "level") {
-				err::logMessage("EVENT: error loading next state, invalid triple state " + data[0] + ", only valid state is \"level\" ");
+				err::logMessage("EVENT: error loading next state, invalid triple state " + data[0] + ". \n only valid state is \"level\" ");
 				return;
 			}
 			
