@@ -113,7 +113,7 @@ class SystemLoader : public System {
 	//error stuff
 	void pushErrorLoading(string line, string id, string lex) {
 		string message = "LOAD: Error loading file: " + file + " at line " + to_string(lineNumber) + ". \n--> ";
-		message += "Got line: " + line + "\n--> ";
+		message += "Got line: " + line + "";
 		message += "Excepted: \"" + id +"\" ";
 		for (auto i : lex) {
 			if (i == 'i') {
@@ -188,7 +188,7 @@ class SystemLoader : public System {
 		return nullptr;
 	}
 
-	//adds ent to imediat pool
+	//adds ent to imediate pool
 	bool pushEnt(shared_ptr<Entity> ent, TargetFullSpecification target) {
 		if (target.target == TaSp_noTarget) {
 			err::logMessage("LOAD: Error, Entity pushed at " + to_string(lineNumber) + " in file " + file + " with no target set prior");
@@ -254,6 +254,15 @@ class SystemLoader : public System {
 		return false;
 	}
 
+	//executes the given command against a component of an ent
+	void inlineExecuteOnComponent(shared_ptr<Entity> ent, string componentName, string line) {
+		string source = "this:get_component(" + componentName + "):" + line.substr(2);
+		ScriptUnit su(SS_inlineLoader, source);
+		su.addDebugData(" in " + file + " at line " + to_string(lineNumber) + " ");
+		su.attachEntity(ent);
+		executeScriptUnit(su);
+	}
+
 
 	bool parseLoadTable(string filepath) {
 		file = filepath;
@@ -292,7 +301,7 @@ class SystemLoader : public System {
 			}
 			//else check if a inline component script ahs been requested
 			else if (line.size() >= 1 && line[0] == '-' && line[1] == '>') {
-
+				inlineExecuteOnComponent(ent, componentName, line);
 			}
 		}
 
