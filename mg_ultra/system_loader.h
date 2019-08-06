@@ -52,6 +52,12 @@ class SystemLoader : public System {
 	int lineNumber;
 	string file;
 
+	static string loadTableComponentNameToScriptName(string loadName) {
+		string name = "Component" + loadName;
+		name[9] = name[9] - 32;
+		return name;
+	}
+
 	//transfers ents from 
 	void transferBufferedEntsToGame(EntityPool* pool) {
 		//get cycle
@@ -186,7 +192,7 @@ class SystemLoader : public System {
 	}
 
 	//Adds a component to the lates ent
-	bool addComponent(string line, Entity* ent) {
+	bool addComponent(string line, Entity* ent, string* componentName) {
 		if not(ent) {
 			err::logMessage("LOAD: Error, attempting to add a component with no prior entity declaration " + to_string(lineNumber) + " in file " + file);
 			return false;
@@ -197,7 +203,7 @@ class SystemLoader : public System {
 
 		//position
 		if (result = str_kit::lexicalAnalysis(line, "+position", "ff")) {
-
+			*componentName = loadTableComponentNameToScriptName("position");
 			if (result == str_kit::LAR_valid) {
 				auto newComponent = new ComponentPosition(str_kit::qStringToFloat(line, 1), str_kit::qStringToFloat(line, 2), 0);
 				ent->addComponent( newComponent->pullForEntity() );
@@ -220,7 +226,7 @@ class SystemLoader : public System {
 
 		//graphics
 		else if (result = str_kit::lexicalAnalysis(line, "+graphics", "s")) {
-
+			*componentName = loadTableComponentNameToScriptName("graphics");
 			if (result == str_kit::LAR_valid) {
 				auto newComponent = new ComponentGraphics(str_kit::splitOnToken(line, ' ')[1]);
 				ent->addComponent(newComponent->pullForEntity());
@@ -256,6 +262,8 @@ class SystemLoader : public System {
 
 		TargetFullSpecification currentTarget;
 		Entity* ent = nullptr;
+		//The load_table name of the last component used
+		string componentName = "";
 
 		string line;
 		ifstream table(filepath);
@@ -281,9 +289,8 @@ class SystemLoader : public System {
 			}
 			//else check if an component needs to be added'
 			else if (line[0] == '+') {
-				valid = addComponent(line, ent);
+				valid = addComponent(line, ent, &componentName);
 			}
-
 		}
 
 		return valid;
