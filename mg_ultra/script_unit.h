@@ -14,7 +14,8 @@ using namespace std;
 //enumeration of locations to load a script unit from
 enum ScriptSources {
 	SS_file,
-	SS_commandLine
+	SS_commandLine,
+	SS_inlineLoader
 };
 
 /*A single unit of executable script
@@ -22,6 +23,9 @@ Contains methods for accessing origin for debugging purposes*/
 class ScriptUnit {
 	ScriptSources scriptSource;
 	string script;
+
+	//can hold debug data
+	string debugData = "";
 	
 	//can attach entities to this object
 	vector<shared_ptr<Entity>> attachedEnts;
@@ -56,6 +60,13 @@ public:
 		return attachedEnts[i];
 	}
 
+	void addDebugData(string data) {
+		debugData = data;
+	}
+
+	string getDebugData() {
+		return debugData;
+	}
 };
 
 
