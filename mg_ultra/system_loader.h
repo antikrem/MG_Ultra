@@ -300,7 +300,7 @@ class SystemLoader : public System {
 				valid = addComponent(line, ent, &componentName);
 			}
 			//else check if a inline component script ahs been requested
-			else if (line.size() >= 1 && line[0] == '-' && line[1] == '>') {
+			else if (line.size() > 1 && line[0] == '-' && line[1] == '>') {
 				inlineExecuteOnComponent(ent, componentName, line);
 			}
 		}
@@ -314,22 +314,11 @@ public:
 		//empty system
 		cacheOnly = true;
 		cachedTarget = 0;
-
-
-		auto newEnt = new Entity(0);
-		auto newComponent = new ComponentPosition(0, 0, -3);
-		newEnt->addComponent(newComponent->pullForEntity());
-		auto newComponent1 = new ComponentGraphics("default");
-		newEnt->addComponent(newComponent1->pullForEntity());
-		auto newComponent2 = new ComponentAnimation();
-		newEnt->addComponent(newComponent2->pullForEntity());
-		//cycleEnt[3000] = newEnt;
 	}
 
 	void precycle(EntityPool* pool) override {
 		//push current cycle of ents
 		transferBufferedEntsToGame(pool);
-
 
 
 		//check if loading is requested
