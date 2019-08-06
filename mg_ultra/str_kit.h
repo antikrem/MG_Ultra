@@ -61,7 +61,7 @@ namespace str_kit {
 	bool compareStart(string a, string b);
 
 	enum LexicalAnalysisResult {
-		LAR_idFail,
+		LAR_idFail = 0,
 		LAR_valid,
 		LAR_lexLengthFail,
 		LAR_lexTypeFail,
