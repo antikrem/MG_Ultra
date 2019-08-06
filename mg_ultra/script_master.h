@@ -32,7 +32,7 @@ class ScriptMaster {
 		//check script errors
 		vector<string> buffer = pullScriptErrors();
 		if (buffer.size()) {
-			err::logMessage("SCRIPT ERROR: An error occured during the execution of a script in " + location);
+			err::logMessage("SCRIPT: Error, an error occured during the execution of a script in " + location);
 			for (auto i : buffer) {
 				err::logMessage(i);
 			}
@@ -48,12 +48,23 @@ class ScriptMaster {
 			copies.push_back(scriptUnit.getAttachedInt(0));
 			kaguya["this"] = copies[0].get();
 		}
-
+		
 		if (source == SS_commandLine) {
 			kaguya.dostring(scriptUnit.getScript());
 			vector<string> buffer = pullScriptErrors();
 			if (buffer.size()) {
-				err::logMessage("SCRIPT ERROR: Last command line was invalid");
+				err::logMessage("SCRIPT: Error, Last command line was invalid");
+				for (auto i : buffer) {
+					err::logMessage(i);
+				}
+			}
+		}
+		else if (source == SS_inlineLoader) {
+			kaguya.dostring(scriptUnit.getScript());
+			vector<string> buffer = pullScriptErrors();
+			if (buffer.size()) {
+				err::logMessage("SCRIPT: Error, the load_table has erroneous inline request at" + scriptUnit.getDebugData()
+					+ "\n--> Level loaded anyway ignoring line, produced error(s):");
 				for (auto i : buffer) {
 					err::logMessage(i);
 				}
