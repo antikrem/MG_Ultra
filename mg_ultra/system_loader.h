@@ -46,7 +46,7 @@ struct TargetFullSpecification {
 };
 
 class SystemLoader : public System {
-	map<int, Entity*> cycleEnt;
+	map<int, shared_ptr<Entity>> cycleEnt;
 
 	//error stuff
 	int lineNumber;
@@ -73,9 +73,6 @@ class SystemLoader : public System {
 
 	//clears all ents in future queue
 	void deleteAllFutureEnts() {
-		for (auto i : cycleEnt) {
-			delete i.second;
-		} 
 		cycleEnt.clear();
 	}
 
@@ -173,10 +170,10 @@ class SystemLoader : public System {
 	}
 
 	//Takes a line and generates a ptr, null indicates the line could not be converted
-	Entity* createEnt(string line) {
+	shared_ptr<Entity> createEnt(string line) {
 		//lex analysis for first template
 		if (str_kit::lexicalAnalysis(line, "ent", "i") == str_kit::LAR_valid) {
-			return new Entity(str_kit::qStringToInt(line, 1));
+			return make_shared<Entity>( str_kit::qStringToInt(line, 1) );
 		}
 		else if (str_kit::lexicalAnalysis(line, "ent", "s") == str_kit::LAR_valid) {
 			string token = str_kit::splitOnToken(line, ' ')[1];
@@ -184,15 +181,28 @@ class SystemLoader : public System {
 				err::logMessage("LOAD: Error resolving token " + token + " to a recognized ent type at line " + to_string(lineNumber) + " in file " +  file);
 				return nullptr;
 			}
-			return new Entity(stringToEntType(token));
+			return make_shared<Entity>( stringToEntType(token) );
 		}
 		err::logMessage("LOAD: Error creating ent at" + to_string(lineNumber) + " in file " + file +
 			+"\n --> Expected: ent [float:ent_type]/[string:ent_type]");
 		return nullptr;
 	}
 
+	//adds ent to imediat pool
+	bool pushEnt(shared_ptr<Entity> ent, TargetFullSpecification target) {
+		if (target.target == TaSp_noTarget) {
+			err::logMessage("LOAD: Error, Entity pushed at " + to_string(lineNumber) + " in file " + file + " with no target set prior");
+			return false;
+		}
+		else if (target.target == TaSp_cycle) {
+			cycleEnt[target.cycle] = ent;
+			return true;
+		}
+		return false;
+	}
+
 	//Adds a component to the lates ent
-	bool addComponent(string line, Entity* ent, string* componentName) {
+	bool addComponent(string line, shared_ptr<Entity> ent, string* componentName) {
 		if not(ent) {
 			err::logMessage("LOAD: Error, attempting to add a component with no prior entity declaration " + to_string(lineNumber) + " in file " + file);
 			return false;
@@ -244,24 +254,13 @@ class SystemLoader : public System {
 		return false;
 	}
 
-	bool pushEnt(Entity* ent, TargetFullSpecification target) {
-		if (target.target == TaSp_noTarget) {
-			err::logMessage("LOAD: Error, Entity pushed at " + to_string(lineNumber) + " in file " + file + " with no target set prior");
-			return false;
-		}
-		else if (target.target == TaSp_cycle) {
-			cycleEnt[target.cycle] = ent;
-			return true;
-		}
-		return false;
-	}
 
 	bool parseLoadTable(string filepath) {
 		file = filepath;
 		lineNumber = -1;
 
 		TargetFullSpecification currentTarget;
-		Entity* ent = nullptr;
+		shared_ptr<Entity> ent = nullptr;
 		//The load_table name of the last component used
 		string componentName = "";
 
@@ -290,6 +289,10 @@ class SystemLoader : public System {
 			//else check if an component needs to be added'
 			else if (line[0] == '+') {
 				valid = addComponent(line, ent, &componentName);
+			}
+			//else check if a inline component script ahs been requested
+			else if (line.size() >= 1 && line[0] == '-' && line[1] == '>') {
+
 			}
 		}
 
