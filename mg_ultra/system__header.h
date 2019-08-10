@@ -5,7 +5,6 @@
 //ring 0 - meta ECS management systems
 #include "system_garbage_collector.h"
 
-
 //ring 1 - graphics pipeline system
 #include "system_graphics.h"
 
@@ -15,6 +14,7 @@
 #include "system_console.h"
 
 //ring 3 - main game loop - most important main gameplay loop
+#include "system_timer.h"
 #include "system_game_state_control.h"
 #include "system_script.h"
 
