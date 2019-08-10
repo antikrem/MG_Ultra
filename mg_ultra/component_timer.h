@@ -7,7 +7,7 @@
 
 #include <atomic>
 
-class ComponentTimer : public Component {
+class ComponentTimer : public Component, public ScriptableClass {
 	atomic<int> cycle = -1;
 
 public:
@@ -17,6 +17,20 @@ public:
 
 	int getCycle() {
 		return cycle;
+	}
+
+	void setCycle(int cycle) {
+		this->cycle = cycle;
+	}
+
+	void registerToLua(kaguya::State& state) override {
+		state["ComponentTimer"].setClass(kaguya::UserdataMetatable<ComponentTimer, Component>()
+			.setConstructors<ComponentTimer()>()
+			.addFunction("get_cycle", &ComponentTimer::getCycle)
+			.addFunction("set_cycle", &ComponentTimer::setCycle)
+			.addStaticFunction("type", &getType<ComponentTimer>)
+			.addStaticFunction("cast", &Component::castDown<ComponentTimer>)
+		);
 	}
 };
 
