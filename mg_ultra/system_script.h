@@ -14,6 +14,7 @@ class SystemScript : public System {
 public:
 	SystemScript() {
 		cacheOnly = true;
+		debugName = "s_script";
 	}
 
 	void setScriptMaster(ScriptMaster* scriptMaster) {
