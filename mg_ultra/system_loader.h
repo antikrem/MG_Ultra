@@ -22,6 +22,9 @@ ent [string] - ent table look up
 3. component adding
 +[Component name] ...parameters
 
+4 executing script against component
+->{script...}
+
 */
 #ifndef __SYSTEM_LOADER__
 #define __SYSTEM_LOADER__
@@ -222,7 +225,8 @@ class SystemLoader : public System {
 
 			else if (result == str_kit::LAR_lexLengthFail) {
 				if (str_kit::lexicalAnalysis(line, "+position", "fff") == str_kit::LAR_valid) {
-					auto newComponent = new ComponentPosition(str_kit::qStringToFloat(line, 1), str_kit::qStringToFloat(line, 2), str_kit::qStringToFloat(line, 3));
+					auto newComponent = 
+						new ComponentPosition(str_kit::qStringToFloat(line, 1), str_kit::qStringToFloat(line, 2), str_kit::qStringToFloat(line, 3));
 					ent->addComponent(newComponent->pullForEntity());
 					return true;
 				}
