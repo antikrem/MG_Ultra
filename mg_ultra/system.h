@@ -49,7 +49,7 @@ protected:
 	}
 
 	//To be over written if types is of size 0, system will have to keep buffers if interaction are required
-	virtual void handleEntity(Entity* ent, int id) {
+	virtual void handleEntity(shared_ptr<Entity> ent, int id) {
 		assert(false);
 	}
 
@@ -100,7 +100,7 @@ protected:
 			return; //exit if ent is null
 
 		if not(types.size())
-			handleEntity(entity.get(), id);
+			handleEntity(entity, id);
 		else
 			createComponentList(entity.get(), id);
 		//entity shared pointer will pass off the stack, freeing reference count

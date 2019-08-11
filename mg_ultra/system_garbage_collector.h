@@ -16,7 +16,7 @@ public:
 	}
 
 	//find ents that need be cleared
-	void handleEntity(Entity* ent, int id) override {
+	void handleEntity(shared_ptr<Entity> ent, int id) override {
 		ent->entityUpdate();
 		toBeCollected = toBeCollected || not( ent->getFlag() );
 	}
