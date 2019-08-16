@@ -59,6 +59,8 @@ class ECSMaster {
 		-system_console
 
 	master3: main gameloop
+	    -system_timer
+	    -system_game_state_control
 		-system_script
 
 	master4: loading
@@ -87,6 +89,7 @@ class ECSMaster {
 		//ring 3
 		master = newSystemsMaster();
 		master->setTimer(300);
+		master->createSystem<SystemTimer>(registar);
 		master->createSystem<SystemGameStateControl>(registar);
 		auto scriptSystem = master->createSystem<SystemScript>(registar);
 		scriptSystem->setScriptMaster(scriptMaster);
