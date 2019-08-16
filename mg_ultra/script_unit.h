@@ -15,7 +15,8 @@ using namespace std;
 enum ScriptSources {
 	SS_file,
 	SS_commandLine,
-	SS_inlineLoader
+	SS_inlineLoader,
+	SS_timedCallBack
 };
 
 /*A single unit of executable script

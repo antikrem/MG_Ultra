@@ -39,7 +39,7 @@ class ScriptMaster {
 		}
 	}
 
-	void executeScriptUnit(ScriptUnit scriptUnit) {
+	void finalExecuteScriptUnit(ScriptUnit scriptUnit) {
 		ScriptSources source = scriptUnit.getSource();
 		//explicit vector of shared pointers
 		vector<shared_ptr<Entity>> copies;
@@ -73,7 +73,18 @@ class ScriptMaster {
 		else if (source == SS_file) {
 			quickLoadAndExecute(scriptUnit.getScript());
 		}
-
+		else if (source == SS_timedCallBack) {
+			kaguya.dostring(scriptUnit.getScript());
+			vector<string> buffer = pullScriptErrors();
+			if (buffer.size()) {
+				vector<string> debugInformation = str_kit::splitOnToken(scriptUnit.getDebugData(), ' ');
+				err::logMessage("SCRIPT: Error, The entity with id: " + debugInformation[0] + " failed a callback timed on " + debugInformation[1]
+					+ "\n--> The error(s) occured are:");
+				for (auto i : buffer) {
+					err::logMessage(i);
+				}
+			}
+		}
 		//clear old environment
 		if (scriptUnit.numberOfAttachedEnts()) {
 			kaguya["this"] = nullptr;
@@ -100,7 +111,7 @@ public:
 			scriptList.clear();
 		}
 		for (auto& i : buffer) {
-			executeScriptUnit(i);
+			finalExecuteScriptUnit(i);
 		}
 	}
 
