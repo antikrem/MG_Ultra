@@ -3,23 +3,32 @@
 #define __SYSTEM_TIMER__
 
 #include "system.h"
+#include "component_timer.h"
+
+#include "script_master.h"
 
 class SystemTimer : public System {
 
-#include "component_timer.h"
 
 public:
 
 	SystemTimer() {
 		debugName = "s_timer";
-
-		types.push_back(typeid(ComponentTimer));
-		requiredTypes.push_back(typeid(ComponentTimer));
 	}
 
-	void handleComponentMap(map<type_index, Component*> components, int entityType, int id) override {
-		ComponentTimer* comText = (ComponentTimer*)components[typeid(ComponentTimer)];
-		comText->updateTimer();
+	void handleEntity(shared_ptr<Entity> ent, int id) override {
+		if (auto comText = ent->getComponent<ComponentTimer>()) {
+			comText->updateTimer();
+
+			auto callbacks = comText->getCallbacks(comText->getCycle());
+			for (auto i : callbacks) {
+				ScriptUnit su(SS_timedCallBack, i);
+				su.attachEntity(ent);
+				su.addDebugData(to_string(id) + " " + to_string(comText->getCycle()));
+				executeScriptUnit(su);
+			}
+
+		}
 	}
 };
 
