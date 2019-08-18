@@ -6,9 +6,6 @@
 #include "component_text.h"
 #include "component_timer.h"
 
-#include <mutex>
-#include <condition_variable>
-
 #include "system.h"
 
 //lua error reporting catch, no error when empty

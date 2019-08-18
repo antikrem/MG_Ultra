@@ -24,9 +24,6 @@ class ScriptMaster {
 	//locks when copying script buffer
 	mutex scriptBufferLock;
 
-	//set to true on destruction
-	atomic<bool> destroy = false;
-
 	//list of script units to execute
 	vector<ScriptUnit> scriptList;
 
