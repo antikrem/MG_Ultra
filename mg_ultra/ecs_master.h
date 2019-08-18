@@ -65,6 +65,9 @@ class ECSMaster {
 
 	master4: loading
 		-system_loader
+
+	master5: scripts
+		-system_script
 	
 	*/
 	void createBasicSystems() {
