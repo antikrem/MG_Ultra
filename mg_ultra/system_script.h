@@ -17,12 +17,16 @@ public:
 		debugName = "s_script";
 	}
 
+	bool executeSystem() override {
+		return scriptMaster->getNumberOfScripts();
+	}
+
 	void setScriptMaster(ScriptMaster* scriptMaster) {
 		this->scriptMaster = scriptMaster;
 	}
 
 	void precycle(EntityPool* pool) override {
-		scriptMaster->executeBufferedScriptUnits();
+		scriptMaster->executeBufferedScripts();
 	}
 };
 
