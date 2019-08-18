@@ -70,7 +70,6 @@ protected:
 	virtual void cacheFail(EntityPool* pool) {
 	}
 
-
 	//keeps a reference to the shared entities
 	//not to be over written
 	void createComponentList(Entity* ent, int id) {
@@ -107,6 +106,11 @@ protected:
 	}
 		
 public:
+	//called before a precycle, system will only be executed if true
+	virtual bool executeSystem() {
+		return true;
+	}
+
 	//sets global registar
 	void setGRegistar(Registar* registar) {
 		this->registar = registar;

@@ -45,7 +45,9 @@ class SystemsMaster {
 	//cycles through the systems, applying what ever needs to be done
 	void cycleSystems() {
 		for (auto system : systems) {
-			system->systemCycleProcess(entityPool);
+			if (system->executeSystem()) {
+				system->systemCycleProcess(entityPool);
+			}
 		}
 		inExec = false;
 	}
