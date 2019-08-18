@@ -246,10 +246,26 @@ class SystemLoader : public System {
 				ent->addComponent(newComponent->pullForEntity());
 				return true;
 			}
-
+			
 			else {
 				err::logMessage("LOAD: Error, attempting to add a component with +graphics prefix" + to_string(lineNumber) + " in file " + file
 					+ "\n --> Expected: +graphics [string:set_name]");
+				return false;
+			}
+		}
+
+		//callback
+		else if (result = str_kit::lexicalAnalysis(line, "+timer", "")) {
+			*componentName = loadTableComponentNameToScriptName("timer");
+			if (result == str_kit::LAR_valid) {
+				auto newComponent = new ComponentTimer();
+				ent->addComponent(newComponent->pullForEntity());
+				return true;
+			}
+
+			else {
+				err::logMessage("LOAD: Error, attempting to add a component with +timer prefix" + to_string(lineNumber) + " in file " + file
+					+ "\n --> Expected: +timer");
 				return false;
 			}
 		}
