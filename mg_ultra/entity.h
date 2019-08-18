@@ -34,7 +34,7 @@ public:
 		return components.count(type) ? components[type] : nullptr ;
 	}
 
-	//alternative method to get component with template
+	//alternative method to get component with template, nullptr on no component
 	template <class T>
 	shared_ptr<T> getComponent() {
 		return components.count(typeid(T)) ? dynamic_pointer_cast<T>(components[typeid(T)]) : nullptr;
