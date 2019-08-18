@@ -91,13 +91,15 @@ class ECSMaster {
 		master->setTimer(300);
 		master->createSystem<SystemTimer>(registar);
 		master->createSystem<SystemGameStateControl>(registar);
-		auto scriptSystem = master->createSystem<SystemScript>(registar);
-		scriptSystem->setScriptMaster(scriptMaster);
 
 		//ring 4
 		master = newSystemsMaster();
 		master->setTimer(300);
 		master->createSystem<SystemLoader>(registar);
+
+		//ring 5
+		auto scriptSystem = master->createSystem<SystemScript>(registar);
+		scriptSystem->setScriptMaster(scriptMaster);
 	}
 
 public:
