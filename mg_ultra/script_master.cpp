@@ -6,6 +6,9 @@
 #include "component_text.h"
 #include "component_timer.h"
 
+#include <mutex>
+#include <condition_variable>
+
 #include "system.h"
 
 //lua error reporting catch, no error when empty
@@ -71,7 +74,6 @@ ScriptMaster::ScriptMaster()
 		.addOverloadedFunctions("update", &Registar::update<int>, &Registar::update<float>, &Registar::update<string>, &Registar::update<bool>)
 	);
 
-
 	forceLuaRegistration<ComponentPosition>(kaguya);
 	forceLuaRegistration<ComponentGraphics>(kaguya);
 	forceLuaRegistration<ComponentText>(kaguya);
@@ -84,6 +86,23 @@ ScriptMaster::ScriptMaster()
 	quickLoadAndExecute("scripts/library_ex.lua");
 
 	kaguyaPtr = this;
+}
+
+void ScriptMaster::addScriptUnit(ScriptUnit scriptUnit) {
+	unique_lock<mutex> lck(scriptBufferLock);
+	scriptList.push_back(scriptUnit);
+}
+
+void ScriptMaster::executeBufferedScripts() {
+	vector<ScriptUnit> buffer;
+	{
+		unique_lock<mutex> lck(scriptBufferLock);
+		buffer = scriptList;
+		scriptList.clear();
+	}
+	for (auto& i : buffer) {
+		finalExecuteScriptUnit(i);
+	}
 }
 
 void executeScriptUnit(ScriptUnit scriptUnit) {

@@ -6,6 +6,7 @@
 
 #include "scriptable_class.h"
 #include "events.h"
+#include "str_kit.h"
 
 template <class T>
 static type_index getType() {
@@ -20,8 +21,12 @@ execution done by systems_masters
 class ScriptMaster {
 	kaguya::State kaguya;
 
-	//lock for script unit vector
-	mutex lock;
+	//locks when copying script buffer
+	mutex scriptBufferLock;
+
+	//set to true on destruction
+	atomic<bool> destroy = false;
+
 	//list of script units to execute
 	vector<ScriptUnit> scriptList;
 
@@ -98,21 +103,14 @@ public:
 		return kaguya;
 	}
 
-	void addScriptUnit(ScriptUnit scriptUnit) {
-		lock_guard<mutex> lck(lock);
-		scriptList.push_back(scriptUnit);
-	}
+	void addScriptUnit(ScriptUnit scriptUnit);
 
-	void executeBufferedScriptUnits() {
-		vector<ScriptUnit> buffer;
-		{
-			lock_guard<mutex> lck(lock);
-			buffer = scriptList;
-			scriptList.clear();
-		}
-		for (auto& i : buffer) {
-			finalExecuteScriptUnit(i);
-		}
+	void executeBufferedScripts();
+
+	//gets size of script
+	int getNumberOfScripts() {
+		unique_lock<mutex> lck(scriptBufferLock);
+		return scriptList.size();
 	}
 
 };
