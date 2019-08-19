@@ -101,6 +101,7 @@ class ECSMaster {
 		master->createSystem<SystemLoader>(registar);
 
 		//ring 5
+		master = newSystemsMaster();
 		auto scriptSystem = master->createSystem<SystemScript>(registar);
 		scriptSystem->setScriptMaster(scriptMaster);
 	}
