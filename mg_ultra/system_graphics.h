@@ -86,7 +86,7 @@ public:
 		}
 
 		//todo make this a direct write to unmapped memory, also check mem size
-		BoxData data[500];
+		BoxData data[1000];
 		unsigned int boxcount = states.size();
 
 		for (unsigned int i = 0; i < boxcount; i++) {

@@ -28,7 +28,7 @@ checks if a vao request exists
 #include <glm/gtc/matrix_transform.hpp>
 
 //Maximum number of boxes able to be rendered
-#define BOX_COUNT 500
+#define BOX_COUNT 1000
 
 //base quad that is updated for each instance
 const float BASEQUAD[12] = {
