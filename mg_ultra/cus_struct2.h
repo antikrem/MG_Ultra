@@ -4,6 +4,7 @@
 
 #include <cmath>
 #include "constants.h"
+#include <glm/glm.hpp>
 
 /*Use for both rectangular points and polar representations in 2d
 x,y will always be accurate, but mag, angle are private and only accurate when called with mag(), ang() and related
@@ -118,6 +119,10 @@ public:
 		return Point3(this->x + b.x, this->y + b.y, this->z + b.z);
 	}
 
+	//as glm is avalible use the following conversion
+	glm::vec3 getVec3() {
+		return glm::vec3(this->x, this->y, this->z);
+	}
 };
 
 #endif
