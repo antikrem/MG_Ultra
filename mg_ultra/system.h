@@ -62,7 +62,7 @@ protected:
 
 	//An alternative to both, if cachedTarget != ETNoType (0), this will be called if cache grab is sucessful
 	//Otherwise cacheFail will be called, must be overwritten if being used
-	virtual void cacheHandle(Entity* ent) {
+	virtual void cacheHandle(shared_ptr<Entity> ent) {
 		assert(false);
 	}
 
@@ -125,7 +125,7 @@ public:
 		if (cachedTarget != 0 || cacheOnly) {
 			shared_ptr<Entity> ptr = pool->getCachedEnt(cachedTarget);
 			if (ptr) {
-				cacheHandle(ptr.get());
+				cacheHandle(ptr);
 			}
 			else {
 				cacheFail(pool);

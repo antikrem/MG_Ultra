@@ -18,7 +18,7 @@ public:
 		input::getCurrentInputMaster()->seedState(&inputState);
 	}
 
-	void cacheHandle(Entity* ent) override {
+	void cacheHandle(shared_ptr<Entity> ent) override {
 		input::getCurrentInputMaster()->updateState(&inputState);
 		
 		auto consoleComponent = ent->getComponent<ComponentConsole>();
