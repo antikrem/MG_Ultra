@@ -11,10 +11,13 @@
 //lua error reporting catch, no error when empty
 vector<string> luaErrorMessage;
 
+atomic<bool> failedLastScript = false;
+
 void handleError(int errCode, const char * errorMessage) {
 	luaErrorMessage.push_back(
 		string(errorMessage)
 	);
+	failedLastScript = true;
 }
 
 vector<string> pullScriptErrors() {
@@ -48,7 +51,7 @@ ScriptMaster::ScriptMaster()
 	kaguya["Entity"].setClass(
 		kaguya::UserdataMetatable<Entity>()
 		.setConstructors<Entity(int)>()
-		.addFunction("getComponent", &Entity::_getComponent)
+		.addFunction("getComponent", &Entity::l_getComponent)
 	);
 
 	//register entity pool
@@ -83,6 +86,93 @@ ScriptMaster::ScriptMaster()
 	quickLoadAndExecute("scripts/library_ex.lua");
 
 	kaguyaPtr = this;
+}
+
+void ScriptMaster::finalExecuteScriptUnit(ScriptUnit scriptUnit) {
+	ScriptSources source = scriptUnit.getSource();
+
+	//set last fail to false
+	failedLastScript = false;
+
+	//explicit vector of shared pointers
+	vector<shared_ptr<Entity>> copies;
+
+	//create entity environment
+	int attachedEntCount = scriptUnit.numberOfAttachedEnts();
+	if (attachedEntCount) {
+		copies.push_back(scriptUnit.getAttachedEnt(0));
+		kaguya["this"] = copies[0].get();
+		for (int i = 1; i < attachedEntCount; i++) {
+			kaguya["target" + to_string(i)] = copies[i].get();
+		}
+	}
+
+	if (source == SS_commandLine) {
+		kaguya.dostring(scriptUnit.getScript());
+		vector<string> buffer = pullScriptErrors();
+		if (buffer.size()) {
+			err::logMessage("SCRIPT: Error, Last command line was invalid:");
+			for (auto i : buffer) {
+				err::logMessage(i);
+			}
+		}
+	}
+	else if (source == SS_inlineLoader) {
+		kaguya.dostring(scriptUnit.getScript());
+		vector<string> buffer = pullScriptErrors();
+		if (buffer.size()) {
+			err::logMessage("SCRIPT: Error, the load_table has erroneous inline request at" + scriptUnit.getDebugData()
+				+ "\n--> Level loaded anyway ignoring line, produced error(s):");
+			for (auto i : buffer) {
+				err::logMessage(i);
+			}
+		}
+	}
+	else if (source == SS_file) {
+		quickLoadAndExecute(scriptUnit.getScript());
+	}
+	else if (source == SS_timedCallBack) {
+		kaguya.dostring(scriptUnit.getScript());
+		vector<string> buffer = pullScriptErrors();
+		if (buffer.size()) {
+			vector<string> debugInformation = str_kit::splitOnToken(scriptUnit.getDebugData(), ' ');
+			err::logMessage("SCRIPT: Error, The entity with id: " + debugInformation[0] + " failed a callback timed on " + debugInformation[1]
+				+ "\n--> The error(s) occured are:");
+			for (auto i : buffer) {
+				err::logMessage(i);
+			}
+		}
+	}
+	else if (source == SS_functionalCallBack) {
+		kaguya.dostring(scriptUnit.getScript());
+		vector<string> buffer = pullScriptErrors();
+		if (buffer.size()) {
+			vector<string> debugInformation = str_kit::splitOnToken(scriptUnit.getDebugData(), ' ');
+			err::logMessage("SCRIPT: Error, The system: " + debugInformation[0] + " failed a functional callback"
+				+ "\n--> The error(s) occured are:");
+			for (auto i : buffer) {
+				err::logMessage(i);
+			}
+		}
+	}
+
+	//clear old environment
+	if (scriptUnit.numberOfAttachedEnts()) {
+		kaguya["this"] = nullptr;
+	}
+
+	if (attachedEntCount) {
+		for (int i = 1; i < attachedEntCount; i++) {
+			kaguya["target" + to_string(i)] = nullptr;
+		}
+	}
+
+	//if script has an attached successfulCallback, set to true
+	if (scriptUnit.getSuccessCallback()) {
+		scriptUnit.getSuccessCallback()->setCompletion(!failedLastScript);
+	}
+	
+
 }
 
 void ScriptMaster::addScriptUnit(ScriptUnit scriptUnit) {
