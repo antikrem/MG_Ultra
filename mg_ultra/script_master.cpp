@@ -5,6 +5,7 @@
 #include "component_position.h"
 #include "component_text.h"
 #include "component_timer.h"
+#include "component_camera.h"
 
 #include "system.h"
 
@@ -27,7 +28,7 @@ vector<string> pullScriptErrors() {
 }
 
 //used to get a global pointer to kaguya
-ScriptMaster* kaguyaPtr = nullptr;
+ScriptMaster* globalScriptMasterPtr = nullptr;
 
 ScriptMaster::ScriptMaster()
 	: kaguya() {
@@ -78,6 +79,7 @@ ScriptMaster::ScriptMaster()
 	forceLuaRegistration<ComponentGraphics>(kaguya);
 	forceLuaRegistration<ComponentText>(kaguya);
 	forceLuaRegistration<ComponentTimer>(kaguya);
+	forceLuaRegistration<ComponentCamera>(kaguya);
 
 	//set contextual script functions
 	kaguya["getEntityPool"] = getLastPool;
@@ -85,7 +87,19 @@ ScriptMaster::ScriptMaster()
 
 	quickLoadAndExecute("scripts/library_ex.lua");
 
-	kaguyaPtr = this;
+	globalScriptMasterPtr = this;
+}
+
+ScriptMaster::~ScriptMaster() {
+	//close the pipeline
+	closeScriptPipeline();
+	//clear the buffer
+	for (auto i : scriptList) {
+		if (i.getSuccessCallback()) {
+			i.getSuccessCallback()->setCompletion(false);
+		}
+	}
+	globalScriptMasterPtr = false;
 }
 
 void ScriptMaster::finalExecuteScriptUnit(ScriptUnit scriptUnit) {
@@ -192,6 +206,20 @@ void ScriptMaster::executeBufferedScripts() {
 	}
 }
 
+//if true, the script pipeline is closed
+atomic<bool> closedScriptPipeLine = false;
+
+void closeScriptPipeline() {
+	closedScriptPipeLine = true;
+}
+
 void executeScriptUnit(ScriptUnit scriptUnit) {
-	kaguyaPtr->addScriptUnit(scriptUnit);
+	if (closedScriptPipeLine) {
+		//pipeline is closed, new script units are disposed
+		if (scriptUnit.getSuccessCallback()) {
+			scriptUnit.getSuccessCallback()->setCompletion(false);
+		}
+		return;
+	}
+	globalScriptMasterPtr->addScriptUnit(scriptUnit);
 }

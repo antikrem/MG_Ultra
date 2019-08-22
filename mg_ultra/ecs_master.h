@@ -53,21 +53,21 @@ class ECSMaster {
 	master1: graphics
 	    -system_graphics
 
-	master2: animation
+	master2: scripts
+		-system_script
+
+	master3: non-essentaion gameplay
 	    -system_animation
 		-system_text
 		-system_console
 
-	master3: main gameloop
+	master4: main gameloop
 	    -system_timer
 	    -system_game_state_control
 		-system_script
 
-	master4: loading
+	master5: loading
 		-system_loader
-
-	master5: scripts
-		-system_script
 	
 	*/
 	void createBasicSystems() {
@@ -82,28 +82,32 @@ class ECSMaster {
 
 		//ring 2
 		master = newSystemsMaster();
+		auto scriptSystem = master->createSystem<SystemScript>(registar);
+		scriptSystem->setScriptMaster(scriptMaster);
+
+		//ring 3
+		master = newSystemsMaster();
 		master->setTimer(300);
 		auto animationSystem = master->createSystem<SystemAnimation>(registar);
 		animationSystem->setAnimationMaster(gState->getAnimationsMaster());
 		auto textSystem = master->createSystem<SystemText>(registar);
 		textSystem->setAnimationMaster(gState->getAnimationsMaster());
 		auto consoleSystem = master->createSystem<SystemConsole>(registar);
+		auto cameraSystem = master->createSystem<SystemCamera>(registar);
+		cameraSystem->setCamera(gState->getCamera());
 
-		//ring 3
+		//ring 4
 		master = newSystemsMaster();
 		master->setTimer(300);
 		master->createSystem<SystemTimer>(registar);
 		master->createSystem<SystemGameStateControl>(registar);
 
-		//ring 4
+
+		//ring 5
 		master = newSystemsMaster();
 		master->setTimer(300);
 		master->createSystem<SystemLoader>(registar);
 
-		//ring 5
-		master = newSystemsMaster();
-		auto scriptSystem = master->createSystem<SystemScript>(registar);
-		scriptSystem->setScriptMaster(scriptMaster);
 	}
 
 public:
@@ -164,6 +168,8 @@ public:
 	}
 
 	~ECSMaster() {
+		delete scriptMaster;
+
 		for (auto i : systemsMasters) {
 			delete i;
 		}
@@ -173,7 +179,7 @@ public:
 		delete gState;
 		delete inputMaster;
 		delete registar;
-		delete scriptMaster;
+
 	}
 
 	
