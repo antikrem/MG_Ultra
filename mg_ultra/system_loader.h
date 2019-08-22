@@ -33,6 +33,7 @@ ent [string] - ent table look up
 
 #include "registar.h"
 #include "os_kit.h"
+#include "script_master.h"
 
 enum TargetSpecification {
 	TaSp_noTarget,
@@ -275,12 +276,15 @@ class SystemLoader : public System {
 	}
 
 	//executes the given command against a component of an ent
-	void inlineExecuteOnComponent(shared_ptr<Entity> ent, string componentName, string line) {
+	bool inlineExecuteOnComponent(shared_ptr<Entity> ent, string componentName, string line) {
 		string source = "this:get_component(" + componentName + "):" + line.substr(2);
 		ScriptUnit su(SS_inlineLoader, source);
+		SuccessCallback sc;
 		su.addDebugData(" in " + file + " at line " + to_string(lineNumber) + " ");
 		su.attachEntity(ent);
+		su.attachSuccessCallback(&sc);
 		executeScriptUnit(su);
+		return sc.waitForCompletion();
 	}
 
 
@@ -321,7 +325,7 @@ class SystemLoader : public System {
 			}
 			//else check if a inline component script ahs been requested
 			else if (line.size() > 1 && line[0] == '-' && line[1] == '>') {
-				inlineExecuteOnComponent(ent, componentName, line);
+				valid = inlineExecuteOnComponent(ent, componentName, line);
 			}
 		}
 
@@ -339,7 +343,6 @@ public:
 	void precycle(EntityPool* pool) override {
 		//push current cycle of ents
 		transferBufferedEntsToGame(pool);
-
 
 		//check if loading is requested
 		bool loading = false;
@@ -360,7 +363,13 @@ public:
 			return;
 		}
 
-		parseLoadTable(path);
+		if (!parseLoadTable(path)) {
+			err::logMessage("LOAD: Fatal Error, load aborted");
+		}
+		else {
+			err::logMessage("LOAD: Successful, starting level at " + path);
+			registar->update("cycle", -1);
+		}
 
 		registar->update("loading", false);
 		registar->update("cycle_progress", true);
