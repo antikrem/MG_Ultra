@@ -73,6 +73,10 @@ public:
 		}
 	}
 
+	Camera* getCamera() {
+		return camera;
+	}
+
 	~GraphicsState() {
 		delete glHandler;
 		delete camera;
