@@ -26,7 +26,7 @@ public:
 		entityType = type;
 	}
 	//for scrpting purposes
-	shared_ptr<Component> _getComponent(type_index type) {
+	shared_ptr<Component> l_getComponent(type_index type) {
 		return components.count(type) ? components[type] : nullptr;
 	}
 
