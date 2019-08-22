@@ -35,6 +35,10 @@ ent [string] - ent table look up
 #include "os_kit.h"
 #include "script_master.h"
 
+#include "component_timer.h"
+#include "component_graphics.h"
+#include "component_position.h"
+
 enum TargetSpecification {
 	TaSp_noTarget,
 	TaSp_cycle,
