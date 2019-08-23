@@ -90,9 +90,13 @@ ScriptMaster::ScriptMaster()
 	globalScriptMasterPtr = this;
 }
 
-ScriptMaster::~ScriptMaster() {
+void ScriptMaster::disable() {
+	disabled = true;
 	//close the pipeline
 	closeScriptPipeline();
+}
+
+ScriptMaster::~ScriptMaster() {
 	//clear the buffer
 	for (auto i : scriptList) {
 		if (i.getSuccessCallback()) {
@@ -100,6 +104,7 @@ ScriptMaster::~ScriptMaster() {
 		}
 	}
 	globalScriptMasterPtr = false;
+	std::this_thread::sleep_for(std::chrono::milliseconds(100));
 }
 
 void ScriptMaster::finalExecuteScriptUnit(ScriptUnit scriptUnit) {
@@ -186,7 +191,6 @@ void ScriptMaster::finalExecuteScriptUnit(ScriptUnit scriptUnit) {
 		scriptUnit.getSuccessCallback()->setCompletion(!failedLastScript);
 	}
 	
-
 }
 
 void ScriptMaster::addScriptUnit(ScriptUnit scriptUnit) {
@@ -195,6 +199,10 @@ void ScriptMaster::addScriptUnit(ScriptUnit scriptUnit) {
 }
 
 void ScriptMaster::executeBufferedScripts() {
+	if (disabled) {
+		return;
+	}
+	executingScript = true;
 	vector<ScriptUnit> buffer;
 	{
 		unique_lock<mutex> lck(scriptBufferLock);
@@ -204,6 +212,7 @@ void ScriptMaster::executeBufferedScripts() {
 	for (auto& i : buffer) {
 		finalExecuteScriptUnit(i);
 	}
+	executingScript = false;
 }
 
 //if true, the script pipeline is closed

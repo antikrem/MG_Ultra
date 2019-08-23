@@ -168,7 +168,7 @@ public:
 	}
 
 	~ECSMaster() {
-		delete scriptMaster;
+		scriptMaster->disable();
 
 		for (auto i : systemsMasters) {
 			delete i;
@@ -179,7 +179,7 @@ public:
 		delete gState;
 		delete inputMaster;
 		delete registar;
-
+		delete scriptMaster;
 	}
 
 	

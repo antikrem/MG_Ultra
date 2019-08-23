@@ -21,6 +21,11 @@ execution done by systems_masters
 class ScriptMaster {
 	kaguya::State kaguya;
 
+	//true when executing a script
+	atomic<bool> executingScript = false;
+	//script master is shut down
+	atomic<bool> disabled = false;
+
 	//locks when copying script buffer
 	mutex scriptBufferLock;
 
@@ -45,6 +50,9 @@ class ScriptMaster {
 
 public:
 	ScriptMaster();
+
+	//call before destroying
+	void disable();
 
 	~ScriptMaster();
 
