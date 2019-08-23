@@ -7,16 +7,23 @@
 #include <vector>
 
 #include "entity.h"
+#include "success_callback.h"
 
 
 using namespace std;
 
 //enumeration of locations to load a script unit from
 enum ScriptSources {
+	//source is loaded direct from a file, no env
 	SS_file,
+	//script comes from command line, no env
 	SS_commandLine,
+	//script comes from system_loader, env
 	SS_inlineLoader,
-	SS_timedCallBack
+	//Call back associated to component_timer
+	SS_timedCallBack,
+	//Call back associated with a components evaluation
+	SS_functionalCallBack
 };
 
 /*A single unit of executable script
@@ -30,6 +37,9 @@ class ScriptUnit {
 	
 	//can attach entities to this object
 	vector<shared_ptr<Entity>> attachedEnts;
+
+	//can add a successCallback to check script outcome
+	SuccessCallback* callbackResult = nullptr;
 
 public:
 	//set script to file location to execute from file
@@ -51,14 +61,25 @@ public:
 		attachedEnts.push_back(ptr);
 	}
 
+	//attach a SuccessCallback
+	void attachSuccessCallback(SuccessCallback* callbackResult) {
+		this->callbackResult = callbackResult;
+	}
+
+
 	//get size of attached ents
 	int numberOfAttachedEnts() {
 		return attachedEnts.size();
 	}
 
 	//returns a copy of the shared pointer pointed by index
-	shared_ptr<Entity>& getAttachedInt(int i) {
+	shared_ptr<Entity>& getAttachedEnt(int i) {
 		return attachedEnts[i];
+	}
+
+	//grabs a pointer to SuccessCallback, nullptr indicates no callback
+	SuccessCallback* getSuccessCallback() {
+		return callbackResult;
 	}
 
 	void addDebugData(string data) {
