@@ -9,6 +9,7 @@ enum EntityTypes {
 	ETNoType,
 	ETGeneric,
 	ETConsole,
+	ETCamera,
 	ETPlayer
 };
 

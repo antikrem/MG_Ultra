@@ -9,10 +9,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 class Camera {
-	//Projection matrix
-	glm::mat4 projection = glm::mat4(1.0f);
-	//View matrix
-	glm::mat4 view = glm::mat4(1.0f);
+
+	//view 
+	atomic<glm::mat4> projection = glm::mat4(1.0f);
+	//projections
+	atomic<glm::mat4> view = glm::mat4(1.0f);
 
 	//culling distance
 	atomic<float> cullingDistance = 3000.0f;
@@ -22,17 +23,27 @@ class Camera {
 public:
 	Camera(GraphicsSettings* gSettings) {
 		this->gSettings = gSettings;
-	}
-
-	glm::mat4 getVPMatrix() {
 		projection = glm::perspective(glm::radians(45.0f), (float)gSettings->screenWidth / (float)gSettings->screenHeight, 0.1f, cullingDistance.load());
 		view = glm::lookAt(
 			glm::vec3(0, 0, 2000.0),
 			glm::vec3(0, 0, 0),
 			glm::vec3(0, 1, 0)
 		);
+	}
 
-		return projection * view;
+	void updateCamera(glm::vec3 eyePos, glm::vec3 lookAt, float fov) {
+		projection = glm::perspective(
+			glm::radians(fov), (float)gSettings->screenWidth / (float)gSettings->screenHeight, 0.1f, cullingDistance.load()
+		);
+		view = glm::lookAt(
+			eyePos,
+			lookAt,
+			glm::vec3(0, 1, 0)
+		);
+	}
+
+	glm::mat4 getVPMatrix() {
+		return projection.load() * view.load();
 	}
 
 
