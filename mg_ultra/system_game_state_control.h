@@ -28,7 +28,6 @@ public:
 		registar->get("loading", &loading);
 
 		if (load_request) {
-			registar->update("cycle", -1);
 			registar->update("cycle_progress", false);
 			registar->update("load_request", false);
 			registar->update("loading", true);
