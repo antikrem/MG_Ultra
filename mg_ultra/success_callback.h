@@ -27,11 +27,7 @@ public:
 		cv.notify_one();
 	}
 
-	bool waitForCompletion() {
-		unique_lock<std::mutex> lk(lock);
-		cv.wait(lk, [this] {return this->complete.load(); });
-		return result;
-	}
+	bool waitForCompletion();
 
 };
 
