@@ -6,6 +6,11 @@
 #include "global_funcs.h"
 #include "error.h"
 
+template <class T>
+static type_index getType() {
+	return typeid(T);
+}
+
 /*ScriptableClass allows an inherited class to be used in lua
 Set derived class as template, overwrite register
 additionally, takes another template parameter B, which is a base

@@ -8,11 +8,6 @@
 #include "events.h"
 #include "str_kit.h"
 
-template <class T>
-static type_index getType() {
-	return typeid(T);
-}
-
 vector<string> pullScriptErrors();
 
 /*Encapsulates the lua state machine
