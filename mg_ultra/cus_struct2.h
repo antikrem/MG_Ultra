@@ -65,6 +65,14 @@ public:
 		setRectComponent();
 	}
 
+	//generates a point2 from mag angle
+	static Point2 generateFromMagAng(float mag, float ang) {
+		Point2 a(0, 0);
+		a.setMag(mag);
+		a.setAng(ang);
+		return a;
+	}
+
 	Point2 operator+(const Point2& b) {
 		return Point2(this->x + b.x, this->y + b.y);
 	}
@@ -107,21 +115,20 @@ public:
 		this->z = z;
 	}
 
+	Point3(Point2 xy, float z) {
+		Point3(xy.x, xy.y, z);
+	}
+
 	Point3(float val) {
 		this->x = val;
 		this->y = val;
 		this->z = val;
 	}
 
-	Point3(Point2 xy, float z) {
-		this->x = xy.x;
-		this->y = xy.y;
-		this->z = z;
-	}
-
 	Point3 operator+(const Point3& b) {
 		return Point3(this->x + b.x, this->y + b.y, this->z + b.z);
 	}
+
 
 #ifdef GLM_ADDED
 	//as glm is avalible use the following conversion
