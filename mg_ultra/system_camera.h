@@ -6,16 +6,13 @@
 #include "graphics_state.h"
 #include "os_kit.h"
 #include "script_unit.h"
+#include "functional_callback_system.h"
+
 #include "component_camera.h"
 #include "component_position.h"
 
-class SystemCamera : public System {
+class SystemCamera : public System, public FunctionalCallbackSystem {
 	Camera* camera;
-
-	string cameraScript;
-
-	//set a priori, invalidated on failure
-	atomic<bool> validCameraScript = false;
 
 public:
 	SystemCamera() {
@@ -23,32 +20,13 @@ public:
 		cachedTarget = ETCamera;
 		cacheOnly = true;
 		//load camera script
-		setCameraScript(os_kit::getFileAsString("scripts//camera.lua"));
-	}
-
-	//use to set the camera script
-	void setCameraScript(string script) {
-		validCameraScript = true;
-		cameraScript = script;
+		setInternalScript(os_kit::getFileAsString("scripts//camera.lua"));
 	}
 
 	void cacheHandle(shared_ptr<Entity> ent) override {
-		//check for a valid script
-		if (!validCameraScript) {
+		//execute camera script
+		if (!executeInternalScript("system_camera", "CAMERA: Fatal error executing camera script, camera disabled", ent)) {
 			return;
-		}
-
-		//execute the camera script
-		ScriptUnit su(SS_functionalCallBack, cameraScript);
-		su.addDebugData("system_camera");
-		su.attachEntity(ent);
-		SuccessCallback sc;
-		su.attachSuccessCallback(&sc);
-		executeScriptUnit(su);
-
-		if (!sc.waitForCompletion()) {
-			err::logMessage("CAMERA: Fatal error executing camera script, camera disabled");
-			validCameraScript = false;
 		}
 
 		//set camera values
@@ -62,7 +40,6 @@ public:
 
 	void cacheFail(EntityPool* pool) override {
 		//create the camera entity
-		//create a console entity
 		auto newEnt = new Entity(ETCamera);
 		auto newComponent = new ComponentPosition(0, 0, 2000.0);
 		newEnt->addComponent(newComponent->pullForEntity());
