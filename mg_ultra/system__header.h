@@ -19,6 +19,7 @@
 
 //ring 4 - main game loop - most important main gameplay loop
 #include "system_timer.h"
+#include "system_player.h"
 #include "system_game_state_control.h"
 
 //ring 5 - loading

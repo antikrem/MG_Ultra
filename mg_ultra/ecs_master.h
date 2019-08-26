@@ -92,7 +92,7 @@ class ECSMaster {
 		animationSystem->setAnimationMaster(gState->getAnimationsMaster());
 		auto textSystem = master->createSystem<SystemText>(registar);
 		textSystem->setAnimationMaster(gState->getAnimationsMaster());
-		auto consoleSystem = master->createSystem<SystemConsole>(registar);
+		master->createSystem<SystemConsole>(registar);
 		auto cameraSystem = master->createSystem<SystemCamera>(registar);
 		cameraSystem->setCamera(gState->getCamera());
 
@@ -101,6 +101,7 @@ class ECSMaster {
 		master->setTimer(300);
 		master->createSystem<SystemTimer>(registar);
 		master->createSystem<SystemGameStateControl>(registar);
+		master->createSystem<SystemPlayer>(registar);
 
 
 		//ring 5
@@ -119,9 +120,9 @@ public:
 		gState = new GraphicsState();
 		registar = new Registar();
 		g_registar::setGlobalRegistar(registar);
-		scriptMaster = new ScriptMaster();
 		inputMaster = new InputMaster(gState->getWindow());
 		input::setCurrentInputMaster(inputMaster);
+		scriptMaster = new ScriptMaster();
 
 		registar->addToBase("cycle", -1);
 		registar->addToBase("cycle_progress", false);
