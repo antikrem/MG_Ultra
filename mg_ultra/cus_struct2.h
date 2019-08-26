@@ -116,7 +116,9 @@ public:
 	}
 
 	Point3(Point2 xy, float z) {
-		Point3(xy.x, xy.y, z);
+		this->x = xy.x;
+		this->y = xy.y;
+		this->z = z;
 	}
 
 	Point3(float val) {
