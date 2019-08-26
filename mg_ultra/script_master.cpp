@@ -6,6 +6,7 @@
 #include "component_text.h"
 #include "component_timer.h"
 #include "component_camera.h"
+#include "component_input.h"
 
 #include "system.h"
 
@@ -80,6 +81,7 @@ ScriptMaster::ScriptMaster()
 	forceLuaRegistration<ComponentText>(kaguya);
 	forceLuaRegistration<ComponentTimer>(kaguya);
 	forceLuaRegistration<ComponentCamera>(kaguya);
+	forceLuaRegistration<ComponentInput>(kaguya);
 
 	//set contextual script functions
 	kaguya["getEntityPool"] = getLastPool;
