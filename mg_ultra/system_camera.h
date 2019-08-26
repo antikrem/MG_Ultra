@@ -46,7 +46,7 @@ public:
 		auto newComponent1 = new ComponentCamera();
 		newEnt->addComponent(newComponent1->pullForEntity());
 		pool->addEnt(newEnt, true);
-		err::logMessage("Camera created");
+		err::logMessage("CAMERA: camera not found, camera created");
 	}
 
 	void setCamera(Camera* camera) {
