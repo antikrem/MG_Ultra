@@ -84,6 +84,14 @@ public:
 		z = z + pos.z;
 	}
 
+	void ll_addPosition(float x, float y) {
+		addPosition(Point3(x, y, 0));
+	}
+
+	void lll_addPosition(float x, float y, float z) {
+		addPosition(Point3(x, y, z));
+	}
+
 
 	void addPosition(Point2 pos, float z = 0) {
 		position = position.load() + pos;
@@ -95,6 +103,7 @@ public:
 			.setConstructors<ComponentPosition(), ComponentPosition(float, float), ComponentPosition(float, float, float)>()
 			.addOverloadedFunctions("set_position", &ComponentPosition::lll_setPosition, &ComponentPosition::ll_setPosition)
 			.addFunction("get_position", &ComponentPosition::getPosition)
+			.addOverloadedFunctions("add_position", &ComponentPosition::ll_addPosition, &ComponentPosition::lll_addPosition)
 			.addStaticFunction("type", &getType<ComponentPosition>)
 			.addStaticFunction("cast", &Component::castDown<ComponentPosition>)
 		);
