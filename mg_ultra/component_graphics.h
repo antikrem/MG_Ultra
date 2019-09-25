@@ -55,6 +55,10 @@ public:
 		this->visible = visible;
 	}
 
+	bool getVisible() {
+		return visible;
+	}
+
 	AnimationState getAnimationState() {
 		return states.load();
 	}
@@ -71,6 +75,7 @@ public:
 		state["ComponentGraphics"].setClass(kaguya::UserdataMetatable<ComponentGraphics, Component>()
 			.setConstructors<ComponentGraphics(string animationSet)>()
 			.addFunction("set_animation_set", &ComponentGraphics::l_setAniamtionSet)
+			.addFunction("set_visible", &ComponentGraphics::setVisible)
 			.addStaticFunction("type", &getType<ComponentGraphics>)
 			.addStaticFunction("cast", &Component::castDown<ComponentGraphics>)
 		);
