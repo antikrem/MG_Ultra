@@ -32,7 +32,7 @@ public:
 		AnimationState state = graphics->getAnimationState();
 
 		AnimationTemplate animationTemplate;
-		bool valid = animationMaster->populateTemplate(state.animationSetName, state.currentFrame, &animationTemplate);
+		bool valid = animationMaster->populateTemplate(state.animationSetName, state.animationType, &animationTemplate);
 
 		if not(valid) {
 			return;
