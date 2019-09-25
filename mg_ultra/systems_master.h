@@ -16,6 +16,12 @@ void emptyFunc() {
 //A object that will handle a bunch of systems, 
 //Will do thread behaviour
 class SystemsMaster {
+	//name of system
+	string name;
+
+	//Internal counter of times called
+	unsigned long int calls = 0;
+
 	//vector of systems associated with this systems master
 	vector<System*> systems;
 
@@ -53,16 +59,17 @@ class SystemsMaster {
 	}
 
 public:
-	SystemsMaster(EntityPool* entityPool) {
+	SystemsMaster(EntityPool* entityPool, string name) {
 		this->entityPool = entityPool;
 		//sets a value in lastFuture, for ease
 		lastFuture = async(launch::async, &emptyFunc);
+		this->name = name;
 	}
 
 	~SystemsMaster() {
 		//Spin lock waiting for systems to end
 		while (inExec) {
-			cout << "spin locked" << endl;
+			cout << "spin locked " + name << endl;
 		}
 
 		for (auto i : systems) {
@@ -100,6 +107,7 @@ public:
 			inExec = true;
 			lateCall = false;
 			lastCall = timer;
+			calls++;
 			lastFuture = async(launch::async, &SystemsMaster::cycleSystems, this);
 		} 
 		//handle if inExec is true and timer is true
