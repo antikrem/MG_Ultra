@@ -9,15 +9,7 @@ the script loaded is in script/camera.lua
 #include "script_master.h"
 #include "scriptable_class.h"
 
-//different modes for camera
-enum CameraMode {
-	CM_track,
-	CM_direction
-};
-
 class ComponentCamera : public Component, public ScriptableClass {
-	//current mdoe of the camera
-	atomic<CameraMode> cameraMode = CM_direction;
 	//treats location as a vector
 	atomic<Point3> viewTarget;
 
@@ -30,20 +22,20 @@ public:
 		return viewTarget.load().getVec3();
 	}
 
-	void setCameraTarget(Point3 target) {
-		viewTarget = target;
-	}
-
-	void setCameraMode(int mode) {
-		cameraMode = (CameraMode)mode;
-	}
-
 	tuple<float, float, float> l_getViewTarget() {
 		return tuple<float, float, float>(viewTarget.load().x, viewTarget.load().y, viewTarget.load().z);
 	}
 
-	void l_setViewTarget(float x, float y, float z) {
+	void setViewTarget(Point3 target) {
+		viewTarget = target;
+	}
+
+	void lll_setViewTarget(float x, float y, float z) {
 		viewTarget = Point3(x, y, z);
+	}
+
+	void ll_setViewTarget(float x, float y) {
+		viewTarget = Point3(x, y, this->viewTarget.load().z);
 	}
 
 	void l_addViewTarget(float x, float y, float z) {
@@ -53,6 +45,7 @@ public:
 	void registerToLua(kaguya::State& state) override {
 		state["ComponentCamera"].setClass(kaguya::UserdataMetatable<ComponentCamera, Component>()
 			.setConstructors<ComponentCamera()>()
+			.addOverloadedFunctions("set_view_target", &ComponentCamera::ll_setViewTarget, &ComponentCamera::lll_setViewTarget)
 			.addFunction("get_view_target", &ComponentCamera::l_getViewTarget)
 			.addStaticFunction("type", &getType<ComponentCamera>)
 			.addStaticFunction("cast", &Component::castDown<ComponentCamera>)
