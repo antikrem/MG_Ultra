@@ -2,7 +2,14 @@
 --Camera entity (this) has a position and camera component attached
 --This script is run asyncronous to rendering
 
-cPosition = this:get_component(ComponentPosition)
-cCamera = this:get_component(ComponentCamera)
+--Pull components for the camera entity
+camPosition = this:get_component(ComponentPosition)
+camCamera = this:get_component(ComponentCamera)
 
---cPosition:add_position(1, 1)
+--Get the player entity and pull components
+player = pool:get_cached_entity(EntityPlayer)
+
+--set camera x,y position to the player
+x,y = player:get_component(ComponentPosition):get_position()
+--camPosition:set_position(x, y)
+--camCamera:set_view_target(x, y)
