@@ -179,7 +179,7 @@ public:
 		unique_lock<shared_mutex> lock(mtx);
 
 		//Check reader opened
-		if (file.getStatus())
+		if (FAILURE(file.getStatus()))
 			return EXIT_FAILURE;
 
 		//check ID
@@ -302,7 +302,7 @@ public:
 
 	//Takes a set and frame number, and populates a template with all but uvwhs
 	//returns true if operation successful
-	bool populateTemplate(string setName, int frame, AnimationTemplate* animationTemplate) {
+	bool populateTemplate(string setName, unsigned int animationType, AnimationTemplate* animationTemplate) {
 		if not(animationTemplate) {
 			return false;
 		}
@@ -316,12 +316,12 @@ public:
 		}
 
 		//check template exists
-		if not(set->checkTemplate(frame)) {
+		if not(set->checkTemplate(animationType)) {
 			return false;
 		}
 		
 		//set values
-		*animationTemplate = *set->getAnimationTemplate(frame);
+		*animationTemplate = *set->getAnimationTemplate(animationType);
 
 		return true;
 	}
