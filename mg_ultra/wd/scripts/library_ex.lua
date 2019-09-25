@@ -1,9 +1,6 @@
 ---Extended library
 --Classes and mg functionality have been bounded
 
---global pool, contains all the entities in the game
-pool = getEntityPool()
-
 --global registar, keeps states
 registar = getGlobalRegistar()
 
