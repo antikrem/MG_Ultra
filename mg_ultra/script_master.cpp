@@ -8,6 +8,7 @@
 #include "component_camera.h"
 #include "component_input.h"
 #include "component_movement.h"
+#include "component_extended_scripting.h"
 
 #include "system.h"
 
@@ -84,12 +85,15 @@ ScriptMaster::ScriptMaster()
 	forceLuaRegistration<ComponentCamera>(kaguya);
 	forceLuaRegistration<ComponentInput>(kaguya);
 	forceLuaRegistration<ComponentMovement>(kaguya);
+	forceLuaRegistration<ComponentExtendedScripting>(kaguya);
 
 	//set contextual script functions
 	kaguya["getEntityPool"] = getLastPool;
 	kaguya["getGlobalRegistar"] = g_registar::getGlobalRegistar;
 
 	quickLoadAndExecute("scripts/library_ex.lua");
+	quickLoadAndExecute("scripts/pool_utils.lua");
+	quickLoadAndExecute("scripts/math_utils.lua");
 
 	globalScriptMasterPtr = this;
 }
