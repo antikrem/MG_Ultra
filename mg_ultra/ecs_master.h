@@ -37,8 +37,8 @@ class ECSMaster {
 	//global registar
 	Registar* registar = nullptr;
 
-	SystemsMaster* newSystemsMaster() {
-		auto master = new SystemsMaster(entityPool);
+	SystemsMaster* newSystemsMaster(string name) {
+		auto master = new SystemsMaster(entityPool, name);
 		systemsMasters.push_back(master);
 		return master;
 	}
@@ -72,40 +72,40 @@ class ECSMaster {
 	*/
 	void createBasicSystems() {
 		//ring 0
-		auto master = newSystemsMaster();
+		auto master = newSystemsMaster("m_meta");
 		master->createSystem<SystemGarbageCollector>(registar);
 
 		//ring 1
-		master = newSystemsMaster();
+		master = newSystemsMaster("m_graphics");
 		auto graphicsMaster = master->createSystem<SystemGraphics>(registar);
 		graphicsMaster->setGraphicsState(gState);
 
 		//ring 2
-		master = newSystemsMaster();
+		master = newSystemsMaster("m_script");
 		auto scriptSystem = master->createSystem<SystemScript>(registar);
 		scriptSystem->setScriptMaster(scriptMaster);
 
 		//ring 3
-		master = newSystemsMaster();
-		master->setTimer(300);
+		master = newSystemsMaster("m_graphics2");
+		master->setTimer(256);
 		auto animationSystem = master->createSystem<SystemAnimation>(registar);
 		animationSystem->setAnimationMaster(gState->getAnimationsMaster());
 		auto textSystem = master->createSystem<SystemText>(registar);
 		textSystem->setAnimationMaster(gState->getAnimationsMaster());
-		master->createSystem<SystemConsole>(registar);
 		auto cameraSystem = master->createSystem<SystemCamera>(registar);
 		cameraSystem->setCamera(gState->getCamera());
+		
 
 		//ring 4
-		master = newSystemsMaster();
-		master->setTimer(300);
+		master = newSystemsMaster("m_gameplay");
+		master->setTimer(256);
 		master->createSystem<SystemTimer>(registar);
 		master->createSystem<SystemGameStateControl>(registar);
 		master->createSystem<SystemPlayer>(registar);
-
+		master->createSystem<SystemConsole>(registar);
 
 		//ring 5
-		master = newSystemsMaster();
+		master = newSystemsMaster("m_loader");
 		master->setTimer(300);
 		master->createSystem<SystemLoader>(registar);
 
