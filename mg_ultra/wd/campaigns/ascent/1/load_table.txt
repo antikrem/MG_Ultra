@@ -1,0 +1,7 @@
+//Testing
+@cycle 500
+ent 1
++position 0 0 0
+->set_position(500, 500)
++graphics default
++timer
