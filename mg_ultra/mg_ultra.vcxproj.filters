@@ -46,6 +46,9 @@
     <Filter Include="Source Files\ECS">
       <UniqueIdentifier>{d0cecc33-a185-4166-9035-ba85a1c02dae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\ECS\Systems">
+      <UniqueIdentifier>{1fefb6dc-3f8d-4544-a9b7-53739ea96e1b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -79,6 +82,12 @@
       <Filter>Source Files\ECS</Filter>
     </ClCompile>
     <ClCompile Include="os_kit.cpp">
+      <Filter>Source Files\Support</Filter>
+    </ClCompile>
+    <ClCompile Include="entity_types.cpp">
+      <Filter>Source Files\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="success_callback.cpp">
       <Filter>Source Files\Support</Filter>
     </ClCompile>
   </ItemGroup>
@@ -230,6 +239,42 @@
     <ClInclude Include="os_kit.h">
       <Filter>Header Files\Support</Filter>
     </ClInclude>
+    <ClInclude Include="component_timer.h">
+      <Filter>Header Files\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="system_timer.h">
+      <Filter>Header Files\ECS\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="success_callback.h">
+      <Filter>Header Files\Support</Filter>
+    </ClInclude>
+    <ClInclude Include="system_camera.h">
+      <Filter>Header Files\ECS\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="component_camera.h">
+      <Filter>Header Files\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="system_player.h">
+      <Filter>Header Files\ECS\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="component_input.h">
+      <Filter>Header Files\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="mmap.h">
+      <Filter>Header Files\Support</Filter>
+    </ClInclude>
+    <ClInclude Include="functional_callback_system.h">
+      <Filter>Header Files\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="component_movement.h">
+      <Filter>Header Files\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="component_extended_scripting.h">
+      <Filter>Header Files\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="any_type.h">
+      <Filter>Header Files\Support</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="wd\shaders\base.vert">
@@ -244,9 +289,21 @@
     <None Include="wd\scripts\library.lua">
       <Filter>Resource Files\scripts</Filter>
     </None>
+    <None Include="wd\scripts\camera.lua">
+      <Filter>Resource Files\scripts</Filter>
+    </None>
+    <None Include="wd\scripts\player.lua">
+      <Filter>Resource Files\scripts</Filter>
+    </None>
+    <None Include="wd\scripts\pool_utils.lua">
+      <Filter>Resource Files\scripts</Filter>
+    </None>
+    <None Include="wd\scripts\math_utils.lua">
+      <Filter>Resource Files\scripts</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="log.txt">
+    <Text Include="wd\log.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
