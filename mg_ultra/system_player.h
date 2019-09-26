@@ -8,6 +8,8 @@
 #include "component_graphics.h"
 #include "component_input.h"
 #include "component_movement.h"
+#include "component_animation.h"
+#include "component_extended_scripting.h"
 
 #include "functional_callback_system.h"
 
@@ -35,10 +37,15 @@ public:
 		newEnt->addComponent(newComponent->pullForEntity());
 		auto newComponent1 = new ComponentGraphics("default");
 		newEnt->addComponent(newComponent1->pullForEntity());
-		auto newComponent2 = new ComponentInput();
+		auto newComponent2 = new ComponentAnimation();
+		newComponent2->changeDefaultAnimation(2);
 		newEnt->addComponent(newComponent2->pullForEntity());
-		auto newComponent3 = new ComponentMovement();
+		auto newComponent3 = new ComponentInput();
 		newEnt->addComponent(newComponent3->pullForEntity());
+		auto newComponent4 = new ComponentMovement();
+		newEnt->addComponent(newComponent4->pullForEntity());
+		auto newComponent5 = new ComponentExtendedScripting();
+		newEnt->addComponent(newComponent5->pullForEntity());
 		pool->addEnt(newEnt, true);
 		err::logMessage("Player created");
 	}
