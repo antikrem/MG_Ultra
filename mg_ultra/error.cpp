@@ -56,19 +56,22 @@ namespace err {
 		loggingCycle.store(cycle);
 	}
 
-	void appendToErrorFile(std::string message) {
-		std::ofstream outfile;
-		outfile.open("log.txt", std::ios_base::app);
-		outfile << message << std::endl;
-		outfile.close();
+	std::ofstream* openErrorFile() {
+		std::ofstream* outfile = new std::ofstream();
+		outfile->open("log.txt", std::ios_base::app);
+		return outfile;
 	}
 
-	void appendToErrorFile(int cycle, std::string message) {
-		std::ofstream outfile;
+	void closeErrorFile(std::ofstream* outfile) {
+		outfile->close();
+	}
 
-		outfile.open("log.txt", std::ios_base::app);
-		outfile << cycle << ": " << message << std::endl;
-		outfile.close();
+	void appendToErrorFile(std::ofstream* outfile, std::string message) {
+		*outfile << message << std::endl;
+	}
+
+	void appendToErrorFile(std::ofstream* outfile, int cycle, std::string message) {
+		*outfile << cycle << ": " << message << std::endl;
 	}
 
 	bool checkSize() {
@@ -90,16 +93,18 @@ namespace err {
 				messageBuffer.clear();
 			}
 
+			auto outfile = openErrorFile();
 			for (ErrorMessage i : localBuffer) {
 				if (i.cycle == 0) {
-					appendToErrorFile(i.message);
+					appendToErrorFile(outfile, i.message);
 					consoleMessageBuffer.push_back(i.message);
 				}
 				else {
+					appendToErrorFile(outfile, i.cycle, i.message);
 					consoleMessageBuffer.push_back(to_string(i.cycle) + ": " + i.message);
-					appendToErrorFile(i.cycle, i.message);
 				}
 			}
+			closeErrorFile(outfile);
 			localBuffer.clear();
 
 			//copy console message buffer to consoleMirror
