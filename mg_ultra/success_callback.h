@@ -29,6 +29,11 @@ public:
 
 	bool waitForCompletion();
 
+	void reset() {
+		lock_guard<std::mutex> lk(lock);
+		complete = false;
+	}
+
 };
 
 #endif
