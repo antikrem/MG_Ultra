@@ -135,6 +135,7 @@
     <ClCompile Include="script_master.cpp" />
     <ClCompile Include="str_kit.cpp" />
     <ClCompile Include="success_callback.cpp" />
+    <ClCompile Include="timed_event_callback.cpp" />
     <ClCompile Include="timer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -195,10 +196,12 @@
     <ClInclude Include="system.h" />
     <ClInclude Include="systems_master.h" />
     <ClInclude Include="thread_cruncher.h" />
+    <ClInclude Include="timed_event_callback.h" />
     <ClInclude Include="timer.h" />
     <ClInclude Include="n_buffer.h" />
     <ClInclude Include="vao.h" />
     <ClInclude Include="vec_kit.h" />
+    <ClInclude Include="_graphics_headers.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="wd\scripts\camera.lua" />

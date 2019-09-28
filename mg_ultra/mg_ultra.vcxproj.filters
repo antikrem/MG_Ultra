@@ -90,6 +90,9 @@
     <ClCompile Include="success_callback.cpp">
       <Filter>Source Files\Support</Filter>
     </ClCompile>
+    <ClCompile Include="timed_event_callback.cpp">
+      <Filter>Source Files\ECS</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="graphics_state.h">
@@ -274,6 +277,12 @@
     </ClInclude>
     <ClInclude Include="any_type.h">
       <Filter>Header Files\Support</Filter>
+    </ClInclude>
+    <ClInclude Include="timed_event_callback.h">
+      <Filter>Header Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="_graphics_headers.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
