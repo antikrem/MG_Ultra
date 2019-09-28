@@ -80,4 +80,5 @@ void registerGlobalFunctions(kaguya::State &kaguya) {
 	kaguya["setEvent"] = setEvent;
 	kaguya["addEventData"] = addEventData;
 	kaguya["pushEvent"] = pushEvent;
+	kaguya["get_event_length"] = g_events::queueSize;
 }

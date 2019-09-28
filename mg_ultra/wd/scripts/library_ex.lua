@@ -55,3 +55,8 @@ end
 function test() 
 	load_state("level", "ascent", 1)
 end
+
+
+function dump()
+	print("Event size:", get_event_length())
+end
