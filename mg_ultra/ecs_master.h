@@ -20,10 +20,7 @@ class ECSMaster {
 	EntityPool* entityPool = nullptr;
 
 	//Vector of systemMasters
-	vector<SystemsMaster*> systemsMasters;
-
-	//main timer
-	Timer* timer = nullptr;
+	map<string, SystemsMaster*> systemsMasters;
 
 	//global graphics state
 	GraphicsState* gState = nullptr;
@@ -39,7 +36,7 @@ class ECSMaster {
 
 	SystemsMaster* newSystemsMaster(string name) {
 		auto master = new SystemsMaster(entityPool, name);
-		systemsMasters.push_back(master);
+		systemsMasters[name] = master;
 		return master;
 	}
 
@@ -87,7 +84,7 @@ class ECSMaster {
 
 		//ring 3
 		master = newSystemsMaster("m_graphics2");
-		master->setTimer(256);
+		master->setTimer(250);
 		auto animationSystem = master->createSystem<SystemAnimation>(registar);
 		animationSystem->setAnimationMaster(gState->getAnimationsMaster());
 		auto textSystem = master->createSystem<SystemText>(registar);
@@ -98,7 +95,7 @@ class ECSMaster {
 
 		//ring 4
 		master = newSystemsMaster("m_gameplay");
-		master->setTimer(256);
+		master->setTimer(250);
 		master->createSystem<SystemTimer>(registar);
 		master->createSystem<SystemGameStateControl>(registar);
 		master->createSystem<SystemPlayer>(registar);
@@ -108,7 +105,13 @@ class ECSMaster {
 		master = newSystemsMaster("m_loader");
 		master->setTimer(300);
 		master->createSystem<SystemLoader>(registar);
+	}
 
+	//starts all of the masters
+	void startMasters() {
+		for (auto i : systemsMasters) {
+			i.second->start();
+		}
 	}
 
 public:
@@ -116,7 +119,6 @@ public:
 	ECSMaster() {
 
 		entityPool = new EntityPool();
-		timer = new Timer();
 		gState = new GraphicsState();
 		registar = new Registar();
 		g_registar::setGlobalRegistar(registar);
@@ -139,49 +141,28 @@ public:
 		createBasicSystems();
 		cout << print() << endl;
 
-		
-		//TESTING
-		//add some entities 
-		/*
-		{
-			auto newEnt = new Entity(0);
-			auto newComponent = new ComponentPosition(0, 0, -3);
-			newEnt->addComponent(newComponent->pullForEntity());
-			auto newComponent1 = new ComponentGraphics("default");
-			newEnt->addComponent(newComponent1->pullForEntity());
-			auto newComponent2 = new ComponentAnimation();
-			newEnt->addComponent(newComponent2->pullForEntity());
-			entityPool->addEnt(newEnt, true);
-		}
-		*/
-		/*
-		//add text ent
-		auto newEnt = new Entity(0);
-		auto newComponent = new ComponentPosition(0, 0, 0);
-		newEnt->addComponent(newComponent->pullForEntity());
-		auto newComponent1 = new ComponentText();
-		newComponent1->setText("Hello\n World");
-		newComponent1->setFont("text_consolas58");
-		newEnt->addComponent(newComponent1->pullForEntity());
-		entityPool->addEnt(newEnt);
-		*/
+		//start the masters
+		startMasters();
 		
 	}
 
 	~ECSMaster() {
 		scriptMaster->disable();
+		g_events::closeEventPipeline();
+
 
 		for (auto i : systemsMasters) {
-			delete i;
+			delete i.second;
 		}
 
 		delete entityPool;
-		delete timer;
 		delete gState;
 		delete inputMaster;
 		delete registar;
 		delete scriptMaster;
 	}
+
+	/*stops ecs loop*/
 
 	
 private:
@@ -223,32 +204,59 @@ private:
 
 		}
 		else {
-			err::logMessage("EVENT: error loading next state, invalid number of state parameters: " + str_kit::reconstituteVectorIntoString(data, " "));
+			err::logMessage("EVENT: error, loading next state, invalid number of state parameters: " + str_kit::reconstituteVectorIntoString(data, " "));
 			return;
 		}
 		registar->update("load_request", true);
 	}
 
-	void handleEvents() {
-		Event event(EV_noEvent);
-		while (g_events::pollEvents( &event )) {
-
-			switch (event.type) {
-
-			case EV_noEvent:
-				break;
-
-			case EV_quit:
-				executing = false;
-				break;
-
-			case EV_loadNextState:
-				//set next load request flags
-				handleLoadRequest(event.data);
-				break;
-			}
-
+	void handleSystemsInvoke(Event* event) {
+		if (event->data.size() != 1) {
+			err::logMessage("EVENT: error, expected one system name, got: " + to_string(event->data.size()));
+			return;
 		}
+
+		if (!systemsMasters.count(event->data[0])) {
+			err::logMessage("EVENT: error, expected a known system name, got: " + event->data[0]);
+			return;
+		}
+		
+		systemsMasters[event->data[0]]->executeSystemMaster();
+	}
+
+	void handleEvents() {
+		Event* event = nullptr;
+		g_events::pollEvents(&event);
+
+		if (g_events::queueSize() > 100 && event->data.size()) {
+			cout << "cycleing " << event->data[0] << " " << g_events::queueSize() << endl;
+		}
+		
+
+		switch (event->type) {
+		//no event, no effect
+		case EV_noEvent:
+			break;
+
+		//quit game
+		case EV_quit:
+			executing = false;
+			break;
+
+		//loads the next game state
+		case EV_loadNextState:
+			//set next load request flags
+			handleLoadRequest(event->data);
+			break;
+		
+		//invokes a systems master's system cycle
+		case EV_invokeSystemMaster:
+			//invoke a system master
+			handleSystemsInvoke(event);
+			break;
+		}
+
+		delete event;
 	}
 
 public:
@@ -264,23 +272,20 @@ public:
 			//handle events
 			handleEvents();
 
-			//iterate over system masters, allocating rescources
-			for (auto i : systemsMasters) {
-				i->update(timer->getTime());
-			}
-
 			//check executing conditions
 			if (glfwWindowShouldClose( gState->getWindow() )) {
-				g_events::pushEvent(Event(EV_quit));
+				g_events::pushEvent(new Event(EV_quit));
 			}
 		}
 	}
 
 	string print() {
 		string message = "MASTERS DEBUG:";
-		for (unsigned int i = 0; i < systemsMasters.size(); i++) {
+		int i = 0;
+		for (auto it = systemsMasters.begin(); it != systemsMasters.end(); it++) {
 			message += "\n";
-			message += systemsMasters[i]->print(i);
+			message += it->second->print(i);
+			i++;
 		}
 		return message;
 	}
