@@ -211,13 +211,13 @@ private:
 	}
 
 	void handleSystemsInvoke(Event* event) {
-		if (event->data.size() != 1) {
-			err::logMessage("EVENT: error, expected one system name, got: " + to_string(event->data.size()));
+		if (event->data.size() != 2) {
+			err::logMessage("EVENT: error, expected 2 parameters, got: " + to_string(event->data.size()) + " " + str_kit::reconstituteVectorIntoString(event->data, " "));
 			return;
 		}
 
 		if (!systemsMasters.count(event->data[0])) {
-			err::logMessage("EVENT: error, expected a known system name, got: " + event->data[0]);
+			err::logMessage("EVENT: error, expected a known system name and [timer/starter], got: " + event->data[0]);
 			return;
 		}
 		
@@ -228,7 +228,7 @@ private:
 		Event* event = nullptr;
 		g_events::pollEvents(&event);
 
-		if (g_events::queueSize() > 100 && event->data.size()) {
+		if (g_events::queueSize() > 1000 && event->data.size()) {
 			cout << "cycleing " << event->data[0] << " " << g_events::queueSize() << endl;
 		}
 		

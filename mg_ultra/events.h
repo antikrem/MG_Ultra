@@ -48,6 +48,9 @@ namespace g_events {
 	//updates event with pointer to new event
 	bool pollEvents(Event** event);
 
+	//clears all events currently in the queue
+	void clearEventQueue();
+
 	//closes event pipeline
 	//then clears all events in queue
 	void closeEventPipeline();

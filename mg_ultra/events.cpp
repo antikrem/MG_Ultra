@@ -32,6 +32,27 @@ bool g_events::pollEvents(Event** event) {
 	return true;
 }
 
+void g_events::clearEventQueue() {
+	unique_lock<mutex> l(lck);
+	//cannot delete starters, otherwise some
+	//systems will stop
+	vector<Event*> starters;
+	while (!eventQueue.empty()) {
+		Event* event = eventQueue.front();
+		if (event->data[1] == "starter") {
+			starters.push_back(event);
+		}
+		else {
+			delete event;
+		}
+		eventQueue.pop();
+	}
+	//add back starters
+	for (auto i : starters) {
+		eventQueue.push(i);
+	}
+}
+
 int g_events::queueSize() {
 	return (int)eventQueue.size();
 }
