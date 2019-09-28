@@ -283,9 +283,9 @@ class SystemLoader : public System {
 	bool inlineExecuteOnComponent(shared_ptr<Entity> ent, string componentName, string line) {
 		string source = "this:get_component(" + componentName + "):" + line.substr(2);
 		ScriptUnit su(SS_inlineLoader, source);
-		SuccessCallback sc;
 		su.addDebugData(" in " + file + " at line " + to_string(lineNumber) + " ");
 		su.attachEntity(ent);
+		sc.reset();
 		su.attachSuccessCallback(&sc);
 		executeScriptUnit(su);
 		return sc.waitForCompletion();

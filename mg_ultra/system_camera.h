@@ -25,7 +25,8 @@ public:
 
 	void cacheHandle(shared_ptr<Entity> ent) override {
 		//execute camera script
-		if (!executeInternalScript("system_camera", "CAMERA: Fatal error executing camera script, camera disabled", ent)) {
+		sc.reset();
+		if (!executeInternalScript("system_camera", "CAMERA: Fatal error executing camera script, camera disabled", ent, &sc)) {
 			return;
 		}
 

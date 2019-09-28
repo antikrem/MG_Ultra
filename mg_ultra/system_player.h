@@ -26,7 +26,8 @@ public:
 
 	void cacheHandle(shared_ptr<Entity> ent) override {
 		ent->getComponent<ComponentInput>()->update();
-		executeInternalScript("system_player", "PLAYER: Fatal error executing player script, player update disabled", ent);
+		sc.reset();
+		executeInternalScript("system_player", "PLAYER: Fatal error executing player script, player update disabled", ent, &sc);
 
 	}
 

@@ -66,7 +66,6 @@ public:
 		this->callbackResult = callbackResult;
 	}
 
-
 	//get size of attached ents
 	int numberOfAttachedEnts() {
 		return attachedEnts.size();

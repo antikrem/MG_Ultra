@@ -13,6 +13,7 @@
 
 #include "registar.h"
 
+#include "success_callback.h"
 
 /*A system works on entities*/
 class System {
@@ -37,6 +38,10 @@ protected:
 
 	//pointer to global registar
 	Registar* registar = nullptr;
+
+	//Each system is given a single su
+	//only this su should be used
+	SuccessCallback sc;
 
 	//Gets called before a cycle
 	virtual void precycle(EntityPool* pool) {
@@ -106,6 +111,10 @@ protected:
 	}
 		
 public:
+	~System() {
+		sc.setCompletion(false);
+	}
+
 	//called before a precycle, system will only be executed if true
 	virtual bool executeSystem() {
 		return true;
