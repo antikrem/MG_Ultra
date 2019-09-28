@@ -15,6 +15,7 @@ public:
 	TimedEventCallback(int callsPerSecond, string systemName) : event(EV_invokeSystemMaster)  {
 		this->msPeriod = MS_IN_SECOND / callsPerSecond;
 		this->event.data.push_back(systemName);
+		this->event.data.push_back("timer");
 	}
 
 	//can be used for more complex events, that arent a systems invoke
