@@ -20,6 +20,8 @@ using namespace std;
 #define DEG2RAD(a) a*(PI/180)
 #define RAD2DEG(a) a*(180/PI)
 
+#define MS_IN_SECOND 1000
+
 //unsigned long long max
 const unsigned long long ULLINT_MAX = (unsigned long long int) -1;
 
