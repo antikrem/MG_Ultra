@@ -20,7 +20,7 @@ protected:
 	}
 
 	//Executes the internal script, returns false on attempt to execute failed script
-	bool executeInternalScript(string systemName, string systemErrorMessage, shared_ptr<Entity> ent) {
+	bool executeInternalScript(string systemName, string systemErrorMessage, shared_ptr<Entity> ent, SuccessCallback* sc) {
 		//check for a valid script
 		if (!validInternalScript) {
 			return false;
@@ -30,11 +30,11 @@ protected:
 		ScriptUnit su(SS_functionalCallBack, internalScript);
 		su.addDebugData(systemName);
 		su.attachEntity(ent);
-		SuccessCallback sc;
-		su.attachSuccessCallback(&sc);
+		sc->reset();
+		su.attachSuccessCallback(sc);
 		executeScriptUnit(su);
 
-		if (!sc.waitForCompletion()) {
+		if (!sc->waitForCompletion()) {
 			err::logMessage(systemErrorMessage);
 			validInternalScript = false;
 		}
