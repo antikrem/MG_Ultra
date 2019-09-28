@@ -29,8 +29,8 @@ void print_push() {
 	buffer.clear();
 }
 
-//Factor event template which allows events to be constructed
-Event eventConstruction(EV_noEvent);
+//Factory event template which allows events to be constructed
+Event* eventConstruction = nullptr;
 
 //converts an int to a EventType
 EventType convertIntToEventType(int flag) {
@@ -42,17 +42,34 @@ EventType convertIntToEventType(int flag) {
 
 //sets event type
 void setEvent(int type) {
-	eventConstruction.type = convertIntToEventType(type);
-	eventConstruction.data.clear();
+	if (!eventConstruction) {
+		eventConstruction = new Event(convertIntToEventType(type));
+		eventConstruction->data.clear();
+	}
+	else {
+		//todo report error
+	}
+	
 }
 
 
 void addEventData(string data) {
-	eventConstruction.data.push_back(data);
+	if (eventConstruction) {
+		eventConstruction->data.push_back(data);
+	}
+	else {
+		//todo report error
+	}
 }
 
 void pushEvent() {
-	g_events::pushEvent(eventConstruction);
+	if (eventConstruction) {
+		g_events::pushEvent(eventConstruction);
+		eventConstruction = nullptr;
+	}
+	else {
+		//todo report error
+	}
 }
 
 
