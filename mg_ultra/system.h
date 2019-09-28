@@ -21,6 +21,9 @@ protected:
 	//A name for debugging
 	string debugName = "s_base";
 
+	//if false, end executions
+	atomic<bool> killed = false;
+
 	//Target components if one wishes to target those instead of handling ents
 	//If types is empty then overwite handleEntity, else overwrite handleComponents
 	vector<type_index> types;
@@ -115,6 +118,12 @@ public:
 		sc.setCompletion(false);
 	}
 
+	//ends the system, stopping all future execution
+	void endSystem() {
+		killed = true;
+		sc.setCompletion(false);
+	}
+
 	//called before a precycle, system will only be executed if true
 	virtual bool executeSystem() {
 		return true;
@@ -128,6 +137,9 @@ public:
 	//Not to be overridden, the act that will iterate over all of the ents and conduct process for a single cycle
 	//The pointer to EntityPool must remain valid, MUST
 	void systemCycleProcess(EntityPool* pool) {
+		if (killed) {
+			return;
+		}
 		precycle(pool);
 
 		//check if the system is cached first
