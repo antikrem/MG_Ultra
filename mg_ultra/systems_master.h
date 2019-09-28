@@ -3,10 +3,9 @@
 
 #include "system.h"
 #include "pool.h"
+#include "timed_event_callback.h"
 
 #include <future>
-
-#define MICROSECONDS_IN_SECOND 1000000
 
 //A static function that does nothing!
 void emptyFunc() {
@@ -31,22 +30,15 @@ class SystemsMaster {
 	//stores the last future
 	future<void> lastFuture;
 
+	//if true, this cycle is still on timer, and needs to reexecute 
+	atomic<bool> inUse = false;
 	//if true in execution, uses a bool rather than the future to keep track of future, 
 	atomic<bool> inExec = false;
 	//The next cycle to be executed will be a late execution
 	atomic<bool> lateCall = false;
-	
-	//timer variables
-	bool timer = false; //If true, this master will execute async on cycle, otherwise executes when ever touched
-	unsigned long long int microsecondsPerCycle = 0; //number of microseconds before next call
-	unsigned long long int lastCall = 0; //timer when last called
 
-	//Works the entity pool, applying all the systems
-	void workEntityPool() {
-		for (auto i : systems) {
-			i->systemCycleProcess(entityPool);
-		}
-	}
+	//if not null, used for executing system
+	TimedEventCallback* timer = nullptr;
 
 	//cycles through the systems, applying what ever needs to be done
 	void cycleSystems() {
@@ -55,7 +47,14 @@ class SystemsMaster {
 				system->systemCycleProcess(entityPool);
 			}
 		}
+
 		inExec = false;
+		//if not timer, this cycle system will invoke another cycle
+		if (!timer && inUse) {
+			Event* starterEvent = new Event(EV_invokeSystemMaster);
+			starterEvent->data.push_back(name);
+			g_events::pushEvent(starterEvent);
+		}
 	}
 
 public:
@@ -67,6 +66,12 @@ public:
 	}
 
 	~SystemsMaster() {
+		inUse = false;
+		//if has a timer, stop it
+		if (timer) {
+			timer->stopTimer();
+		}
+
 		//Spin lock waiting for systems to end
 		while (inExec) {
 			cout << "spin locked " + name << endl;
@@ -83,6 +88,28 @@ public:
 		return systems.size();
 	}
 
+	//Puts this system on a timer, each iteration will compute asyncronously
+	//N will be the number of times computed per second, set n=0 to turn off timer
+	//n=0 causes finite recursion, where the end of each cycle causes the next one 
+	void setTimer(int n) {
+		timer = new TimedEventCallback(n, name);
+	}
+
+	//starts the systems execution
+	void start() {
+		inUse = true;
+		if (timer) {
+			//start the timer to send off events
+			timer->startTimer();
+		} 
+		else {
+			//else, send off the starting event
+			Event* starterEvent = new Event(EV_invokeSystemMaster);
+			starterEvent->data.push_back(name);
+			g_events::pushEvent(starterEvent);
+		}
+	}
+
 	//Creates the system, and returns a pointer for further manipulation
 	//As an option, feed a pointer, which if not null will be filled with size
 	template <class T>
@@ -93,41 +120,18 @@ public:
 		return system;
 	}
 
-	//Puts this system on a timer, each iteration will compute asyncronously
-	//N will be the number of times computed per second, set n=0 to turn off timer
-	void setTimer(int n) {
-		timer = !!n;
-		microsecondsPerCycle = n ? MICROSECONDS_IN_SECOND / n : 0; //no divide by zero
-	}
-
 	//Calls cycleSystems asyncronously
 	//If the function is already in execution, sets latecall to be true
-	void callAsyncCycle(unsigned long long int timer) {
+	void executeSystemMaster() {
 		if not(inExec) {
 			inExec = true;
 			lateCall = false;
-			lastCall = timer;
 			calls++;
 			lastFuture = async(launch::async, &SystemsMaster::cycleSystems, this);
 		} 
-		//handle if inExec is true and timer is true
-		else if (this->timer) {
-			lateCall = true;
-		}
-	}
-
-	//Behaviour depends on timer
-	//If timer is active, update will pass unless $timer - $lastCall > $microsecondsPerCycle and $inExec is false, resulting in call
-	//If no timer is active, if not $inExec then a call will be made
-	void update(unsigned long long int timer) {
-		//No timer case
-		if not(this->timer) {
-			callAsyncCycle(timer);
-		}
+		//handle if inExec is true
 		else {
-			if (timer - lastCall >= microsecondsPerCycle) {
-				callAsyncCycle(timer);
-			}
+			lateCall = true;
 		}
 	}
 
