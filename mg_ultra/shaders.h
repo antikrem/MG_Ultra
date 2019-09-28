@@ -8,11 +8,11 @@ including loading, compiling, using and deleting*/
 #include <string>
 #include <map>
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
+#include "_graphics_headers.h"
 
 #include "constants.h"
 #include "str_kit.h"
+#include "error.h"
 
 //Stores all the shaders, should only be one stored in gState
 class ShaderMaster {
