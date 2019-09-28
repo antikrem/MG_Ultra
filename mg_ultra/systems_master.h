@@ -40,10 +40,14 @@ class SystemsMaster {
 	//if not null, used for executing system
 	TimedEventCallback* timer = nullptr;
 
+	//DEBUG system currently executed
+	System* sys = nullptr;
+
 	//cycles through the systems, applying what ever needs to be done
 	void cycleSystems() {
 		for (auto system : systems) {
 			if (system->executeSystem()) {
+				sys = system;
 				system->systemCycleProcess(entityPool);
 			}
 		}
@@ -53,6 +57,7 @@ class SystemsMaster {
 		if (!timer && inUse) {
 			Event* starterEvent = new Event(EV_invokeSystemMaster);
 			starterEvent->data.push_back(name);
+			starterEvent->data.push_back("starter");
 			g_events::pushEvent(starterEvent);
 		}
 	}
@@ -70,6 +75,11 @@ public:
 		//if has a timer, stop it
 		if (timer) {
 			timer->stopTimer();
+		}
+
+		//dirty kill each systems sucess callback
+		for (auto i : systems) {
+			i->endSystem();
 		}
 
 		//Spin lock waiting for systems to end
@@ -106,6 +116,7 @@ public:
 			//else, send off the starting event
 			Event* starterEvent = new Event(EV_invokeSystemMaster);
 			starterEvent->data.push_back(name);
+			starterEvent->data.push_back("starter");
 			g_events::pushEvent(starterEvent);
 		}
 	}
