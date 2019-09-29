@@ -5,10 +5,20 @@ VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mg_ultra", "mg_ultra\mg_ultra.vcxproj", "{3DD6D9F0-CE34-4386-9E84-174F579728A3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{319E90B4-B760-49F6-8879-CE7D0FEE41A9}"
+	ProjectSection(SolutionItems) = preProject
+		Performance1.psess = Performance1.psess
+	EndProjectSection
+EndProject
 Global
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
+		Profile|x64 = Profile|x64
+		Profile|x86 = Profile|x86
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
@@ -17,6 +27,10 @@ Global
 		{3DD6D9F0-CE34-4386-9E84-174F579728A3}.Debug|x64.Build.0 = Debug|x64
 		{3DD6D9F0-CE34-4386-9E84-174F579728A3}.Debug|x86.ActiveCfg = Debug|Win32
 		{3DD6D9F0-CE34-4386-9E84-174F579728A3}.Debug|x86.Build.0 = Debug|Win32
+		{3DD6D9F0-CE34-4386-9E84-174F579728A3}.Profile|x64.ActiveCfg = Profile|x64
+		{3DD6D9F0-CE34-4386-9E84-174F579728A3}.Profile|x64.Build.0 = Profile|x64
+		{3DD6D9F0-CE34-4386-9E84-174F579728A3}.Profile|x86.ActiveCfg = Profile|Win32
+		{3DD6D9F0-CE34-4386-9E84-174F579728A3}.Profile|x86.Build.0 = Profile|Win32
 		{3DD6D9F0-CE34-4386-9E84-174F579728A3}.Release|x64.ActiveCfg = Release|x64
 		{3DD6D9F0-CE34-4386-9E84-174F579728A3}.Release|x64.Build.0 = Release|x64
 		{3DD6D9F0-CE34-4386-9E84-174F579728A3}.Release|x86.ActiveCfg = Release|Win32
