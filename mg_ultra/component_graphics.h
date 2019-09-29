@@ -3,6 +3,7 @@
 #define __COMPONENT_GRAPHICS__
 
 #include <atomic>
+#include <shared_mutex>
 #include "component.h"
 #include "constants.h"
 
@@ -12,11 +13,14 @@
 
 class ComponentGraphics : public Component, public ScriptableClass {
 private:
-	//todo, lock should be enough/better
-	TrippleBuffer<AnimationState> states;
+	shared_mutex lock;
+	AnimationState state;
 
 	//an internal visible sign
 	atomic<bool> visible;
+	//sets the render space, true will be default 3d
+	//false renders in 2d mode, using an orthogonal perspective
+	atomic<bool> renderIn3D = true;
 
 public:
 	ComponentGraphics() {
@@ -30,25 +34,26 @@ public:
 
 	//wrapper
 	void l_setAniamtionSet(string name) {
-		setAniamtionSet(name);
+		setAniamtionSet(name, true);
 	}
 
 	//sets the animation type
-	//if reset is true, sets the animation to true, frame to zero and valid will be true
+	//if reset is true, sets the animation to idle, frame to zero and valid will be true
 	void setAniamtionSet(string name, bool reset = true) {
-		AnimationState state;
+		unique_lock<shared_mutex> lck(lock);
 		state.animationSetName = name;
 		if (reset) {
 			state.valid = true;
 			state.animationType = 1;
 			state.currentFrame = 0;
 		}
-		states.store(state);
+		this->state = state;
 	}
 
 	//sets the animation state directly
 	void setAnimationState(AnimationState state) {
-		states.store(state);
+		unique_lock<shared_mutex> lck(lock);
+		this->state = state;
 	}
 
 	void setVisible(bool visible) {
@@ -60,7 +65,8 @@ public:
 	}
 
 	AnimationState getAnimationState() {
-		return states.load();
+		shared_lock<shared_mutex> lck(lock);
+		return state;
 	}
 
 	//Takes a position and returns a complete AnimationState
