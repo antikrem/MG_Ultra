@@ -20,7 +20,7 @@ public:
 		cachedTarget = ETCamera;
 		cacheOnly = true;
 		//load camera script
-		setInternalScript(os_kit::getFileAsString("scripts//camera.lua"));
+		setInternalScript(debugName, os_kit::getFileAsString("scripts//camera//camera.lua"));
 	}
 
 	void cacheHandle(shared_ptr<Entity> ent) override {
