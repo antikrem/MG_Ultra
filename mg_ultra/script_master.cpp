@@ -9,6 +9,7 @@
 #include "component_input.h"
 #include "component_movement.h"
 #include "component_extended_scripting.h"
+#include "component_spawner.h"
 
 #include "system.h"
 
@@ -86,6 +87,7 @@ ScriptMaster::ScriptMaster()
 	forceLuaRegistration<ComponentInput>(kaguya);
 	forceLuaRegistration<ComponentMovement>(kaguya);
 	forceLuaRegistration<ComponentExtendedScripting>(kaguya);
+	forceLuaRegistration<ComponentSpawner>(kaguya);
 
 	//set contextual script functions
 	kaguya["getEntityPool"] = getLastPool;
@@ -106,11 +108,6 @@ void ScriptMaster::disable() {
 
 ScriptMaster::~ScriptMaster() {
 	//clear the buffer
-	for (auto i : scriptList) {
-		if (i.getSuccessCallback()) {
-			i.getSuccessCallback()->setCompletion(false);
-		}
-	}
 	globalScriptMasterPtr = false;
 	std::this_thread::sleep_for(std::chrono::milliseconds(100));
 }
