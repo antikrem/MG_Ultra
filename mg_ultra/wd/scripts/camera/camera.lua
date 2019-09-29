@@ -11,5 +11,5 @@ player = pool:get_cached_entity(EntityPlayer)
 
 --set camera x,y position to the player
 x,y = player:get_component(ComponentPosition):get_position()
---camPosition:set_position(x, y)
---camCamera:set_view_target(x, y)
+camPosition:set_position(x, y)
+camCamera:set_view_target(x, y)
