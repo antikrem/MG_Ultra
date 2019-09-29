@@ -30,6 +30,28 @@ struct AnimationState {
 	AnimationState() : centerPostion(0), offset(0) {
 	}
 
+	//a prefered constructor that garantees a wellformed animation set
+	AnimationState(string name, unsigned int type, unsigned int frame, unsigned int frameskip) 
+			: centerPostion(0), offset(0) {
+		animationSetName = name;
+		animationType = type;
+		currentFrame = frame;
+		frameskipCounter = frameskip;
+	}
+
+	//copy constructor
+	AnimationState(const AnimationState& state)
+		    : centerPostion(state.centerPostion), offset(state.offset) {
+		this->visible = state.visible;
+		this->valid = state.valid;
+		this->scale = state.scale;
+		this->animationSetName = state.animationSetName;
+		this->animationType = state.animationType;
+		this->currentFrame = state.currentFrame;
+		this->frameskipCounter = state.frameskipCounter;
+		this->inSingleAnimation = state.inSingleAnimation;
+	}
+
 	//simple function to reset to the start of an animation
 	void resetAnimation() {
 		currentFrame = 0;
