@@ -68,11 +68,6 @@ public:
 		vao->requestMapAsync();
 	}
 
-	BoxData instanceData[2] = {
-		{-0.5f, -0.5f, 0.0f, 1.0f, 1.0f},
-		{0.5f, 0.5f, 0.0f, 1.0f, 1.0f}
-	};
-
 	void postcycle(EntityPool* pool) override {
 		//graphics state hasn't been set yet, so no render
 		if not(vao) {
