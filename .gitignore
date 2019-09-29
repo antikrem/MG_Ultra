@@ -262,3 +262,6 @@ __pycache__/
 
 # ignore api folder
 api/
+/mg_ultra/Profile/mg_ultra.tlog
+/mg_ultra/wd/mg_ultra.exe
+/Profile
