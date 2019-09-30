@@ -40,10 +40,10 @@ public:
 		return components.count(typeid(T)) ? dynamic_pointer_cast<T>(components[typeid(T)]) : nullptr;
 	}
 
-	//return EXIT_SUCCESS if component is added, else failure and EXIT_FAILURE
-	int addComponent(pair<type_index, Component*> component) {
+	//returns a valid shared pointer if successful, otherwise returns a nullptr
+	shared_ptr<Component> addComponent(pair<type_index, Component*> component) {
 		if (components.count(component.first)) {
-			return EXIT_FAILURE;
+			return nullptr;
 		}
 		components[component.first] = shared_ptr<Component>(component.second);
 		return EXIT_SUCCESS;
