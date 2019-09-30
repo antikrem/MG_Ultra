@@ -59,5 +59,4 @@ dmag = clamp(dmag, 0, PLAYER_MAX_VELOCITY)
 
 cMovement:set_velocity( to_point(dmag, dang) )
 
-
 cPosition:set_position( cMovement:get_updated_position(cPosition:get_position()) )
