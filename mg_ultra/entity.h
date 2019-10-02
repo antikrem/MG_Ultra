@@ -21,6 +21,10 @@ private:
 	//All entities have a type
 	int entityType = ETNoType;
 
+	//allows for system association with this entity
+	//if true, quick evaluate, if false, pass
+	map<string, bool> systemsCaching;
+
 public:
 	Entity(int type) {
 		entityType = type;
@@ -64,6 +68,26 @@ public:
 	//returns flag, if false, delete this ent
 	bool getFlag() {
 		return flag;
+	}
+
+	//returns true if this system is part of the caching system
+	bool isSystemCached(const string& systemName) {
+		return systemsCaching.count(systemName);
+	}
+
+	//sets an association 
+	void setSystemCache(const string& systemName, bool association) {
+		systemsCaching[systemName] = association;
+	}
+
+	//returns true if an association exists between the system and this end
+	bool isAnAssociatedSystem(const string& systemName) {
+		return systemsCaching[systemName];
+	}
+
+	//exposes internal component map for evaluation
+	map<type_index, shared_ptr<Component>>& getMapComponent() {
+		return components;
 	}
 
 };
