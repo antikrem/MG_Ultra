@@ -25,9 +25,9 @@ public:
 		this->animationMaster = animationMaster;
 	}
 
-	void handleComponentMap(map<type_index, Component*> components, int entityType, int id) override {
-		ComponentGraphics* graphics = (ComponentGraphics*)components[typeid(ComponentGraphics)];
-		ComponentAnimation* animation = (ComponentAnimation*)components[typeid(ComponentAnimation)];
+	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, int entityType, int id) override {
+		auto graphics = getComponent<ComponentGraphics>(components);
+		auto animation = getComponent<ComponentAnimation>(components);
 
 		AnimationState state = graphics->getAnimationState();
 

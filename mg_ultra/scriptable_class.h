@@ -19,7 +19,15 @@ finally, the new derived class must have a default constructior
 class ScriptableClass {
 
 protected:
+	//required to implement this method to add the class to lua
 	virtual void registerToLua(kaguya::State& state) = 0;
+
+	//A templated way to create a new instance of a scriptable class
+	//that will remain on the heap
+	template <class T, class ... Args>
+	static T* create(Args ... args) {
+		return new T(args ...);
+	}
 };
 
 /*Forces a class to become scripted

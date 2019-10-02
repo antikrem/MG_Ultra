@@ -27,11 +27,11 @@ public:
 		this->graphicsState = graphicsState;
 	}
 
-	void handleComponentMap(map<type_index, Component*> components, int entityType, int id) override {
+	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, int entityType, int id) override {
 		//if both position and graphics components are present, this is a simple single state push case 
 		if ( components.count(typeid(ComponentPosition)) && components.count(typeid(ComponentGraphics)) ) {
-			auto pos = (ComponentPosition*)components[typeid(ComponentPosition)];
-			auto gra = (ComponentGraphics*)components[typeid(ComponentGraphics)];
+			auto pos = getComponent<ComponentPosition>(components);
+			auto gra = getComponent<ComponentGraphics>(components);
 
 			bool toDraw;
 			auto state = gra->getAnimationState(&toDraw, pos->getPosition3());
@@ -42,8 +42,8 @@ public:
 		}
 		//if otherwise a text component is found, get cached frames
 		else if ( components.count(typeid(ComponentPosition)) && components.count(typeid(ComponentText)) ) {
-			auto pos = (ComponentPosition*)components[typeid(ComponentPosition)];
-			auto tex = (ComponentText*)components[typeid(ComponentText)];
+			auto pos = getComponent<ComponentPosition>(components);
+			auto tex = getComponent<ComponentText>(components);
 			//exit early if not visible
 			if not(tex->getVisible()) {
 				return;

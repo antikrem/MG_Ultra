@@ -24,8 +24,8 @@ public:
 		this->animationMaster = animationMaster;
 	}
 
-	void handleComponentMap(map<type_index, Component*> components, int entityType, int id) override {
-		ComponentText* comText = (ComponentText*)components[typeid(ComponentText)];
+	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, int entityType, int id) override {
+		auto comText = getComponent<ComponentText>(components);
 		comText->textUpdate(animationMaster);
 	}
 };

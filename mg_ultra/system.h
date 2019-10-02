@@ -64,7 +64,7 @@ protected:
 	//This is an alternative to handleEntity
 	//To be over written if types is of size greater than zero
 	//Components made availible is of type_index specified in types
-	virtual void handleComponentMap(map<type_index, Component*> components, int entityType, int id) {
+	virtual void handleComponentMap(map<type_index, shared_ptr<Component>>& components, int entityType, int id) {
 		assert(false);
 	}
 
@@ -78,26 +78,25 @@ protected:
 	virtual void cacheFail(EntityPool* pool) {
 	}
 
-	//keeps a reference to the shared entities
-	//not to be over written
-	void createComponentList(Entity* ent, int id) {
+	//Templated static helper function to get a certain type of component out
+	//of a component map
+	template <class T>
+	static shared_ptr<T> getComponent(map<type_index, shared_ptr<Component>>& components) {
+		static_assert(is_base_of<Component, T>::value, "Invalid Component conversion: getComponent");
+		return dynamic_pointer_cast<T>(components[typeid(T)]);
+	}
+
+	//sets associativity for systems caching
+	void setSystemsCachingAssociativity(shared_ptr<Entity> ent) {
 		vector<type_index> componentTypes;
-		vector<shared_ptr<Component>> shareds;
-		map<type_index, Component*> components;
-		shared_ptr<Component> comp = nullptr;
 
 		for (auto i : types) {
-			if (comp = ent->getComponent(i)) {
-				shareds.push_back(comp);
+			if (ent->getComponent(i)) {
 				componentTypes.push_back(i);
-				components[i] = comp.get();
 			}
 		}
 
-		if (vec_kit::isSubset(componentTypes, requiredTypes)) {
-			handleComponentMap(components, ent->getType(), id);
-		}
-		//shareds passes, freeing shared pointers
+		ent->setSystemCache(debugName, vec_kit::isSubset(componentTypes, requiredTypes));
 	}
 
 	//Not to be overridden, simply an interface for system
@@ -106,10 +105,24 @@ protected:
 		if (entity == nullptr)
 			return; //exit if ent is null
 
-		if not(types.size())
+		//if not types, handle the general way
+		if not(types.size()) {
 			handleEntity(entity, id);
-		else
-			createComponentList(entity.get(), id);
+		}
+		//otherwise, handle with type lists
+		else {
+			//look for system caching
+			if (!ent->isSystemCached(debugName)) {
+				//if not, evaluate caching
+				setSystemsCachingAssociativity(ent);
+			}
+			
+			//if the ent is cached, do the standard
+			if (ent->isAnAssociatedSystem(debugName)) {
+				handleComponentMap(ent->getMapComponent(), ent->getType(), id);
+			}
+		}
+
 		//entity shared pointer will pass off the stack, freeing reference count
 	}
 		
@@ -142,7 +155,7 @@ public:
 		}
 		precycle(pool);
 
-		//check if the system is cached first
+		//check if the system is associated with a cached entity
 		if (cachedTarget != 0 || cacheOnly) {
 			shared_ptr<Entity> ptr = pool->getCachedEnt(cachedTarget);
 			if (ptr) {
