@@ -21,7 +21,7 @@ public:
 		cachedTarget = ETPlayer;
 		cacheOnly = true;
 		//load player script
-		setInternalScript(debugName, os_kit::getFileAsString("scripts//player.lua"));
+		setInternalScript(debugName, os_kit::getFileAsString("scripts//player//player.lua"));
 	}
 
 	void cacheHandle(shared_ptr<Entity> ent) override {
