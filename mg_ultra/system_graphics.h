@@ -21,6 +21,8 @@ public:
 		types.push_back(typeid(ComponentPosition));
 		types.push_back(typeid(ComponentGraphics));
 		types.push_back(typeid(ComponentText));
+
+		requiredTypes.push_back(typeid(ComponentPosition));
 	}
 
 	void setGraphicsState(GraphicsState* graphicsState) {
@@ -29,7 +31,7 @@ public:
 
 	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, int entityType, int id) override {
 		//if both position and graphics components are present, this is a simple single state push case 
-		if ( components.count(typeid(ComponentPosition)) && components.count(typeid(ComponentGraphics)) ) {
+		if (components.count(typeid(ComponentGraphics)) ) {
 			auto pos = getComponent<ComponentPosition>(components);
 			auto gra = getComponent<ComponentGraphics>(components);
 
@@ -41,7 +43,7 @@ public:
 			}
 		}
 		//if otherwise a text component is found, get cached frames
-		else if ( components.count(typeid(ComponentPosition)) && components.count(typeid(ComponentText)) ) {
+		else if (components.count(typeid(ComponentText)) ) {
 			auto pos = getComponent<ComponentPosition>(components);
 			auto tex = getComponent<ComponentText>(components);
 			//exit early if not visible
