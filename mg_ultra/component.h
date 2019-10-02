@@ -31,7 +31,8 @@ public:
 	}
 
 	//Allows a component to cast itself into a derived type
-	template <class T> static shared_ptr<T> castDown(shared_ptr<Component> in) {
+	template <class T> 
+	static shared_ptr<T> castDown(shared_ptr<Component> in) {
 		return dynamic_pointer_cast<T>(in);
 	}
 
