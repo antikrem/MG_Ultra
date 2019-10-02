@@ -82,6 +82,7 @@ public:
 			.setConstructors<ComponentGraphics(string animationSet)>()
 			.addFunction("set_animation_set", &ComponentGraphics::l_setAniamtionSet)
 			.addFunction("set_visible", &ComponentGraphics::setVisible)
+			.addStaticFunction("create", ScriptableClass::create<ComponentGraphics, string>)
 			.addStaticFunction("type", &getType<ComponentGraphics>)
 			.addStaticFunction("cast", &Component::castDown<ComponentGraphics>)
 		);

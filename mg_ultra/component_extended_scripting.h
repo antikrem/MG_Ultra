@@ -97,6 +97,7 @@ public:
 				&ComponentExtendedScripting::noCheckGet<string>, 
 				&ComponentExtendedScripting::noCheckGet<bool>
 			)
+			.addStaticFunction("create", ScriptableClass::create<ComponentExtendedScripting>)
 			.addStaticFunction("type", &getType<ComponentExtendedScripting>)
 			.addStaticFunction("cast", &Component::castDown<ComponentExtendedScripting>)
 		);

@@ -38,6 +38,10 @@ public:
 		setPosition(0, 0, 0);
 	}
 
+	ComponentPosition(ComponentPosition* a) {
+		setPosition(a->getPosition3());
+	}
+
 	void setPosition(Point3 xyz) {
 		position = Point2(xyz.x, xyz.y);
 		z = xyz.z;
@@ -104,6 +108,12 @@ public:
 			.addOverloadedFunctions("set_position", &ComponentPosition::lll_setPosition, &ComponentPosition::ll_setPosition)
 			.addFunction("get_position", &ComponentPosition::getPosition)
 			.addOverloadedFunctions("add_position", &ComponentPosition::ll_addPosition, &ComponentPosition::lll_addPosition)
+			.addOverloadedFunctions(
+				"create", 
+				ScriptableClass::create<ComponentPosition>,
+				ScriptableClass::create<ComponentPosition, float, float>,
+				ScriptableClass::create<ComponentPosition, float, float, float>
+			)
 			.addStaticFunction("type", &getType<ComponentPosition>)
 			.addStaticFunction("cast", &Component::castDown<ComponentPosition>)
 		);
