@@ -156,7 +156,7 @@ public:
 		precycle(pool);
 
 		//check if the system is associated with a cached entity
-		if (cachedTarget != 0 || cacheOnly) {
+		if (cacheOnly || cachedTarget != 0) {
 			shared_ptr<Entity> ptr = pool->getCachedEnt(cachedTarget);
 			if (ptr) {
 				cacheHandle(ptr);
