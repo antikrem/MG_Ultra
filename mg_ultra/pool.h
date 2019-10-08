@@ -184,6 +184,12 @@ public:
 		unique_lock<shared_mutex> lck(lock);
 
 	}
+
+	//locks and returns size of entitypool
+	tuple<int, int> size() {
+		unique_lock<shared_mutex> lck(lock);
+		return make_tuple(list.size(), cache.size());
+	}
 };
 
 EntityPool* getLastPool();

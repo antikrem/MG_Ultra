@@ -6,6 +6,7 @@
 #include <typeindex>
 
 #include "events.h"
+#include "pool.h"
 
 ///print
 //For use with print function, holds a buffer sting to print
@@ -72,13 +73,22 @@ void pushEvent() {
 	}
 }
 
+tuple<int, int> getNumberOfEnts() {
+	return getLastPool()->size();
+}
+
 
 void registerGlobalFunctions(kaguya::State &kaguya) {
+	//printing
 	kaguya["printAdd"] = kaguya::overload(print_addString, print_addInt, print_addBool);
 	kaguya["printPush"] = print_push;
 
+	//events
 	kaguya["setEvent"] = setEvent;
 	kaguya["addEventData"] = addEventData;
 	kaguya["pushEvent"] = pushEvent;
 	kaguya["get_event_length"] = g_events::queueSize;
+
+	//pool
+	kaguya["get_entity_count"] = getNumberOfEnts;
 }
