@@ -49,6 +49,12 @@
     <Filter Include="Source Files\ECS\Systems">
       <UniqueIdentifier>{1fefb6dc-3f8d-4544-a9b7-53739ea96e1b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\scripts\camera">
+      <UniqueIdentifier>{13dd9f55-84c7-493f-93f6-9c8900923e78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\scripts\player">
+      <UniqueIdentifier>{130e8ab7-e892-46fa-be73-49080f27c59e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -92,6 +98,9 @@
     </ClCompile>
     <ClCompile Include="timed_event_callback.cpp">
       <Filter>Source Files\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="functional_callback_system.cpp">
+      <Filter>Source Files\Script</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -284,6 +293,12 @@
     <ClInclude Include="_graphics_headers.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="component_spawner.h">
+      <Filter>Header Files\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="system_spawner.h">
+      <Filter>Header Files\ECS\Systems</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="wd\shaders\base.vert">
@@ -298,17 +313,17 @@
     <None Include="wd\scripts\library.lua">
       <Filter>Resource Files\scripts</Filter>
     </None>
-    <None Include="wd\scripts\camera.lua">
-      <Filter>Resource Files\scripts</Filter>
-    </None>
-    <None Include="wd\scripts\player.lua">
-      <Filter>Resource Files\scripts</Filter>
-    </None>
     <None Include="wd\scripts\pool_utils.lua">
       <Filter>Resource Files\scripts</Filter>
     </None>
     <None Include="wd\scripts\math_utils.lua">
       <Filter>Resource Files\scripts</Filter>
+    </None>
+    <None Include="wd\scripts\camera\camera.lua">
+      <Filter>Resource Files\scripts\camera</Filter>
+    </None>
+    <None Include="wd\scripts\player\player.lua">
+      <Filter>Resource Files\scripts\player</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
