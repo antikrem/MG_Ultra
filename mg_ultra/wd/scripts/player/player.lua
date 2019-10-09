@@ -10,13 +10,13 @@ PLAYER_MAX_FOCUS_VELOCITY = 2.0
 PLAYER_MAX_DASH_VELOCITY = 15.0
 
 --The position of the player
-cPosition = this:get_component(ComponentPosition)
+local cPosition = this:get_component(ComponentPosition)
 --More sophisticated interface for controlling movement
-cMovement = this:get_component(ComponentMovement)
+local cMovement = this:get_component(ComponentMovement)
 --A component to look at movement
-cInput = this:get_component(ComponentInput)
+local cInput = this:get_component(ComponentInput)
 --Extended scripting functionality
-cEScript = this:get_component(ComponentExtendedScripting)
+local cEScript = this:get_component(ComponentExtendedScripting)
 
 --add has no effect if value is already set
 --cEScript:add("test", 10)
@@ -27,7 +27,7 @@ cEScript = this:get_component(ComponentExtendedScripting)
 --print(testValue)
 
 --represents input
-ix, iy = 0,0
+local ix, iy = 0,0
 
 if cInput:query_down("left") == 1 then
 	ix = ix - 1;
@@ -49,7 +49,7 @@ end
 dmag, dang = to_polar( cMovement:get_velocity() )
 
 --set magnitude and angle depending on input
-if ( to_magnitude(ix,iy) < 0.1) then
+if (to_magnitude(ix,iy) < 0.1) then
 	dmag = dmag - PLAYER_ACCELERATION
 else
 	dmag = dmag + PLAYER_ACCELERATION
@@ -60,3 +60,18 @@ dmag = clamp(dmag, 0, PLAYER_MAX_VELOCITY)
 cMovement:set_velocity( to_point(dmag, dang) )
 
 cPosition:set_position( cMovement:get_updated_position(cPosition:get_position()) )
+
+--create a bullet entity
+if cInput:query_press("shoot") == 1 then
+	cSpawner = this:get_component(ComponentSpawner)
+	cSpawner:create_entity(3)
+	cSpawner:add_component(ComponentPosition.create(x, y))
+	cSpawner:add_component(ComponentGraphics.create("default"))
+	cSpawner:push_entity()
+end
+
+collectgarbage()
+
+--create and collect 
+--cSpawner = this:get_component(ComponentSpawner)
+--typeof(cSpawner)

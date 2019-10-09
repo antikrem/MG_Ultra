@@ -90,6 +90,9 @@ InputMaster::InputMaster(GLFWwindow* window) {
 	addToKeyMap("up", GLFW_KEY_UP);
 	addToKeyMap("down", GLFW_KEY_DOWN);
 
+	addToKeyMap("shoot", GLFW_KEY_Z);
+	addToKeyMap("bomb", GLFW_KEY_X);
+
 	addToKeyMap("console_open", GLFW_KEY_GRAVE_ACCENT);
 	addToKeyMap("console_enter", GLFW_KEY_ENTER);
 	addToKeyMap("console_newline", GLFW_KEY_LEFT_SHIFT);

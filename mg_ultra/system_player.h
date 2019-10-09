@@ -47,6 +47,9 @@ public:
 		newEnt->addComponent(newComponent4->pullForEntity());
 		auto newComponent5 = new ComponentExtendedScripting();
 		newEnt->addComponent(newComponent5->pullForEntity());
+		auto newComponent6 = new ComponentSpawner();
+		newEnt->addComponent(newComponent6->pullForEntity());
+
 		pool->addEnt(newEnt, true);
 		err::logMessage("Player created");
 	}
