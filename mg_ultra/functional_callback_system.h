@@ -5,6 +5,7 @@ This script facilitates easy use*/
 
 #include "script_master.h"
 #include "entity.h"
+#include "os_kit.h"
 
 class FunctionalCallbackSystem {
 	//a script called and waited on 

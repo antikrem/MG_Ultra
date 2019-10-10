@@ -1,4 +1,5 @@
 #include "functional_callback_system.h"
+
 void FunctionalCallbackSystem::executeInitialScript(string systemName, string script, shared_ptr<Entity> ent, SuccessCallback* sc) {
 	ScriptUnit su(SS_functionalCallBack, script);
 	su.addDebugData(systemName);
