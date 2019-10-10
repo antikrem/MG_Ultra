@@ -89,8 +89,6 @@ class ECSMaster {
 		animationSystem->setAnimationMaster(gState->getAnimationsMaster());
 		auto textSystem = master->createSystem<SystemText>(registar);
 		textSystem->setAnimationMaster(gState->getAnimationsMaster());
-		auto cameraSystem = master->createSystem<SystemCamera>(registar);
-		cameraSystem->setCamera(gState->getCamera());
 		master->createSystem<SystemConsole>(registar);
 		master->createSystem<SystemSpawner>(registar);
 
@@ -100,7 +98,8 @@ class ECSMaster {
 		master->createSystem<SystemTimer>(registar);
 		master->createSystem<SystemGameStateControl>(registar);
 		master->createSystem<SystemPlayer>(registar);
-		
+		auto cameraSystem = master->createSystem<SystemCamera>(registar);
+		cameraSystem->setCamera(gState->getCamera());
 		
 
 		//ring 5

@@ -15,12 +15,12 @@
 #include "system_animation.h"
 #include "system_text.h"
 #include "system_console.h"
-#include "system_camera.h"
 #include "system_spawner.h"
 
 //ring 4 - main game loop - most important main gameplay loop
 #include "system_timer.h"
 #include "system_player.h"
+#include "system_camera.h"
 #include "system_game_state_control.h"
 
 //ring 5 - loading
