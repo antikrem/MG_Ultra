@@ -33,7 +33,6 @@ public:
 	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, int entityType, int id) override {
 		//if buffer is null, dont write yet
 		if (!buffer) {
-			//cout << "ooop" << endl;
 			return;
 		}
 
