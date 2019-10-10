@@ -12,7 +12,7 @@ what appears to be a vao.
 #include "_graphics_headers.h"
 
 //VAO state
-enum VaoState1 {
+enum VaoState {
 	VS_waiting, //waiting for another thread to update this
 	VS_ready, //finalised updating, waiting on glside to unmap
 	VS_drawing  //not so useful debug state, indicating that this vao is being drawn
@@ -36,7 +36,7 @@ private:
 
 
 	//state of each VAO
-	VaoState1 vaoState[2] = { VS_ready, VS_ready };
+	VaoState vaoState[2] = { VS_ready, VS_ready };
 
 	//mutex lock for switching thread context
 	mutex lock;
