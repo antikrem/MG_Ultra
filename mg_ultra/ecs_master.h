@@ -100,6 +100,7 @@ class ECSMaster {
 		master->createSystem<SystemPlayer>(registar);
 		auto cameraSystem = master->createSystem<SystemCamera>(registar);
 		cameraSystem->setCamera(gState->getCamera());
+		master->createSystem<SystemMovement>(registar);
 		
 
 		//ring 5

@@ -242,6 +242,7 @@
     <ClInclude Include="system_garbage_collector.h" />
     <ClInclude Include="system_graphics.h" />
     <ClInclude Include="system_loader.h" />
+    <ClInclude Include="system_movement.h" />
     <ClInclude Include="system_player.h" />
     <ClInclude Include="system_position.h" />
     <ClInclude Include="shaders.h" />

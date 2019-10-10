@@ -21,6 +21,7 @@
 #include "system_timer.h"
 #include "system_player.h"
 #include "system_camera.h"
+#include "system_movement.h"
 #include "system_game_state_control.h"
 
 //ring 5 - loading
