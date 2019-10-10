@@ -87,11 +87,6 @@ public:
 		return glHandler->getWindow();
 	}
 
-	//returns a pointer to the vao with the lowest unmap index
-	Vao* getLowestVao() {
-		return glHandler->getLowestUnmap();
-	}
-
 	AnimationsMaster* getAnimationsMaster() {
 		return animationsMaster;
 	}
@@ -102,6 +97,13 @@ public:
 
 	BoxData evaluateToBox(AnimationState state) {
 		return animationsMaster->evaluateToBox(state);
+	}
+
+	//gets a pointer to a buffered map
+	//blocks until fufiled
+	//also commits the last block
+	BoxData* getBoxDataBuffer(int count) {
+		return glHandler->getBoxDataBuffer(count);
 	}
 };
 

@@ -262,7 +262,9 @@
     <ClInclude Include="timed_event_callback.h" />
     <ClInclude Include="timer.h" />
     <ClInclude Include="n_buffer.h" />
-    <ClInclude Include="vao.h" />
+    <ClInclude Include="_vao.h" />
+    <ClInclude Include="vao_boxdata.h" />
+    <ClInclude Include="vao_buffer.h" />
     <ClInclude Include="vec_kit.h" />
     <ClInclude Include="_graphics_headers.h" />
   </ItemGroup>

@@ -12,8 +12,9 @@ class SystemGraphics : public System {
 	//Pointer to graphics state
 	GraphicsState* graphicsState = nullptr;
 	vector<AnimationState> states;
-	//vao to write to
-	Vao* vao = nullptr;
+
+	int boxCount = 0;
+	BoxData* buffer = nullptr;
 
 public:
 	SystemGraphics() {
@@ -30,6 +31,12 @@ public:
 	}
 
 	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, int entityType, int id) override {
+		//if buffer is null, dont write yet
+		if (!buffer) {
+			//cout << "ooop" << endl;
+			return;
+		}
+
 		//if both position and graphics components are present, this is a simple single state push case 
 		if (components.count(typeid(ComponentGraphics)) ) {
 			auto pos = getComponent<ComponentPosition>(components);
@@ -40,6 +47,8 @@ public:
 
 			if (toDraw) {
 				states.push_back(state);
+				buffer[boxCount] = graphicsState->evaluateToBox(state);
+				boxCount++;
 			}
 		}
 		//if otherwise a text component is found, get cached frames
@@ -53,46 +62,21 @@ public:
 
 			//pull all the states 
 			auto stateList = tex->getStates(pos->getPosition3());
-			states.insert(states.end(), stateList.begin(), stateList.end());
+			vector<BoxData> boxes;
+			for (auto i : stateList) {
+				boxes.push_back(graphicsState->evaluateToBox(i));
+			}
+			copy(boxes.begin(), boxes.end(), buffer + boxCount);
+			boxCount += boxes.size();
 		}
 	}
 
 	void precycle(EntityPool* pool) override {
-		//clear all states
-		states.clear();
-		//get a vao
-		vao = graphicsState->getLowestVao();
-		//sometimes this will be null, return in this case
-		if not(vao) {
-			return;
-		}
-		//request a memory space to write to
-		vao->requestMapAsync();
+		boxCount = 0;
 	}
 
 	void postcycle(EntityPool* pool) override {
-		//graphics state hasn't been set yet, so no render
-		if not(vao) {
-			return;
-		}
-		//otherwise, get the memory to map to
-		BoxData* boxMap = vao->returnMapAsync();
-		//can be null, return in this case
-		if not(boxMap) {
-			return;
-		}
-
-		//todo make this a direct write to unmapped memory, also check mem size
-		BoxData data[1000];
-		unsigned int boxcount = states.size();
-
-		for (unsigned int i = 0; i < boxcount; i++) {
-			data[i] = graphicsState->evaluateToBox(states[i]);
-		}
-
-		memcpy(boxMap, data, boxcount * sizeof(BoxData));
-		vao->requestUnmap(boxcount, graphicsState->getNextUnmap());
-
+		buffer = graphicsState->getBoxDataBuffer(boxCount);
 	}
 
 };

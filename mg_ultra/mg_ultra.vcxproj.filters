@@ -55,6 +55,9 @@
     <Filter Include="Resource Files\scripts\player">
       <UniqueIdentifier>{130e8ab7-e892-46fa-be73-49080f27c59e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Graphics\VAO">
+      <UniqueIdentifier>{bddc3d78-4e0d-493c-bdcd-c0769277a518}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -163,9 +166,6 @@
     </ClInclude>
     <ClInclude Include="reader.h">
       <Filter>Header Files\Support</Filter>
-    </ClInclude>
-    <ClInclude Include="vao.h">
-      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="systems_master.h">
       <Filter>Header Files\ECS</Filter>
@@ -298,6 +298,15 @@
     </ClInclude>
     <ClInclude Include="system_spawner.h">
       <Filter>Header Files\ECS\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="vao_buffer.h">
+      <Filter>Header Files\Graphics\VAO</Filter>
+    </ClInclude>
+    <ClInclude Include="vao_boxdata.h">
+      <Filter>Header Files\Graphics\VAO</Filter>
+    </ClInclude>
+    <ClInclude Include="_vao.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

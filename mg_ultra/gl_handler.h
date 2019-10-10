@@ -1,7 +1,6 @@
 #ifndef __GL_HANDLER__
 #define __GL_HANDLER__
 
-#include "vao.h"
 #include "constants.h"
 #include "shaders.h"
 #include "camera.h"
@@ -14,6 +13,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <iostream>
+
+#include "vao_boxdata.h"
 
 /*Handles openGL handling
 Only one thread calls openGL at a time
@@ -28,17 +29,6 @@ private:
 
 	//unmapindex
 	unsigned long long int unmapIndex = 0;
-
-	//buffer of Vaos
-	vector<Vao*> vaoBuffer;
-
-	//Needs to be locked to make sure lowest and highest vao are valid
-	mutex lock;
-
-	//constantly updated pointer to lowest index
-	atomic<Vao*> lowestVao = nullptr;
-	//constantly updated pointer to lowest index
-	atomic<Vao*> highestVao = nullptr;
 
 	//gl handle thread, it will do all gl calls, containing current context
 	thread* glThread = nullptr;
@@ -59,6 +49,9 @@ private:
 	//Handles camera
 	Camera* camera = nullptr;
 
+	//buffer for all boxes in the render view
+	VAOBoxData boxVAOBuffer;
+
 	//initialises last part of gl
 	int glThreadInitialise(GLFWwindow *window, GraphicsSettings* gSettings) {
 		glfwMakeContextCurrent(window);
@@ -74,12 +67,6 @@ private:
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);
 
-		//set up vao
-		for (; unmapIndex < size; unmapIndex++) {
-			vaoBuffer.push_back(new Vao(unmapIndex));
-		}
-		highestVao.store(vaoBuffer[0]);
-
 		shaderMaster = new ShaderMaster();
 
 		mvpID = glGetUniformLocation(shaderMaster->getShaderProgramID(), "MVP");
@@ -90,30 +77,6 @@ private:
 
 		err::logMessage("GRAPHICS: Subsystem initialised... Entering render loop");
 		return EXIT_SUCCESS;
-	}
-
-	//comparison function for updating lowest map
-	static bool comp0(Vao* a, Vao* b) {
-		return (a->getUnmapIndex() < b->getUnmapIndex());
-	}
-
-	//sets the lowest unmap index pointer
-	void updateLowestUnmap() {
-		lowestVao.store(
-			*min_element(begin(vaoBuffer), end(vaoBuffer), &GLHandler::comp0)
-		);
-	}
-
-	//sets the highest unmap index pointer
-	void updateHighestUnmap() {
-		for (int i = 0; i < size; i++) {
-			//the highest unmap must be ready to draw
-			if ( (vaoBuffer[i]->getUnmapIndex() > highestVao.load()->getUnmapIndex()) && 
-				(vaoBuffer[i]->getState() == VS_readyDraw) ) {
-				highestVao.store(vaoBuffer[i]);
-			}
-		}
-
 	}
 
 	//The process of gl handling
@@ -136,15 +99,6 @@ private:
 	void postrender() {
 		glfwSwapBuffers(window);
 	}
-
-	//does gl handling and sets min max vaos
-	void glHandleAll() {
-		for (auto i : vaoBuffer) {
-			i->glHandle();
-		}
-		updateLowestUnmap();
-		updateHighestUnmap();
-	}
 	
 	//renders everything in the render buffer
 	void render() {
@@ -153,10 +107,11 @@ private:
 		glm::mat4 mvp = camera->getVPMatrix();
 		glUniformMatrix4fv(mvpID, 1, GL_FALSE, &mvp[0][0]);
 
-		glHandleAll();
+		//process the box buffer, which renders the geometry
+		boxVAOBuffer.processGLSide();
 
 		//draw highest unmap
-		highestVao.load()->drawVao();
+		//highestVao.load()->drawVao();
 
 		postrender();
 	}
@@ -164,7 +119,8 @@ private:
 public:
 	//GL calls are done in a seperate thread
 	//Requests made to gl thread will be handled async
-	GLHandler(GLFWwindow *window, GraphicsSettings* gSettings, AnimationsMaster* textureMaster, Camera* camera) {
+	GLHandler(GLFWwindow *window, GraphicsSettings* gSettings, AnimationsMaster* textureMaster, Camera* camera) 
+	: boxVAOBuffer(1000) {
 		this->window = window;
 		this->gSettings = gSettings;
 		this->camera = camera;
@@ -179,9 +135,6 @@ public:
 		while not(ended) {
 
 		}
-		for (int i = 0; i < size; i++) {
-			delete vaoBuffer[i];
-		}
 		glfwDestroyWindow(window);
 	}
 
@@ -193,14 +146,16 @@ public:
 		return window;
 	}
 
-	Vao* getLowestUnmap() {
-		return lowestVao;
-	}
-
 	void blockUntilActive() {
 		while not(active.load()) {
 
 		}
+	}
+
+	//gets a boxdata buffer and commits the last one
+	//blocks until operation is done
+	BoxData* getBoxDataBuffer(int count) {
+		return boxVAOBuffer.processUpdateSide(count);
 	}
 };
 
