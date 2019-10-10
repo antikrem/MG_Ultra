@@ -15,8 +15,6 @@
 
 #include "error.h"
 
-#include "registar.h"
-
 void glfwErrorCallback(int error, const char* description) {
 	err::logMessage("WINDOW: error: %s\n" + string(description));
 }
