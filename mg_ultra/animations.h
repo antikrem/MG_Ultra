@@ -9,6 +9,7 @@
 #include <algorithm> 
 
 #include "constants.h"
+#include "cus_struct2.h"
 
 //has enough information to get a boxdata 
 //Needs an AnimationSetTemplate to actually have meaning
