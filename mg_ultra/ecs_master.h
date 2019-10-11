@@ -68,10 +68,11 @@ class ECSMaster {
 	
 	*/
 	void createBasicSystems() {
+		
 		//ring 0
 		auto master = newSystemsMaster("m_meta");
 		master->createSystem<SystemGarbageCollector>(registar);
-
+		
 		//ring 1
 		master = newSystemsMaster("m_graphics");
 		auto graphicsMaster = master->createSystem<SystemGraphics>(registar);

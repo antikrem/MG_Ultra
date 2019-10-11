@@ -11,7 +11,6 @@
 class SystemGraphics : public System {
 	//Pointer to graphics state
 	GraphicsState* graphicsState = nullptr;
-	vector<AnimationState> states;
 
 	int boxCount = 0;
 	BoxData* buffer = nullptr;
@@ -45,7 +44,6 @@ public:
 			auto state = gra->getAnimationState(&toDraw, pos->getPosition3());
 
 			if (toDraw) {
-				states.push_back(state);
 				buffer[boxCount] = graphicsState->evaluateToBox(state);
 				boxCount++;
 			}

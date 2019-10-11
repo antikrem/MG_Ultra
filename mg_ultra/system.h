@@ -148,7 +148,7 @@ public:
 	}
 
 	//Not to be overridden, the act that will iterate over all of the ents and conduct process for a single cycle
-	//The pointer to EntityPool must remain valid, MUST
+	//The pointer to EntityPool must remain valid
 	void systemCycleProcess(EntityPool* pool) {
 		if (killed) {
 			return;
