@@ -58,6 +58,9 @@
     <Filter Include="Header Files\Graphics\VAO">
       <UniqueIdentifier>{bddc3d78-4e0d-493c-bdcd-c0769277a518}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Graphics">
+      <UniqueIdentifier>{47a1f7b3-5a59-42f9-b996-1e854235c58f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -104,6 +107,9 @@
     </ClCompile>
     <ClCompile Include="functional_callback_system.cpp">
       <Filter>Source Files\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="_graphics_headers.cpp">
+      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

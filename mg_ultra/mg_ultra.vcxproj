@@ -198,6 +198,7 @@
     <ClCompile Include="success_callback.cpp" />
     <ClCompile Include="timed_event_callback.cpp" />
     <ClCompile Include="timer.cpp" />
+    <ClCompile Include="_graphics_headers.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animations.h" />
