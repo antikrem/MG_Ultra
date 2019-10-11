@@ -59,4 +59,6 @@ end
 
 function dump()
 	print("Event size:", get_event_length())
+	print("Entities size:", get_entity_count())
+	print("Memory Usage:", collectgarbage("count"))
 end
