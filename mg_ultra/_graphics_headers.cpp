@@ -1,17 +1,23 @@
 #include "_graphics_headers.h"
 
+#include <stdio.h>
 
-void glErrorSpam() {
-	GLenum errorCode;
-	bool errored = false;
-	std::cout << "GL ERROR REPORT" << std::endl;
-	while ((errorCode = glGetError()) != GL_NO_ERROR) {
-		errored = true;
-		std::cout << glGetString(errorCode) << std::endl;
-	}
-	if (!errored) {
-		std::cout << "GL NO ERROR " << std::endl;
-	}
+//TODO improve to use log
 
+void GLAPIENTRY MessageCallback(GLenum source,
+	GLenum type,
+	GLuint id,
+	GLenum severity,
+	GLsizei length,
+	const GLchar* message,
+	const void* userParam)
+{
+	fprintf(stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
+		(type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""),
+		type, severity, message);
 }
 
+void glEnableDebug() {
+	glEnable(GL_DEBUG_OUTPUT);
+	glDebugMessageCallback(MessageCallback, 0);
+}

@@ -63,6 +63,8 @@ private:
 			return EXIT_FAILURE;
 		}
 
+		glEnableDebug();
+
 		//depth test
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);

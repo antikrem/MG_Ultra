@@ -8,12 +8,8 @@ to avoid macro redifinition*/
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-//A standard gl error checking function
-//will only work in debug mode
-
-#include <iostream>
-
-void glErrorSpam();
+//Use for debugging
+void glEnableDebug();
 
 
 #endif
