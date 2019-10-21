@@ -129,16 +129,7 @@ public:
 		input::setCurrentInputMaster(inputMaster);
 		scriptMaster = new ScriptMaster();
 
-		registar->addToBase("cycle", -1);
-		registar->addToBase("cycle_progress", false);
-		registar->addToBase("load_request", false);
-		registar->addToBase("loading", false);
-		registar->addToBase("state", string("none"));
-		registar->addToBase("campaign", string("none"));
-		registar->addToBase("level", 0);
-		registar->addToBase("next_state", string("none"));
-		registar->addToBase("next_campaign", string("none"));
-		registar->addToBase("next_level", 0);
+		
 
 		//Create basic system masters
 		createBasicSystems();

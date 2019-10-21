@@ -42,7 +42,7 @@ ScriptMaster::ScriptMaster()
 	registerGlobalFunctions(kaguya);
 
 	//load local library
-	quickLoadAndExecute("scripts/library.lua");
+	quickLoadAndExecute("scripts/_library/library.lua");
 
 	//Register base component
 	kaguya["Component"].setClass(kaguya::UserdataMetatable<Component>()
@@ -94,9 +94,10 @@ ScriptMaster::ScriptMaster()
 	kaguya["getEntityPool"] = getLastPool;
 	kaguya["getGlobalRegistar"] = g_registar::getGlobalRegistar;
 
-	quickLoadAndExecute("scripts/library_ex.lua");
-	quickLoadAndExecute("scripts/pool_utils.lua");
-	quickLoadAndExecute("scripts/math_utils.lua");
+	quickLoadAndExecute("scripts/_library/library_ex.lua");
+	quickLoadAndExecute("scripts/_library/pool_utils.lua");
+	quickLoadAndExecute("scripts/_library/math_utils.lua");
+	quickLoadAndExecute("scripts/_initialise/registar.lua");
 
 	globalScriptMasterPtr = this;
 }
