@@ -35,7 +35,7 @@ public:
 		camera->updateCamera(
 			eyePos.getVec3(),
 			ent->getComponent<ComponentCamera>()->getViewTarget(eyePos),
-			45.0f
+			ent->getComponent<ComponentCamera>()->getFOV()
 		);
 	}
 
