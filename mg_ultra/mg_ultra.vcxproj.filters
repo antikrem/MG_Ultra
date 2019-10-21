@@ -61,6 +61,12 @@
     <Filter Include="Source Files\Graphics">
       <UniqueIdentifier>{47a1f7b3-5a59-42f9-b996-1e854235c58f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\scripts\_library">
+      <UniqueIdentifier>{5930ae98-c055-4ecc-be83-189afdd6fe9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\scripts\_initialise">
+      <UniqueIdentifier>{6906ca14-0a3d-42e2-85e7-42609e1d4b1e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -317,6 +323,9 @@
     <ClInclude Include="system_movement.h">
       <Filter>Header Files\ECS\Systems</Filter>
     </ClInclude>
+    <ClInclude Include="system_bounds_control.h">
+      <Filter>Header Files\ECS\Systems</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="wd\shaders\base.vert">
@@ -325,23 +334,26 @@
     <None Include="wd\shaders\base.frag">
       <Filter>Resource Files\shaders</Filter>
     </None>
-    <None Include="wd\scripts\library_ex.lua">
-      <Filter>Resource Files\scripts</Filter>
-    </None>
-    <None Include="wd\scripts\library.lua">
-      <Filter>Resource Files\scripts</Filter>
-    </None>
-    <None Include="wd\scripts\pool_utils.lua">
-      <Filter>Resource Files\scripts</Filter>
-    </None>
-    <None Include="wd\scripts\math_utils.lua">
-      <Filter>Resource Files\scripts</Filter>
-    </None>
     <None Include="wd\scripts\camera\camera.lua">
       <Filter>Resource Files\scripts\camera</Filter>
     </None>
     <None Include="wd\scripts\player\player.lua">
       <Filter>Resource Files\scripts\player</Filter>
+    </None>
+    <None Include="wd\scripts\_library\math_utils.lua">
+      <Filter>Resource Files\scripts\_library</Filter>
+    </None>
+    <None Include="wd\scripts\_library\pool_utils.lua">
+      <Filter>Resource Files\scripts\_library</Filter>
+    </None>
+    <None Include="wd\scripts\_library\library.lua">
+      <Filter>Resource Files\scripts\_library</Filter>
+    </None>
+    <None Include="wd\scripts\_library\library_ex.lua">
+      <Filter>Resource Files\scripts\_library</Filter>
+    </None>
+    <None Include="wd\scripts\_initialise\registar.lua">
+      <Filter>Resource Files\scripts\_initialise</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

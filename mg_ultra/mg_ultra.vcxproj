@@ -237,6 +237,7 @@
     <ClInclude Include="script_unit.h" />
     <ClInclude Include="success_callback.h" />
     <ClInclude Include="system_animation.h" />
+    <ClInclude Include="system_bounds_control.h" />
     <ClInclude Include="system_camera.h" />
     <ClInclude Include="system_console.h" />
     <ClInclude Include="system_game_state_control.h" />
@@ -272,11 +273,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="wd\scripts\camera\camera.lua" />
-    <None Include="wd\scripts\library.lua" />
-    <None Include="wd\scripts\library_ex.lua" />
-    <None Include="wd\scripts\math_utils.lua" />
     <None Include="wd\scripts\player\player.lua" />
-    <None Include="wd\scripts\pool_utils.lua" />
+    <None Include="wd\scripts\_initialise\registar.lua" />
+    <None Include="wd\scripts\_library\library.lua" />
+    <None Include="wd\scripts\_library\library_ex.lua" />
+    <None Include="wd\scripts\_library\math_utils.lua" />
+    <None Include="wd\scripts\_library\pool_utils.lua" />
     <None Include="wd\shaders\base.frag" />
     <None Include="wd\shaders\base.vert" />
   </ItemGroup>
