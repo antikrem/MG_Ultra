@@ -7,7 +7,7 @@ camPosition = this:get_component(ComponentPosition)
 camCamera = this:get_component(ComponentCamera)
 
 --Get the player entity and pull components
-player = pool:get_cached_entity(EntityPlayer)
+player = EntityPool.get_cached_entity(EntityPlayer)
 
 --set camera x,y position to the player
 x,y = player:get_component(ComponentPosition):get_position()
