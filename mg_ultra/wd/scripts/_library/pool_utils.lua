@@ -13,6 +13,6 @@ EntityPlayer = 4
 
 --returns the entity cached with this types
 --or nil on failure due to invalid type or no respective cached ent
-function EntityPool:get_cached_entity(entityType)
+function EntityPool.get_cached_entity(entityType)
 	return pool:getEntFromCache(entityType)
 end
