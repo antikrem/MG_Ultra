@@ -244,7 +244,7 @@ public:
 
 	//takes an animation state and returns boxdata
 	//error checking here is superflous todo
-	BoxData evaluateToBox(AnimationState state) {
+	BoxData evaluateToBox(AnimationState state, float scale) {
 		BoxData boxData;
 
 		shared_lock<shared_mutex> lock(mtx);
@@ -267,9 +267,9 @@ public:
 
 		//populate box data
 		memcpy(boxData.xyz, &state.centerPostion, 3*sizeof(float));
-		boxData.wh[0] = state.scale*(float)ani->getWidth();
-		boxData.wh[1] = state.scale*(float)ani->getHeight();
-		memcpy(boxData.uvwh, &ani->getUVWH( state.currentFrame), 4 * sizeof(float));
+		boxData.wh[0] = scale * state.scale*(float)ani->getWidth();
+		boxData.wh[1] = scale * state.scale*(float)ani->getHeight();
+		memcpy(boxData.uvwh, &ani->getUVWH(state.currentFrame), 4 * sizeof(float));
 		
 		return boxData;
 	}

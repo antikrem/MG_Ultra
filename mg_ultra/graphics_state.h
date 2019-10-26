@@ -95,8 +95,8 @@ public:
 		return glHandler->getNextUnmap();
 	}
 
-	BoxData evaluateToBox(AnimationState state) {
-		return animationsMaster->evaluateToBox(state);
+	BoxData evaluateToBox(AnimationState state, float scale) {
+		return animationsMaster->evaluateToBox(state, scale);
 	}
 
 	//gets a pointer to a buffered map

@@ -44,7 +44,7 @@ public:
 			auto state = gra->getAnimationState(&toDraw, pos->getPosition3());
 
 			if (toDraw) {
-				buffer[boxCount] = graphicsState->evaluateToBox(state);
+				buffer[boxCount] = graphicsState->evaluateToBox(state, 1.0f);
 				boxCount++;
 			}
 		}
@@ -61,7 +61,7 @@ public:
 			auto stateList = tex->getStates(pos->getPosition3());
 			vector<BoxData> boxes;
 			for (auto i : stateList) {
-				boxes.push_back(graphicsState->evaluateToBox(i));
+				boxes.push_back(graphicsState->evaluateToBox(i, tex->getScale()));
 			}
 			copy(boxes.begin(), boxes.end(), buffer + boxCount);
 			boxCount += boxes.size();
