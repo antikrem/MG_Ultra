@@ -45,7 +45,7 @@ class ECSMaster {
 
 	master0: ECS_meta_master :
 		-system_garbage_collector
-		-system_refractor
+		-system_bounds_control
 
 	master1: graphics
 	    -system_graphics
@@ -71,7 +71,9 @@ class ECSMaster {
 		
 		//ring 0
 		auto master = newSystemsMaster("m_meta");
+		master->setTimer(250);
 		master->createSystem<SystemGarbageCollector>(registar);
+		master->createSystem<SystemBoundsControl>(registar);
 		
 		//ring 1
 		master = newSystemsMaster("m_graphics");
