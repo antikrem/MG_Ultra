@@ -4,6 +4,7 @@ Can be iterated over safely*/
 #define __POOL__
 
 #include <mutex>
+#include <vector>
 #include <map>
 #include <shared_mutex>
 #include <cassert>
@@ -27,6 +28,9 @@ private:
 	int largestID = -1;
 	//Smallest id within the list
 	int smallestID = 0;
+
+	//graveyard
+	vector<shared_ptr<Entity>> graveyard;
 
 	//Updates smallestID, not thread safe, call in the context of lock being aquired uniquely
 	void updateSmallestID() {
@@ -56,13 +60,15 @@ public:
 		if (id >= largestID) {
 			return -1;
 		}
-		for (int i = id+1; i <= largestID; id++) {
-			if (list.count(i)) {
-				return i;
-			}
+
+		//get an interator to the current element
+		auto it = list.find(id);
+
+		if (it == list.end() || (++it) == list.end()) {
+			return -1;
 		}
-		assert(false);
-		return -1;
+		
+		return it->first;
 	}
 
 	//adds a new entity, in a thread safe way
@@ -124,37 +130,37 @@ public:
 	//clear dead entities, needs to be sometimes, locks access to ents, so should only be done sometimes
 	//returns how many ents were killed
 	int clearDeadEnts() {
-		//check seperatly, this part is thread safe
+		int cleanedEnts = 0;
+		unique_lock<shared_mutex> lck(lock);
+
+		for (auto i : list) {
+			i.second->entityUpdate();
+		}
+		
 		{
-			shared_lock<shared_mutex> lck(lock);
-			for (auto i : list) {
-				i.second->entityUpdate();
+			//clear list
+			auto it = list.begin();
+			while (it != list.end()) {
+				if (it->second->getFlag()) {
+					it++;
+				}
+				else {
+					graveyard.push_back(it->second);
+					it = list.erase(it);
+				}
 			}
 		}
 
-		int cleanedEnts = 0;
-		unique_lock<shared_mutex> lck(lock);
-		
-		//clear list
-		auto it = list.begin();
-		while (it != list.begin()) {
-			if (it->second->getFlag()) {
-				it++;
-			}
-			else {
-				cleanedEnts++;
-				it = list.erase(it);
-			}
-		}
-		
-		//clear cache
-		it = cache.begin();
-		while (it != cache.begin()) {
-			if (it->second->getFlag()) {
-				it++;
-			}
-			else {
-				it = cache.erase(it);
+		{
+			//clear cache
+			auto it = cache.begin();
+			while (it != cache.end()) {
+				if (it->second->getFlag()) {
+					it++;
+				}
+				else {
+					it = cache.erase(it);
+				}
 			}
 		}
 
