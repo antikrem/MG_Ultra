@@ -34,6 +34,9 @@ class ComponentText : public Component, public ScriptableClass {
 	//cache lock
 	mutex lock;
 
+	//scales the text
+	atomic<float> scale = 1.0f;
+
 	//text and font change lock change mutex
 	mutex textLock;
 	//The string the text represents
@@ -60,7 +63,7 @@ class ComponentText : public Component, public ScriptableClass {
 	//create the cache
 	vector<AnimationState> createCache(AnimationsMaster* animationsMaster) {
 		Point2 runningOffset(0, 0); //running offset
-		Point2 padding(0,0);
+		Point2 padding(0, 0);
 		vector<AnimationState> cacheBuffer; //Buffer that is used to cache
 		string text;
 		string fontName;
@@ -87,8 +90,8 @@ class ComponentText : public Component, public ScriptableClass {
 			//check for control strings
 			if (str_kit::stringCompareAtLocation(text, i, string("\n"))) {
 				runningOffset.x = 0;
-				runningOffset.y -= verticalBuffer;
-				runningOffset.y -= padding.y;
+				runningOffset.y -= scale * verticalBuffer;
+				runningOffset.y -= scale * padding.y;
 			}
 			//else, append the character with an offset, and update running offset
 			else if (char2Ani(text[i]) > -1) {
@@ -104,8 +107,8 @@ class ComponentText : public Component, public ScriptableClass {
 				}
 
 				//todo report error
-				runningOffset += Point2((float)aniTemp->getWidth(), 0);
-				runningOffset.x += padding.x;
+				runningOffset += Point2((float)aniTemp->getWidth(), 0) * scale.load();
+				runningOffset.x += scale * padding.x;
 				cacheBuffer.push_back(state);
 			}
 			//todo catch error case
@@ -177,11 +180,22 @@ public:
 		validCache.store(false);
 	}
 
+	void setScale(float scale) {
+		validCache.store(false);
+		this->scale = scale;
+	}
+
+	float getScale() {
+		return scale;
+	}
+
 	void registerToLua(kaguya::State& state) override {
 		state["ComponentText"].setClass(kaguya::UserdataMetatable<ComponentText, Component>()
 			.setConstructors<ComponentText()>()
 			.addFunction("set_visible", &ComponentText::setVisible)
 			.addFunction("set_text", &ComponentText::setText)
+			.addFunction("set_scale", &ComponentText::setScale)
+			.addFunction("get_scale", &ComponentText::getScale)
 			.addStaticFunction("type", &getType<ComponentText>)
 			.addStaticFunction("cast", &Component::castDown<ComponentText>)
 		);
