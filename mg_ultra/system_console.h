@@ -84,7 +84,7 @@ public:
 	void cacheFail(EntityPool* pool) override {
 		//create a console entity
 		auto newEnt = new Entity(ETConsole);
-		auto newComponent = new ComponentPosition(-800, 800, 2);
+		auto newComponent = new ComponentPosition(-940, 540, 2);
 		newEnt->addComponent(newComponent->pullForEntity());
 		auto newComponent1 = new ComponentConsole();
 		newEnt->addComponent(newComponent1->pullForEntity());
@@ -92,6 +92,7 @@ public:
 		newComponent2->setText("Console");
 		newComponent2->setFont("text_consolas58");
 		newComponent2->setVisible(false);
+		newComponent2->setScale(0.5f);
 		newEnt->addComponent(newComponent2->pullForEntity());
 		pool->addEnt(newEnt, true);
 	}
