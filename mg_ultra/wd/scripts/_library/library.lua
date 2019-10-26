@@ -100,6 +100,11 @@ function emit_event(eventType, ...)
 	pushEvent()
 end
 
+--checks if value is nil
+function is_nil(a)
+	return a == nul
+end
+
 --Requests engine shutdown by emmiting a quit event
 function quit()
 	print("Exiting from console...")
