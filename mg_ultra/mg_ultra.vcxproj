@@ -273,6 +273,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="wd\scripts\camera\camera.lua" />
+    <None Include="wd\scripts\camera\initialise_camera.lua" />
+    <None Include="wd\scripts\player\initialise_player.lua" />
     <None Include="wd\scripts\player\player.lua" />
     <None Include="wd\scripts\_initialise\registar.lua" />
     <None Include="wd\scripts\_library\library.lua" />

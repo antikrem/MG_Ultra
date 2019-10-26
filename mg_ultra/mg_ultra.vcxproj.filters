@@ -355,6 +355,12 @@
     <None Include="wd\scripts\_initialise\registar.lua">
       <Filter>Resource Files\scripts\_initialise</Filter>
     </None>
+    <None Include="wd\scripts\camera\initialise_camera.lua">
+      <Filter>Resource Files\scripts\camera</Filter>
+    </None>
+    <None Include="wd\scripts\player\initialise_player.lua">
+      <Filter>Resource Files\scripts\player</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="wd\log.txt">

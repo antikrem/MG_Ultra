@@ -27,13 +27,16 @@ public:
 	void cacheHandle(shared_ptr<Entity> ent) override {
 		ent->getComponent<ComponentInput>()->update();
 		sc.reset();
-		executeInternalScript("system_player", "PLAYER: Fatal error executing player script, player update disabled", ent, &sc);
-
+		executeInternalScript(
+			"system_player", "PLAYER: Fatal error executing player script, player update disabled", 
+			ent, 
+			&sc
+		);
 	}
 
 	void cacheFail(EntityPool* pool) override {
 		//create the camera entity
-		auto newEnt = new Entity(ETPlayer);
+		auto newEnt = shared_ptr<Entity>(new Entity(ETPlayer));
 		auto newComponent = new ComponentPosition(0, 0, -10.0);
 		newEnt->addComponent(newComponent->pullForEntity());
 		auto newComponent1 = new ComponentGraphics("default");
@@ -49,6 +52,13 @@ public:
 		newEnt->addComponent(newComponent5->pullForEntity());
 		auto newComponent6 = new ComponentSpawner();
 		newEnt->addComponent(newComponent6->pullForEntity());
+
+		//execute a script to initialise the player
+		executeAnyScript(debugName, 
+			os_kit::getFileAsString("scripts//player//initialise_player.lua"), 
+			newEnt, 
+			&sc
+		);
 
 		pool->addEnt(newEnt, true);
 		err::logMessage("Player created");
