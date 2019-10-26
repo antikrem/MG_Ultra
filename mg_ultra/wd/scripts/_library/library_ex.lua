@@ -59,6 +59,15 @@ end
 
 function dump()
 	print("Event size:", get_event_length())
-	print("Entities size:", get_entity_count())
+	local a, b = get_entity_count()
+	print("Entities alive, Total:", a, "Cached:", b)
+	print("Graveyard, size:", EntityPool.get_graveyard_size())
 	print("Memory Usage:", collectgarbage("count"))
 end
+
+function test2()
+	local ent = EntityPool.get_cached_entity(EntityPlayer)
+	local comp = ent:get_component(ComponentPosition)
+	print(comp:get_position())
+end
+

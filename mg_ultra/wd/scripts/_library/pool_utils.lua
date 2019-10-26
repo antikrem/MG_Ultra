@@ -16,3 +16,8 @@ EntityPlayer = 4
 function EntityPool.get_cached_entity(entityType)
 	return pool:getEntFromCache(entityType)
 end
+
+--gets the number of entities in the graveyard
+function EntityPool.get_graveyard_size() 
+	return pool:getGraveyardSize()
+end
