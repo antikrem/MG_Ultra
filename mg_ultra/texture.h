@@ -269,6 +269,7 @@ public:
 		memcpy(boxData.xyz, &state.centerPostion, 3*sizeof(float));
 		boxData.wh[0] = scale * state.scale*(float)ani->getWidth();
 		boxData.wh[1] = scale * state.scale*(float)ani->getHeight();
+		boxData.rotation = DEG2RAD(state.rotation);
 		memcpy(boxData.uvwh, &ani->getUVWH(state.currentFrame), 4 * sizeof(float));
 		
 		return boxData;

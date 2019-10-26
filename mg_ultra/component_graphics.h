@@ -22,6 +22,9 @@ private:
 	//false renders in 2d mode, using an orthogonal perspective
 	atomic<bool> renderIn3D = true;
 
+	//rotaion value in degrees
+	atomic<float> rotation = 0;
+
 public:
 	ComponentGraphics() {
 		visible.store(false);
@@ -69,11 +72,22 @@ public:
 		return state;
 	}
 
+	//set rotation value
+	void setRotation(float angle) {
+		this->rotation = angle;
+	}
+
+	//get rotation value
+	float getRotation() {
+		return rotation;
+	}
+
 	//Takes a position and returns a complete AnimationState
 	AnimationState getAnimationState(bool* valid, Point3 pos) {
 		auto temp = getAnimationState();
 		*valid = temp.valid && temp.visible && visible.load();
 		temp.centerPostion = pos;
+		temp.rotation = rotation;
 		return temp;
 	}
 
@@ -82,6 +96,8 @@ public:
 			.setConstructors<ComponentGraphics(string animationSet)>()
 			.addFunction("set_animation_set", &ComponentGraphics::l_setAniamtionSet)
 			.addFunction("set_visible", &ComponentGraphics::setVisible)
+			.addFunction("set_rotation", &ComponentGraphics::setRotation)
+			.addFunction("get_rotation", &ComponentGraphics::getRotation)
 			.addStaticFunction("create", ScriptableClass::create<ComponentGraphics, string>)
 			.addStaticFunction("type", &getType<ComponentGraphics>)
 			.addStaticFunction("cast", &Component::castDown<ComponentGraphics>)
