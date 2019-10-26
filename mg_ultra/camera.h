@@ -27,7 +27,7 @@ public:
 		this->gSettings = gSettings;
 		projection = glm::perspective(glm::radians(45.0f), (float)gSettings->screenWidth / (float)gSettings->screenHeight, 0.1f, cullingDistance.load());
 		view = glm::lookAt(
-			glm::vec3(0, 0, 2000.0),
+			glm::vec3(0, 0, 0),
 			glm::vec3(0, 0, 0),
 			glm::vec3(0, 1, 0)
 		);
