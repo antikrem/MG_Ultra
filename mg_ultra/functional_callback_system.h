@@ -17,8 +17,7 @@ class FunctionalCallbackSystem {
 
 protected:
 	//An optional script that will be executed
-	//before the internal script
-	void executeInitialScript(string systemName, string script, shared_ptr<Entity> ent, SuccessCallback* sc);
+	void executeAnyScript(string systemName, string script, shared_ptr<Entity> ent, SuccessCallback* sc);
 
 	//sets the source of the script to use
 	void setInternalScript(string systemName, string script);

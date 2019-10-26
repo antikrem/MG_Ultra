@@ -1,12 +1,16 @@
 #include "functional_callback_system.h"
 
-void FunctionalCallbackSystem::executeInitialScript(string systemName, string script, shared_ptr<Entity> ent, SuccessCallback* sc) {
+void FunctionalCallbackSystem::executeAnyScript(string systemName, string script, shared_ptr<Entity> ent, SuccessCallback* sc) {
 	ScriptUnit su(SS_functionalCallBack, script);
 	su.addDebugData(systemName);
 	su.attachEntity(ent);
 	sc->reset();
 	su.attachSuccessCallback(sc);
 	executeScriptUnit(su);
+
+	if (!sc->waitForCompletion()) {
+		err::logMessage("Setup script failed in " + systemName);
+	}
 }
 
 void FunctionalCallbackSystem::setInternalScript(string systemName, string script) {
