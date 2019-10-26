@@ -31,3 +31,7 @@ registar:add("play_space_y", 1080)
 --Used for culling entities that fall outside of the play space
 registar:add("culling_enable", true)
 registar:add("culling_padding", 100)
+
+--Sets the vertical camera view, how  much of the play_space_y
+--is viewable
+registar:add("view_space_y", 1080)
