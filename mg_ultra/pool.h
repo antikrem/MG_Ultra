@@ -29,6 +29,8 @@ private:
 	//Smallest id within the list
 	int smallestID = 0;
 
+	//lock for graveyard
+	shared_mutex graveyardLock;
 	//graveyard
 	vector<shared_ptr<Entity>> graveyard;
 
@@ -145,6 +147,7 @@ public:
 					it++;
 				}
 				else {
+					unique_lock<shared_mutex> glck(graveyardLock);
 					graveyard.push_back(it->second);
 					it = list.erase(it);
 				}
@@ -179,6 +182,12 @@ public:
 	tuple<int, int> size() {
 		unique_lock<shared_mutex> lck(lock);
 		return make_tuple(list.size(), cache.size());
+	}
+
+	//returns size of graveyard
+	float getGraveYardSize() {
+		shared_lock<shared_mutex> lck(graveyardLock);
+		return graveyard.size();
 	}
 };
 
