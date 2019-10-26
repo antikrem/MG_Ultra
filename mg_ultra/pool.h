@@ -163,22 +163,6 @@ public:
 		return cleanedEnts;
 	}
 
-
-	//defragments entity position within the pool
-	//too many empty slots can cause lag
-	void defragment() {
-		map<int, shared_ptr<Entity>> copy;
-		unique_lock<shared_mutex> lck(lock);
-		copy = list;
-		list.clear();
-		int ptr = -1;
-		for (auto i : copy) {
-			list[++ptr] = i.second;
-		}
-		smallestID = 0;
-		largestID = ptr;
-	}
-
 	//sets all entity pool objects that dont have the saveBetweenState to have death flag
 	void stateClear() {
 		unique_lock<shared_mutex> lck(lock);
