@@ -102,7 +102,7 @@ end
 
 --checks if value is nil
 function is_nil(a)
-	return a == nul
+	return a == nil
 end
 
 --Requests engine shutdown by emmiting a quit event
