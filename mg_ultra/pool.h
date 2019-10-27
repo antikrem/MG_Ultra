@@ -39,8 +39,6 @@ private:
 	atomic<int> passed = 0;
 
 public:
-	EntityPool();
-
 	int begin() {
 		shared_lock<shared_mutex> lck(lock);
 		if not(list.size()) {
@@ -200,6 +198,8 @@ public:
 
 };
 
-EntityPool* getLastPool();
+EntityPool* getGlobalPool();
+
+void setGlobalPool(EntityPool* pool);
 
 #endif

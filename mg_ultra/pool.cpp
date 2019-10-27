@@ -1,11 +1,11 @@
 #include "pool.h"
 
-EntityPool* lastPool = nullptr;
+EntityPool* globalPool = nullptr;
 
-EntityPool::EntityPool() {
-	lastPool = this;
+EntityPool* getGlobalPool() {
+	return globalPool;
 }
 
-EntityPool* getLastPool() {
-	return lastPool;
+void setGlobalPool(EntityPool* pool) {
+	globalPool = pool;
 }

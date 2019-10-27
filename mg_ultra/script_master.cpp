@@ -82,6 +82,8 @@ ScriptMaster::ScriptMaster()
 		.addOverloadedFunctions("update", &Registar::update<int>, &Registar::update<float>, &Registar::update<string>, &Registar::update<bool>)
 	);
 
+
+
 	forceLuaRegistration<ComponentPosition>(kaguya);
 	forceLuaRegistration<ComponentGraphics>(kaguya);
 	forceLuaRegistration<ComponentText>(kaguya);
@@ -93,7 +95,7 @@ ScriptMaster::ScriptMaster()
 	forceLuaRegistration<ComponentSpawner>(kaguya);
 
 	//set contextual script functions
-	kaguya["getEntityPool"] = getLastPool;
+	kaguya["getEntityPool"] = getGlobalPool;
 	kaguya["getGlobalRegistar"] = g_registar::getGlobalRegistar;
 
 	quickLoadAndExecute("scripts/_library/library_ex.lua");

@@ -127,6 +127,7 @@ public:
 	ECSMaster() {
 
 		entityPool = new EntityPool();
+		setGlobalPool(entityPool);
 		gState = new GraphicsState();
 		registar = new Registar();
 		g_registar::setGlobalRegistar(registar);
