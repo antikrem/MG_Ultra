@@ -82,6 +82,18 @@ public:
 		return rotation;
 	}
 
+	//set scale
+	void setScale(float scale) {
+		unique_lock<shared_mutex> lck(lock);
+		this->state.scale = scale;
+	}
+
+	//get scale
+	float getScale() {
+		unique_lock<shared_mutex> lck(lock);
+		return this->state.scale;
+	}
+
 	//Takes a position and returns a complete AnimationState
 	AnimationState getAnimationState(bool* valid, Point3 pos) {
 		auto temp = getAnimationState();
@@ -98,6 +110,8 @@ public:
 			.addFunction("set_visible", &ComponentGraphics::setVisible)
 			.addFunction("set_rotation", &ComponentGraphics::setRotation)
 			.addFunction("get_rotation", &ComponentGraphics::getRotation)
+			.addFunction("set_scale", &ComponentGraphics::setScale)
+			.addFunction("get_scale", &ComponentGraphics::getScale)
 			.addStaticFunction("create", ScriptableClass::create<ComponentGraphics, string>)
 			.addStaticFunction("type", &getType<ComponentGraphics>)
 			.addStaticFunction("cast", &Component::castDown<ComponentGraphics>)
