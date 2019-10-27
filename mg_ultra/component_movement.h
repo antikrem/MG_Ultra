@@ -182,6 +182,7 @@ public:
 			.addFunction("get_speed_acceleration", &ComponentMovement::getSpeedAcceleration)
 			.addFunction("get_rotation_speed", &ComponentMovement::getRotationVelocity)
 			.addFunction("set_rotation_speed", &ComponentMovement::setRotationVelocity)
+			.addStaticFunction("create", ScriptableClass::create<ComponentMovement>)
 			.addStaticFunction("type", &getType<ComponentMovement>)
 			.addStaticFunction("cast", &Component::castDown<ComponentMovement>)
 		);
