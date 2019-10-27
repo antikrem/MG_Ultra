@@ -105,6 +105,20 @@ function is_nil(a)
 	return a == nil
 end
 
+--creates a python style range
+--shamelessly stolen from http://lua-users.org/wiki/RangeIterator
+function range(from, to, step)
+	step = step or 1
+	return function(_, lastvalue)
+		local nextvalue = lastvalue + step
+		if step > 0 and nextvalue <= to or step < 0 and nextvalue >= to or
+			step == 0
+		then
+			return nextvalue
+		end
+	end, nil, from - step
+end
+
 --Requests engine shutdown by emmiting a quit event
 function quit()
 	print("Exiting from console...")
