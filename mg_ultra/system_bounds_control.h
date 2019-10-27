@@ -89,9 +89,6 @@ public:
 			//check y
 			(abs(pos.y) > (yGradient * depth + padding))
 			) {
-			float a = xGradient * depth + padding;
-			float b = yGradient * depth + padding;
-			cout << "meme" << endl;
 			cPosition->killEntity();
 		}
 
