@@ -94,6 +94,12 @@ public:
 		return this->state.scale;
 	}
 
+	//set animation, not to be used 
+	void setAnimationType(unsigned int animation) {
+		unique_lock<shared_mutex> lck(lock);
+		state.animationType = animation;
+	}
+
 	//Takes a position and returns a complete AnimationState
 	AnimationState getAnimationState(bool* valid, Point3 pos) {
 		auto temp = getAnimationState();
@@ -107,6 +113,7 @@ public:
 		state["ComponentGraphics"].setClass(kaguya::UserdataMetatable<ComponentGraphics, Component>()
 			.setConstructors<ComponentGraphics(string animationSet)>()
 			.addFunction("set_animation_set", &ComponentGraphics::l_setAniamtionSet)
+			.addFunction("set_animation", &ComponentGraphics::setAnimationType)
 			.addFunction("set_visible", &ComponentGraphics::setVisible)
 			.addFunction("set_rotation", &ComponentGraphics::setRotation)
 			.addFunction("get_rotation", &ComponentGraphics::getRotation)
