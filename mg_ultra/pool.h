@@ -12,11 +12,13 @@ Can be iterated over safely*/
 #include "constants.h"
 #include "entity.h"
 
+#include "scriptable_class.h"
+
 /*This can be asyncly iterated over,
 Use begin() to get an id int,
 Use this id and next() to get next pair
 After the last pair, return negative id, not guranteed: null ptr*/
-class EntityPool {
+class EntityPool : public ScriptableClass {
 private:
 	//Locks during access
 	shared_mutex lock;
@@ -194,6 +196,18 @@ public:
 			graveyard.end()
 		);
 		passed += (oldSize - graveyard.size());
+	}
+
+	void registerToLua(kaguya::State& state) override {
+		state["EntityPool"].setClass(
+			kaguya::UserdataMetatable<EntityPool>()
+			.setConstructors<EntityPool()>()
+			.addFunction("getEntByID", &EntityPool::getEnt)
+			.addFunction("getEntFromCache", &EntityPool::getCachedEnt)
+			.addFunction("getGraveyardSize", &EntityPool::getGraveyardSize)
+			.addFunction("getGraveyardPassed", &EntityPool::getGraveyardPassed)
+			.addFunction("size", &EntityPool::size)
+		);
 	}
 
 };

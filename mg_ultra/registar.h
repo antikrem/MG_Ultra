@@ -13,10 +13,12 @@
 
 #include "any_type.h"
 
+#include "scriptable_class.h"
+
 /*Singleton class, allows systems to exchange states
 save only for global values
 Exposed to lua*/
-class Registar {
+class Registar : public ScriptableClass {
 	map<string, TypeContainer*> reg;
 	shared_mutex lock;
 
@@ -89,6 +91,18 @@ public:
 		return make_tuple(val, valid);
 	}
 
+	void registerToLua(kaguya::State& state) override {
+		state["Registar"].setClass(
+			kaguya::UserdataMetatable<Registar>()
+			.setConstructors<Registar()>()
+			.addFunction("getInt", &Registar::noCheckGet<int>)
+			.addFunction("getFloat", &Registar::noCheckGet<float>)
+			.addFunction("getString", &Registar::noCheckGet<string>)
+			.addFunction("getBool", &Registar::noCheckGet<bool>)
+			.addOverloadedFunctions("add", &Registar::addToBase<int>, &Registar::addToBase<float>, &Registar::addToBase<string>, &Registar::addToBase<bool>)
+			.addOverloadedFunctions("update", &Registar::update<int>, &Registar::update<float>, &Registar::update<string>, &Registar::update<bool>)
+		);
+	}
 };
 
 namespace g_registar {

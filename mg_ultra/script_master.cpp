@@ -60,29 +60,10 @@ ScriptMaster::ScriptMaster()
 	);
 
 	//register entity pool
-	kaguya["EntityPool"].setClass(
-		kaguya::UserdataMetatable<EntityPool>()
-		.setConstructors<EntityPool()>()
-		.addFunction("getEntByID", &EntityPool::getEnt)
-		.addFunction("getEntFromCache", &EntityPool::getCachedEnt)
-		.addFunction("getGraveyardSize", &EntityPool::getGraveyardSize)
-		.addFunction("getGraveyardPassed", &EntityPool::getGraveyardPassed)
-		.addFunction("size", &EntityPool::size)
-	);
+	forceLuaRegistration<EntityPool>(kaguya);
 
 	//register registar
-	kaguya["Registar"].setClass(
-		kaguya::UserdataMetatable<Registar>()
-		.setConstructors<Registar()>()
-		.addFunction("getInt", &Registar::noCheckGet<int>)
-		.addFunction("getFloat", &Registar::noCheckGet<float>)
-		.addFunction("getString", &Registar::noCheckGet<string>)
-		.addFunction("getBool", &Registar::noCheckGet<bool>)
-		.addOverloadedFunctions("add", &Registar::addToBase<int>, &Registar::addToBase<float>, &Registar::addToBase<string>, &Registar::addToBase<bool>)
-		.addOverloadedFunctions("update", &Registar::update<int>, &Registar::update<float>, &Registar::update<string>, &Registar::update<bool>)
-	);
-
-
+	forceLuaRegistration<Registar>(kaguya);
 
 	forceLuaRegistration<ComponentPosition>(kaguya);
 	forceLuaRegistration<ComponentGraphics>(kaguya);
