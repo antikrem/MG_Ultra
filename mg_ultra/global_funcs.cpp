@@ -73,11 +73,6 @@ void pushEvent() {
 	}
 }
 
-tuple<int, int> getNumberOfEnts() {
-	return getLastPool()->size();
-}
-
-
 void registerGlobalFunctions(kaguya::State &kaguya) {
 	//printing
 	kaguya["printAdd"] = kaguya::overload(print_addString, print_addInt, print_addBool);
@@ -88,7 +83,4 @@ void registerGlobalFunctions(kaguya::State &kaguya) {
 	kaguya["addEventData"] = addEventData;
 	kaguya["pushEvent"] = pushEvent;
 	kaguya["get_event_length"] = g_events::queueSize;
-
-	//pool
-	kaguya["get_entity_count"] = getNumberOfEnts;
 }

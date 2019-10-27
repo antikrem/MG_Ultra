@@ -59,7 +59,7 @@ end
 
 function dump()
 	print("Event size:", get_event_length())
-	local a, b = get_entity_count()
+	local a, b = EntityPool.get_entity_count()
 	print("Entities alive, Total:", a, "Cached:", b)
 	print("Graveyard, size:", EntityPool.get_graveyard_size())
 	print("Memory Usage:", collectgarbage("count"))
