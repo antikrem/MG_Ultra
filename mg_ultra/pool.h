@@ -63,16 +63,7 @@ public:
 	//set cacheEnt to true to add the cache 
 	//returns false if attempted to cache but an ent of the same type already exists
 	bool addEnt(Entity* ent, bool cacheEnt = false) {
-		unique_lock<shared_mutex> lck(lock);
-		largestID++;
-		list[largestID] = shared_ptr<Entity>(ent);
-		if (cacheEnt) {
-			if (cache.count(ent->getType())) {
-				return false;
-			}
-			cache[ent->getType()] = list[largestID];
-		}
-		return true;
+		return addEnt(shared_ptr<Entity>(ent), cacheEnt);
 	}
 
 	//alternative method to addEnt to add a shared ptr
