@@ -27,6 +27,9 @@ private:
 	//Largest id used
 	int largestID = -1;
 
+	//if active, will move dead entities to a staging area
+	//and only clear sometimes
+	atomic<bool> gravekeep = true;
 	//lock for graveyard
 	mutex graveyardLock;
 	//graveyard
@@ -155,9 +158,33 @@ public:
 
 	//returns size of graveyard
 	int getGraveYardSize() {
-		unique_lock<mutex> lck(graveyardLock);
+		unique_lock<mutex> glck(graveyardLock);
 		return graveyard.size();
 	}
+
+	//sets gravekeep
+	void setGravekeep(bool gravekeep) {
+		this->gravekeep = gravekeep;
+	}
+
+	//gets gravekeep
+	bool getGravekeep() {
+		return this->gravekeep;
+	}
+
+	//clears all entites in the gravekeep
+	//that have no other references
+	void clearGraveyard() {
+		unique_lock<mutex> glck(graveyardLock);
+		vector<shared_ptr<Entity>> graveyardCopy;
+		for (auto& i : graveyard) {
+			if (i.use_count() != 1) {
+				graveyardCopy.push_back(i);
+			}
+		}
+		graveyard = graveyardCopy;
+	}
+
 };
 
 EntityPool* getLastPool();

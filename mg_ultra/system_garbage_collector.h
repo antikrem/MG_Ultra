@@ -31,6 +31,11 @@ public:
 		if (toBeCollected) {
 			pool->clearDeadEnts();
 		}
+
+		//if gravekeep is active, need to clear
+		if (pool->getGravekeep()) {
+			pool->clearGraveyard();
+		}
 	}
 };
 #endif
