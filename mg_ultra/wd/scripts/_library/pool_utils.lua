@@ -25,3 +25,8 @@ end
 function EntityPool.get_graveyard_size() 
 	return pool:getGraveyardSize()
 end
+
+--gets the number of entities passed by the pool
+function EntityPool.get_graveyard_passed() 
+	return pool:getGraveyardPassed()
+end

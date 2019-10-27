@@ -65,7 +65,8 @@ ScriptMaster::ScriptMaster()
 		.setConstructors<EntityPool()>()
 		.addFunction("getEntByID", &EntityPool::getEnt)
 		.addFunction("getEntFromCache", &EntityPool::getCachedEnt)
-		.addFunction("getGraveyardSize", &EntityPool::getGraveYardSize)
+		.addFunction("getGraveyardSize", &EntityPool::getGraveyardSize)
+		.addFunction("getGraveyardPassed", &EntityPool::getGraveyardPassed)
 		.addFunction("size", &EntityPool::size)
 	);
 

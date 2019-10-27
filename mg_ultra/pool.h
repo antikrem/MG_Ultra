@@ -35,6 +35,8 @@ private:
 	mutex graveyardLock;
 	//graveyard
 	vector<shared_ptr<Entity>> graveyard;
+	//count of number of entities cleared
+	atomic<int> passed = 0;
 
 public:
 	EntityPool();
@@ -158,7 +160,7 @@ public:
 	}
 
 	//returns size of graveyard
-	int getGraveYardSize() {
+	int getGraveyardSize() {
 		unique_lock<mutex> glck(graveyardLock);
 		return graveyard.size();
 	}
@@ -173,10 +175,16 @@ public:
 		return this->gravekeep;
 	}
 
+	//get number of entities passed by the graveyard
+	int getGraveyardPassed() {
+		return this->passed;
+	}
+
 	//clears all entites in the gravekeep
 	//that have no other references
 	void clearGraveyard() {
 		unique_lock<mutex> glck(graveyardLock);
+		int oldSize = graveyard.size();
 		graveyard.erase(
 			remove_if(
 				graveyard.begin(), 
@@ -187,6 +195,7 @@ public:
 			),
 			graveyard.end()
 		);
+		passed += (oldSize - graveyard.size());
 	}
 
 };
