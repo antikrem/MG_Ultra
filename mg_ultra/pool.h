@@ -7,7 +7,8 @@ Can be iterated over safely*/
 #include <vector>
 #include <map>
 #include <shared_mutex>
-#include <cassert>
+#include <algorithm>
+
 #include "constants.h"
 #include "entity.h"
 
@@ -176,13 +177,16 @@ public:
 	//that have no other references
 	void clearGraveyard() {
 		unique_lock<mutex> glck(graveyardLock);
-		vector<shared_ptr<Entity>> graveyardCopy;
-		for (auto& i : graveyard) {
-			if (i.use_count() != 1) {
-				graveyardCopy.push_back(i);
-			}
-		}
-		graveyard = graveyardCopy;
+		graveyard.erase(
+			remove_if(
+				graveyard.begin(), 
+				graveyard.end(), 
+				[](shared_ptr<Entity> &ent) {
+					return ent.use_count() == 1;
+				}
+			),
+			graveyard.end()
+		);
 	}
 
 };
