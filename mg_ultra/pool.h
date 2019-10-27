@@ -26,24 +26,11 @@ private:
 	map<int, shared_ptr<Entity>> cache;
 	//Largest id used
 	int largestID = -1;
-	//Smallest id within the list
-	int smallestID = 0;
 
 	//lock for graveyard
 	mutex graveyardLock;
 	//graveyard
 	vector<shared_ptr<Entity>> graveyard;
-
-	//Updates smallestID, not thread safe, call in the context of lock being aquired uniquely
-	void updateSmallestID() {
-		for (int i = smallestID; i < largestID; i++) {
-			if (list.count(i)) {
-				smallestID = i;
-				return;
-			}
-
-		}
-	}
 
 public:
 	EntityPool();
@@ -53,8 +40,7 @@ public:
 		if not(list.size()) {
 			return -1;
 		}
-		int ret = smallestID;
-		return ret;
+		return list.begin()->first;
 	}
 	
 	int next(int id) {
@@ -167,15 +153,7 @@ public:
 			}
 		}
 
-		updateSmallestID();
-
 		return cleanedEnts;
-	}
-
-	//sets all entity pool objects that dont have the saveBetweenState to have death flag
-	void stateClear() {
-		unique_lock<shared_mutex> lck(lock);
-
 	}
 
 	//locks and returns size of entitypool
