@@ -22,6 +22,8 @@ class ComponentMovement : public Component, public ScriptableClass {
 	atomic<float> speedVelocity;
 	atomic<float> speedAceleration;
 
+	atomic<float> rotationVelocity = 0;
+
 public:
 	
 	ComponentMovement() : velocity({ 0,0,0 }), acceleration({ 0,0,0 })  {
@@ -43,6 +45,19 @@ public:
 		speedVelocity = speedVelocity + speedAceleration;
 
 		return position + velocity + Point3(Point2::generateFromMagAng(speedVelocity, angleVelocity), 0);
+	}
+
+	//updates current rotation
+	float getUpdatedRotation(float currentRotation) {
+		return currentRotation + rotationVelocity;
+	}
+
+	void setRotationVelocity(float rotation) {
+		rotationVelocity = rotation;
+	}
+
+	float getRotationVelocity() {
+		return rotationVelocity;
 	}
 
 	tuple<float, float, float> lll_getUpdatedPosition(float x, float y, float z) {
@@ -165,6 +180,8 @@ public:
 			.addFunction("get_speed_velocity", &ComponentMovement::getSpeedVelocity)
 			.addFunction("set_speed_acceleration", &ComponentMovement::setSpeedAcceleration)
 			.addFunction("get_speed_acceleration", &ComponentMovement::getSpeedAcceleration)
+			.addFunction("get_rotation_speed", &ComponentMovement::getRotationVelocity)
+			.addFunction("set_rotation_speed", &ComponentMovement::setRotationVelocity)
 			.addStaticFunction("type", &getType<ComponentMovement>)
 			.addStaticFunction("cast", &Component::castDown<ComponentMovement>)
 		);

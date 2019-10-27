@@ -60,8 +60,11 @@ class ECSMaster {
 
 	master4: main gameloop
 	    -system_timer
+		-system_player
+		-system_camera
+		-system_movement
+		-system_rotation
 	    -system_game_state_control
-		-system_script
 
 	master5: loading
 		-system_loader
@@ -99,12 +102,12 @@ class ECSMaster {
 		master = newSystemsMaster("m_gameplay");
 		master->setTimer(250);
 		master->createSystem<SystemTimer>(registar);
-		master->createSystem<SystemGameStateControl>(registar);
 		master->createSystem<SystemPlayer>(registar);
 		auto cameraSystem = master->createSystem<SystemCamera>(registar);
 		cameraSystem->setCamera(gState->getCamera());
 		master->createSystem<SystemMovement>(registar);
-		
+		master->createSystem<SystemRotation>(registar);
+		master->createSystem<SystemGameStateControl>(registar);
 
 		//ring 5
 		master = newSystemsMaster("m_loader");
