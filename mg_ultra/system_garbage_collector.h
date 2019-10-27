@@ -33,7 +33,7 @@ public:
 		}
 
 		//if gravekeep is active, need to clear
-		if (pool->getGravekeep()) {
+		if (pool->getGravekeep() && pool->getGraveyardSize()) {
 			pool->clearGraveyard();
 		}
 	}
