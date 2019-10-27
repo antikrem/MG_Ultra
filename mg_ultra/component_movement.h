@@ -44,7 +44,10 @@ public:
 		angleVelocity = angleVelocity + angleAcceleration;
 		speedVelocity = speedVelocity + speedAceleration;
 
-		return position + velocity + Point3(Point2::generateFromMagAng(speedVelocity, angleVelocity), 0);
+		speed.store(speed + speedVelocity);
+		angle.store(angle + angleVelocity);
+
+		return position + velocity + Point3(Point2::generateFromMagAng(speed, angle), 0);
 	}
 
 	//updates current rotation
