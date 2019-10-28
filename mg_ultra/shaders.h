@@ -100,6 +100,7 @@ public:
 		programMap[programName] = programID;
 
 		err::logMessage("GRAPHICS: Shader compilation done");
+		err::logMessage("GRAPHICS: Shader program " + programName + " loaded");
 
 		return EXIT_SUCCESS;
 	}
@@ -109,7 +110,6 @@ public:
 		if (programMap.count(programName)) {
 			glUseProgram(programMap[programName]);
 			currentProgram = programName;
-			err::logMessage("GRAPHICS: Shader program " + programName + " loaded");
 			return EXIT_SUCCESS;
 		}
 		else {
