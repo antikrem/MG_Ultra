@@ -14,6 +14,7 @@ class ComponentInput : public Component, public ScriptableClass {
 public:
 	ComponentInput() {
 		input::getCurrentInputMaster()->seedState(&inputState);
+		update();
 	}
 
 	void update() {
