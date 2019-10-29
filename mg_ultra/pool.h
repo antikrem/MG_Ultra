@@ -14,6 +14,8 @@ Can be iterated over safely*/
 
 #include "scriptable_class.h"
 
+#include "algorithm_ex.h"
+
 /*This can be asyncly iterated over,
 Use begin() to get an id int,
 Use this id and next() to get next pair
@@ -138,18 +140,7 @@ public:
 			}
 		}
 
-		{
-			//clear cache
-			auto it = cache.begin();
-			while (it != cache.end()) {
-				if (it->second->getFlag()) {
-					it++;
-				}
-				else {
-					it = cache.erase(it);
-				}
-			}
-		}
+		erase_associative_if(cache, [](auto pair) { return pair.second->getFlag(); });
 
 		return cleanedEnts;
 	}
@@ -186,16 +177,7 @@ public:
 	void clearGraveyard() {
 		unique_lock<mutex> glck(graveyardLock);
 		int oldSize = graveyard.size();
-		graveyard.erase(
-			remove_if(
-				graveyard.begin(), 
-				graveyard.end(), 
-				[](shared_ptr<Entity> &ent) {
-					return ent.use_count() == 1;
-				}
-			),
-			graveyard.end()
-		);
+		erase_sequential_if(graveyard, [](shared_ptr<Entity> &ent) { return ent.use_count() == 1; });
 		passed += (oldSize - graveyard.size());
 	}
 

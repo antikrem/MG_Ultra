@@ -8,6 +8,7 @@ Works in conjunction with component_spawner*/
 #include <shared_mutex>
 #include "component.h"
 #include "constants.h"
+#include "algorithm_ex.h"
 
 #include "scriptable_class.h"
 
@@ -29,17 +30,8 @@ public:
 	//clears any dead entities from this internal store
 	void clearDeadEntities() {
 		unique_lock<shared_mutex> lck(lock);
-		internalEntities.erase(
-			remove_if(
-				internalEntities.begin(),
-				internalEntities.end(),
-				[](shared_ptr<Entity> &ent) {
-					return !ent->getFlag();
-				}
-			),
-			internalEntities.end()
-		);
-
+		//erase dead entities
+		erase_sequential_if(internalEntities, [](shared_ptr<Entity> &ent) { return !ent->getFlag(); });
 	}
 	
 };
