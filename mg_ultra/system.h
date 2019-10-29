@@ -83,7 +83,7 @@ protected:
 	template <class T>
 	static shared_ptr<T> getComponent(map<type_index, shared_ptr<Component>>& components) {
 		static_assert(is_base_of<Component, T>::value, "Invalid Component conversion: getComponent");
-		return dynamic_pointer_cast<T>(components[typeid(T)]);
+		return components.count(typeid(T)) ? dynamic_pointer_cast<T>(components[typeid(T)]) : nullptr;
 	}
 
 	//sets associativity for systems caching
