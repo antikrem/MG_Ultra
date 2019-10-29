@@ -211,8 +211,10 @@
     <ClInclude Include="component_extended_scripting.h" />
     <ClInclude Include="component_graphics.h" />
     <ClInclude Include="component_input.h" />
+    <ClInclude Include="component_multi_entity.h" />
     <ClInclude Include="component_spawner.h" />
     <ClInclude Include="component_text.h" />
+    <ClInclude Include="component_tiling.h" />
     <ClInclude Include="component_timer.h" />
     <ClInclude Include="component_movement.h" />
     <ClInclude Include="constants.h" />
@@ -245,8 +247,8 @@
     <ClInclude Include="system_graphics.h" />
     <ClInclude Include="system_loader.h" />
     <ClInclude Include="system_movement.h" />
+    <ClInclude Include="system_multi_ent.h" />
     <ClInclude Include="system_player.h" />
-    <ClInclude Include="system_position.h" />
     <ClInclude Include="shaders.h" />
     <ClInclude Include="str_kit.h" />
     <ClInclude Include="system_rotation.h" />
@@ -266,7 +268,6 @@
     <ClInclude Include="timed_event_callback.h" />
     <ClInclude Include="timer.h" />
     <ClInclude Include="n_buffer.h" />
-    <ClInclude Include="_vao.h" />
     <ClInclude Include="vao_boxdata.h" />
     <ClInclude Include="vao_buffer.h" />
     <ClInclude Include="vec_kit.h" />

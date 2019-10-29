@@ -4,6 +4,7 @@
 
 #include "system.h"
 #include "component_spawner.h"
+#include "component_multi_entity.h"
 
 class SystemSpawner : public System {
 	EntityPool* entityPool = nullptr;
@@ -14,16 +15,31 @@ class SystemSpawner : public System {
 
 public:
 	SystemSpawner() {
+		debugName = "s_spawner";
 		types.push_back(typeid(ComponentSpawner));
 		requiredTypes.push_back(typeid(ComponentSpawner));
 	}
 
 	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, int entityType, int id) override {
 		auto spawner = getComponent<ComponentSpawner>(components);
+
+		auto multient = getComponent<ComponentMultiEntity>(components);
+
 		vector<Entity*> ents;
 		spawner->pullEnts(ents);
-		for (auto i : ents) {
-			entityPool->addEnt(i, false);
+
+		//algorithm is slightly different depending
+		//on if a multi ent exists
+		if (!multient) {
+			for (auto i : ents) {
+				entityPool->addEnt(i, false);
+			}
+		}
+
+		else {
+			for (auto i : ents) {
+				multient->addEntity(entityPool->addEnt(i, false));
+			}
 		}
 
 	}

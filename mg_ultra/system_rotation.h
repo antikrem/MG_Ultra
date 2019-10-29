@@ -5,7 +5,7 @@
 #define __SYSTEM_ROTATION__
 
 #include "system.h"
-
+	
 #include "component_graphics.h"
 #include "component_movement.h"
 

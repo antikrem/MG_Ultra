@@ -46,6 +46,7 @@ class ECSMaster {
 	master0: ECS_meta_master :
 		-system_garbage_collector
 		-system_bounds_control
+		-system_multi_ent
 
 	master1: graphics
 	    -system_graphics
@@ -77,6 +78,7 @@ class ECSMaster {
 		master->setTimer(250);
 		master->createSystem<SystemGarbageCollector>(registar);
 		master->createSystem<SystemBoundsControl>(registar);
+		master->createSystem<SystemMultiEnt>(registar);
 		
 		//ring 1
 		master = newSystemsMaster("m_graphics");
@@ -134,8 +136,6 @@ public:
 		inputMaster = new InputMaster(gState->getWindow());
 		input::setCurrentInputMaster(inputMaster);
 		scriptMaster = new ScriptMaster();
-
-		
 
 		//Create basic system masters
 		createBasicSystems();
