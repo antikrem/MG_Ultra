@@ -50,7 +50,7 @@ public:
 			return nullptr;
 		}
 		components[component.first] = shared_ptr<Component>(component.second);
-		return EXIT_SUCCESS;
+		return components[component.first];
 	}
 
 	//A general update to set entity flag
