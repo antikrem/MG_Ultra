@@ -112,9 +112,6 @@ private:
 		//process the box buffer, which renders the geometry
 		boxVAOBuffer.processGLSide();
 
-		//draw highest unmap
-		//highestVao.load()->drawVao();
-
 		postrender();
 	}
 
