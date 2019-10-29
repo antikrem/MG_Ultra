@@ -67,23 +67,24 @@ public:
 
 	//adds a new entity, in a thread safe way
 	//set cacheEnt to true to add the cache 
-	//returns false if attempted to cache but an ent of the same type already exists
-	bool addEnt(Entity* ent, bool cacheEnt = false) {
+	//returns nullptr if attempted to cache but an ent of the same type already exists
+	//otherwise return shared_ptr to new entity
+	shared_ptr<Entity> addEnt(Entity* ent, bool cacheEnt = false) {
 		return addEnt(shared_ptr<Entity>(ent), cacheEnt);
 	}
 
 	//alternative method to addEnt to add a shared ptr
-	bool addEnt(shared_ptr<Entity> ent, bool cacheEnt = false) {
+	shared_ptr<Entity> addEnt(shared_ptr<Entity> ent, bool cacheEnt = false) {
 		unique_lock<shared_mutex> lck(lock);
 		largestID++;
 		list[largestID] = ent;
 		if (cacheEnt) {
 			if (cache.count(ent->getType())) {
-				return false;
+				return nullptr;
 			}
 			cache[ent->getType()] = list[largestID];
 		}
-		return true;
+		return ent;
 	}
 
 	//On failure, returns null, may fail with a valid id, as that id could have be deleted
