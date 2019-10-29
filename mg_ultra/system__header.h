@@ -5,6 +5,7 @@
 //ring 0 - meta ECS management systems
 #include "system_garbage_collector.h"
 #include "system_bounds_control.h"
+#include "system_multi_ent.h"
 
 //ring 1 - graphics pipeline system
 #include "system_graphics.h"
