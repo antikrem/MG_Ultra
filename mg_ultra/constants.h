@@ -25,4 +25,16 @@ using namespace std;
 //unsigned long long max
 const unsigned long long ULLINT_MAX = (unsigned long long int) -1;
 
+//MS types, for easy porting
+#include <stdint.h>
+#define uint8t uint8_t
+#define uint16t uint16_t
+#define uint32t uint32_t
+#define uint64t uint64_t
+
+#define int8t __int8
+#define int16t __int16
+#define int32t __int32
+#define int64t __int64
+
 #endif
