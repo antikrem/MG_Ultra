@@ -15,6 +15,8 @@ class SystemGraphics : public System {
 	int boxCount = 0;
 	BoxData* buffer = nullptr;
 
+	int bufferSize = 0;
+
 public:
 	SystemGraphics() {
 		debugName = "s_graphics";
@@ -31,7 +33,7 @@ public:
 
 	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, int entityType, int id) override {
 		//if buffer is null, dont write yet
-		if (!buffer) {
+		if (!buffer || (boxCount >= bufferSize)) {
 			return;
 		}
 
@@ -59,12 +61,10 @@ public:
 
 			//pull all the states 
 			auto stateList = tex->getStates(pos->getPosition3());
-			vector<BoxData> boxes;
-			for (auto i : stateList) {
-				boxes.push_back(graphicsState->evaluateToBox(i, tex->getScale()));
+		
+			for (int i = 0; (i < (int)stateList.size()) && (boxCount < bufferSize); i++) {
+				buffer[boxCount++] = graphicsState->evaluateToBox(stateList[i], tex->getScale());
 			}
-			copy(boxes.begin(), boxes.end(), buffer + boxCount);
-			boxCount += boxes.size();
 		}
 	}
 
@@ -74,6 +74,7 @@ public:
 
 	void postcycle(EntityPool* pool) override {
 		buffer = graphicsState->getBoxDataBuffer(boxCount);
+		bufferSize = graphicsState->getBoxDataBufferSize();
 	}
 
 };

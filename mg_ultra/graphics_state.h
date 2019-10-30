@@ -105,6 +105,11 @@ public:
 	BoxData* getBoxDataBuffer(int count) {
 		return glHandler->getBoxDataBuffer(count);
 	}
+
+	//returns the size of the GLHandler's boxBufferDataBuffer size
+	int getBoxDataBufferSize() {
+		return glHandler->getBoxDataBufferSize();
+	}
 };
 
 

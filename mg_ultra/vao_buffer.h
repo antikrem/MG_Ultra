@@ -120,7 +120,9 @@ public:
 		return buffer;
 	}
 
-	
+	int getMaxSize() {
+		return maxSize;
+	}
 
 };
 

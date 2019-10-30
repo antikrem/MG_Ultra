@@ -156,6 +156,11 @@ public:
 	BoxData* getBoxDataBuffer(int count) {
 		return boxVAOBuffer.processUpdateSide(count);
 	}
+
+	//gets the size of the BoxDataBuffer
+	int getBoxDataBufferSize() {
+		return boxVAOBuffer.getMaxSize();
+	}
 };
 
 
