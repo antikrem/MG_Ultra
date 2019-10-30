@@ -5,6 +5,7 @@
 #include "pool.h"
 #include "timed_event_callback.h"
 
+#include <chrono>
 #include <future>
 
 //A static function that does nothing!
@@ -39,12 +40,27 @@ class SystemsMaster {
 
 	//if not null, used for executing system
 	TimedEventCallback* timer = nullptr;
+	//seperate int for profiling
+	int timing = 0;
 
 	//DEBUG system currently executed
 	System* sys = nullptr;
 
+	///Further time based debugging
+	//clock used for master timing
+	chrono::high_resolution_clock::time_point mastersClock;
+	//time taken for a full period (from one call to the next), in microseconds
+	atomic<int64t> periodProfileTime = 0;
+	//time taken to conduct cycle systems, in microseconds
+	atomic<int64t> executionProfileTime = 0;
+
 	//cycles through the systems, applying what ever needs to be done
 	void cycleSystems() {
+		//calculate difference for timePeriod
+		auto now = chrono::high_resolution_clock::now();
+		periodProfileTime = chrono::duration_cast<std::chrono::milliseconds>(mastersClock - now).count();
+		mastersClock = now;
+
 		for (auto system : systems) {
 			if (system->executeSystem()) {
 				sys = system;
@@ -60,6 +76,10 @@ class SystemsMaster {
 			starterEvent->data.push_back("starter");
 			g_events::pushEvent(starterEvent);
 		}
+
+		executionProfileTime = chrono::duration_cast<std::chrono::milliseconds>(
+			mastersClock - chrono::high_resolution_clock::now()
+			).count();
 	}
 
 public:
@@ -68,6 +88,9 @@ public:
 		//sets a value in lastFuture, for ease
 		lastFuture = async(launch::async, &emptyFunc);
 		this->name = name;
+
+		//set up mastersClock until ready
+		mastersClock = chrono::high_resolution_clock::now();
 	}
 
 	~SystemsMaster() {
@@ -102,6 +125,7 @@ public:
 	//N will be the number of times computed per second, set n=0 to turn off timer
 	//n=0 causes finite recursion, where the end of each cycle causes the next one 
 	void setTimer(int n) {
+		timing = n;
 		timer = new TimedEventCallback(n, name);
 	}
 
@@ -164,6 +188,12 @@ public:
 			debugs.push_back(i->getDebugName());
 		}
 		return ("MASTER @ LEVEL " + to_string(level) + '\n') + str_kit::createBranchFromVector(debugs);
+	}
+
+	//returns a tuple of (period_time, execution_time, timing)
+	//timing = 0 if not set, period_time and execution_time in microseconds
+	tuple<int64t, int64t> getProfileInfo() {
+		return make_tuple(periodProfileTime.load(), executionProfileTime.load());
 	}
 };
 
