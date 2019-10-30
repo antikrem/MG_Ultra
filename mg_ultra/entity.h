@@ -6,6 +6,7 @@
 #include <typeindex>
 #include <memory>
 #include <mutex>
+#include <shared_mutex>
 
 #include "component.h"
 #include "entity_types.h"
@@ -23,7 +24,7 @@ private:
 	int entityType = ETNoType;
 
 	//a lock on systemsCaching
-	mutex cacheLock;
+	shared_mutex cacheLock;
 	//allows for system association with this entity
 	//if true, quick evaluate, if false, pass
 	map<string, bool> systemsCaching;
@@ -75,19 +76,19 @@ public:
 
 	//returns true if this system is part of the caching system
 	bool isSystemCached(const string& systemName) {
-		unique_lock<mutex> cacheLock;
+		shared_lock<shared_mutex> lck(cacheLock);
 		return systemsCaching.count(systemName);
 	}
 
 	//sets an association 
 	void setSystemCache(const string& systemName, bool association) {
-		unique_lock<mutex> cacheLock;
+		unique_lock<shared_mutex> lck(cacheLock);
 		systemsCaching[systemName] = association;
 	}
 
 	//returns true if an association exists between the system and this end
 	bool isAnAssociatedSystem(const string& systemName) {
-		unique_lock<mutex> cacheLock;
+		shared_lock<shared_mutex> lck(cacheLock);
 		return systemsCaching[systemName];
 	}
 
