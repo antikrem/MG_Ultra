@@ -8,9 +8,12 @@ using namespace std;
 enum EntityTypes {
 	ETNoType,
 	ETGeneric,
+	ETGameControl,
 	ETConsole,
 	ETCamera,
-	ETPlayer
+	ETPlayer,
+	ETPlayerBullets,
+	ETProfile
 };
 
 //String to Entity type

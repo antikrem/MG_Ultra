@@ -7,9 +7,10 @@ pool = getEntityPool()
 --
 EntityNoType = 0
 EntityGeneric = 1
-EntityConsole = 2
-EntityCamera = 3
-EntityPlayer = 4
+EntityGameControl = 2
+EntityConsole = 3
+EntityCamera = 4
+EntityPlayer = 5
 
 --returns the entity cached with this types
 --or nil on failure due to invalid type or no respective cached ent
