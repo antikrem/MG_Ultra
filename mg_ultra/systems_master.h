@@ -58,7 +58,7 @@ class SystemsMaster {
 	void cycleSystems() {
 		//calculate difference for timePeriod
 		auto now = chrono::high_resolution_clock::now();
-		periodProfileTime = chrono::duration_cast<std::chrono::milliseconds>(mastersClock - now).count();
+		periodProfileTime = chrono::duration_cast<std::chrono::microseconds>(now - mastersClock).count();
 		mastersClock = now;
 
 		for (auto system : systems) {
@@ -77,8 +77,8 @@ class SystemsMaster {
 			g_events::pushEvent(starterEvent);
 		}
 
-		executionProfileTime = chrono::duration_cast<std::chrono::milliseconds>(
-			mastersClock - chrono::high_resolution_clock::now()
+		executionProfileTime = chrono::duration_cast<std::chrono::microseconds>(
+			chrono::high_resolution_clock::now() - mastersClock
 			).count();
 	}
 
@@ -192,8 +192,8 @@ public:
 
 	//returns a tuple of (period_time, execution_time, timing)
 	//timing = 0 if not set, period_time and execution_time in microseconds
-	tuple<int64t, int64t> getProfileInfo() {
-		return make_tuple(periodProfileTime.load(), executionProfileTime.load());
+	tuple<int, int, int> getProfileInfo() {
+		return make_tuple((int)periodProfileTime.load(), (int)executionProfileTime.load(), timing);
 	}
 };
 

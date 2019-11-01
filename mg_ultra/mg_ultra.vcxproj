@@ -201,6 +201,7 @@
     <ClCompile Include="_graphics_headers.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="algorithm_ex.h" />
     <ClInclude Include="animations.h" />
     <ClInclude Include="any_type.h" />
     <ClInclude Include="camera.h" />
@@ -251,6 +252,7 @@
     <ClInclude Include="system_player.h" />
     <ClInclude Include="shaders.h" />
     <ClInclude Include="str_kit.h" />
+    <ClInclude Include="system_profiler.h" />
     <ClInclude Include="system_rotation.h" />
     <ClInclude Include="system_script.h" />
     <ClInclude Include="system_spawner.h" />
@@ -278,6 +280,8 @@
     <None Include="wd\scripts\camera\initialise_camera.lua" />
     <None Include="wd\scripts\player\initialise_player.lua" />
     <None Include="wd\scripts\player\player.lua" />
+    <None Include="wd\scripts\_initialise\profiler.lua" />
+    <None Include="wd\scripts\_initialise\profiling_init.lua" />
     <None Include="wd\scripts\_initialise\registar.lua" />
     <None Include="wd\scripts\_library\library.lua" />
     <None Include="wd\scripts\_library\library_ex.lua" />

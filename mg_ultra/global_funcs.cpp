@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <atomic>
+#include <mutex>
 
 #include <typeindex>
 
@@ -73,6 +74,20 @@ void pushEvent() {
 	}
 }
 
+//used for profiling
+mutex profileLock;
+ProfileMap profileInfo;
+
+ProfileMap getProfileInfoMap() {
+	unique_lock<mutex> lck(profileLock);
+	return profileInfo;
+}
+
+void setProfileInfoMap(ProfileMap& profileMap) {
+	unique_lock<mutex> lck(profileLock);
+	profileInfo = profileMap;
+}
+
 void registerGlobalFunctions(kaguya::State &kaguya) {
 	//printing
 	kaguya["printAdd"] = kaguya::overload(print_addString, print_addInt, print_addBool);
@@ -83,4 +98,7 @@ void registerGlobalFunctions(kaguya::State &kaguya) {
 	kaguya["addEventData"] = addEventData;
 	kaguya["pushEvent"] = pushEvent;
 	kaguya["get_event_length"] = g_events::queueSize;
+
+	//profiling
+	kaguya["getProfileInfo"] = getProfileInfoMap;
 }

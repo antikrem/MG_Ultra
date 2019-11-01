@@ -14,6 +14,19 @@ extern "C" {
 
 #include "error.h"
 
+#include <map>
+#include <tuple>
+
+#include "constants.h"
+
 void registerGlobalFunctions(kaguya::State &kaguya);
+
+//using ProfileMap = map<string, tuple<int, int, int>>;
+using ProfileMap = map<string, vector<int>>;
+
+
+ProfileMap getProfileInfoMap();
+
+void setProfileInfoMap(ProfileMap& profileMap);
 
 #endif

@@ -6,6 +6,7 @@
 #include "system_garbage_collector.h"
 #include "system_bounds_control.h"
 #include "system_multi_ent.h"
+#include "system_profiler.h"
 
 //ring 1 - graphics pipeline system
 #include "system_graphics.h"

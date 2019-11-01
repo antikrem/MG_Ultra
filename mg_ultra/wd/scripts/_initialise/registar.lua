@@ -1,6 +1,9 @@
 ---sets g-registar variables, these are used for game control
 registar = getGlobalRegistar();
 
+----Debug flags
+registar:add("profiler_active", false)
+
 ----Engine level variables
 
 --levels are on cycles, with scripted events occuring on the tick
@@ -35,3 +38,8 @@ registar:add("culling_padding", 100)
 --Sets the vertical camera view, how  much of the play_space_y
 --is viewable
 registar:add("view_space_y", 1080)
+
+--The depth of the level,
+--Base tiles will be on this level
+--Additionally, the camera will render to this level
+--then cull

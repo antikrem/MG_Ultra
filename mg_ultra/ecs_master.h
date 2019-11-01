@@ -79,6 +79,7 @@ class ECSMaster {
 		master->createSystem<SystemGarbageCollector>(registar);
 		master->createSystem<SystemBoundsControl>(registar);
 		master->createSystem<SystemMultiEnt>(registar);
+		master->createSystem<SystemProfiler>(registar);
 		
 		//ring 1
 		master = newSystemsMaster("m_graphics");
@@ -254,6 +255,12 @@ private:
 			//invoke a system master
 			handleSystemsInvoke(event);
 			break;
+
+		//update the profiling information
+		case EV_profilingUpdate:
+			updateProfileMap();
+			break;
+
 		}
 
 		delete event;
@@ -288,6 +295,20 @@ public:
 			i++;
 		}
 		return message;
+	}
+
+	//sets the profile map in global funcs
+	void updateProfileMap() {
+		ProfileMap profileInfo;
+		for (auto i : systemsMasters) {
+			auto info = i.second->getProfileInfo();
+			profileInfo[i.first] = {
+				get<0>(info),
+				get<1>(info),
+				get<2>(info)
+			};
+		}
+		setProfileInfoMap(profileInfo);
 	}
 };
 
