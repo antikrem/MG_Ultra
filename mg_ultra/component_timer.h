@@ -50,6 +50,7 @@ public:
 			.addFunction("set_cycle", &ComponentTimer::setCycle)
 			.addFunction("add_callback", &ComponentTimer::addCallback)
 			.addStaticFunction("type", &getType<ComponentTimer>)
+			.addStaticFunction("create", &ScriptableClass::create<ComponentTimer>)
 			.addStaticFunction("cast", &Component::castDown<ComponentTimer>)
 		);
 	}
