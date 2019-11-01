@@ -3,7 +3,9 @@
 void FunctionalCallbackSystem::executeAnyScript(string systemName, string script, shared_ptr<Entity> ent, SuccessCallback* sc) {
 	ScriptUnit su(SS_functionalCallBack, script);
 	su.addDebugData(systemName);
-	su.attachEntity(ent);
+	if (ent) {
+		su.attachEntity(ent);
+	}
 	sc->reset();
 	su.attachSuccessCallback(sc);
 	executeScriptUnit(su);
