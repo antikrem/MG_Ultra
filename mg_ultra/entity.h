@@ -69,6 +69,12 @@ public:
 		return entityType;
 	}
 
+	//kills entity directly
+	//TODO: make thread safe
+	void killEntity() {
+		flag = false;
+	}
+
 	//returns flag, if false, delete this ent
 	bool getFlag() {
 		return flag;
