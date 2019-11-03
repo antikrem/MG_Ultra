@@ -75,7 +75,7 @@ class ECSMaster {
 		
 		//ring 0
 		auto master = newSystemsMaster("m_meta");
-		master->setTimer(250);
+		master->setTimer(10);
 		master->createSystem<SystemGarbageCollector>(registar);
 		master->createSystem<SystemBoundsControl>(registar);
 		master->createSystem<SystemMultiEnt>(registar);
@@ -85,6 +85,8 @@ class ECSMaster {
 		master = newSystemsMaster("m_graphics");
 		auto graphicsMaster = master->createSystem<SystemGraphics>(registar);
 		graphicsMaster->setGraphicsState(gState);
+		auto cameraSystem = master->createSystem<SystemCamera>(registar);
+		cameraSystem->setCamera(gState->getCamera());
 
 		//ring 2
 		master = newSystemsMaster("m_script");
@@ -93,7 +95,7 @@ class ECSMaster {
 
 		//ring 3
 		master = newSystemsMaster("m_graphics2");
-		master->setTimer(250);
+		master->setTimer(150);
 		auto animationSystem = master->createSystem<SystemAnimation>(registar);
 		animationSystem->setAnimationMaster(gState->getAnimationsMaster());
 		auto textSystem = master->createSystem<SystemText>(registar);
@@ -103,18 +105,16 @@ class ECSMaster {
 
 		//ring 4
 		master = newSystemsMaster("m_gameplay");
-		master->setTimer(250);
+		master->setTimer(150);
 		master->createSystem<SystemTimer>(registar);
 		master->createSystem<SystemPlayer>(registar);
-		auto cameraSystem = master->createSystem<SystemCamera>(registar);
-		cameraSystem->setCamera(gState->getCamera());
 		master->createSystem<SystemMovement>(registar);
 		master->createSystem<SystemRotation>(registar);
 		master->createSystem<SystemGameStateControl>(registar);
 
 		//ring 5
 		master = newSystemsMaster("m_loader");
-		master->setTimer(300);
+		master->setTimer(5);
 		master->createSystem<SystemLoader>(registar);
 	}
 
