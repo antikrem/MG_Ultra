@@ -29,7 +29,7 @@ function convertToProfileString(name, slice)
 		return name .. ": " 
 			.. "Timed "
 			.. string.format("exec: %.3f ", slice[2]/slice[1]) 
-			.. string.format("speed: %.2f%% ", clamp(100*(desiredTimePerCycle/slice[2]), 0, 100)) 
+			.. string.format("speed: %3.2f%% ", 100*(slice[1] / desiredTimePerCycle) )
 			.. "\n"
 
 	end
