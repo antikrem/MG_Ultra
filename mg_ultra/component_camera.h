@@ -21,7 +21,7 @@ public:
 	ComponentCamera() : viewTarget{ Point3(0,0,0) } {
 	}
 	
-	glm::vec3 getViewTarget(Point3 cameraPos) {
+	glm::vec3 getViewTarget() {
 		return viewTarget.load().getVec3();
 	}
 
