@@ -2,10 +2,10 @@ local cText = this:get_component(ComponentText)
 
 local profileInfo = getProfileInfo()
 
-local profileString = ""
+local profileString = get_dump_report() .. "\n"
 
 for system, values in pairs(profileInfo) do
-	profileString = profileString .. system .. " " .. tostring(values[1])  .. "\n"
+	profileString = profileString .. convertToProfileString(system, values)
 end
 
 cText:set_text(profileString)

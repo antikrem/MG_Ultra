@@ -56,17 +56,19 @@ function test()
 	load_state("level", "ascent", 1)
 end
 
+function get_dump_report() 
+	local dumpReport = string.format("Event size: %d\n", get_event_length())
+	dumpReport = dumpReport 
+		.. string.format("Entities alive, Total: %04d Cached: %02d \n", EntityPool.get_entity_count())
+	dumpReport = dumpReport 
+		.. string.format("Graveyard, size: %03d passed: %05d \n", EntityPool.get_graveyard_size(), EntityPool.get_graveyard_passed())
+	dumpReport = dumpReport 
+		.. string.format("Memory Usage: %f ", collectgarbage("count"))
+	return dumpReport
+end
 
 function dump()
-	print("Event size:", get_event_length())
-	local a, b = EntityPool.get_entity_count()
-	print("Entities alive, Total:", a, "Cached:", b)
-	print("Graveyard, size:", 
-		EntityPool.get_graveyard_size(), 
-		"passed:", 
-		EntityPool.get_graveyard_passed()
-	)
-	print("Memory Usage:", collectgarbage("count"))
+	print(get_dump_report())
 end
 
 function test2()
