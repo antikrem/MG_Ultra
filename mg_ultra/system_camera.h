@@ -27,10 +27,6 @@ public:
 		if (!executeInternalScript("system_camera", "CAMERA: Fatal error executing camera script, camera disabled", ent, &sc)) {
 			return;
 		}
-
-		//set camera values
-		Point3 eyePos = ent->getComponent<ComponentPosition>()->getPosition3();
-		
 	}
 
 	void cacheFail(EntityPool* pool) override {
