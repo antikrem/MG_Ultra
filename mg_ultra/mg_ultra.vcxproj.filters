@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
@@ -28,9 +24,6 @@
     <Filter Include="Header Files\ECS\Systems">
       <UniqueIdentifier>{81b0941a-0912-4815-bfc4-b9c2adcc4462}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Support">
-      <UniqueIdentifier>{8cd78e2c-ebec-416d-bf47-da262f611f91}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Script">
       <UniqueIdentifier>{5c31e2da-3aed-4134-8f98-b8514ddf3a1e}</UniqueIdentifier>
     </Filter>
@@ -39,15 +32,6 @@
     </Filter>
     <Filter Include="Resource Files\scripts">
       <UniqueIdentifier>{d12c0401-392e-4fe4-95df-3e2093155d38}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Script">
-      <UniqueIdentifier>{cd4685ff-bdb9-48f4-96e0-92c4e07bf839}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\ECS">
-      <UniqueIdentifier>{d0cecc33-a185-4166-9035-ba85a1c02dae}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\ECS\Systems">
-      <UniqueIdentifier>{1fefb6dc-3f8d-4544-a9b7-53739ea96e1b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource Files\scripts\camera">
       <UniqueIdentifier>{13dd9f55-84c7-493f-93f6-9c8900923e78}</UniqueIdentifier>
@@ -58,14 +42,30 @@
     <Filter Include="Header Files\Graphics\VAO">
       <UniqueIdentifier>{bddc3d78-4e0d-493c-bdcd-c0769277a518}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Graphics">
-      <UniqueIdentifier>{47a1f7b3-5a59-42f9-b996-1e854235c58f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resource Files\scripts\_library">
       <UniqueIdentifier>{5930ae98-c055-4ecc-be83-189afdd6fe9b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource Files\scripts\_initialise">
       <UniqueIdentifier>{6906ca14-0a3d-42e2-85e7-42609e1d4b1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Support">
+      <UniqueIdentifier>{8cd78e2c-ebec-416d-bf47-da262f611f91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Script">
+      <UniqueIdentifier>{cd4685ff-bdb9-48f4-96e0-92c4e07bf839}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ECS">
+      <UniqueIdentifier>{d0cecc33-a185-4166-9035-ba85a1c02dae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ECS\Systems">
+      <UniqueIdentifier>{1fefb6dc-3f8d-4544-a9b7-53739ea96e1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics">
+      <UniqueIdentifier>{47a1f7b3-5a59-42f9-b996-1e854235c58f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -169,9 +169,6 @@
     </ClInclude>
     <ClInclude Include="component_graphics.h">
       <Filter>Header Files\ECS\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="vec_kit.h">
-      <Filter>Header Files\Support</Filter>
     </ClInclude>
     <ClInclude Include="reader.h">
       <Filter>Header Files\Support</Filter>
@@ -338,6 +335,9 @@
     <ClInclude Include="system_profiler.h">
       <Filter>Header Files\ECS\Systems</Filter>
     </ClInclude>
+    <ClInclude Include="vec_kit.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="wd\shaders\base.vert">
@@ -378,6 +378,9 @@
     </None>
     <None Include="wd\scripts\_initialise\profiling_init.lua">
       <Filter>Resource Files\scripts\_initialise</Filter>
+    </None>
+    <None Include="wd\scripts\_library\string_ex.lua">
+      <Filter>Resource Files\scripts\_library</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

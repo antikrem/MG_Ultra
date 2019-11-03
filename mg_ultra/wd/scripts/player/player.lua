@@ -14,14 +14,6 @@ local cEScript = this:get_component(ComponentExtendedScripting)
 --Timing component
 local cTiming = this:get_component(ComponentTimer)
 
---add has no effect if value is already set
---cEScript:add("test", 10)
-
---testValue = cEScript:get("test")
---testValue = testValue + 1
---cEScript:set("test", testValue)
---print(testValue)
-
 --represents input
 local ix, iy = 0,0
 
@@ -71,7 +63,7 @@ if cInput:query_down("shoot") == 1 and
 		cSpawner:add_component(bulletGComponents)
 
 		local bulletMComponent = ComponentMovement.create()
-		bulletMComponent:set_speed(10.0)
+		bulletMComponent:set_speed(15.0)
 		bulletMComponent:set_angle(bAngle)
 		bulletMComponent:set_rotation_speed(5)
 		cSpawner:add_component(bulletMComponent)

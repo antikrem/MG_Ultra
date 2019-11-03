@@ -15,7 +15,7 @@ public:
 		debugName = "s_gamestate_control";
 		//empty system
 		cacheOnly = true;
-		cachedTarget = 0;
+		cachedTarget = ETGameControl;
 	}
 
 	void precycle(EntityPool* pool) override {
