@@ -10,6 +10,7 @@
 #include "component_movement.h"
 #include "component_animation.h"
 #include "component_extended_scripting.h"
+#include "component_multi_entity.h"
 
 #include "functional_callback_system.h"
 
@@ -40,6 +41,8 @@ public:
 		auto newComponent = new ComponentPosition(0, 0, -10.0);
 		newEnt->addComponent(newComponent->pullForEntity());
 		auto newComponent1 = new ComponentGraphics("default");
+		newComponent1->setScale(0.3f);
+		newComponent1->setAnimationType(2);
 		newEnt->addComponent(newComponent1->pullForEntity());
 		auto newComponent2 = new ComponentAnimation();
 		newComponent2->changeDefaultAnimation(2);
@@ -52,6 +55,10 @@ public:
 		newEnt->addComponent(newComponent5->pullForEntity());
 		auto newComponent6 = new ComponentSpawner();
 		newEnt->addComponent(newComponent6->pullForEntity());
+		auto newComponent7 = new ComponentMultiEntity();
+		newEnt->addComponent(newComponent7->pullForEntity());
+		auto newComponent8 = new ComponentTimer();
+		newEnt->addComponent(newComponent8->pullForEntity());
 
 		//execute a script to initialise the player
 		executeAnyScript(debugName, 
