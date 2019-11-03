@@ -94,7 +94,7 @@ class ECSMaster {
 
 		//ring 3
 		master = newSystemsMaster("m_graphics2");
-		master->setTimer(150);
+		master->setTimer(125);
 		auto animationSystem = master->createSystem<SystemAnimation>(registar);
 		animationSystem->setAnimationMaster(gState->getAnimationsMaster());
 		auto textSystem = master->createSystem<SystemText>(registar);
@@ -104,7 +104,7 @@ class ECSMaster {
 
 		//ring 4
 		master = newSystemsMaster("m_gameplay");
-		master->setTimer(150);
+		master->setTimer(125);
 		master->createSystem<SystemTimer>(registar);
 		master->createSystem<SystemPlayer>(registar);
 		master->createSystem<SystemCamera>(registar);
