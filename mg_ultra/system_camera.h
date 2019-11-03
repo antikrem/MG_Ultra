@@ -12,8 +12,6 @@
 #include "component_position.h"
 
 class SystemCamera : public System, public FunctionalCallbackSystem {
-	Camera* camera;
-
 public:
 	SystemCamera() {
 		debugName = "s_camera";
@@ -32,11 +30,7 @@ public:
 
 		//set camera values
 		Point3 eyePos = ent->getComponent<ComponentPosition>()->getPosition3();
-		camera->updateCamera(
-			eyePos.getVec3(),
-			ent->getComponent<ComponentCamera>()->getViewTarget(eyePos),
-			ent->getComponent<ComponentCamera>()->getFOV()
-		);
+		
 	}
 
 	void cacheFail(EntityPool* pool) override {
@@ -53,10 +47,6 @@ public:
 			newEnt,
 			&sc
 		);
-	}
-
-	void setCamera(Camera* camera) {
-		this->camera = camera;
 	}
 
 };

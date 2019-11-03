@@ -7,8 +7,11 @@
 #include "component_position.h"
 #include "component_graphics.h"
 #include "component_text.h"
+#include "component_camera.h"
 
 class SystemGraphics : public System {
+	//Pointer to camera
+	Camera* camera = nullptr;
 	//Pointer to graphics state
 	GraphicsState* graphicsState = nullptr;
 
@@ -29,6 +32,10 @@ public:
 
 	void setGraphicsState(GraphicsState* graphicsState) {
 		this->graphicsState = graphicsState;
+	}
+
+	void setCamera(Camera* camera) {
+		this->camera = camera;
 	}
 
 	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, int entityType, int id) override {
@@ -73,6 +80,21 @@ public:
 	}
 
 	void postcycle(EntityPool* pool) override {
+		//need to move camera entity values to camera
+		auto cameraEnt = pool->getCachedEnt(ETCamera);
+		if (cameraEnt) {
+			auto cCamera = cameraEnt->getComponent<ComponentCamera>();
+			auto cPosition = cameraEnt->getComponent<ComponentPosition>();
+
+			camera->updateCamera(
+				cPosition->getPosition3().getVec3(),
+				cCamera->getViewTarget(),
+				cCamera->getFOV()
+			);
+		}
+
+		
+
 		buffer = graphicsState->getBoxDataBuffer(boxCount);
 		bufferSize = graphicsState->getBoxDataBufferSize();
 	}

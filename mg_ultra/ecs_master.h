@@ -85,8 +85,7 @@ class ECSMaster {
 		master = newSystemsMaster("m_graphics");
 		auto graphicsMaster = master->createSystem<SystemGraphics>(registar);
 		graphicsMaster->setGraphicsState(gState);
-		auto cameraSystem = master->createSystem<SystemCamera>(registar);
-		cameraSystem->setCamera(gState->getCamera());
+		graphicsMaster->setCamera(gState->getCamera());
 
 		//ring 2
 		master = newSystemsMaster("m_script");
@@ -108,6 +107,7 @@ class ECSMaster {
 		master->setTimer(150);
 		master->createSystem<SystemTimer>(registar);
 		master->createSystem<SystemPlayer>(registar);
+		master->createSystem<SystemCamera>(registar);
 		master->createSystem<SystemMovement>(registar);
 		master->createSystem<SystemRotation>(registar);
 		master->createSystem<SystemGameStateControl>(registar);
