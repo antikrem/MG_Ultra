@@ -82,6 +82,7 @@ ScriptMaster::ScriptMaster()
 	quickLoadAndExecute("scripts/_library/library_ex.lua");
 	quickLoadAndExecute("scripts/_library/pool_utils.lua");
 	quickLoadAndExecute("scripts/_library/math_utils.lua");
+	quickLoadAndExecute("scripts/_library/string_ex.lua");
 	quickLoadAndExecute("scripts/_initialise/registar.lua");
 
 	globalScriptMasterPtr = this;
