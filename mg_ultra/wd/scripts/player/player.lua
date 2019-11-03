@@ -1,16 +1,5 @@
 --executed to update player
 
---some constant values
-WIDE_WIDTH = 1520
-
---Player movement
-PLAYER_ACCELERATION = 0.25
-PLAYER_MAX_VELOCITY = 5.0
-PLAYER_MAX_FOCUS_VELOCITY = 2.0
-PLAYER_MAX_DASH_VELOCITY = 15.0
-
---shooting timer
-PLAYER_SHOOT_TIMING = 5
 
 --The position of the player
 local cPosition = this:get_component(ComponentPosition)
