@@ -176,7 +176,10 @@ private:
 				registar->update("next_state", data[0]);
 			}
 			else {
-				err::logMessage("EVENT: error loading next state, invalid single state " + data[0]);
+				err::logMessage(
+					"EVENT: error loading next state, invalid single state " 
+					+ data[0]
+				);
 				return;
 			}
 
@@ -184,7 +187,11 @@ private:
 		//3 flag is for switching a a level, 1 is campaign name, 2 is level number
 		else if (data.size() == 3) {
 			if not(data[0] == "level") {
-				err::logMessage("EVENT: error loading next state, invalid triple state " + data[0] + ". \n only valid state is \"level\" ");
+				err::logMessage(
+					"EVENT: error loading next state, invalid triple state " 
+					+ data[0] 
+					+ ". \n only valid state is \"level\" "
+				);
 				return;
 			}
 			
@@ -194,7 +201,10 @@ private:
 			int level = str_kit::stringToInt(data[2], &valid);
 			
 			if not(valid) {
-				err::logMessage("EVENT: level value is invalid, provided value is: " + data[2]);
+				err::logMessage(
+					"EVENT: level value is invalid, provided value is: " 
+					+ data[2]
+				);
 				return;
 			}
 
@@ -205,7 +215,10 @@ private:
 
 		}
 		else {
-			err::logMessage("EVENT: error, loading next state, invalid number of state parameters: " + str_kit::reconstituteVectorIntoString(data, " "));
+			err::logMessage(
+				"EVENT: error, loading next state, invalid number of state parameters: " 
+				+ str_kit::reconstituteVectorIntoString(data, " ")
+			);
 			return;
 		}
 		registar->update("load_request", true);
@@ -213,12 +226,20 @@ private:
 
 	void handleSystemsInvoke(Event* event) {
 		if (event->data.size() != 2) {
-			err::logMessage("EVENT: error, expected 2 parameters, got: " + to_string(event->data.size()) + " " + str_kit::reconstituteVectorIntoString(event->data, " "));
+			err::logMessage(
+				"EVENT: error, expected 2 parameters, got: " 
+				+ to_string(event->data.size()) 
+				+ " " 
+				+ str_kit::reconstituteVectorIntoString(event->data, " ")
+			);
 			return;
 		}
 
 		if (!systemsMasters.count(event->data[0])) {
-			err::logMessage("EVENT: error, expected a known system name and [timer/starter], got: " + event->data[0]);
+			err::logMessage(
+				"EVENT: error, expected a known system name and [timer/starter], got: " 
+				+ event->data[0]
+			);
 			return;
 		}
 		
