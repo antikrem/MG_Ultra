@@ -8,6 +8,9 @@
 #include "cus_struct2.h"
 
 class ComponentMovement : public Component, public ScriptableClass {
+	//specifies this system to update in system_movement
+	atomic<bool> updateInSystem = true;
+
 	//cartesian  stuff
 	atomic<Point3> velocity;
 	atomic<Point3> acceleration;
@@ -163,6 +166,14 @@ public:
 		return speedAceleration;
 	}
 
+	bool getUpdateInSystem() {
+		return updateInSystem;
+	}
+
+	void updateManually(bool value) {
+		updateInSystem = !value;
+	}
+
 	void registerToLua(kaguya::State& state) override {
 		state["ComponentMovement"].setClass(kaguya::UserdataMetatable<ComponentMovement, Component>()
 			.setConstructors<ComponentMovement()>()
@@ -185,6 +196,7 @@ public:
 			.addFunction("get_speed_acceleration", &ComponentMovement::getSpeedAcceleration)
 			.addFunction("get_rotation_speed", &ComponentMovement::getRotationVelocity)
 			.addFunction("set_rotation_speed", &ComponentMovement::setRotationVelocity)
+			.addFunction("set_update_manually", &ComponentMovement::updateManually)
 			.addStaticFunction("create", ScriptableClass::create<ComponentMovement>)
 			.addStaticFunction("type", &getType<ComponentMovement>)
 			.addStaticFunction("cast", &Component::castDown<ComponentMovement>)

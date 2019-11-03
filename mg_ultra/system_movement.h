@@ -27,7 +27,10 @@ public:
 		auto pos = getComponent<ComponentPosition>(components);
 		auto mov = getComponent<ComponentMovement>(components);
 
-		pos->setPosition(mov->getUpdatedPosition(pos->getPosition3()));
+		if (mov->getUpdateInSystem()) {
+			pos->setPosition(mov->getUpdatedPosition(pos->getPosition3()));
+		}
+		
 	}
 
 };
