@@ -21,103 +21,96 @@ enum VaoState {
 /*
 Uses CRTP<This>
 Each VAOBuffer has 2 vaos, one will be read and one write
-
+T is  a renderable
 */
 template <class This, class T>
 class VAOBuffer {
 private:
-	//if false vao 0 is updating, 1 is drawing
-	//if true vao 0 is drawing, 0 is updating
-	bool updating = false;
-
-	//2 VAO's ids for each vao buffer
-	GLuint vaoID[2] = { 0 };
-
-
-
-	//state of each VAO
-	VaoState vaoState[2] = { VS_ready, VS_ready };
+	//vao associated with this buffer
+	GLuint vaoID;
 
 	//mutex lock for switching thread context
 	mutex lock;
-	//conditional variable for blocking update size thread
+	//conditional variable for blocking update side thread
 	condition_variable cv;
 
-	//a pointer to a mapped buffer
+	//buffer for renderable, will be of size maxsize
 	T* buffer = nullptr;
+	//size of current buffer
+	int bufferSize = 0;
+
+	//write buffer for renderable, will be of size maxsize
+	//used by updateSide to give new values
+	T* writeBuffer = nullptr;
+	//set to true when writeBuffer has been updated
+	atomic<bool> copyBuffer = false;
+	//contains the size of the copy buffer
+	int copyBufferSize = 0;
 
 protected:
 	//instance index, index corresponds to VAO
-	GLuint vboID[2] = { 0 };
+	GLuint vboID = 0;
 
-	//number of entities in each vao
-	int sizes[2] = { 0 };
 	//maximum number of boxes a VAO can handle
 	const int maxSize;
 
 	//set up default buffers
 	VAOBuffer(int maxSize) : maxSize(maxSize) {
-		glGenVertexArrays(2, vaoID);
-		for (int i = 0; i < 2; i++) {
-			glBindVertexArray(vaoID[i]);
-			static_cast<This*>(this)->setUpAttribPointers(i);
-		}
+		buffer = new T[maxSize];
+		writeBuffer = new T[maxSize];
+		glGenVertexArrays(1, &vaoID);
+		glBindVertexArray(vaoID);
+		static_cast<This*>(this)->setUpAttribPointers();
 		glBindVertexArray(0);
 	}
 
-	//returns a pointer to mapped gl buffer of specified VAO
-	void updateMappedBuffer(int i) {
-		glBindVertexArray(vaoID[i]);
-		glBindBuffer(GL_ARRAY_BUFFER, vboID[i]);
-		buffer = (T*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
-		glBindVertexArray(0);
+	~VAOBuffer() {
+		delete buffer;
 	}
+
 
 public:
 
 	//handles the process of this VAO, from the gl side
 	void processGLSide() {
-		//lock and check if a graphics update thread is ready
-		{
-			unique_lock<mutex> l(lock);
-			if (vaoState[(int)updating] == VS_ready) {
-				//updating is side is waiting on an unmap
-				if (buffer) { //checks if buffer has been allocated, to avoid unmaping a unmapped buffer
-					glBindVertexArray(vaoID[(int)updating]);
-					glBindBuffer(GL_ARRAY_BUFFER, vboID[(int)updating]);
-					glUnmapBuffer(GL_ARRAY_BUFFER);
-				}
-
-				//updating side is ready to draw, this is the new drawing size
-				updating = !updating;
-				//set the new drawing thread 
-				vaoState[(int)!updating] = VS_drawing;
-
-				updateMappedBuffer((int)updating);
-				vaoState[(int)updating] = VS_waiting;
-
-				cv.notify_one();
+		//check if a copy buffer has come in
+		if (copyBuffer) {
+			{
+				//copy over to buffer
+				unique_lock<mutex> lck(lock);
+				copy(writeBuffer, writeBuffer + bufferSize, buffer);
+				bufferSize = copyBufferSize;
+				copyBuffer = false;
 			}
-			
+			//notify glUpdate to continue
+			cv.notify_one();
+			//move buffer data to gl
+			glBindVertexArray(vaoID);
+			glBindBuffer(GL_ARRAY_BUFFER, vboID);
+			glBufferSubData(GL_ARRAY_BUFFER, 0, bufferSize * sizeof(T), buffer);
+			glBindVertexArray(0);
 		}
 
 		//need to render eitherway
-		glBindVertexArray(vaoID[(int)!updating]);
-		static_cast<This*>(this)->render(sizes[(int)!updating]);
+		glBindVertexArray(vaoID);
+		static_cast<This*>(this)->render(bufferSize);
 		glBindVertexArray(0);
 	}
 
-	//handles the process of this VAO from the update side
-	//takes the size of the last instance insertion
-	//returns a pointer to the buffer when ready
-	T* processUpdateSide(int size) {
-		unique_lock<mutex> l(lock);
-		//updating is done, set size on signal ready
-		sizes[(int)updating] = size;
-		vaoState[(int)updating] = VS_ready;
-		//wait for updating to switch and VS_waiting to be set
-		cv.wait(l, [this] { return (vaoState[(int)updating] == VS_waiting); });
-		return buffer;
+	//grabs a pointer to the write buffer
+	T* getWriteBuffer() {
+		return writeBuffer;
+	}
+
+	//commits the write buffer, then waits until
+	//the commit is recieved
+	//should be accessed update side
+	void commitBuffer(int size) {
+		unique_lock<mutex> lck(lock);
+		copyBufferSize = size;
+		//signal the glThread to handle
+		copyBuffer = true;
+		cv.wait(lck, [this] { return !copyBuffer.load(); });
 	}
 
 	int getMaxSize() {

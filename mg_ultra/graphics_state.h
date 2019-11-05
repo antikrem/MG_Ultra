@@ -102,8 +102,13 @@ public:
 	//gets a pointer to a buffered map
 	//blocks until fufiled
 	//also commits the last block
-	BoxData* getBoxDataBuffer(int count) {
-		return glHandler->getBoxDataBuffer(count);
+	BoxData* getBoxDataBuffer() {
+		return glHandler->getBoxDataBuffer();
+	}
+
+	//commit the buffer, waiting until operation is complete
+	void commitBoxDataBuffer(int boxCount) {
+		glHandler->commitBoxDataBuffer(boxCount);
 	}
 
 	//returns the size of the GLHandler's boxBufferDataBuffer size

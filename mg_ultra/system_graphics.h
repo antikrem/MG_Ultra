@@ -77,6 +77,8 @@ public:
 
 	void precycle(EntityPool* pool) override {
 		boxCount = 0;
+		buffer = graphicsState->getBoxDataBuffer();
+		bufferSize = graphicsState->getBoxDataBufferSize();
 	}
 
 	void postcycle(EntityPool* pool) override {
@@ -93,10 +95,7 @@ public:
 			);
 		}
 
-		
-
-		buffer = graphicsState->getBoxDataBuffer(boxCount);
-		bufferSize = graphicsState->getBoxDataBufferSize();
+		graphicsState->commitBoxDataBuffer(boxCount);
 	}
 
 };

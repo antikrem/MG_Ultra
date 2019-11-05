@@ -153,8 +153,13 @@ public:
 
 	//gets a boxdata buffer and commits the last one
 	//blocks until operation is done
-	BoxData* getBoxDataBuffer(int count) {
-		return boxVAOBuffer.processUpdateSide(count);
+	BoxData* getBoxDataBuffer() {
+		return boxVAOBuffer.getWriteBuffer();
+	}
+
+	//Commit current write buffer and waot until its processed
+	void commitBoxDataBuffer(int boxCount) {
+		boxVAOBuffer.commitBuffer(boxCount);
 	}
 
 	//gets the size of the BoxDataBuffer

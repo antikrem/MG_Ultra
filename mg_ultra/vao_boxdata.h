@@ -16,23 +16,23 @@ const float BASEQUAD[12] = {
 class VAOBoxData : public VAOBuffer<VAOBoxData, BoxData> {
 
 	//quad index, index corresponds to VAO
-	GLuint quadID[2] = { 0 };
+	GLuint quadID = 0;
 
 public:
-	void setUpAttribPointers(int i) {
+	void setUpAttribPointers() {
 		//Generate and bind base quad buffer
-		glGenBuffers(1, quadID + i);
-		glBindBuffer(GL_ARRAY_BUFFER, quadID[i]);
+		glGenBuffers(1, &quadID);
+		glBindBuffer(GL_ARRAY_BUFFER, quadID);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(BASEQUAD), BASEQUAD, GL_STATIC_DRAW);
 
 		//Generate and bind instance buffer
-		glGenBuffers(1, vboID + i);
-		glBindBuffer(GL_ARRAY_BUFFER, vboID[i]);
+		glGenBuffers(1, &vboID );
+		glBindBuffer(GL_ARRAY_BUFFER, vboID);
 		glBufferData(GL_ARRAY_BUFFER, maxSize * sizeof(BoxData), NULL, GL_DYNAMIC_DRAW);
 
 		//set up base quad pointer
 		glEnableVertexAttribArray(0);
-		glBindBuffer(GL_ARRAY_BUFFER, quadID[i]);
+		glBindBuffer(GL_ARRAY_BUFFER, quadID);
 		glVertexAttribPointer(
 			0, //layout = 0
 			3, //vec3
@@ -44,7 +44,7 @@ public:
 
 		//set up position pointer
 		glEnableVertexAttribArray(1);
-		glBindBuffer(GL_ARRAY_BUFFER, vboID[i]);
+		glBindBuffer(GL_ARRAY_BUFFER, vboID);
 		glVertexAttribPointer(
 			1, //layout = 1
 			3, //vec3
@@ -56,7 +56,7 @@ public:
 
 		//set up size pointer
 		glEnableVertexAttribArray(2);
-		glBindBuffer(GL_ARRAY_BUFFER, vboID[i]);
+		glBindBuffer(GL_ARRAY_BUFFER, vboID);
 		glVertexAttribPointer(
 			2, //layout = 2
 			2, //vec2
@@ -68,7 +68,7 @@ public:
 
 		//set up rotation pointer
 		glEnableVertexAttribArray(3);
-		glBindBuffer(GL_ARRAY_BUFFER, vboID[i]);
+		glBindBuffer(GL_ARRAY_BUFFER, vboID);
 		glVertexAttribPointer(
 			3, //layout = 3
 			1, //float
@@ -80,7 +80,7 @@ public:
 
 		//Set up texture access pointer
 		glEnableVertexAttribArray(4);
-		glBindBuffer(GL_ARRAY_BUFFER, vboID[i]);
+		glBindBuffer(GL_ARRAY_BUFFER, vboID);
 		glVertexAttribPointer(
 			4, //layout = 4
 			4, //vec 4 (u,v,w,l)
