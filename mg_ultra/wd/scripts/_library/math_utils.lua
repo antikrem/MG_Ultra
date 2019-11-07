@@ -131,9 +131,22 @@ function arrays.sum(first, ...)
 	return arrays.compose( apply_function_to_set(arrays.sum, arrays.decompose(tFirst)) )
 end
 
+--takes an n-dimension array A,
+--and multiplies by m
+function arrays.multiply(m, A)
+	if is_number(A) then
+		return m*A 
+	else
+		for i = 1,#A do
+			A[i] = arrays.multiply(m, A[i])
+		end
+		return A
+	end
+end
+
 function testy() 
 	a = {1, 2, 4, 5}
 	b =	{7, 8, 10, 11}
-	c = arrays.sum(a, b)
+	c = arrays.multiply(10, b)
 	print(c)
 end
