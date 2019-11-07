@@ -106,28 +106,15 @@ function arrays.transpose(a)
     return result
 end
 
---adds multiple first order arrays
-function arrays.addFirstOrderArrays(...)
-	local result = {}
-	for i in 1,#select(1, ...) do
-		result[i] = 0
-		for j in 1,select("#", ...) do
-			result[i] = result[i] + select(j, ...)[i]
-		end
-	end
-	return result
-		
-end
-
 --takes m count n-dimensional arrays
 --alternativly takes a composition of n-dimension arrays
 --and adds each element
-function arrays.add(first, ...)
+function arrays.sum(first, ...)
 	--if we have more than 1 element
 	--this is the first invokation
 	--and we compose
 	if not is_nil(...) then
-		return arrays.add(arrays.compose(first, ...))
+		return arrays.sum(arrays.compose(first, ...))
 	end
 
 	--can't decompose further
@@ -141,12 +128,12 @@ function arrays.add(first, ...)
 	local tFirst = arrays.transpose(first)
 
 	--decompose, apply next iteration, recompose
-	return arrays.compose( apply_function_to_set(arrays.add, arrays.decompose(tFirst)) )
+	return arrays.compose( apply_function_to_set(arrays.sum, arrays.decompose(tFirst)) )
 end
 
 function testy() 
 	a = {1, 2, 4, 5}
 	b =	{7, 8, 10, 11}
-	c = arrays.add(a, b)
+	c = arrays.sum(a, b)
 	print(c)
 end
