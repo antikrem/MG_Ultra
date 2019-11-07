@@ -78,8 +78,8 @@ public:
 			{
 				//copy over to buffer
 				unique_lock<mutex> lck(lock);
-				copy(writeBuffer, writeBuffer + bufferSize, buffer);
 				bufferSize = copyBufferSize;
+				copy(writeBuffer, writeBuffer + bufferSize, buffer);
 				copyBuffer = false;
 			}
 			//notify glUpdate to continue
@@ -93,6 +93,7 @@ public:
 
 		//need to render eitherway
 		glBindVertexArray(vaoID);
+		glBindBuffer(GL_ARRAY_BUFFER, vboID);
 		static_cast<This*>(this)->render(bufferSize);
 		glBindVertexArray(0);
 	}
