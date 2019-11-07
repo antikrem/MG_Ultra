@@ -4,6 +4,6 @@
 --returns new string
 function string.pad_string(string, paddedLength)
 	local padding = paddedLength - string.len(string)
-	padding = clamp(padding, 0, padding)
+	padding = math.clamp(padding, 0, padding)
 	return string .. string.rep(" ", padding)
 end
