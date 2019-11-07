@@ -10,6 +10,16 @@ function length(a)
 	return count
 end
 
+--checks if value is nil
+function is_nil(a)
+	return a == nil
+end
+
+--checks if value is numer
+function is_number(a)
+	return type(a) == "number"
+end
+
 function print_table(class)
 	for key,val in pairs(class) do
 		print(key, "=>", val);
@@ -77,6 +87,36 @@ function check_element_in_set(element, ...)
 	return false;
 end
 
+--sums all elements in a set
+function sum_set(first, ...)
+	if is_nil(first) then
+		return 0
+	else
+		return first + sum_set(...)
+	end
+end
+
+--implementation of lua global unpack
+function unpack(a, i)
+	i = i or 1
+	if not is_nil(a[i]) then
+		return a[i], unpack(a, i + 1)
+	end
+end
+
+--takes a function f and multiple arguments
+--f will be applied with each of the arguments
+--f should be in the form f : x -> f(x)
+--then returned
+function apply_function_to_set(f, ...)
+	local result = {}
+	for i = 1, #{...} do
+		local temp = select(i, ...)
+		result[i] = f(temp)
+	end
+	return unpack(result)
+end
+
 --definitions for events
 EventNone = 0
 EventQuit = 1
@@ -99,11 +139,6 @@ function emit_event(eventType, ...)
 	end
 
 	pushEvent()
-end
-
---checks if value is nil
-function is_nil(a)
-	return a == nil
 end
 
 --creates a python style range
