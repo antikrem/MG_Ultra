@@ -1,5 +1,5 @@
---executed to update player
-
+--scripts\playerplayer.lua
+--executed regularly to update player
 
 --The position of the player
 local cPosition = this:get_component(ComponentPosition)
@@ -34,18 +34,18 @@ end
 --angle will always point to input
 --magnitude increases linearly to max, and decays quickly with no input
 
-local dmag, dang = to_polar( cMovement:get_velocity() )
+local dmag, dang = math.to_polar( cMovement:get_velocity() )
 
 --set magnitude and angle depending on input
-if (to_magnitude(ix,iy) < 0.1) then
+if (math.to_magnitude(ix,iy) < 0.1) then
 	dmag = dmag - PLAYER_ACCELERATION
 else
 	dmag = dmag + PLAYER_ACCELERATION
-	__, dang = to_polar(ix, iy)
+	__, dang = math.to_polar(ix, iy)
 end
-dmag = clamp(dmag, 0, PLAYER_MAX_VELOCITY)
+dmag = math.clamp(dmag, 0, PLAYER_MAX_VELOCITY)
 
-cMovement:set_velocity( to_point(dmag, dang) )
+cMovement:set_velocity( math.to_point(dmag, dang) )
 
 --create a bullet entity
 if cInput:query_down("shoot") == 1 and 
