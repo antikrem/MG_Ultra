@@ -29,7 +29,7 @@ public:
 	void cacheHandle(shared_ptr<Entity> ent) override {
 		//update profiling 
 		bool active;
-		if (registar->get("profiler_active", &active) && active) {
+		if (registar->get("d_profiler_active", &active) && active) {
 			//execute profile script
 			sc.reset();
 			if (!executeInternalScript("system_profiler", "PROFILER: Fatal error executing profile script", ent, &sc)) {
@@ -54,7 +54,7 @@ public:
 		}
 
 		bool active;
-		if (registar->get("profiler_active", &active) && active) {
+		if (registar->get("d_profiler_active", &active) && active) {
 			//create the profiler entity
 			auto newEnt = shared_ptr<Entity>(new Entity(ETProfile));
 			auto newComponent = new ComponentPosition(0, 0);
