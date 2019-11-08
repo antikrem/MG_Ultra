@@ -6,7 +6,7 @@ namespace math_ex {
 
 	//templated clamp
 	template <typename T>
-	T clamp(T value, T max, T min) {
+	T clamp(T value, T min, T max) {
 		return value > max ? max : (value < min ? min : value);
 	}
 }
