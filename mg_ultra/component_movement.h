@@ -6,6 +6,7 @@
 #include "component.h"
 #include "scriptable_class.h"
 #include "cus_struct2.h"
+#include "math_ex.h"
 
 class ComponentMovement : public Component, public ScriptableClass {
 	//specifies this system to update in system_movement
@@ -19,11 +20,12 @@ class ComponentMovement : public Component, public ScriptableClass {
 	atomic<float> angle;
 	atomic<float> speed;
 
-	atomic<float> angleVelocity;
-	atomic<float> angleAcceleration;
+	atomic<float> angleChange;
 
-	atomic<float> speedVelocity;
-	atomic<float> speedAceleration;
+	atomic<float> speedChange;
+
+	atomic<float> speedCap = INFINITY;
+	atomic<float> angleCap = INFINITY;
 
 	atomic<float> rotationVelocity = 0;
 
@@ -33,24 +35,23 @@ public:
 		angle = 0;
 		speed = 0;
 
-		angleVelocity = 0;
-		angleAcceleration = 0;
-
-		speedVelocity = 0;
-		speedAceleration = 0;
+		angleChange = 0;
+		speedChange = 0;
 	}
 
 	//updates all given values and returns new value
 	Point3 getUpdatedPosition(Point3 position) {
 		//move acceleration values to velocity
 		velocity = acceleration.load() + velocity.load();
-		angleVelocity = angleVelocity + angleAcceleration;
-		speedVelocity = speedVelocity + speedAceleration;
 
-		speed.store(speed + speedVelocity);
-		angle.store(angle + angleVelocity);
-
-		return position + velocity + Point3(Point2::generateFromMagAng(speed, angle), 0);
+		speed.store(
+			math_ex::clamp(speed + speedChange, -speedCap, speedCap.load())
+		);
+		angle.store(angle + angleChange);
+		
+		return position 
+			+ velocity 
+			+ Point3(Point2::generateFromMagAng(speed, angle), 0);
 	}
 
 	//updates current rotation
@@ -134,36 +135,36 @@ public:
 		return speed;
 	}
 
-	void setAngleVelocity(float angleVelocity) {
-		this->angleVelocity = angleVelocity;
+	void setAngleChange(float angleChange) {
+		this->angleChange = math_ex::clamp(angleChange, -angleCap, angleCap.load());
 	}
 
-	float getAngleVelocity() {
-		return angleVelocity;
+	float getAngleChange() {
+		return angleChange;
 	}
 
-	void setAngleAcceleration(float angleAcceleration) {
-		this->angleAcceleration = angleAcceleration;
+	void setSpeedChange(float speedChange) {
+		this->speedChange = speedChange;
 	}
 
-	float getAngleAcceleration() {
-		return angleAcceleration;
+	float getSpeedChange() {
+		return speedChange;
 	}
 
-	void setSpeedVelocity(float speedVelocity) {
-		this->speedVelocity = speedVelocity;
+	void setSpeedCap(float speedCap) {
+		this->speedCap = speedCap;
 	}
 
-	float getSpeedVelocity() {
-		return speedVelocity;
+	float getSpeedCap() {
+		return speedCap;
 	}
 
-	void setSpeedAcceleration(float speedAceleration) {
-		this->speedAceleration = speedAceleration;
+	void setAngleCap(float angleCap) {
+		this->angleCap = angleCap;
 	}
 
-	float getSpeedAcceleration() {
-		return speedAceleration;
+	float getAngleCap() {
+		return angleCap;
 	}
 
 	bool getUpdateInSystem() {
@@ -186,14 +187,16 @@ public:
 			.addFunction("get_angle", &ComponentMovement::getAngle)
 			.addFunction("set_speed", &ComponentMovement::setSpeed)
 			.addFunction("get_speed", &ComponentMovement::getSpeed)
-			.addFunction("set_angle_velocity", &ComponentMovement::setAngleVelocity)
-			.addFunction("get_angle_velocity", &ComponentMovement::getAngleVelocity)
-			.addFunction("set_angle_acceleration", &ComponentMovement::setAngleAcceleration)
-			.addFunction("get_angle_acceleration", &ComponentMovement::getAngleAcceleration)
-			.addFunction("set_speed_velocity", &ComponentMovement::setSpeedVelocity)
-			.addFunction("get_speed_velocity", &ComponentMovement::getSpeedVelocity)
-			.addFunction("set_speed_acceleration", &ComponentMovement::setSpeedAcceleration)
-			.addFunction("get_speed_acceleration", &ComponentMovement::getSpeedAcceleration)
+			.addFunction("set_angle_change", &ComponentMovement::setAngleChange)
+			.addFunction("get_angle_change", &ComponentMovement::getAngleChange)
+			.addFunction("set_speed_change", &ComponentMovement::setSpeedChange)
+			.addFunction("get_speed_change", &ComponentMovement::getSpeedChange)
+
+			.addFunction("set_speed_cap", &ComponentMovement::setSpeedCap)
+			.addFunction("get_speed_cap", &ComponentMovement::getSpeedCap)
+			.addFunction("set_angle_cap", &ComponentMovement::setAngleCap)
+			.addFunction("get_angle_cap", &ComponentMovement::getAngleCap)
+
 			.addFunction("get_rotation_speed", &ComponentMovement::getRotationVelocity)
 			.addFunction("set_rotation_speed", &ComponentMovement::setRotationVelocity)
 			.addFunction("set_update_manually", &ComponentMovement::updateManually)
