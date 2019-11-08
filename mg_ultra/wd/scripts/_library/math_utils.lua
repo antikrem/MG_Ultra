@@ -19,18 +19,42 @@ function math.to_radians(d)
 	return d*(math.pi/180)
 end
 
+--takes an angle and reframes it within the principle
+-- range of -180 to 180
+function math.to_principle(angle)
+	angle = angle % 360
+	if (angle > 180) then 
+		return angle - 360 
+	else 
+		return angle 
+	end
+end
+
 function math.to_magnitude(x, y)
 	return math.sqrt(x^2+y^2)
 end
 
 --takes a cartesian point, and returns a polar vector (mag, ang)
 function math.to_polar(x, y)
-	return math.to_magnitude(x,y), math.to_degrees(math.atan(y,x))
+	return math.to_magnitude(x,y), -1*(math.to_degrees(math.atan2(y,x)) - 90)
 end
 
 --takes a polar vector, and returns cartesian
 function math.to_point(mag, ang)
 	return mag*math.cos(math.to_radians(ang)), mag*math.sin(math.to_radians(ang))
+end
+
+--takes two angles a and b
+--computes what to add to a to get to b in the fastest way
+function math.compute_smallest_turn(target, current)
+	local difference = math.to_principle(target) - math.to_principle(current)
+	if -180 < difference and difference < 180 then
+		return difference
+	elseif 180 <= difference then
+		return difference - 360
+	else
+		return difference + 360
+	end
 end
 
 ----The array class of functions deal with handling arrays
