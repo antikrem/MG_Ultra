@@ -230,6 +230,7 @@
     <ClInclude Include="component_health.h" />
     <ClInclude Include="component_position.h" />
     <ClInclude Include="input.h" />
+    <ClInclude Include="math_ex.h" />
     <ClInclude Include="mmap.h" />
     <ClInclude Include="os_kit.h" />
     <ClInclude Include="reader.h" />
