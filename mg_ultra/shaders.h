@@ -197,6 +197,14 @@ public:
 		glUniformMatrix4fv(getUniformLocation(programName, uniformName), 1, GL_FALSE, &value[0][0]);
 	}
 
+	//sets a variable number of uniform ints
+	void setNUniformI(string programName, string uniformName, int n, vector<int>& values) {
+		glUniform1iv(getUniformLocation(programName, uniformName), n, &values[0]);
+	}
+
+	//Attaches a framebuffer as the source for rendering
+
+
 	ShaderMaster() {
 		loadProgramFromFile("base");
 		useShader("base");
