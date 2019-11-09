@@ -8,6 +8,9 @@ to avoid macro redifinition*/
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 //Use for debugging
 void glEnableDebug();
 
