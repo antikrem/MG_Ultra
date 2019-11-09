@@ -18,6 +18,9 @@ known as mg(???) textures: .mgt
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+//maximum unumber of textures
+#define MAX_TEXTURE_COUNT 16
+
 //Header Identifier
 #define MGTID "mgt!KOH!"
 #define MGTEND "mgt!END!"
@@ -104,13 +107,8 @@ public:
 			height /= 2;
 		}
 
-		//bind last steps
-		glActiveTexture(GL_TEXTURE0 + TU);
-		glBindTexture(GL_TEXTURE_2D, textureID);
-
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
 	}
 
 	int getTU() {
@@ -127,6 +125,13 @@ public:
 
 	int getHeight() {
 		return texHeight;
+	}
+
+	//binds this texture to the correct texture unit
+	void bindTexture() {
+		//bind last steps
+		glActiveTexture(GL_TEXTURE0 + TU);
+		glBindTexture(GL_TEXTURE_2D, textureID);
 	}
 };
 
@@ -327,7 +332,18 @@ public:
 		return true;
 	}
 
+	//attaches all current textures to the target shader
+	void attachTextures(ShaderMaster* shaderMaster, string programName, string textureVariableTargetName) {
+		//vector of texture units to use
+		vector<int> tuList;
+		//bind to texture units
+		for (auto& i : loadedTextures) {
+			i.second->bindTexture();
+			tuList.push_back(i.second->getTU());
+		}
+		shaderMaster->setNUniformI(programName, textureVariableTargetName, (int)tuList.size(), tuList);
 
+	}
 
 };
 
