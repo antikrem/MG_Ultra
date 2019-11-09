@@ -7,18 +7,63 @@ including loading, compiling, using and deleting*/
 
 #include <string>
 #include <map>
+#include <exception>
 
 #include "_graphics_headers.h"
 
 #include "constants.h"
 #include "str_kit.h"
 #include "os_kit.h"
+
 #include "error.h"
+
+struct GraphicsException : public runtime_error {
+	GraphicsException(string error) : runtime_error(error) {
+
+	}
+};
+
+//Contains a single program
+//and all the associated uniforms
+struct ProgramDetails {
+	GLuint programID;
+	string programName;
+	map<string, GLuint> uniforms;
+
+	ProgramDetails(GLuint programID, string programName) {
+		this->programID = programID;
+		this->programName = programName;
+	}
+
+	//returns the uniform for a given
+	//uniform name
+	//if it doesnt exist will find
+	//throws GraphicsException on error
+	GLuint getUniformLocation(string name) {
+		if (uniforms.count(name)) {
+			return uniforms[name];
+		}
+		else {
+			GLuint location;
+			if ((location = glGetUniformLocation(programID, name.c_str())) < 0) {
+				throw GraphicsException("Invalid uniform: " + name + " in program: " + programName);
+			}
+			else {
+				uniforms[name] = location;
+			}
+			return location;
+		}
+		
+	}
+};
+
+
+using ProgramMap_t = map<string, ProgramDetails>;
 
 //Stores all the shaders, should only be one stored in gState
 class ShaderMaster {
 private:
-	map<string, GLuint> programMap;
+	ProgramMap_t programMap;
 	string currentProgram = "";
 
 public:
@@ -99,7 +144,8 @@ public:
 		glDeleteShader(vertexShaderID);
 		glDeleteShader(fragmentShaderID);
 
-		programMap[programName] = programID;
+		//insert new program to the map
+		programMap.insert(ProgramMap_t::value_type(programName, ProgramDetails(programID, programName)));
 
 		err::logMessage("GRAPHICS: Shader compilation done");
 		err::logMessage("GRAPHICS: Shader program " + programName + " loaded");
@@ -108,26 +154,47 @@ public:
 	}
 
 	//Sets a shader program as current shader to use
-	int useShader(string programName) {
+	//throws exception on bad program name
+	void useShader(string programName) {
 		if (programMap.count(programName)) {
-			glUseProgram(programMap[programName]);
+
+			glUseProgram(programMap.find(programName)->second.programID);
 			currentProgram = programName;
-			return EXIT_SUCCESS;
+			return;
 		}
 		else {
-			err::logMessage("GRAPHICS: Shader program " + programName + " not found");
-			return EXIT_FAILURE;
+			throw GraphicsException("Invalid program name: " + programName + " requested for use");
 		}
 	}
 
 	//Get the current program being used
+	//returns zero on no program
 	GLuint getShaderProgramID() {
 		if (currentProgram == "") {
 			return 0;
 		}
 		else {
-			return programMap[currentProgram];
+			return programMap.find(currentProgram)->second.programID;
 		}
+	}
+
+	//returns the uniform for a given
+	//uniform name
+	//if it doesnt exist will find
+	//throws GraphicsException on error
+	GLuint getUniformLocation(string programName, string uniformName) {
+		if (programMap.count(programName)) {
+			return programMap.find(currentProgram)->second.getUniformLocation(uniformName);
+		}
+		else {
+			throw GraphicsException("Invalid program: " + programName);
+		}
+
+	}
+
+	//sets a uniform 4x4 matrix in the target shader
+	void setUniform4(string programName, string uniformName, glm::mat4& value) {
+		glUniformMatrix4fv(getUniformLocation(programName, uniformName), 1, GL_FALSE, &value[0][0]);
 	}
 
 	ShaderMaster() {
@@ -138,7 +205,7 @@ public:
 	~ShaderMaster() {
 		glUseProgram(0);
 		for (auto i : programMap) {
-			glDeleteProgram(i.second);
+			glDeleteProgram(i.second.programID);
 		}
 	}
 
