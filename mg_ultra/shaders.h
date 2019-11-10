@@ -7,21 +7,17 @@ including loading, compiling, using and deleting*/
 
 #include <string>
 #include <map>
-#include <exception>
 
 #include "_graphics_headers.h"
 
+#include "frame_buffer.h"
+
 #include "constants.h"
 #include "str_kit.h"
+#include "vec_kit.h"
 #include "os_kit.h"
 
 #include "error.h"
-
-struct GraphicsException : public runtime_error {
-	GraphicsException(string error) : runtime_error(error) {
-
-	}
-};
 
 //Contains a single program
 //and all the associated uniforms
@@ -184,7 +180,7 @@ public:
 	//throws GraphicsException on error
 	GLuint getUniformLocation(string programName, string uniformName) {
 		if (programMap.count(programName)) {
-			return programMap.find(currentProgram)->second.getUniformLocation(uniformName);
+			return programMap.find(programName)->second.getUniformLocation(uniformName);
 		}
 		else {
 			throw GraphicsException("Invalid program: " + programName);
@@ -193,7 +189,7 @@ public:
 	}
 
 	//sets a uniform 4x4 matrix in the target shader
-	void setUniform4(string programName, string uniformName, glm::mat4& value) {
+	void setUniform4f(string programName, string uniformName, glm::mat4& value) {
 		glUniformMatrix4fv(getUniformLocation(programName, uniformName), 1, GL_FALSE, &value[0][0]);
 	}
 
@@ -202,12 +198,27 @@ public:
 		glUniform1iv(getUniformLocation(programName, uniformName), n, &values[0]);
 	}
 
-	//Attaches a framebuffer as the source for rendering
+	//sets a single int in shader
+	void setUniformI(string programName, string uniformName, int value) {
+		glUniform1i(getUniformLocation(programName, uniformName), value);
+	}
 
+	//Attaches a framebuffer as the source for rendering
+	//sampler is the name of the sampler array in the 
+	void attachFrameBufferAsSource(string programName, FrameBuffer* frameBuffer) {
+		auto colourTextures = frameBuffer->getColourTexture();
+		auto targets = frameBuffer->getTargetNames();
+
+		for (int i = 0; i < (int)targets.size(); i++) {
+			glActiveTexture(GL_TEXTURE0 + i);
+			glBindTexture(GL_TEXTURE_2D, colourTextures[i]);
+			setUniformI(programName, targets[i], i);
+		}
+	}
 
 	ShaderMaster() {
 		loadProgramFromFile("base");
-		useShader("base");
+		loadProgramFromFile("finalise");
 	}
 
 	~ShaderMaster() {
