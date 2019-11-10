@@ -265,3 +265,6 @@ api/
 /mg_ultra/Profile/mg_ultra.tlog
 /mg_ultra/wd/mg_ultra.exe
 /Profile
+
+#ignore log files
+log.txt
