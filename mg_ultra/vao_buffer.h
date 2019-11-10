@@ -19,9 +19,9 @@ enum VaoState {
 };
 
 /*
-Uses CRTP<This>
-Each VAOBuffer has 2 vaos, one will be read and one write
-T is  a renderable
+Uses CRTP<This, T>, where T is the target
+T is a renderable instance containing the minimum amount
+of information required to update the buffer
 */
 template <class This, class T>
 class VAOBuffer {
@@ -91,9 +91,9 @@ public:
 			glBindVertexArray(0);
 		}
 
+		glEnable(GL_DEPTH_TEST);
 		//need to render eitherway
 		glBindVertexArray(vaoID);
-		glBindBuffer(GL_ARRAY_BUFFER, vboID);
 		static_cast<This*>(this)->render(bufferSize);
 		glBindVertexArray(0);
 	}

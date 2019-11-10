@@ -76,9 +76,6 @@ public:
 	void bindBuffer() {
 		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 		//depth test
-		glDisable(GL_DEPTH_TEST);
-		glDisable(GL_CULL_FACE);
-		glDepthFunc(GL_LESS);
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
