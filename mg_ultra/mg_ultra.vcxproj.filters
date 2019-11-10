@@ -332,14 +332,20 @@
     <ClInclude Include="system_profiler.h">
       <Filter>Header Files\ECS\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="vec_kit.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
     <ClInclude Include="_graphics_headers.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="math_ex.h">
-      <Filter>Source Files\Support</Filter>
+      <Filter>Header Files\Support</Filter>
+    </ClInclude>
+    <ClInclude Include="vec_kit.h">
+      <Filter>Header Files\Support</Filter>
+    </ClInclude>
+    <ClInclude Include="frame_buffer.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="vao_screenbuffer.h">
+      <Filter>Header Files\Graphics\VAO</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -384,6 +390,12 @@
     </None>
     <None Include="wd\scripts\_library\string_ex.lua">
       <Filter>Resource Files\scripts\_library</Filter>
+    </None>
+    <None Include="wd\shaders\finalise.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="wd\shaders\finalise.frag">
+      <Filter>Resource Files\shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

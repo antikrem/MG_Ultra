@@ -223,6 +223,7 @@
     <ClInclude Include="ecs_master.h" />
     <ClInclude Include="error.h" />
     <ClInclude Include="events.h" />
+    <ClInclude Include="frame_buffer.h" />
     <ClInclude Include="global_funcs.h" />
     <ClInclude Include="gl_handler.h" />
     <ClInclude Include="graphics_settings.h" />
@@ -273,6 +274,7 @@
     <ClInclude Include="n_buffer.h" />
     <ClInclude Include="vao_boxdata.h" />
     <ClInclude Include="vao_buffer.h" />
+    <ClInclude Include="vao_screenbuffer.h" />
     <ClInclude Include="vec_kit.h" />
     <ClInclude Include="_graphics_headers.h" />
   </ItemGroup>
@@ -291,6 +293,8 @@
     <None Include="wd\scripts\_library\string_ex.lua" />
     <None Include="wd\shaders\base.frag" />
     <None Include="wd\shaders\base.vert" />
+    <None Include="wd\shaders\finalise.frag" />
+    <None Include="wd\shaders\finalise.vert" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="wd\log.txt" />
