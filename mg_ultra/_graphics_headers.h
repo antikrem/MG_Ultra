@@ -11,6 +11,15 @@ to avoid macro redifinition*/
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <string>
+#include <stdexcept>
+
+struct GraphicsException : public std::runtime_error {
+	GraphicsException(std::string error) : std::runtime_error(error) {
+
+	}
+};
+
 //Use for debugging
 void glEnableDebug();
 
