@@ -10,12 +10,17 @@ class FrameBuffer {
 	unsigned int fbo;
 	//vector of colour buffers
 	vector<GLuint> drawTargets;
+	//vector of the underlying colour buffer
+	vector<GLuint> textureIDs;
+	//vector of strings associated with draw targets
+	vector<string> targetNames;
 
 	//Creates an attaches a new colour buffer at the given level
-	void createAndAttachColourBuffer(GraphicsSettings* graphicsSettings, int i) {
+	void createAndAttachColourBuffer(GraphicsSettings* graphicsSettings, int i, string name) {
 		//Create colour buffer
 		GLuint texColorBuffer;
 		glGenTextures(1, &texColorBuffer);
+		textureIDs.push_back(texColorBuffer);
 		glBindTexture(GL_TEXTURE_2D, texColorBuffer);
 
 		graphicsSettings->accessLock.lock();
@@ -28,19 +33,21 @@ class FrameBuffer {
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, texColorBuffer, 0);
 		drawTargets.push_back(GL_COLOR_ATTACHMENT0 + i);
 		glBindTexture(GL_TEXTURE_2D, 0);
+
+		targetNames.push_back(name);
 	}
 
 public:
 	//returns true if creation was succesful
-	bool initialiseFrameBuffer(GraphicsSettings* graphicsSettings, int colourBufferCount, bool attachDepthBuffer) {
+	void initialiseFrameBuffer(GraphicsSettings* graphicsSettings, vector<string> names, bool attachDepthBuffer) {
 		glGenFramebuffers(1, &fbo);
 		bindBuffer();
 
 		//create all of the colour buffers desired
-		for (int i = 0; i < colourBufferCount; i++) {
-			createAndAttachColourBuffer(graphicsSettings, i);
+		for (unsigned int i = 0; i < names.size(); i++) {
+			createAndAttachColourBuffer(graphicsSettings, i, names[i]);
 		}
-		glDrawBuffers(colourBufferCount, &drawTargets[0]);
+		glDrawBuffers((int)names.size(), &drawTargets[0]);
 
 		if (attachDepthBuffer) {
 			//Create depth buffer
@@ -56,9 +63,10 @@ public:
 		}
 		
 		//done, check and return
-		bool result = (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
+		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+			throw GraphicsException("Frame buffer failed creation");
+		}
 		unbindBuffer();
-		return result;
 	}
 
 	~FrameBuffer() {
@@ -67,12 +75,26 @@ public:
 
 	void bindBuffer() {
 		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		//depth test
+		glDisable(GL_DEPTH_TEST);
+		glDisable(GL_CULL_FACE);
+		glDepthFunc(GL_LESS);
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
 	void unbindBuffer() {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
+	//gets a vector of colour textures for sampling
+	vector<GLuint>& getColourTexture() {
+		return textureIDs;
+	}
+
+	//gets the vector of names
+	vector<string>& getTargetNames() {
+		return targetNames;
 	}
 };
 
