@@ -1,13 +1,17 @@
 #version 330 core
-uniform sampler2D myTextureSampler;
+
+#define MAX_TEXTURES 16
+
+//Contains all currently loaded mgt
+uniform sampler2D mgtSamplers[MAX_TEXTURES];
 
 in vec2 uv;
 
-out vec3 color;
+layout(location = 0) out vec3 color;
 
 void main(){
     vec2(uv.x, 1.0-uv.y);
-	vec4 texel = texture( myTextureSampler,vec2(uv.x, uv.y)).rgba;
+	vec4 texel = texture( mgtSamplers[0],vec2(uv.x, uv.y)).rgba;
 	if (texel.a < 0.2) {
 		discard;
 	}

@@ -8,13 +8,12 @@
 #include "n_buffer.h"
 #include "error.h"
 
-#include <thread>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include "frame_buffer.h"
 
-#include <iostream>
+#include <thread>
 
 #include "vao_boxdata.h"
+#include "vao_screenbuffer.h"
 
 /*Handles openGL handling
 Only one thread calls openGL at a time
@@ -44,13 +43,15 @@ private:
 	//window
 	GLFWwindow* window = nullptr;
 
-	//location of MVP
-	GLuint mvpID;
 	//Handles camera
 	Camera* camera = nullptr;
 
+	//frame buffer for geometry
+	FrameBuffer geometryFrameBuffer;
+
 	//buffer for all boxes in the render view
 	VAOBoxData boxVAOBuffer;
+	VAOScreenBuffer screenVAO;
 
 	//initialises last part of gl
 	int glThreadInitialise(GLFWwindow *window, GraphicsSettings* gSettings) {
@@ -69,10 +70,10 @@ private:
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);
 
-		shaderMaster = new ShaderMaster();
+		//create frame buffers
+		geometryFrameBuffer.initialiseFrameBuffer(gSettings, {"firstPassSampler"}, true);
 
-		mvpID = glGetUniformLocation(shaderMaster->getShaderProgramID(), "MVP");
-		glUniform1i(glGetUniformLocation(shaderMaster->getShaderProgramID(), "myTextureSampler"), 0);
+		shaderMaster = new ShaderMaster();
 
 		//Load most important global mgt
 		textureMaster->loadMGT("output.mgt", TA_global);
@@ -94,6 +95,8 @@ private:
 
 	//Called before a render
 	void prerender() {
+		glDisable(GL_CULL_FACE);
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
@@ -106,11 +109,22 @@ private:
 	void render() {
 		prerender();
 
+		//FIRST PASS - render basic stuff
+		shaderMaster->useShader("base");
 		glm::mat4 mvp = camera->getVPMatrix();
-		glUniformMatrix4fv(mvpID, 1, GL_FALSE, &mvp[0][0]);
-
+		shaderMaster->setUniform4f("base", "MVP", mvp);
+		geometryFrameBuffer.bindBuffer();
 		//process the box buffer, which renders the geometry
+		//set mgt textures in shader
+		textureMaster->attachTextures(shaderMaster, "base", "mgtSamplers");
 		boxVAOBuffer.processGLSide();
+		geometryFrameBuffer.unbindBuffer();
+
+		//SECOND PASS - render buffer to screenspace
+		//set the geometry frame buffer as the source
+		shaderMaster->useShader("finalise");
+		shaderMaster->attachFrameBufferAsSource("finalise", &geometryFrameBuffer);
+		screenVAO.processGLSide();
 
 		postrender();
 	}
