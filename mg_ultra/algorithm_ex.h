@@ -39,4 +39,13 @@ void erase_associative_if(Container &container, function<bool(typename Container
 	}
 }
 
+//deletes if not nulll
+template <class T>
+void delete_or_null(T* &object) {
+	if (object) {
+		delete object;
+		object = nullptr;
+	}
+}
+
 #endif
