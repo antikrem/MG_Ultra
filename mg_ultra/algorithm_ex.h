@@ -7,6 +7,7 @@ Including range based algorithm functions*/
 #include <algorithm>
 #include <functional>
 #include <type_traits>
+#include <stack>
 
 using namespace std;
 
@@ -48,4 +49,12 @@ void delete_or_null(T* &object) {
 	}
 }
 
+//deletes everything inside a stack
+//TODO assert type
+template <class T>
+void clear_stack(T &s) {
+	while (!s.empty()) {
+		s.pop();
+	}
+}
 #endif
