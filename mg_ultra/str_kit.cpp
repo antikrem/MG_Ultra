@@ -87,9 +87,9 @@ string str_kit::convertToScoreString(float value, bool whole) {
 		score.append(wholeNumber);
 	}
 	if (whole)
-		return score+"%";
+		return score + "%";
 	score.append(".");
-	score.append( source.substr(source.find('.')+1, 2) );
+	score.append(source.substr(source.find('.') + 1, 2));
 	return score + "%";
 }
 
@@ -187,9 +187,9 @@ string str_kit::trimString(string str) {
 }
 
 string str_kit::padStringLeft(string str, int length) {
-	length = str.size() - length;
+	length = length - (int)str.size();
 	length = length < 0 ? 0 : length;
-	
+
 	return string(" ", length) + str;
 }
 
@@ -202,8 +202,8 @@ int str_kit::stringToInt(string& str, bool* valid) {
 			*valid = true;
 		}
 		return value;
-	} 
-	catch(invalid_argument) {
+	}
+	catch (invalid_argument) {
 		if (valid) {
 			*valid = false;
 		}
@@ -259,9 +259,9 @@ str_kit::LexicalAnalysisResult str_kit::lexicalAnalysis(string line, string id, 
 		return LAR_idFail;
 	}
 	vector<string> vec = splitOnToken(line, ' ');
-	
+
 	//check if the number of parameters is correct
-	if (vec.size() != lex.size()+1) {
+	if (vec.size() != lex.size() + 1) {
 		return LAR_lexLengthFail;
 	}
 
@@ -272,7 +272,7 @@ str_kit::LexicalAnalysisResult str_kit::lexicalAnalysis(string line, string id, 
 			if (!isInt(vec[i])) {
 				return LAR_lexTypeFail;
 			}
-		} 
+		}
 		else if (idChar == 'f') {
 			if (!isFloat(vec[i])) {
 				return LAR_lexTypeFail;
@@ -320,7 +320,7 @@ string str_kit::createBranchFromVector(vector<string> list) {
 
 	for (unsigned int i = 0; i < list.size(); i++) {
 		message += " ";
-		message += (i == list.size()-1) ? (char)192 : (char)195;
+		message += (i == list.size() - 1) ? (char)192 : (char)195;
 		message += (char)196;
 		message += " ";
 		message += list[i];
@@ -330,17 +330,17 @@ string str_kit::createBranchFromVector(vector<string> list) {
 	return message;
 }
 
-string str_kit::createPercentageBar(float percentage) {
+string str_kit::createPercentageBar(float fraction) {
 	//clamp percentage
-	percentage = percentage < 0 ? 0 : percentage;
-	percentage = percentage > 100 ? (float)100 : percentage;
+	fraction = fraction < 0 ? 0 : 100 * fraction;
+	fraction = fraction > 100 ? (float)100 : fraction;
 
 
-	string str = padStringLeft(to_string((int)round(percentage)), 3) + "%: [";
-	percentage = round(percentage / 10);
+	string str = padStringLeft(to_string((int)round(fraction)), 3) + "%: [";
+	fraction = round(fraction / 10);
 
-	str += string("#", percentage);
-	str += string(".", 10-percentage);
+	str += string((int)fraction, '#');
+	str += string(10 - (int)fraction, '.');
 	str += "]";
 
 	return str;

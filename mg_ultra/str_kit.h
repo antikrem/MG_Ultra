@@ -31,7 +31,7 @@ namespace str_kit {
 
 	/*Takes a float and formats it to score string: XX.XX% or XXX.XX%, if whole XX%*/
 	string convertToScoreString(float value, bool whole);
-	
+
 	/*Takes a string and replaces all instances token with insert */
 	string replaceToken(string str, const string& token, const string& replacement);
 
@@ -74,7 +74,7 @@ namespace str_kit {
 	//Lexical analysis, checks string for keyword, then attempts to fit the remaining 
 	//parameters with lex str, i: interger, f: float, s: string
 	LexicalAnalysisResult lexicalAnalysis(string line, string id, string lex);
-	
+
 	//converts string to int, no error checking
 	//optionally, set param to a non-negative int to choose a value from a space split vec
 	int qStringToInt(string line, int param = -1);
@@ -85,9 +85,10 @@ namespace str_kit {
 
 	//Takes a vector of strings and creates a tree
 	string createBranchFromVector(vector<string> list);
-	
-	//Returns a loading bar for a given percentage
-	string createPercentageBar(float percentage);
+
+	//Returns a loading bar for a given fraction
+	//fraction should be between 0 and 1
+	string createPercentageBar(float fraction);
 
 }
 
