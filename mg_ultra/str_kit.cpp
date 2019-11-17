@@ -330,3 +330,18 @@ string str_kit::createBranchFromVector(vector<string> list) {
 	return message;
 }
 
+string str_kit::createPercentageBar(float percentage) {
+	//clamp percentage
+	percentage = percentage < 0 ? 0 : percentage;
+	percentage = percentage > 100 ? (float)100 : percentage;
+
+
+	string str = padStringLeft(to_string((int)round(percentage)), 3) + "%: [";
+	percentage = round(percentage / 10);
+
+	str += string("#", percentage);
+	str += string(".", 10-percentage);
+	str += "]";
+
+	return str;
+}

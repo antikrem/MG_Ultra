@@ -85,7 +85,9 @@ namespace str_kit {
 
 	//Takes a vector of strings and creates a tree
 	string createBranchFromVector(vector<string> list);
-
+	
+	//Returns a loading bar for a given percentage
+	string createPercentageBar(float percentage);
 
 }
 
