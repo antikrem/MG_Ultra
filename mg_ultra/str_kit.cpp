@@ -186,6 +186,13 @@ string str_kit::trimString(string str) {
 	return str;
 }
 
+string str_kit::padStringLeft(string str, int length) {
+	length = str.size() - length;
+	length = length < 0 ? 0 : length;
+	
+	return string(" ", length) + str;
+}
+
 //takes a string and a bool ptr, returns int, and sets ptr to true/false, valid with null ptr
 int str_kit::stringToInt(string& str, bool* valid) {
 	int value = 0;
@@ -322,3 +329,4 @@ string str_kit::createBranchFromVector(vector<string> list) {
 	message.pop_back();
 	return message;
 }
+

@@ -47,6 +47,9 @@ namespace str_kit {
 	//removes all trivial whitespacing from start to end of line
 	string trimString(string str);
 
+	//pads a string to the left with required whitespace to reach size
+	string padStringLeft(string str, int length);
+
 	//takes a string and a bool ptr, returns int, and sets ptr to true/false and returns 0 on failure, valid with null ptr
 	int stringToInt(string& str, bool* valid);
 
@@ -82,7 +85,6 @@ namespace str_kit {
 
 	//Takes a vector of strings and creates a tree
 	string createBranchFromVector(vector<string> list);
-
 
 
 }
