@@ -24,3 +24,19 @@ string os_kit::getFileAsString(const std::string& filePath) {
 
 	return contents;
 }
+
+int os_kit::countNewLinesInFile(const std::string& filePath) {
+	int count = 0;
+	string line;
+	ifstream file(filePath);
+
+	if (!file.good()) {
+		return -1;
+	}
+
+	while (getline(file, line)) {
+		count++;
+	}
+		
+	return count;
+}
