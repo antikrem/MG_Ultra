@@ -8,6 +8,7 @@ Including range based algorithm functions*/
 #include <functional>
 #include <type_traits>
 #include <stack>
+#include <cstdint>
 
 using namespace std;
 
@@ -57,4 +58,21 @@ void clear_stack(T &s) {
 		s.pop();
 	}
 }
+
+
+//compares both pointers
+//if both are null, returns null
+//if one is null, returns other
+//if both aren't null returns a
+template <class T>
+T* ptr_or(T* a, T* b) {
+	if (a && b) {
+		return a;
+	}
+	return (T*)(
+		reinterpret_cast<std::uintptr_t>(a)
+		| reinterpret_cast<std::uintptr_t>(b)
+	);
+}
+
 #endif
