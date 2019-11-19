@@ -22,6 +22,11 @@ public:
 	}
 
 	void cacheHandle(shared_ptr<Entity> ent) override {
+		//check if camera script is used
+		bool value;
+		if (registar->get("camera_script_update", &value) && !value) {
+			return;
+		}
 		//execute camera script
 		sc.reset();
 		if (!executeInternalScript("system_camera", "CAMERA: Fatal error executing camera script, camera disabled", ent, &sc)) {

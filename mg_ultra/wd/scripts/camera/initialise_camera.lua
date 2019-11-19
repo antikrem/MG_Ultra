@@ -7,6 +7,8 @@
 --which can be set in the campaign/level load scripts
 local viewSpaceY = registar:get("view_space_y")
 
+--set to true for the camera to be updated with camera.lua
+registar:add("camera_script_update", false)
 
 if not is_nil(viewSpaceY) then
 	local cCamera = this:get_component(ComponentCamera)
