@@ -9,8 +9,7 @@ in vec2 uv;
 
 layout(location = 0) out vec3 color;
 
-void main(){
-    vec2(uv.x, 1.0-uv.y);
+void main() {
 	vec4 texel = texture( mgtSamplers[0],vec2(uv.x, uv.y)).rgba;
 	if (texel.a < 0.2) {
 		discard;
