@@ -9,6 +9,7 @@
 #include "error.h"
 
 #include "frame_buffer.h"
+#include "timed_block.h"
 
 #include <thread>
 
@@ -22,6 +23,9 @@ class GLHandler {
 private:
 	atomic<bool> active = false;
 	atomic<bool> ended = false;
+
+	//An attached TimedBlock that can be activated
+	TimedBlock periodBlock;
 
 	//gl handle thread, it will do all gl calls, containing current context
 	thread* glThread = nullptr;
@@ -92,6 +96,8 @@ private:
 		glDisable(GL_CULL_FACE);
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		periodBlock.blockForTime();
 	}
 
 	//Called after a render
@@ -127,7 +133,7 @@ public:
 	//GL calls are done in a seperate thread
 	//Requests made to gl thread will be handled async
 	GLHandler(GLFWwindow *window, GraphicsSettings* gSettings, AnimationsMaster* textureMaster, Camera* camera) 
-	: boxVAOBuffer(1000) {
+	: boxVAOBuffer(1000), periodBlock(60) {
 		this->window = window;
 		this->gSettings = gSettings;
 		this->camera = camera;
