@@ -236,9 +236,6 @@
     <ClInclude Include="global_funcs.h">
       <Filter>Header Files\Script</Filter>
     </ClInclude>
-    <ClInclude Include="system_script.h">
-      <Filter>Header Files\ECS\Systems</Filter>
-    </ClInclude>
     <ClInclude Include="scriptable_class.h">
       <Filter>Header Files\Script</Filter>
     </ClInclude>

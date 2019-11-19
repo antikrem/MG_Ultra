@@ -256,7 +256,6 @@
     <ClInclude Include="str_kit.h" />
     <ClInclude Include="system_profiler.h" />
     <ClInclude Include="system_rotation.h" />
-    <ClInclude Include="system_script.h" />
     <ClInclude Include="system_spawner.h" />
     <ClInclude Include="system_text.h" />
     <ClInclude Include="system_timer.h" />

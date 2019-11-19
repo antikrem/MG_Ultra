@@ -51,15 +51,12 @@ class ECSMaster {
 	master1: graphics
 	    -system_graphics
 
-	master2: scripts
-		-system_script
-
-	master3: non-essentaion gameplay
+	master2: non-essentaion gameplay
 	    -system_animation
 		-system_text
 		-system_console
 
-	master4: main gameloop
+	master3: main gameloop
 	    -system_timer
 		-system_player
 		-system_camera
@@ -67,7 +64,7 @@ class ECSMaster {
 		-system_rotation
 	    -system_game_state_control
 
-	master5: loading
+	master4: loading
 		-system_loader
 	
 	*/
@@ -88,11 +85,6 @@ class ECSMaster {
 		graphicsMaster->setCamera(gState->getCamera());
 
 		//ring 2
-		master = newSystemsMaster("m_script");
-		auto scriptSystem = master->createSystem<SystemScript>(registar);
-		scriptSystem->setScriptMaster(scriptMaster);
-
-		//ring 3
 		master = newSystemsMaster("m_graphics2");
 		master->setTimer(100);
 		auto animationSystem = master->createSystem<SystemAnimation>(registar);
@@ -102,7 +94,7 @@ class ECSMaster {
 		master->createSystem<SystemConsole>(registar);
 		master->createSystem<SystemSpawner>(registar);
 
-		//ring 4
+		//ring 3
 		master = newSystemsMaster("m_gameplay");
 		master->setTimer(100);
 		master->createSystem<SystemTimer>(registar);
@@ -112,7 +104,7 @@ class ECSMaster {
 		master->createSystem<SystemRotation>(registar);
 		master->createSystem<SystemGameStateControl>(registar);
 
-		//ring 5
+		//ring 4
 		master = newSystemsMaster("m_loader");
 		master->setTimer(5);
 		master->createSystem<SystemLoader>(registar);
@@ -141,6 +133,9 @@ public:
 		//Create basic system masters
 		createBasicSystems();
 		cout << print() << endl;
+
+		//start the script handler
+		scriptMaster->beginScriptHandling();
 
 		//start the masters
 		startMasters();
