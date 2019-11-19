@@ -23,12 +23,6 @@ private:
 	atomic<bool> active = false;
 	atomic<bool> ended = false;
 
-	//size of buffer
-	int size = 3;
-
-	//unmapindex
-	unsigned long long int unmapIndex = 0;
-
 	//gl handle thread, it will do all gl calls, containing current context
 	thread* glThread = nullptr;
 
@@ -149,10 +143,6 @@ public:
 
 		}
 		glfwDestroyWindow(window);
-	}
-
-	unsigned long long int getNextUnmap() {
-		return ++unmapIndex;
 	}
 
 	GLFWwindow* getWindow() {
