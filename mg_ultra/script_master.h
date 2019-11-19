@@ -3,6 +3,9 @@
 #define __SCRIPT_MASTER__
 
 #include <mutex>
+#include <condition_variable>
+#include <thread>
+#include <queue>
 
 #include "scriptable_class.h"
 #include "events.h"
@@ -20,12 +23,17 @@ class ScriptMaster {
 	atomic<bool> executingScript = false;
 	//script master is shut down
 	atomic<bool> disabled = false;
+	//script master shut down has completed
+	atomic<bool> finalised = false;
 
 	//locks when copying script buffer
 	mutex scriptBufferLock;
+	//conditional variable for allowing script handle thread
+	//to execute
+	condition_variable cv;
 
-	//list of script units to execute
-	vector<ScriptUnit> scriptList;
+	//queue of script units to execute
+	queue<ScriptUnit> scriptQueue;
 
 	//loads and executes a script
 	//use to load and initialise scripts
@@ -57,12 +65,44 @@ public:
 
 	void addScriptUnit(ScriptUnit scriptUnit);
 
-	void executeBufferedScripts();
-
 	//gets size of script
 	int getNumberOfScripts() {
 		unique_lock<mutex> lck(scriptBufferLock);
-		return scriptList.size();
+		return scriptQueue.size();
+	}
+
+	//Executes scripts in loop
+	//until disabled
+	void scriptHandling() {
+		while (true) {
+			//lock and wait for a script to come in
+			ScriptUnit current(SS_None, "");
+			{
+				unique_lock<mutex> lck(scriptBufferLock);
+				cv.wait(lck,
+					[this] {
+						return this->scriptQueue.size() || this->disabled;
+					}
+				);
+				if (disabled) {
+					break;
+				}
+				else {
+					current = scriptQueue.front();
+					scriptQueue.pop();
+				}
+			}
+
+			finalExecuteScriptUnit(current);
+		}
+		finalised = true;
+	}
+
+	//starts a new thread to handle script execution
+	//will continue until script master is disabled
+	void beginScriptHandling() {
+		thread scriptHandler(&ScriptMaster::scriptHandling, this);
+		scriptHandler.detach();
 	}
 };
 

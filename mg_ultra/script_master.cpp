@@ -92,6 +92,12 @@ void ScriptMaster::disable() {
 	disabled = true;
 	//close the pipeline
 	closeScriptPipeline();
+	//notify change in state
+	cv.notify_one();
+	//wait for finalisation
+	while (!finalised) {
+		pass;
+	}
 }
 
 ScriptMaster::~ScriptMaster() {
@@ -119,19 +125,23 @@ void ScriptMaster::finalExecuteScriptUnit(ScriptUnit scriptUnit) {
 		}
 	}
 
-	if (source == SS_commandLine) {
+	//each source has subtle differences in execution
+	vector<string> buffer;
+	vector<string> debugInformation;
+	switch (source) {
+	case SS_commandLine:
 		kaguya.dostring(scriptUnit.getScript());
-		vector<string> buffer = pullScriptErrors();
+		buffer = pullScriptErrors();
 		if (buffer.size()) {
 			err::logMessage("SCRIPT: Error, Last command line was invalid:");
 			for (auto i : buffer) {
 				err::logMessage(i);
 			}
 		}
-	}
-	else if (source == SS_inlineLoader) {
+		break;
+	case SS_inlineLoader:
 		kaguya.dostring(scriptUnit.getScript());
-		vector<string> buffer = pullScriptErrors();
+		buffer = pullScriptErrors();
 		if (buffer.size()) {
 			err::logMessage("SCRIPT: Error, the load_table has erroneous inline request at" + scriptUnit.getDebugData()
 				+ "\n--> Level loaded anyway ignoring line, produced error(s):");
@@ -139,34 +149,38 @@ void ScriptMaster::finalExecuteScriptUnit(ScriptUnit scriptUnit) {
 				err::logMessage(i);
 			}
 		}
-	}
-	else if (source == SS_file) {
+		break;
+	case SS_file:
 		quickLoadAndExecute(scriptUnit.getScript());
-	}
-	else if (source == SS_timedCallBack) {
+		break;
+	case SS_timedCallBack:
 		kaguya.dostring(scriptUnit.getScript());
-		vector<string> buffer = pullScriptErrors();
+		buffer = pullScriptErrors();
 		if (buffer.size()) {
-			vector<string> debugInformation = str_kit::splitOnToken(scriptUnit.getDebugData(), ' ');
+			debugInformation = str_kit::splitOnToken(scriptUnit.getDebugData(), ' ');
 			err::logMessage("SCRIPT: Error, The entity with id: " + debugInformation[0] + " failed a callback timed on " + debugInformation[1]
 				+ "\n--> The error(s) occured are:");
 			for (auto i : buffer) {
 				err::logMessage(i);
 			}
 		}
-	}
-	else if (source == SS_functionalCallBack) {
+		break;
+	case SS_functionalCallBack:
 		kaguya.dostring(scriptUnit.getScript());
-		vector<string> buffer = pullScriptErrors();
+		buffer = pullScriptErrors();
 		if (buffer.size()) {
-			vector<string> debugInformation = str_kit::splitOnToken(scriptUnit.getDebugData(), ' ');
+			debugInformation = str_kit::splitOnToken(scriptUnit.getDebugData(), ' ');
 			err::logMessage("SCRIPT: Error, The system: " + debugInformation[0] + " failed a functional callback"
 				+ "\n--> The error(s) occured are:");
 			for (auto i : buffer) {
 				err::logMessage(i);
 			}
 		}
+		break;
+	default:
+		pass;
 	}
+
 
 	//clear old environment
 	if (scriptUnit.numberOfAttachedEnts()) {
@@ -188,25 +202,10 @@ void ScriptMaster::finalExecuteScriptUnit(ScriptUnit scriptUnit) {
 
 void ScriptMaster::addScriptUnit(ScriptUnit scriptUnit) {
 	unique_lock<mutex> lck(scriptBufferLock);
-	scriptList.push_back(scriptUnit);
+	scriptQueue.push(scriptUnit);
+	cv.notify_one();
 }
 
-void ScriptMaster::executeBufferedScripts() {
-	if (disabled) {
-		return;
-	}
-	executingScript = true;
-	vector<ScriptUnit> buffer;
-	{
-		unique_lock<mutex> lck(scriptBufferLock);
-		buffer = scriptList;
-		scriptList.clear();
-	}
-	for (auto& i : buffer) {
-		finalExecuteScriptUnit(i);
-	}
-	executingScript = false;
-}
 
 //if true, the script pipeline is closed
 atomic<bool> closedScriptPipeLine = false;
