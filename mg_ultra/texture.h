@@ -43,7 +43,7 @@ struct BoxData {
 	//2 sizes (x,y)
 	float wh[2];
 	//4 texture coordinates (u,v) is center, (w,l) is width and length
-	float uvwh[4] = { 0.393798828125f, 0.3447265625f, 0.5751953125f, 0.5751953125f };
+	float uvwh[4];
 	//rotation amount in radians
 	float rotation = 0;
 	//sets if this is a ui element, which uses a different projection and shading method
