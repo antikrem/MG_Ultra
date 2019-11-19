@@ -51,6 +51,13 @@ public:
 		DeleteTimerQueueTimer(NULL, multimediaTimer, INVALID_HANDLE_VALUE);
 	}
 
+	/*Sets a new period*/
+	void changePeriod(int msPeriod, int delay = 10) {
+		this->msPeriod = msPeriod;
+		ChangeTimerQueueTimer(NULL, multimediaTimer, delay, msPeriod);
+
+	}
+
 	/*Returns a reference to Timer's parametes*/
 	T& getParameter() {
 		return callbackPack.parameter;
