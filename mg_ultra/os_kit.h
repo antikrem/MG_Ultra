@@ -4,7 +4,7 @@
 #define __OS_KIT__
 
 #include <string>
-#include <fstream>
+#include <vector>
 
 using namespace std;
 
@@ -20,6 +20,9 @@ namespace os_kit {
 	//counts number of new lines within a file
 	//returns -1 if file does not exist
 	int countNewLinesInFile(const std::string& filePath);
+
+	//returns a vector of all file names in a folder
+	vector<string> getFilesInFolder(const std::string& filePath);
 }
 
 #endif
