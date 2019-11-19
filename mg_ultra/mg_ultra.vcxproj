@@ -269,6 +269,8 @@
     <ClInclude Include="system.h" />
     <ClInclude Include="systems_master.h" />
     <ClInclude Include="thread_cruncher.h" />
+    <ClInclude Include="timed_block.h" />
+    <ClInclude Include="timed_callback.h" />
     <ClInclude Include="timed_event_callback.h" />
     <ClInclude Include="timer.h" />
     <ClInclude Include="n_buffer.h" />

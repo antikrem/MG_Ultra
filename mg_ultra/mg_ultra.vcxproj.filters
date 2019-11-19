@@ -347,6 +347,12 @@
     <ClInclude Include="vao_screenbuffer.h">
       <Filter>Header Files\Graphics\VAO</Filter>
     </ClInclude>
+    <ClInclude Include="timed_callback.h">
+      <Filter>Header Files\Support</Filter>
+    </ClInclude>
+    <ClInclude Include="timed_block.h">
+      <Filter>Header Files\Support</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="wd\shaders\base.vert">
