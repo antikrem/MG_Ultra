@@ -91,10 +91,6 @@ public:
 		return animationsMaster;
 	}
 
-	unsigned long long int getNextUnmap() {
-		return glHandler->getNextUnmap();
-	}
-
 	BoxData evaluateToBox(AnimationState state, float scale) {
 		return animationsMaster->evaluateToBox(state, scale);
 	}
