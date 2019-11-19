@@ -14,6 +14,8 @@ using namespace std;
 
 //enumeration of locations to load a script unit from
 enum ScriptSources {
+	//No source
+	SS_None,
 	//source is loaded direct from a file, no env
 	SS_file,
 	//script comes from command line, no env
