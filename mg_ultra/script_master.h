@@ -76,7 +76,7 @@ public:
 	void scriptHandling() {
 		while (true) {
 			//lock and wait for a script to come in
-			ScriptUnit current(SS_None, "");
+			vector<ScriptUnit> currentScripts;
 			{
 				unique_lock<mutex> lck(scriptBufferLock);
 				cv.wait(lck,
@@ -88,12 +88,16 @@ public:
 					break;
 				}
 				else {
-					current = scriptQueue.front();
-					scriptQueue.pop();
+					while (scriptQueue.size()) {
+						currentScripts.push_back(scriptQueue.front());
+						scriptQueue.pop();
+					}
 				}
 			}
 
-			finalExecuteScriptUnit(current);
+			for (auto& i : currentScripts) {
+				finalExecuteScriptUnit(i);
+			}
 		}
 		finalised = true;
 	}
