@@ -18,6 +18,7 @@ end
 --add a function to Registar to allow weak typed Registar return
 --returns nil on failure
 function Registar.get(self, name)
+	local v, check
 	--implementation is done by attempting different acessors
 	v, check = self:getInt(name)
 	if check then
