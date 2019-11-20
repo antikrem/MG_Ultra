@@ -113,6 +113,8 @@ private:
 		shaderMaster->useShader("base");
 		glm::mat4 mvp = camera->getVPMatrix();
 		shaderMaster->setUniform4f("base", "MVP", mvp);
+		glm::mat4 uimvp = camera->getUiVPMatrix();
+		shaderMaster->setUniform4f("base", "uiMVP", uimvp);
 		geometryFrameBuffer.bindBuffer();
 		//process the box buffer, which renders the geometry
 		//set mgt textures in shader

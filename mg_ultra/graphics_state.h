@@ -91,8 +91,8 @@ public:
 		return animationsMaster;
 	}
 
-	BoxData evaluateToBox(AnimationState state, float scale) {
-		return animationsMaster->evaluateToBox(state, scale);
+	BoxData evaluateToBox(AnimationState state, float scale, bool renderIn3D) {
+		return animationsMaster->evaluateToBox(state, scale, renderIn3D);
 	}
 
 	//gets a pointer to a buffered map

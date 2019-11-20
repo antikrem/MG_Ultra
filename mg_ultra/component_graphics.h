@@ -94,6 +94,16 @@ public:
 		return this->state.scale;
 	}
 
+	//set render in 3d
+	void setRenderIn3D(bool renderIn3D) {
+		this->renderIn3D = renderIn3D;
+	}
+
+	//get render in 3d
+	bool getRenderIn3D() {
+		return renderIn3D;
+	}
+
 	//set animation, not to be used 
 	void setAnimationType(unsigned int animation) {
 		unique_lock<shared_mutex> lck(lock);
@@ -119,6 +129,8 @@ public:
 			.addFunction("get_rotation", &ComponentGraphics::getRotation)
 			.addFunction("set_scale", &ComponentGraphics::setScale)
 			.addFunction("get_scale", &ComponentGraphics::getScale)
+			.addFunction("set_render_in_3D", &ComponentGraphics::setRenderIn3D)
+			.addFunction("get_render_in_3D", &ComponentGraphics::getRenderIn3D)
 			.addStaticFunction("create", ScriptableClass::create<ComponentGraphics, string>)
 			.addStaticFunction("type", &getType<ComponentGraphics>)
 			.addStaticFunction("cast", &Component::castDown<ComponentGraphics>)

@@ -53,7 +53,7 @@ public:
 			auto state = gra->getAnimationState(&toDraw, pos->getPosition3());
 
 			if (toDraw) {
-				buffer[boxCount] = graphicsState->evaluateToBox(state, 1.0f);
+				buffer[boxCount] = graphicsState->evaluateToBox(state, 1.0f, gra->getRenderIn3D());
 				boxCount++;
 			}
 		}
@@ -70,7 +70,7 @@ public:
 			auto stateList = tex->getStates(pos->getPosition3());
 		
 			for (int i = 0; (i < (int)stateList.size()) && (boxCount < bufferSize); i++) {
-				buffer[boxCount++] = graphicsState->evaluateToBox(stateList[i], tex->getScale());
+				buffer[boxCount++] = graphicsState->evaluateToBox(stateList[i], tex->getScale(), tex->getRenderIn3D());
 			}
 		}
 	}

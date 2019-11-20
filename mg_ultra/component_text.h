@@ -44,6 +44,9 @@ class ComponentText : public Component, public ScriptableClass {
 	//The name of the "font", which will be the animationSet name
 	string animationSet;
 
+	//set to true if this is rendered in 3d
+	atomic<bool> renderIn3D = true;
+
 	//Alignment that will be used with ComponentPosition to specify position
 	AlignmentText alignmentText;
 	//The internal padding, x is horizontal between characters, y is vertical between lines
@@ -189,6 +192,16 @@ public:
 		return scale;
 	}
 
+	//set render in 3d
+	void setRenderIn3D(bool renderIn3D) {
+		this->renderIn3D = renderIn3D;
+	}
+
+	//get render in 3d
+	bool getRenderIn3D() {
+		return renderIn3D;
+	}
+
 	void registerToLua(kaguya::State& state) override {
 		state["ComponentText"].setClass(kaguya::UserdataMetatable<ComponentText, Component>()
 			.setConstructors<ComponentText()>()
@@ -196,6 +209,8 @@ public:
 			.addFunction("set_text", &ComponentText::setText)
 			.addFunction("set_scale", &ComponentText::setScale)
 			.addFunction("get_scale", &ComponentText::getScale)
+			.addFunction("set_render_in_3D", &ComponentText::setRenderIn3D)
+			.addFunction("get_render_in_3D", &ComponentText::getRenderIn3D)
 			.addStaticFunction("type", &getType<ComponentText>)
 			.addStaticFunction("cast", &Component::castDown<ComponentText>)
 		);

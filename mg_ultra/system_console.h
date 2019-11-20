@@ -93,6 +93,7 @@ public:
 		newComponent2->setFont("text_consolas58");
 		newComponent2->setVisible(false);
 		newComponent2->setScale(0.5f);
+		newComponent2->setRenderIn3D(false);
 		newEnt->addComponent(newComponent2->pullForEntity());
 		pool->addEnt(newEnt, true);
 	}

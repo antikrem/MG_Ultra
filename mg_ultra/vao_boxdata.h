@@ -90,12 +90,25 @@ public:
 			(void*)(offsetof(BoxData, BoxData::uvwh)) //texture access
 		);
 
+		//Set up render in 3D flag
+		glEnableVertexAttribArray(5);
+		glBindBuffer(GL_ARRAY_BUFFER, vboID);
+		glVertexAttribPointer(
+			5, //layout = 5
+			1, //single float
+			GL_FLOAT,
+			GL_FALSE,
+			sizeof(BoxData), //stride the length of boxdata
+			(void*)(offsetof(BoxData, BoxData::render3D)) //texture access
+		);
+
 		//set up striding
 		glVertexAttribDivisor(0, 0); //base quad
 		glVertexAttribDivisor(1, 1); //position
 		glVertexAttribDivisor(2, 1); //size
 		glVertexAttribDivisor(3, 1); //rotation
 		glVertexAttribDivisor(4, 1); //texture access
+		glVertexAttribDivisor(5, 1); //render3DFlag
 
 		//unbind VAO
 		glBindVertexArray(0);
