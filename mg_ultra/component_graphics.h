@@ -22,6 +22,9 @@ private:
 	//false renders in 2d mode, using an orthogonal perspective
 	atomic<bool> renderIn3D = true;
 
+	//wraping factor to use when texturing
+	atomic<float> wrapFactor = 1.0f;
+
 	//rotaion value in degrees
 	atomic<float> rotation = 0;
 
@@ -104,6 +107,16 @@ public:
 		return renderIn3D;
 	}
 
+	//set wrap factor
+	void setWrapFactor(float wrapFactor) {
+		this->wrapFactor = wrapFactor;
+	}
+
+	//get wrap factor
+	float getWrapFactor() {
+		return wrapFactor;
+	}
+
 	//set animation, not to be used 
 	void setAnimationType(unsigned int animation) {
 		unique_lock<shared_mutex> lck(lock);
@@ -116,6 +129,7 @@ public:
 		*valid = temp.valid && temp.visible && visible.load();
 		temp.centerPostion = pos;
 		temp.rotation = rotation;
+		temp.wrapFactor = wrapFactor;
 		return temp;
 	}
 

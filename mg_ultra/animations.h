@@ -18,6 +18,7 @@ struct AnimationState {
 	bool valid = true; 
 	Point3 centerPostion; // invalid until set by position component
 	float scale = 1.0f;
+	float wrapFactor = 1.0f;
 	float rotation = 0; 
 	string animationSetName;
 	unsigned int animationType;
@@ -47,6 +48,7 @@ struct AnimationState {
 		this->visible = state.visible;
 		this->valid = state.valid;
 		this->scale = state.scale;
+		this->wrapFactor = state.wrapFactor;
 		this->rotation = state.rotation;
 		this->animationSetName = state.animationSetName;
 		this->animationType = state.animationType;

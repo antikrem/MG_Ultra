@@ -48,6 +48,8 @@ struct BoxData {
 	float rotation = 0;
 	//sets if this is a 3d element, which uses a different projection and shading method to 2d
 	float render3D = 1.0f;
+	//Used to overshoot wrapping
+	float wrapFactor = 1.0f;
 	//set to true if this box is valid
 	bool draw;
 };
@@ -277,6 +279,7 @@ public:
 		boxData.rotation = DEG2RAD(state.rotation);
 		memcpy(boxData.uvwh, &ani->getUVWH(state.currentFrame), 4 * sizeof(float));
 		boxData.render3D = (float)(int)renderIn3D;
+		boxData.wrapFactor = state.wrapFactor;
 		
 		return boxData;
 	}

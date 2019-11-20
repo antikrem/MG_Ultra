@@ -99,7 +99,19 @@ public:
 			GL_FLOAT,
 			GL_FALSE,
 			sizeof(BoxData), //stride the length of boxdata
-			(void*)(offsetof(BoxData, BoxData::render3D)) //texture access
+			(void*)(offsetof(BoxData, BoxData::render3D)) //render3D flag
+		);
+
+		//Set up wrapfactor
+		glEnableVertexAttribArray(6);
+		glBindBuffer(GL_ARRAY_BUFFER, vboID);
+		glVertexAttribPointer(
+			6, //layout = 6
+			1, //single float
+			GL_FLOAT,
+			GL_FALSE,
+			sizeof(BoxData), //stride the length of boxdata
+			(void*)(offsetof(BoxData, BoxData::wrapFactor)) //wrap factor
 		);
 
 		//set up striding
@@ -109,6 +121,7 @@ public:
 		glVertexAttribDivisor(3, 1); //rotation
 		glVertexAttribDivisor(4, 1); //texture access
 		glVertexAttribDivisor(5, 1); //render3DFlag
+		glVertexAttribDivisor(6, 1); //wrapfactor
 
 		//unbind VAO
 		glBindVertexArray(0);
