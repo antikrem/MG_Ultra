@@ -9,6 +9,7 @@
 #include "component_input.h"
 #include "component_movement.h"
 #include "component_extended_scripting.h"
+#include "component_multi_entity.h"
 #include "component_spawner.h"
 
 #include "system.h"
@@ -73,6 +74,7 @@ ScriptMaster::ScriptMaster()
 	forceLuaRegistration<ComponentInput>(kaguya);
 	forceLuaRegistration<ComponentMovement>(kaguya);
 	forceLuaRegistration<ComponentExtendedScripting>(kaguya);
+	forceLuaRegistration<ComponentMultiEntity>(kaguya);
 	forceLuaRegistration<ComponentSpawner>(kaguya);
 
 	//set contextual script functions
@@ -83,7 +85,9 @@ ScriptMaster::ScriptMaster()
 	quickLoadAndExecute("scripts/_library/pool_utils.lua");
 	quickLoadAndExecute("scripts/_library/math_utils.lua");
 	quickLoadAndExecute("scripts/_library/string_ex.lua");
+
 	quickLoadAndExecute("scripts/_initialise/registar.lua");
+	quickLoadAndExecute("scripts/_initialise/animations.lua");
 
 	globalScriptMasterPtr = this;
 }
