@@ -145,6 +145,8 @@ public:
 			.addFunction("get_scale", &ComponentGraphics::getScale)
 			.addFunction("set_render_in_3D", &ComponentGraphics::setRenderIn3D)
 			.addFunction("get_render_in_3D", &ComponentGraphics::getRenderIn3D)
+			.addFunction("set_wrap_factor", &ComponentGraphics::setWrapFactor)
+			.addFunction("get_wrap_factor", &ComponentGraphics::getWrapFactor)
 			.addStaticFunction("create", ScriptableClass::create<ComponentGraphics, string>)
 			.addStaticFunction("type", &getType<ComponentGraphics>)
 			.addStaticFunction("cast", &Component::castDown<ComponentGraphics>)
