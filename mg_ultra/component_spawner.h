@@ -34,7 +34,7 @@ public:
 	Entity* createFactoryEntity(unsigned int type) {
 		unique_lock<mutex>(factoryLock);
 		if (factoryEntity) {
-			err::logMessage("SPAWNER ERROR: An entity was requested of type: " + to_string(type) + "when one was already being built");
+			err::logMessage("SPAWNER ERROR: An entity was requested of type: " + to_string(type) + " when one was already being built");
 			return nullptr;
 		}
 		else {
@@ -68,11 +68,12 @@ public:
 	void registerToLua(kaguya::State& state) override {
 		state["ComponentSpawner"].setClass(kaguya::UserdataMetatable<ComponentSpawner, Component>()
 			.setConstructors<ComponentSpawner()>()
-			.addStaticFunction("type", &getType<ComponentSpawner>)
-			.addStaticFunction("cast", &Component::castDown<ComponentSpawner>)
 			.addFunction("create_entity", &ComponentSpawner::createFactoryEntity)
 			.addFunction("add_component", &ComponentSpawner::addComponentToEntity)
 			.addFunction("push_entity", &ComponentSpawner::pushFactoryEntity)
+			.addStaticFunction("create", ScriptableClass::create<ComponentSpawner>)
+			.addStaticFunction("type", &getType<ComponentSpawner>)
+			.addStaticFunction("cast", &Component::castDown<ComponentSpawner>)
 		);
 	}
 
