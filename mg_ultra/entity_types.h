@@ -13,7 +13,9 @@ enum EntityTypes {
 	ETCamera,
 	ETPlayer,
 	ETPlayerBullets,
-	ETProfile
+	ETProfile,
+	ETBackgroundMaster,
+	ETBackgroundLayer
 };
 
 //String to Entity type
