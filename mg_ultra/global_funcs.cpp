@@ -8,6 +8,7 @@
 
 #include "events.h"
 #include "pool.h"
+#include "texture.h"
 
 ///print
 //For use with print function, holds a buffer sting to print
@@ -31,6 +32,7 @@ void print_push() {
 	buffer.clear();
 }
 
+///events
 //Factory event template which allows events to be constructed
 Event* eventConstruction = nullptr;
 
@@ -74,7 +76,7 @@ void pushEvent() {
 	}
 }
 
-//used for profiling
+///profiling
 mutex profileLock;
 ProfileMap profileInfo;
 
@@ -87,6 +89,9 @@ void setProfileInfoMap(ProfileMap& profileMap) {
 	unique_lock<mutex> lck(profileLock);
 	profileInfo = profileMap;
 }
+
+///animation master
+
 
 void registerGlobalFunctions(kaguya::State &kaguya) {
 	//printing
@@ -101,4 +106,7 @@ void registerGlobalFunctions(kaguya::State &kaguya) {
 
 	//profiling
 	kaguya["getProfileInfo"] = getProfileInfoMap;
+
+	//animation master
+	kaguya["queryAnimation"] = g_aniquery::getAnimationSize;
 }

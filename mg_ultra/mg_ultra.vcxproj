@@ -196,6 +196,7 @@
     <ClCompile Include="script_master.cpp" />
     <ClCompile Include="str_kit.cpp" />
     <ClCompile Include="success_callback.cpp" />
+    <ClCompile Include="texture.cpp" />
     <ClCompile Include="timed_event_callback.cpp" />
     <ClCompile Include="timer.cpp" />
     <ClCompile Include="_graphics_headers.cpp" />
@@ -215,7 +216,6 @@
     <ClInclude Include="component_multi_entity.h" />
     <ClInclude Include="component_spawner.h" />
     <ClInclude Include="component_text.h" />
-    <ClInclude Include="component_tiling.h" />
     <ClInclude Include="component_timer.h" />
     <ClInclude Include="component_movement.h" />
     <ClInclude Include="constants.h" />
@@ -242,6 +242,7 @@
     <ClInclude Include="script_unit.h" />
     <ClInclude Include="success_callback.h" />
     <ClInclude Include="system_animation.h" />
+    <ClInclude Include="system_background.h" />
     <ClInclude Include="system_bounds_control.h" />
     <ClInclude Include="system_camera.h" />
     <ClInclude Include="system_console.h" />
@@ -280,10 +281,12 @@
     <ClInclude Include="_graphics_headers.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="wd\scripts\backgrounds\initialsize_background_master.lua" />
     <None Include="wd\scripts\camera\camera.lua" />
     <None Include="wd\scripts\camera\initialise_camera.lua" />
     <None Include="wd\scripts\player\initialise_player.lua" />
     <None Include="wd\scripts\player\player.lua" />
+    <None Include="wd\scripts\_initialise\animations.lua" />
     <None Include="wd\scripts\_initialise\profiler.lua" />
     <None Include="wd\scripts\_initialise\profiling_init.lua" />
     <None Include="wd\scripts\_initialise\registar.lua" />

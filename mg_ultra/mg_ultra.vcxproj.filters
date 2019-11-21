@@ -67,6 +67,9 @@
     <Filter Include="Source Files\Graphics">
       <UniqueIdentifier>{47a1f7b3-5a59-42f9-b996-1e854235c58f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\scripts\backgrounds">
+      <UniqueIdentifier>{bd295cff-2119-49de-bd78-18ec0db8c466}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -115,6 +118,9 @@
       <Filter>Source Files\Script</Filter>
     </ClCompile>
     <ClCompile Include="_graphics_headers.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="texture.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
@@ -320,9 +326,6 @@
     <ClInclude Include="system_multi_ent.h">
       <Filter>Header Files\ECS\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="component_tiling.h">
-      <Filter>Header Files\ECS\Components</Filter>
-    </ClInclude>
     <ClInclude Include="algorithm_ex.h">
       <Filter>Header Files\Support</Filter>
     </ClInclude>
@@ -349,6 +352,9 @@
     </ClInclude>
     <ClInclude Include="timed_block.h">
       <Filter>Header Files\Support</Filter>
+    </ClInclude>
+    <ClInclude Include="system_background.h">
+      <Filter>Header Files\ECS\Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -399,6 +405,12 @@
     </None>
     <None Include="wd\shaders\finalise.frag">
       <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="wd\scripts\backgrounds\initialsize_background_master.lua">
+      <Filter>Resource Files\scripts\backgrounds</Filter>
+    </None>
+    <None Include="wd\scripts\_initialise\animations.lua">
+      <Filter>Resource Files\scripts\_initialise</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

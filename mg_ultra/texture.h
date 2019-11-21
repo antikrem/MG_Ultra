@@ -9,14 +9,14 @@ known as mg(???) textures: .mgt
 #include <atomic>
 #include <shared_mutex>
 #include <string>
+#include <tuple>
 
 #include "constants.h"
 
 #include "animations.h"
 #include "reader.h"
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
+#include "shaders.h"
 
 //maximum unumber of textures
 #define MAX_TEXTURE_COUNT 16
@@ -175,9 +175,7 @@ private:
 	}
 
 public:
-	AnimationsMaster() {
-
-	}
+	AnimationsMaster();
 
 	//loads a mgt, which has a texture atlas and all associated animation
 	//todo improve by returning enumerated error code
@@ -350,5 +348,10 @@ public:
 	}
 
 };
+
+namespace g_aniquery {
+	//returns (-1, -1) if animationSet/animationType doesn't exist
+	tuple<int, int> getAnimationSize(string animationSet, int animationType);
+}
 
 #endif
