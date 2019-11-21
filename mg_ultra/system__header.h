@@ -14,6 +14,7 @@
 //ring 2 - non-gameplay essential systems
 #include "system_animation.h"
 #include "system_text.h"
+#include "system_background.h"
 #include "system_console.h"
 #include "system_spawner.h"
 

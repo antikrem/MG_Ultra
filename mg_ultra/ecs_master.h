@@ -51,10 +51,12 @@ class ECSMaster {
 	master1: graphics
 	    -system_graphics
 
-	master2: non-essentaion gameplay
+	master2: non-essential gameplay
 	    -system_animation
 		-system_text
 		-system_console
+		-system_spawner
+		-system_backgroun
 
 	master3: main gameloop
 	    -system_timer
@@ -93,6 +95,7 @@ class ECSMaster {
 		textSystem->setAnimationMaster(gState->getAnimationsMaster());
 		master->createSystem<SystemConsole>(registar);
 		master->createSystem<SystemSpawner>(registar);
+		master->createSystem<SystemBackground>(registar);
 
 		//ring 3
 		master = newSystemsMaster("m_gameplay");
