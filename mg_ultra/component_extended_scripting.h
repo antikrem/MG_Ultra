@@ -91,15 +91,40 @@ public:
 				&ComponentExtendedScripting::update<string>,
 				&ComponentExtendedScripting::update<bool>
 			)
-			.addOverloadedFunctions("get", 
-				&ComponentExtendedScripting::noCheckGet<int>, 
-				&ComponentExtendedScripting::noCheckGet<float>, 
-				&ComponentExtendedScripting::noCheckGet<string>, 
-				&ComponentExtendedScripting::noCheckGet<bool>
-			)
+			.addFunction("getInt", &ComponentExtendedScripting::noCheckGet<int>)
+			.addFunction("getFloat", &ComponentExtendedScripting::noCheckGet<float>)
+			.addFunction("getString", &ComponentExtendedScripting::noCheckGet<string>)
+			.addFunction("getBool", &ComponentExtendedScripting::noCheckGet<bool>)
 			.addStaticFunction("create", ScriptableClass::create<ComponentExtendedScripting>)
 			.addStaticFunction("type", &getType<ComponentExtendedScripting>)
 			.addStaticFunction("cast", &Component::castDown<ComponentExtendedScripting>)
+		);
+		//Additionally, add this extra function allowing typeless get
+		state.dostring(
+			"function ComponentExtendedScripting.get(_esComp, _key) \n"
+			"	local v, check \n"
+			"	v, check = _esComp:getInt(_key) \n"
+			"	if check then \n"
+			"		return v \n"
+			"		end "
+			"	\n"
+			"	v, check = _esComp:getFloat(_key) \n"
+			"	if check then \n"
+			"		return v \n"
+			"	end \n"
+			"	\n"
+			"	v, check = _esComp:getBool(_key) \n"
+			"	if check then \n"
+			"		return v \n"
+			"	end \n"
+			"	\n"
+			"	v, check = _esComp:getString(_key) \n"
+			"	if check then \n"
+			"		return v \n"
+			"	end \n"
+			"	\n"
+			"	return nil \n"
+			"end"
 		);
 	}
 
