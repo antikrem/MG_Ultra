@@ -210,10 +210,12 @@
     <ClInclude Include="component_camera.h" />
     <ClInclude Include="component_collision.h" />
     <ClInclude Include="component_console.h" />
+    <ClInclude Include="component_driftable.h" />
     <ClInclude Include="component_extended_scripting.h" />
     <ClInclude Include="component_graphics.h" />
     <ClInclude Include="component_input.h" />
     <ClInclude Include="component_multi_entity.h" />
+    <ClInclude Include="component_no_bounds_control.h" />
     <ClInclude Include="component_spawner.h" />
     <ClInclude Include="component_text.h" />
     <ClInclude Include="component_timer.h" />
@@ -246,6 +248,7 @@
     <ClInclude Include="system_bounds_control.h" />
     <ClInclude Include="system_camera.h" />
     <ClInclude Include="system_console.h" />
+    <ClInclude Include="system_driftable.h" />
     <ClInclude Include="system_game_state_control.h" />
     <ClInclude Include="system_garbage_collector.h" />
     <ClInclude Include="system_graphics.h" />
@@ -281,12 +284,13 @@
     <ClInclude Include="_graphics_headers.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="wd\scripts\backgrounds\initialsize_background_master.lua" />
+    <None Include="wd\scripts\backgrounds\initialise_background_master.lua" />
     <None Include="wd\scripts\camera\camera.lua" />
     <None Include="wd\scripts\camera\initialise_camera.lua" />
     <None Include="wd\scripts\player\initialise_player.lua" />
     <None Include="wd\scripts\player\player.lua" />
     <None Include="wd\scripts\_initialise\animations.lua" />
+    <None Include="wd\scripts\_initialise\drift.lua" />
     <None Include="wd\scripts\_initialise\profiler.lua" />
     <None Include="wd\scripts\_initialise\profiling_init.lua" />
     <None Include="wd\scripts\_initialise\registar.lua" />

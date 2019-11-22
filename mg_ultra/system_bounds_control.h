@@ -6,6 +6,7 @@
 
 #include "component_position.h"
 #include "component_camera.h"
+#include "component_no_bounds_control.h"
 
 class SystemBoundsControl : public System {
 	//if true, bounds are being held
@@ -72,8 +73,8 @@ public:
 			return;
 		}
 
-		//ignore camera
-		if (entityType == ETCamera) {
+		//ignore ents with nobounds
+		if (getComponent<ComponentNoBoundsControl>(components)) {
 			return;
 		}
 

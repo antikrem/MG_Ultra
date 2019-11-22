@@ -6,6 +6,7 @@
 #include "input.h"
 
 #include "component_console.h"
+#include "component_no_bounds_control.h"
 
 class SystemConsole : public System {
 	InputState inputState;
@@ -95,6 +96,8 @@ public:
 		newComponent2->setRenderIn3D(false);
 		newComponent2->setScale(0.75f);
 		newEnt->addComponent(newComponent2->pullForEntity());
+		auto newComponent3 = new ComponentNoBoundsControl();
+		newEnt->addComponent(newComponent3->pullForEntity());
 		pool->addEnt(newEnt, true);
 	}
 

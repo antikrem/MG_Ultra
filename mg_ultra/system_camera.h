@@ -9,6 +9,7 @@
 #include "functional_callback_system.h"
 
 #include "component_camera.h"
+#include "component_no_bounds_control.h"
 #include "component_position.h"
 
 class SystemCamera : public System, public FunctionalCallbackSystem {
@@ -41,6 +42,8 @@ public:
 		newEnt->addComponent(newComponent->pullForEntity());
 		auto newComponent1 = new ComponentCamera();
 		newEnt->addComponent(newComponent1->pullForEntity());
+		auto newComponent2 = new ComponentNoBoundsControl();
+		newEnt->addComponent(newComponent2->pullForEntity());
 		pool->addEnt(newEnt, true);
 		err::logMessage("CAMERA: camera not found, camera created");
 		executeAnyScript(debugName,
