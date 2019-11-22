@@ -61,6 +61,18 @@ public:
 			.addStaticFunction("type", &getType<ComponentMultiEntity>)
 			.addStaticFunction("cast", &Component::castDown<ComponentMultiEntity>)
 		);
+		//Additionally, add this extra function allowing a function to be 
+		//applied to all the entities in a multiend
+		state.dostring(
+			"function ComponentMultiEntity.for_each(_esComp, _func, ...) \n"
+			"	_esComp:reset_iterator() \n"
+			"	local iter = _esComp:get_next() \n"
+			"	while not is_nil(iter) do \n"
+			"		_func(iter, ...) \n"
+			"		iter = _esComp:get_next() \n"
+			"	end\n"
+			"end"
+		);
 	}
 	
 };
