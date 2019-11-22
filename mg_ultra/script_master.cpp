@@ -11,6 +11,8 @@
 #include "component_extended_scripting.h"
 #include "component_multi_entity.h"
 #include "component_spawner.h"
+#include "component_driftable.h"
+#include "component_no_bounds_control.h"
 
 #include "system.h"
 
@@ -76,6 +78,8 @@ ScriptMaster::ScriptMaster()
 	forceLuaRegistration<ComponentExtendedScripting>(kaguya);
 	forceLuaRegistration<ComponentMultiEntity>(kaguya);
 	forceLuaRegistration<ComponentSpawner>(kaguya);
+	forceLuaRegistration<ComponentDriftable>(kaguya);
+	forceLuaRegistration<ComponentNoBoundsControl>(kaguya);
 
 	//set contextual script functions
 	kaguya["getEntityPool"] = getGlobalPool;

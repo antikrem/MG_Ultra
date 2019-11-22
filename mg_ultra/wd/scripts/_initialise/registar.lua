@@ -35,8 +35,3 @@ registar:add("culling_padding", 100)
 --Sets the vertical camera view, how  much of the play_space_y
 --is viewable
 registar:add("view_space_y", 1080)
-
---The depth of the level,
---Base tiles will be on this level
---Additionally, the camera will render to this level
---any object further will not be rendered

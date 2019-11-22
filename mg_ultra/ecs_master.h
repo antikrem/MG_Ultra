@@ -96,6 +96,7 @@ class ECSMaster {
 		master->createSystem<SystemConsole>(registar);
 		master->createSystem<SystemSpawner>(registar);
 		master->createSystem<SystemBackground>(registar);
+		master->createSystem<SystemDriftable>(registar);
 
 		//ring 3
 		master = newSystemsMaster("m_gameplay");

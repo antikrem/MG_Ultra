@@ -64,6 +64,8 @@ function BackgroundMaster.add_new_layer(animationSet, horizontalCount, depth)
 	backgroundLayerGraphics:set_wrap_factor(tileCount)
 	cSpawner:add_component(backgroundLayerGraphics)
 
+	cSpawner:add_component(ComponentDriftable.create())
+
 	cSpawner:push_entity()
 
 end
