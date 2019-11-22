@@ -14,9 +14,18 @@ public:
 		debugName = "s_background";
 		cachedTarget = ETBackgroundMaster;
 		cacheOnly = true;
+
+		//load background update script
+		setInternalScript(debugName, os_kit::getFileAsString("scripts//backgrounds//background_master.lua"));
 	}
 
 	void cacheHandle(shared_ptr<Entity> ent) override {
+		sc.reset();
+		executeInternalScript(
+			"system_background", "BACKGROUND: Fatal error executing background update script",
+			ent,
+			&sc
+		);
 	}
 
 	void cacheFail(EntityPool* pool) override {

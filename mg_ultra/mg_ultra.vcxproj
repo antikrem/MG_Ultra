@@ -284,6 +284,7 @@
     <ClInclude Include="_graphics_headers.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="wd\scripts\backgrounds\background_master.lua" />
     <None Include="wd\scripts\backgrounds\initialise_background_master.lua" />
     <None Include="wd\scripts\camera\camera.lua" />
     <None Include="wd\scripts\camera\initialise_camera.lua" />

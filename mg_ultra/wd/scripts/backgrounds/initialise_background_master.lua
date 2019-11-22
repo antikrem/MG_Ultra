@@ -66,6 +66,24 @@ function BackgroundMaster.add_new_layer(animationSet, horizontalCount, depth)
 
 	cSpawner:add_component(ComponentDriftable.create())
 
+	cSpawner:add_component(ComponentNoBoundsControl.create())
+
+	--Add a scripting component to save 
+	local cScript = ComponentExtendedScripting.create()
+	cScript:add("tilesize_x", tWidth)
+	cScript:add("tilesize_y", tHeight)
+	cSpawner:add_component(cScript)
+
 	cSpawner:push_entity()
 
+end
+
+--Updates a background layer
+function update_background_layer(backgroundLayer)
+	local cPos = backgroundLayer:get_component(ComponentPosition)
+	local cEScript = backgroundLayer:get_component(ComponentExtendedScripting)
+	
+	local x, y = cPos:get_position()
+	
+	cPos:set_position(x % cEScript:get("tilesize_x"), y % cEScript:get("tilesize_y"))
 end

@@ -424,6 +424,9 @@
     <None Include="wd\scripts\backgrounds\initialise_background_master.lua">
       <Filter>Resource Files\scripts\backgrounds</Filter>
     </None>
+    <None Include="wd\scripts\backgrounds\background_master.lua">
+      <Filter>Resource Files\scripts\backgrounds</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="wd\log.txt">
