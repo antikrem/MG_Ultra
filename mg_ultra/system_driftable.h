@@ -54,8 +54,6 @@ public:
 		auto pos = getComponent<ComponentPosition>(components);
 		auto dri = getComponent<ComponentDriftable>(components);
 
-		cout << "caught" << endl;
-
 		if (dri->getScrolling()) {
 			pos->addPosition(scrollSpeed.load());
 		}
