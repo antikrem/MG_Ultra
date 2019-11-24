@@ -74,11 +74,9 @@ class SubPoolTarget {
 	vector<SubPoolComponents> targets;
 
 public:
+	//TODO bad default constructor
+	SubPoolTarget() {
 
-	//create a subpool with a given targets
-	SubPoolTarget(vector<SubPoolComponents> targets) {
-		cachedTarget = ETNoType;
-		this->targets = targets;
 	}
 
 	//this Subpool looks for a specific target
@@ -87,70 +85,51 @@ public:
 		targets.push_back(target);
 	}
 
-	//this subpool looks for a fixed type
-	SubPoolTarget(EntityTypes type) {
-		cachedTarget = type;
-	}
-
-	friend bool operator==(const SubPoolTarget& lhs, const SubPoolTarget& rhs);
-};
-
-//A subpool is kept by the EntityPool
-//A subpool can be a facade for a cached entity
-//or have the full pool
-class SubPool {
-	mutex lock;
-	EntityTypes cachedTarget;
-	vector<SubPoolComponents> targets;
-	vector<shared_ptr<Entity>> ents;
-	
-public:
-	//subpool that defers to any entity
-	SubPool() {
-		cachedTarget = ETNoType;
-	}
-
-	//this Subpool looks for a specific target
-	SubPool(SubPoolComponents target) {
-		cachedTarget = ETNoType;
-		targets.push_back(target);
-	}
-
-	//this subpool looks for anyone of multiple targets
-	SubPool(vector<SubPoolComponents> targets) {
+	//create a subpool with a given targets
+	SubPoolTarget(vector<SubPoolComponents> targets) {
 		cachedTarget = ETNoType;
 		this->targets = targets;
 	}
 
 	//this subpool looks for a fixed type
-	SubPool(EntityTypes type) {
+	SubPoolTarget(EntityTypes type) {
 		cachedTarget = type;
 	}
 
-	bool operator==(const SubPool& rhs) { 
-		return
-			this->cachedTarget == rhs.cachedTarget &&
-			this->targets == rhs.targets;
-	}
-
-	void operator=(const SubPool& rhs) {
+	void operator=(const SubPoolTarget& rhs) {
 		this->cachedTarget = rhs.cachedTarget;
 		this->targets = rhs.targets;
 	}
 
-	//checks if this SubPool is for caching
+	//checks if this SubPoolTarget is for caching
 	bool isCachedTarget() {
 		return cachedTarget != ETNoType;
 	}
 
-	//checks if this SubPool is a full subpool
+	//returns the cache type
+	EntityTypes getCachedTarget() {
+		return cachedTarget;
+	}
+
+	//checks if this SubPoolTarget is a full subpool
 	bool isFullSubPool() {
 		return cachedTarget == ETNoType;
 	}
 
+	//returns inverted bool value of component targets,
+	//used for determining cache only scenarios
+	bool isCacheOnly() {
+		return !targets.size();
+	}
+
+	//checks if this target is empty
+	bool isEmpty() {
+		return cachedTarget == ETNoType && !targets.size();
+	}
+
 	//Checks if an entity fits in a SubPool
 	//only valid if not a cached target
-	bool checkEntityInSubPool(shared_ptr<Entity> ent) {
+	bool checkEntityInSubPoolTarget(shared_ptr<Entity> ent) {
 		//check component map works out
 		auto& componentMap = ent->getMapComponent();
 
@@ -162,27 +141,40 @@ public:
 					valid = false;
 					break;
 				}
-				
+
 			}
-			
+
 			if (valid) {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 
-	//returns the type of the cached target
-	EntityTypes getCachedTarget() {
-		return cachedTarget;
+	friend bool operator==(const SubPoolTarget& lhs, const SubPoolTarget& rhs);
+};
+
+//A subpool is kept by the EntityPool
+//A subpool can be a facade for a cached entity
+//or have the full pool
+class SubPool {
+	mutex lock;
+	SubPoolTarget target;
+	vector<shared_ptr<Entity>> ents;
+	
+public:
+	SubPool() {
 	}
 
-	//returns a reference to the internal pool
-	//also locks
-	vector<shared_ptr<Entity>>& getInternalPool() {
-		unique_lock<mutex> lck(lock);
-		return ents;
+	//subpool that defers to any entity
+	SubPool(SubPoolTarget target) 
+		: target(target) {
+	}
+
+	//returns a reference to internal target
+	SubPoolTarget& getTarget() {
+		return target;
 	}
 
 	//Adds an entity, no check
@@ -209,6 +201,9 @@ public:
 		return ents.size();
 	}
 
+	void operator=(const SubPool& rhs) {
+		this->target = rhs.target;
+	}
 };
 
 #endif

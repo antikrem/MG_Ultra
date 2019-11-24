@@ -25,7 +25,7 @@ protected:
 	atomic<bool> killed = false;
 
 	//target of this entity
-	SubPool target;
+	SubPoolTarget target;
 	int targetKey;
 
 	//pointer to global registar
@@ -128,7 +128,7 @@ public:
 				cacheFail(pool);
 			}
 
-			if (target.getInternalPool().size()) {
+			if (target.isCacheOnly()) {
 				postcycle(pool);
 				return;
 			}

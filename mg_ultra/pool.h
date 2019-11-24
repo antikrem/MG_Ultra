@@ -46,7 +46,7 @@ private:
 public:
 	//Add the empty default pool
 	EntityPool() {
-		subPools[0] = SubPool(SubPoolComponents());
+		subPools[0] = SubPool(SubPoolTarget(SubPoolComponents()));
 	}
 
 	//adds an entity to the pool, will potentially cache
@@ -60,8 +60,9 @@ public:
 		}
 
 		for (auto& i : subPools) {
-			if (i.second.isFullSubPool() && i.second.checkEntityInSubPool(ent)) {
-				i.second.addEnt(ent);
+			if (i.second.getTarget().isFullSubPool() 
+				&& i.second.getTarget().checkEntityInSubPoolTarget(ent)) {
+					i.second.addEnt(ent);
 			}
 		}
 		return ent;
@@ -149,26 +150,33 @@ public:
 		passed += (oldSize - graveyard.size());
 	}
 
-	//Adds a new subpool to the entity pool
+	//Adds a new system to the entity pool
 	//returns an index to a subpool to query
-	int allocateToSubPool(SubPool& subpool) {
+	//in future operation
+	int allocateToSubPool(SubPoolTarget& subpoolTarget) {
+		//check if target is empty
+		if (subpoolTarget.isEmpty()) {
+			return -1;
+		}
+
 		//check if a subpool currently exists
 		for (auto& i : subPools) {
-			if (i.second == subpool) {
+			if (i.second.getTarget() == subpoolTarget) {
 				return i.first;
 			}
 		}
 
 		//otherwise create a new subpool
 		int newIndex = subPools.rbegin()->first + 1;
-		subPools[newIndex] = subpool;
+		subPools[newIndex] = SubPool(subpoolTarget);
 		return newIndex;
 	}
 
 	//gets a shared ptr to entity
 	//return nullptr at end index
+	//negative key indicates an empty request
 	shared_ptr<Entity> getFromSubPool(int key, int index) {
-		return subPools[key].getEntity(index);
+		return key < 0 ? nullptr : subPools[key].getEntity(index);
 	}
 
 	void registerToLua(kaguya::State& state) override {
