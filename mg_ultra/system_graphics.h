@@ -24,7 +24,7 @@ public:
 	SystemGraphics() {
 		debugName = "s_graphics";
 
-		target = SubPool(
+		target = SubPoolTarget(
 			{ SubPoolComponents::ByComponents<ComponentPosition, ComponentGraphics>(),
 			SubPoolComponents::ByComponents<ComponentPosition, ComponentText>() }
 		);

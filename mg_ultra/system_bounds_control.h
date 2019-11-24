@@ -28,7 +28,7 @@ class SystemBoundsControl : public System {
 public:
 	SystemBoundsControl() {
 		debugName = "s_bound_control";
-		target = SubPool(
+		target = SubPoolTarget(
 			SubPoolComponents::ByComponents<ComponentPosition>()
 		);
 	}

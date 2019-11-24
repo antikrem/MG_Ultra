@@ -16,7 +16,7 @@ class SystemMovement : public System {
 public:
 	SystemMovement() {
 		debugName = "s_movement";
-		target = SubPool(
+		target = SubPoolTarget(
 			SubPoolComponents::ByComponents<ComponentPosition, ComponentMovement>()
 		);
 	}

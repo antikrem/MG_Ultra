@@ -10,7 +10,7 @@ class SystemMultiEnt : public System {
 public:
 	SystemMultiEnt() {
 		debugName = "s_multi_ent";
-		target = SubPool(
+		target = SubPoolTarget(
 			SubPoolComponents::ByComponents<ComponentMultiEntity>()
 		);
 	}

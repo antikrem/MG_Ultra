@@ -16,7 +16,7 @@ class SystemCamera : public System, public FunctionalCallbackSystem {
 public:
 	SystemCamera() {
 		debugName = "s_camera";
-		target = SubPool(
+		target = SubPoolTarget(
 			ETCamera
 		);
 		//load camera script

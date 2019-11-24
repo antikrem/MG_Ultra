@@ -15,7 +15,7 @@ public:
 	SystemTimer() {
 		debugName = "s_timer";
 
-		target = SubPool(
+		target = SubPoolTarget(
 			SubPoolComponents::ByComponents<ComponentTimer>()
 		);
 	}

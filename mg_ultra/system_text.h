@@ -16,7 +16,7 @@ public:
 	SystemText() {
 		debugName = "s_text";
 
-		target = SubPool(
+		target = SubPoolTarget(
 			SubPoolComponents::ByComponents<ComponentText>()
 		);
 	}

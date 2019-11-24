@@ -23,7 +23,7 @@ public:
 		: scrollSpeed(Point3(0,0,0)), windSpeed(Point3(0, 0, 0)) {
 		debugName = "s_driftable";
 
-		target = SubPool(
+		target = SubPoolTarget(
 			SubPoolComponents::ByComponents<ComponentPosition, ComponentDriftable>()
 		);
 	}

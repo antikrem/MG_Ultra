@@ -14,7 +14,7 @@ class SystemConsole : public System {
 public:
 	SystemConsole() {
 		debugName = "s_console";
-		target = SubPool(
+		target = SubPoolTarget(
 			ETConsole
 		);
 		input::getCurrentInputMaster()->seedState(&inputState);

@@ -13,7 +13,7 @@ class SystemAnimation : public System {
 public:
 	SystemAnimation() {
 		debugName = "s_animation";
-		target = SubPool(
+		target = SubPoolTarget(
 			SubPoolComponents::ByComponents<ComponentGraphics, ComponentAnimation>()
 		);
 	}

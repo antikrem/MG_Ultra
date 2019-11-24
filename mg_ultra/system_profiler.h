@@ -20,7 +20,7 @@ public:
 	SystemProfiler() {
 		debugName = "s_profiler";
 
-		target = SubPool(
+		target = SubPoolTarget(
 			ETProfile
 		);
 

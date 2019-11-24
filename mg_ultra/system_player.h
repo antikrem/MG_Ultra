@@ -19,7 +19,7 @@ public:
 
 	SystemPlayer() {
 		debugName = "s_player";
-		target = SubPool(
+		target = SubPoolTarget(
 			ETPlayer
 		);
 		//load player script

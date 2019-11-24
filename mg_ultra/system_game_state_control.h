@@ -13,7 +13,7 @@ class SystemGameStateControl : public System {
 public:
 	SystemGameStateControl() {
 		debugName = "s_gamestate_control";
-		target = SubPool(
+		target = SubPoolTarget(
 			ETGameControl
 		);
 	}

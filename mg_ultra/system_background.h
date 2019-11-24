@@ -12,7 +12,7 @@ class SystemBackground : public System, public FunctionalCallbackSystem {
 public:
 	SystemBackground() {
 		debugName = "s_background";
-		target = SubPool(
+		target = SubPoolTarget(
 			ETBackgroundMaster
 		);
 

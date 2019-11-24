@@ -13,7 +13,7 @@ private:
 public:
 	SystemGarbageCollector() {
 		debugName = "s_garbage_collector";
-		target = SubPool(
+		target = SubPoolTarget(
 			SubPoolComponents()
 		);
 	}

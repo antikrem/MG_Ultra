@@ -16,7 +16,7 @@ class SystemSpawner : public System {
 public:
 	SystemSpawner() {
 		debugName = "s_spawner";
-		target = SubPool(
+		target = SubPoolTarget(
 			SubPoolComponents::ByComponents<ComponentSpawner>()
 		);
 	}

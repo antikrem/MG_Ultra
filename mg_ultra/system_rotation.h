@@ -15,7 +15,7 @@ public:
 	SystemRotation() {
 		debugName = "s_rotation";
 		
-		target = SubPool(
+		target = SubPoolTarget(
 			SubPoolComponents::ByComponents<ComponentGraphics, ComponentMovement>()
 		);
 	}
