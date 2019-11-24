@@ -27,16 +27,17 @@ void erase_sequential_if(Container &container, function<bool(typename Container:
 }
 
 //erase if for associative STL containers
+//conditional will delete on true
 template <class Container>
 void erase_associative_if(Container &container, function<bool(typename Container::value_type&)> conditional) {
 	//use a while loop
 	auto it = container.begin();
 	while (it != container.end()) {
 		if (conditional(*it)) {
-			it++;
+			it = container.erase(it);
 		}
 		else {
-			it = container.erase(it);
+			it++;
 		}
 	}
 }
