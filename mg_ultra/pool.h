@@ -91,28 +91,27 @@ public:
 	//returns how many ents were killed
 	int clearDeadEnts() {
 		int cleanedEnts = 0;
-		
-		//update all entities and copy to graveyard
-		int key = 0;
-		auto ent = subPools[0].getEntity(key);
-		while (ent) {
-			ent->entityUpdate();
-			if (!ent->getFlag()) {
-				unique_lock<mutex> glck(graveyardLock);
-				graveyard.push_back(ent);
-			}
-			ent = subPools[0].getEntity(++key);
+
+		//need to clear each subpool
+		for (auto& i : subPools) {
+			i.second.clearDeadEnts();
 		}
 
 		{
+			//clear cache
 			unique_lock<shared_mutex> glck(cacheLock);
 			erase_associative_if(cache, [](auto pair) { return !pair.second->getFlag(); });
 		}
 
-		//need to clear each subpool
-
 		return cleanedEnts;
 	}
+
+	//sends the entity to the graveyard
+	void sendToGraveYard(shared_ptr<Entity> ent) {
+		unique_lock<mutex> glck(graveyardLock);
+		graveyard.push_back(ent);
+	}
+
 
 	//locks and returns size of entitypool
 	tuple<int, int> size() {
