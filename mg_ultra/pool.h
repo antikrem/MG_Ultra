@@ -11,6 +11,7 @@ Can be iterated over safely*/
 
 #include "constants.h"
 #include "entity.h"
+#include "subpooling.h"
 
 #include "scriptable_class.h"
 
@@ -22,15 +23,15 @@ Use this id and next() to get next pair
 After the last pair, return negative id, not guranteed: null ptr*/
 class EntityPool : public ScriptableClass {
 private:
-	//Locks during access
-	shared_mutex lock;
-	//Entities are mapped to ids
-	map<int, shared_ptr<Entity>> list;
+	//Locks cache access
+	shared_mutex cacheLock;
 	//A seperate cache, int refers to the entity type
 	//Entities will be in both cache and list. Both are cleared by clearDeadEnts
 	map<int, shared_ptr<Entity>> cache;
-	//Largest id used
-	int largestID = -1;
+
+	//The EntityPool also keeps a list of subpools
+	//which is an optimised access to entities
+	map<int, SubPool> subPools;
 
 	//if active, will move dead entities to a staging area
 	//and only clear sometimes
@@ -43,70 +44,40 @@ private:
 	atomic<int> passed = 0;
 
 public:
-	int begin() {
-		shared_lock<shared_mutex> lck(lock);
-		if not(list.size()) {
-			return -1;
-		}
-		return list.begin()->first;
-	}
-	
-	int next(int id) {
-		shared_lock<shared_mutex> lck(lock);
-		if (id >= largestID) {
-			return -1;
-		}
-
-		//get an interator to the current element
-		auto it = list.find(id);
-
-		if (it == list.end() || (++it) == list.end()) {
-			return -1;
-		}
-		
-		return it->first;
+	//Add the empty default pool
+	EntityPool() {
+		subPools[0] = SubPool(SubPoolComponents());
 	}
 
-	//adds a new entity, in a thread safe way
-	//set cacheEnt to true to add the cache 
-	//returns nullptr if attempted to cache but an ent of the same type already exists
-	//otherwise return shared_ptr to new entity
-	shared_ptr<Entity> addEnt(Entity* ent, bool cacheEnt = false) {
-		return addEnt(shared_ptr<Entity>(ent), cacheEnt);
-	}
-
-	//alternative method to addEnt to add a shared ptr
+	//adds an entity to the pool, will potentially cache
 	shared_ptr<Entity> addEnt(shared_ptr<Entity> ent, bool cacheEnt = false) {
-		unique_lock<shared_mutex> lck(lock);
-		largestID++;
-		list[largestID] = ent;
 		if (cacheEnt) {
+			unique_lock<shared_mutex> lck(cacheLock);
 			if (cache.count(ent->getType())) {
 				return nullptr;
 			}
-			cache[ent->getType()] = list[largestID];
+			cache[ent->getType()] = ent;
+		}
+
+		for (auto& i : subPools) {
+			if (i.second.isFullSubPool() && i.second.checkEntityInSubPool(ent)) {
+				i.second.addEnt(ent);
+			}
 		}
 		return ent;
 	}
 
-	//On failure, returns null, may fail with a valid id, as that id could have be deleted
-	shared_ptr<Entity> getEnt(int id) {
-		shared_lock<shared_mutex> lck(lock);
-		if (list.count(id)) {
-			return list[id];
-		}
-		else {
-			return nullptr;
-		}
+	shared_ptr<Entity> addEnt(Entity* ent, bool cacheEnt = false) {
+		return addEnt(shared_ptr<Entity>(ent), cacheEnt);
 	}
 
 	//returns a system from cache, returns null if the system is not cached
 	shared_ptr<Entity> getCachedEnt(int entityType) {
 		//use null type 
-		if not(entityType) {
+		if (entityType == ETNoType) {
 			return nullptr;
 		}
-		shared_lock<shared_mutex> lck(lock);
+		shared_lock<shared_mutex> lck(cacheLock);
 		if (cache.count(entityType)) {
 			return cache[entityType];
 		}
@@ -119,36 +90,33 @@ public:
 	//returns how many ents were killed
 	int clearDeadEnts() {
 		int cleanedEnts = 0;
-		unique_lock<shared_mutex> lck(lock);
-
-		for (auto i : list) {
-			i.second->entityUpdate();
-		}
 		
-		{
-			//clear list
-			auto it = list.begin();
-			while (it != list.end()) {
-				if (it->second->getFlag()) {
-					it++;
-				}
-				else {
-					unique_lock<mutex> glck(graveyardLock);
-					graveyard.push_back(it->second);
-					it = list.erase(it);
-				}
+		//update all entities and copy to graveyard
+		int key = 0;
+		auto ent = subPools[0].getEntity(key);
+		while (ent) {
+			ent->entityUpdate();
+			if (!ent->getFlag()) {
+				unique_lock<mutex> glck(graveyardLock);
+				graveyard.push_back(ent);
 			}
+			ent = subPools[0].getEntity(++key);
 		}
 
-		erase_associative_if(cache, [](auto pair) { return pair.second->getFlag(); });
+		{
+			unique_lock<shared_mutex> glck(cacheLock);
+			erase_associative_if(cache, [](auto pair) { return !pair.second->getFlag(); });
+		}
+
+		//need to clear each subpool
 
 		return cleanedEnts;
 	}
 
 	//locks and returns size of entitypool
 	tuple<int, int> size() {
-		unique_lock<shared_mutex> lck(lock);
-		return make_tuple(list.size(), cache.size());
+		unique_lock<shared_mutex> lck(cacheLock);
+		return make_tuple(subPools[0].size(), cache.size());
 	}
 
 	//returns size of graveyard
@@ -181,11 +149,32 @@ public:
 		passed += (oldSize - graveyard.size());
 	}
 
+	//Adds a new subpool to the entity pool
+	//returns an index to a subpool to query
+	int allocateToSubPool(SubPool& subpool) {
+		//check if a subpool currently exists
+		for (auto& i : subPools) {
+			if (i.second == subpool) {
+				return i.first;
+			}
+		}
+
+		//otherwise create a new subpool
+		int newIndex = subPools.rbegin()->first + 1;
+		subPools[newIndex] = subpool;
+		return newIndex;
+	}
+
+	//gets a shared ptr to entity
+	//return nullptr at end index
+	shared_ptr<Entity> getFromSubPool(int key, int index) {
+		return subPools[key].getEntity(index);
+	}
+
 	void registerToLua(kaguya::State& state) override {
 		state["EntityPool"].setClass(
 			kaguya::UserdataMetatable<EntityPool>()
 			.setConstructors<EntityPool()>()
-			.addFunction("getEntByID", &EntityPool::getEnt)
 			.addFunction("getEntFromCache", &EntityPool::getCachedEnt)
 			.addFunction("getGraveyardSize", &EntityPool::getGraveyardSize)
 			.addFunction("getGraveyardPassed", &EntityPool::getGraveyardPassed)

@@ -24,20 +24,9 @@ protected:
 	//if false, end executions
 	atomic<bool> killed = false;
 
-	//Target components if one wishes to target those instead of handling ents
-	//If types is empty then overwite handleEntity, else overwrite handleComponents
-	vector<type_index> types;
-
-	//This is an optional field, if types.size is greater than 1, then any entity will require these types
-	//to be used in handleComponentMap
-	vector<type_index> requiredTypes;
-
-	//Setting this to a value not is not will force cacheHandle and cacheFail to be used
-	bool cacheOnly = false;
-
-	//Also alternativly, this system can be used to interact with a cached entity
-	//handleEntity and handleComponentMap will not be used
-	int cachedTarget = ETNoType;
+	//target of this entity
+	SubPool target;
+	int targetKey;
 
 	//pointer to global registar
 	Registar* registar = nullptr;
@@ -56,15 +45,10 @@ protected:
 
 	}
 
-	//To be over written if types is of size 0, system will have to keep buffers if interaction are required
-	virtual void handleEntity(shared_ptr<Entity> ent, int id) {
-		assert(false);
-	}
-
 	//This is an alternative to handleEntity
 	//To be over written if types is of size greater than zero
 	//Components made availible is of type_index specified in types
-	virtual void handleComponentMap(map<type_index, shared_ptr<Component>>& components, int entityType, int id) {
+	virtual void handleComponentMap(map<type_index, shared_ptr<Component>>& components, shared_ptr<Entity> ent, int id) {
 		assert(false);
 	}
 
@@ -86,42 +70,15 @@ protected:
 		return components.count(typeid(T)) ? dynamic_pointer_cast<T>(components[typeid(T)]) : nullptr;
 	}
 
-	//sets associativity for systems caching
-	void setSystemsCachingAssociativity(shared_ptr<Entity> ent) {
-		vector<type_index> componentTypes;
-
-		for (auto i : types) {
-			if (ent->getComponent(i)) {
-				componentTypes.push_back(i);
-			}
-		}
-
-		ent->setSystemCache(debugName, vec_kit::isSubset(componentTypes, requiredTypes));
-	}
-
 	//Not to be overridden, simply an interface for system
 	void updateEntity(shared_ptr<Entity> ent, int id) {
 		shared_ptr<Entity> entity = ent; //copy to explicitly keep pointer
-		if (entity == nullptr)
-			return; //exit if ent is null
+		if (entity == nullptr) {
+			//exit if ent is null
+			return; 
+		}
 
-		//if not types, handle the general way
-		if not(types.size()) {
-			handleEntity(entity, id);
-		}
-		//otherwise, handle with type lists
-		else {
-			//look for system caching
-			if (!ent->isSystemCached(debugName)) {
-				//if not, evaluate caching
-				setSystemsCachingAssociativity(ent);
-			}
-			
-			//if the ent is cached, do the standard
-			if (ent->isAnAssociatedSystem(debugName)) {
-				handleComponentMap(ent->getMapComponent(), ent->getType(), id);
-			}
-		}
+		handleComponentMap(ent->getMapComponent(), ent, id);
 
 		//entity shared pointer will pass off the stack, freeing reference count
 	}
@@ -130,6 +87,12 @@ public:
 	~System() {
 		sc.setCompletion(false);
 	}
+
+	//sets the key for this system from pool
+	void seedKey(EntityPool* pool) {
+		targetKey = pool->allocateToSubPool(target);
+	}
+
 
 	//ends the system, stopping all future execution
 	void endSystem() {
@@ -156,8 +119,8 @@ public:
 		precycle(pool);
 
 		//check if the system is associated with a cached entity
-		if (cacheOnly || cachedTarget != 0) {
-			shared_ptr<Entity> ptr = pool->getCachedEnt(cachedTarget);
+		if (target.isCachedTarget()) {
+			shared_ptr<Entity> ptr = pool->getCachedEnt(target.getCachedTarget());
 			if (ptr) {
 				cacheHandle(ptr);
 			}
@@ -165,18 +128,21 @@ public:
 				cacheFail(pool);
 			}
 
-			if (cacheOnly) {
+			if (target.getInternalPool().size()) {
 				postcycle(pool);
 				return;
 			}
 		}
 
 		//else handle appropriately
-		int it = pool->begin();
-		while (it >= 0) {
-			updateEntity(pool->getEnt(it), it);
-			it = pool->next(it);
+		int index = 0;
+		auto ent = pool->getFromSubPool(targetKey, index);
+
+		while (ent) {
+			updateEntity(ent, index);
+			ent = pool->getFromSubPool(targetKey, ++index);
 		}
+
 		postcycle(pool);
 	}
 

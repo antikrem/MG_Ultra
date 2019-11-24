@@ -23,12 +23,6 @@ private:
 	//All entities have a type
 	int entityType = ETNoType;
 
-	//a lock on systemsCaching
-	shared_mutex cacheLock;
-	//allows for system association with this entity
-	//if true, quick evaluate, if false, pass
-	map<string, bool> systemsCaching;
-
 public:
 	Entity(int type) {
 		entityType = type;
@@ -78,24 +72,6 @@ public:
 	//returns flag, if false, delete this ent
 	bool getFlag() {
 		return flag;
-	}
-
-	//returns true if this system is part of the caching system
-	bool isSystemCached(const string& systemName) {
-		shared_lock<shared_mutex> lck(cacheLock);
-		return systemsCaching.count(systemName);
-	}
-
-	//sets an association 
-	void setSystemCache(const string& systemName, bool association) {
-		unique_lock<shared_mutex> lck(cacheLock);
-		systemsCaching[systemName] = association;
-	}
-
-	//returns true if an association exists between the system and this end
-	bool isAnAssociatedSystem(const string& systemName) {
-		shared_lock<shared_mutex> lck(cacheLock);
-		return systemsCaching[systemName];
 	}
 
 	//exposes internal component map for evaluation

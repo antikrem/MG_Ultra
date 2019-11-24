@@ -151,6 +151,7 @@ public:
 	T* createSystem(Registar* registar) {
 		T* system = new T();
 		system->setGRegistar(registar);
+		system->seedKey(getGlobalPool());
 		addSystem(system);
 		return system;
 	}
