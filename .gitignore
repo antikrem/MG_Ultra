@@ -268,3 +268,4 @@ api/
 
 #ignore log files
 log.txt
+*.old
