@@ -7,25 +7,28 @@ when it is detected that there are ents to be cleared*/
 
 class SystemGarbageCollector : public System {
 private:
+	EntityPool* lastPool = nullptr;
 	//if true, a entity will need to be cleared
 	bool toBeCollected = false;
 
 public:
 	SystemGarbageCollector() {
 		debugName = "s_garbage_collector";
-		target = SubPoolTarget(
-			SubPoolComponents()
-		);
+		target = SubPoolTarget(SubPoolComponents());
 	}
 
 	//find ents that need be cleared
 	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, shared_ptr<Entity> ent, int id) override {
 		ent->entityUpdate();
-		toBeCollected = toBeCollected || not( ent->getFlag() );
+		if (!ent->getFlag()) {
+			toBeCollected = true;
+			lastPool->sendToGraveYard(ent);
+		}
 	}
 
 	//set false for new cycle
 	void precycle(EntityPool* pool) override {
+		lastPool = pool;
 		toBeCollected = false;
 	}
 
