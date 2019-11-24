@@ -13,7 +13,7 @@ registar:add("load_request", false)
 registar:add("loading", false)
 
 --changing state/campaign/level is done with evets
---consider these read only methods
+--consider these read only values
 registar:add("state", "none")
 registar:add("campaign", "none")
 registar:add("level", 0)

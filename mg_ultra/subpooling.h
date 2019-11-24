@@ -164,6 +164,8 @@ class SubPool {
 	vector<shared_ptr<Entity>> ents;
 	
 public:
+	//TODO easy fix
+	//use map<int, SubPool>::find() in pool.h
 	SubPool() {
 	}
 
