@@ -14,8 +14,9 @@ class SystemConsole : public System {
 public:
 	SystemConsole() {
 		debugName = "s_console";
-		cachedTarget = ETConsole;
-		cacheOnly = true;
+		target = SubPool(
+			ETConsole
+		);
 		input::getCurrentInputMaster()->seedState(&inputState);
 	}
 

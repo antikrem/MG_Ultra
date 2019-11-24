@@ -13,9 +13,9 @@ class SystemGameStateControl : public System {
 public:
 	SystemGameStateControl() {
 		debugName = "s_gamestate_control";
-		//empty system
-		cacheOnly = true;
-		cachedTarget = ETGameControl;
+		target = SubPool(
+			ETGameControl
+		);
 	}
 
 	void precycle(EntityPool* pool) override {

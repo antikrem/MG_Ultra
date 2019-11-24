@@ -23,11 +23,11 @@ class SystemGraphics : public System {
 public:
 	SystemGraphics() {
 		debugName = "s_graphics";
-		types.push_back(typeid(ComponentPosition));
-		types.push_back(typeid(ComponentGraphics));
-		types.push_back(typeid(ComponentText));
 
-		requiredTypes.push_back(typeid(ComponentPosition));
+		target = SubPool(
+			{ SubPoolComponents::ByComponents<ComponentPosition, ComponentGraphics>(),
+			SubPoolComponents::ByComponents<ComponentPosition, ComponentText>() }
+		);
 	}
 
 	void setGraphicsState(GraphicsState* graphicsState) {
@@ -38,7 +38,7 @@ public:
 		this->camera = camera;
 	}
 
-	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, int entityType, int id) override {
+	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, shared_ptr<Entity> ent, int id) override {
 		//if buffer is null, dont write yet
 		if (!buffer || (boxCount >= bufferSize)) {
 			return;

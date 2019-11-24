@@ -16,8 +16,9 @@ class SystemCamera : public System, public FunctionalCallbackSystem {
 public:
 	SystemCamera() {
 		debugName = "s_camera";
-		cachedTarget = ETCamera;
-		cacheOnly = true;
+		target = SubPool(
+			ETCamera
+		);
 		//load camera script
 		setInternalScript(debugName, os_kit::getFileAsString("scripts//camera//camera.lua"));
 	}

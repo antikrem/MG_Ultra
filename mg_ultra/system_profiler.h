@@ -19,9 +19,11 @@ class SystemProfiler : public System, public FunctionalCallbackSystem {
 public:
 	SystemProfiler() {
 		debugName = "s_profiler";
-		//empty cache target
-		cachedTarget = ETProfile;
-		cacheOnly = true;
+
+		target = SubPool(
+			ETProfile
+		);
+
 		//load camera script
 		setInternalScript(debugName, os_kit::getFileAsString("scripts//_initialise//profiler.lua"));
 	}

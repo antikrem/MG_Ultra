@@ -19,8 +19,9 @@ public:
 
 	SystemPlayer() {
 		debugName = "s_player";
-		cachedTarget = ETPlayer;
-		cacheOnly = true;
+		target = SubPool(
+			ETPlayer
+		);
 		//load player script
 		setInternalScript(debugName, os_kit::getFileAsString("scripts//player//player.lua"));
 	}

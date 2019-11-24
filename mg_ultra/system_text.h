@@ -16,15 +16,16 @@ public:
 	SystemText() {
 		debugName = "s_text";
 
-		types.push_back(typeid(ComponentText));
-		requiredTypes.push_back(typeid(ComponentText));
+		target = SubPool(
+			SubPoolComponents::ByComponents<ComponentText>()
+		);
 	}
 
 	void setAnimationMaster(AnimationsMaster* animationMaster) {
 		this->animationMaster = animationMaster;
 	}
 
-	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, int entityType, int id) override {
+	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, shared_ptr<Entity> ent, int id) override {
 		auto comText = getComponent<ComponentText>(components);
 		comText->textUpdate(animationMaster);
 	}

@@ -28,9 +28,9 @@ class SystemBoundsControl : public System {
 public:
 	SystemBoundsControl() {
 		debugName = "s_bound_control";
-		cacheOnly = false;
-		types.push_back(typeid(ComponentPosition));
-		requiredTypes.push_back(typeid(ComponentPosition));
+		target = SubPool(
+			SubPoolComponents::ByComponents<ComponentPosition>()
+		);
 	}
 
 	bool executeSystem() override {
@@ -67,7 +67,7 @@ public:
 
 	}
 
-	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, int entityType, int id) override {
+	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, shared_ptr<Entity> ent, int id) override {
 		//if bounds not enforced exit early
 		if (!boundsEnforced) {
 			return;

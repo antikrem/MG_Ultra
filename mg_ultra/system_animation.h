@@ -13,19 +13,16 @@ class SystemAnimation : public System {
 public:
 	SystemAnimation() {
 		debugName = "s_animation";
-
-		types.push_back(typeid(ComponentGraphics));
-		types.push_back(typeid(ComponentAnimation));
-
-		requiredTypes.push_back(typeid(ComponentGraphics));
-		requiredTypes.push_back(typeid(ComponentAnimation));
+		target = SubPool(
+			SubPoolComponents::ByComponents<ComponentGraphics, ComponentAnimation>()
+		);
 	}
 
 	void setAnimationMaster(AnimationsMaster* animationMaster) {
 		this->animationMaster = animationMaster;
 	}
 
-	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, int entityType, int id) override {
+	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, shared_ptr<Entity> ent, int id) override {
 		auto graphics = getComponent<ComponentGraphics>(components);
 		auto animation = getComponent<ComponentAnimation>(components);
 

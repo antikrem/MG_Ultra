@@ -22,11 +22,10 @@ public:
 	SystemDriftable() 
 		: scrollSpeed(Point3(0,0,0)), windSpeed(Point3(0, 0, 0)) {
 		debugName = "s_driftable";
-		types.push_back(typeid(ComponentPosition));
-		types.push_back(typeid(ComponentDriftable));
 
-		requiredTypes.push_back(typeid(ComponentPosition));
-		requiredTypes.push_back(typeid(ComponentDriftable));
+		target = SubPool(
+			SubPoolComponents::ByComponents<ComponentPosition, ComponentDriftable>()
+		);
 	}
 
 
@@ -50,7 +49,7 @@ public:
 		}
 	}
 
-	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, int entityType, int id) override {
+	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, shared_ptr<Entity> ent, int id) override {
 		auto pos = getComponent<ComponentPosition>(components);
 		auto dri = getComponent<ComponentDriftable>(components);
 

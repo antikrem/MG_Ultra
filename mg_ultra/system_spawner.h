@@ -16,11 +16,12 @@ class SystemSpawner : public System {
 public:
 	SystemSpawner() {
 		debugName = "s_spawner";
-		types.push_back(typeid(ComponentSpawner));
-		requiredTypes.push_back(typeid(ComponentSpawner));
+		target = SubPool(
+			SubPoolComponents::ByComponents<ComponentSpawner>()
+		);
 	}
 
-	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, int entityType, int id) override {
+	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, shared_ptr<Entity> ent, int id) override {
 		auto spawner = getComponent<ComponentSpawner>(components);
 
 		auto multient = getComponent<ComponentMultiEntity>(components);

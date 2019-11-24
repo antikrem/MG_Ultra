@@ -10,11 +10,12 @@ class SystemMultiEnt : public System {
 public:
 	SystemMultiEnt() {
 		debugName = "s_multi_ent";
-		types.push_back(typeid(ComponentMultiEntity));
-		requiredTypes.push_back(typeid(ComponentMultiEntity));
+		target = SubPool(
+			SubPoolComponents::ByComponents<ComponentMultiEntity>()
+		);
 	}
 
-	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, int entityType, int id) override {
+	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, shared_ptr<Entity> ent, int id) override {
 		getComponent<ComponentMultiEntity>(components)->clearDeadEntities();
 	}
 

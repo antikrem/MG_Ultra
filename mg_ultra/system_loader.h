@@ -340,8 +340,7 @@ public:
 	SystemLoader() {
 		debugName = "s_loader";
 		//empty system
-		cacheOnly = true;
-		cachedTarget = 0;
+		target = SubPool();
 	}
 
 	void precycle(EntityPool* pool) override {

@@ -16,14 +16,12 @@ class SystemMovement : public System {
 public:
 	SystemMovement() {
 		debugName = "s_movement";
-		types.push_back(typeid(ComponentPosition));
-		types.push_back(typeid(ComponentMovement));
-
-		requiredTypes.push_back(typeid(ComponentPosition));
-		requiredTypes.push_back(typeid(ComponentMovement));
+		target = SubPool(
+			SubPoolComponents::ByComponents<ComponentPosition, ComponentMovement>()
+		);
 	}
 
-	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, int entityType, int id) override {
+	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, shared_ptr<Entity> ent, int id) override {
 		auto pos = getComponent<ComponentPosition>(components);
 		auto mov = getComponent<ComponentMovement>(components);
 

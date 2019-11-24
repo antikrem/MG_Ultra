@@ -12,8 +12,9 @@ class SystemBackground : public System, public FunctionalCallbackSystem {
 public:
 	SystemBackground() {
 		debugName = "s_background";
-		cachedTarget = ETBackgroundMaster;
-		cacheOnly = true;
+		target = SubPool(
+			ETBackgroundMaster
+		);
 
 		//load background update script
 		setInternalScript(debugName, os_kit::getFileAsString("scripts//backgrounds//background_master.lua"));

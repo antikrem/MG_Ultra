@@ -13,10 +13,13 @@ private:
 public:
 	SystemGarbageCollector() {
 		debugName = "s_garbage_collector";
+		target = SubPool(
+			SubPoolComponents()
+		);
 	}
 
 	//find ents that need be cleared
-	void handleEntity(shared_ptr<Entity> ent, int id) override {
+	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, shared_ptr<Entity> ent, int id) override {
 		ent->entityUpdate();
 		toBeCollected = toBeCollected || not( ent->getFlag() );
 	}
