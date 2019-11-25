@@ -13,24 +13,33 @@ looping cycle*/
 class PerformanceCounter {
 	int count = 0;
 	chrono::system_clock::time_point lastReportTime;
+	chrono::system_clock::time_point lastFrame;
 	atomic<float> lastReportCount;
+	atomic<float> lastFPS;
 
 	inline void updateReport(long long duration) {
 		lastReportCount = (MS_IN_SECOND * (float)count) / duration;
 		count = 0;
-		lastReportTime = chrono::system_clock::now();
+		lastReportTime = lastFrame;
 	}
 
 public:
 	PerformanceCounter() {
 		lastReportTime = chrono::system_clock::now();
 		lastReportCount = 0;
+		lastFPS = 0;
 	}
 
 	//increments a count
 	void increment() {
 		count++;
-		long long duration = chrono::duration_cast<std::chrono::milliseconds>(chrono::system_clock::now() - lastReportTime).count();
+		
+		auto tp = chrono::system_clock::now();
+		lastFPS = 1.0f / (((float)chrono::duration_cast<std::chrono::milliseconds>(tp - lastFrame).count()) / MS_IN_SECOND);
+
+
+		lastFrame = tp;
+		long long duration = chrono::duration_cast<std::chrono::milliseconds>(lastFrame - lastReportTime).count();
 		if (duration > MS_IN_SECOND) {
 			updateReport(duration);
 		}
@@ -39,6 +48,11 @@ public:
 	//gets the number of calls last second
 	float getReportedCalls() {
 		return lastReportCount;
+	}
+
+	//returns fps
+	float getFPS() {
+		return lastFPS;
 	}
 };
 
