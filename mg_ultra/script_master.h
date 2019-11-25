@@ -8,6 +8,7 @@
 #include <queue>
 
 #include "scriptable_class.h"
+#include "performance_counter.h"
 #include "events.h"
 #include "str_kit.h"
 
@@ -34,6 +35,8 @@ class ScriptMaster {
 
 	//queue of script units to execute
 	queue<ScriptUnit> scriptQueue;
+
+	PerformanceCounter pCounter;
 
 	//loads and executes a script
 	//use to load and initialise scripts
@@ -110,10 +113,12 @@ public:
 	}
 };
 
-//closes the pipeline
-void closeScriptPipeline();
+namespace g_script {
+	//closes the pipeline
+	void closeScriptPipeline();
 
-//execute a script unit globally
-void executeScriptUnit(ScriptUnit scriptUnit);
+	//execute a script unit globally
+	void executeScriptUnit(ScriptUnit scriptUnit);
+}
 
 #endif

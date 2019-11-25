@@ -99,7 +99,7 @@ ScriptMaster::ScriptMaster()
 void ScriptMaster::disable() {
 	disabled = true;
 	//close the pipeline
-	closeScriptPipeline();
+	g_script::closeScriptPipeline();
 	//notify change in state
 	cv.notify_one();
 	//wait for finalisation
@@ -206,6 +206,8 @@ void ScriptMaster::finalExecuteScriptUnit(ScriptUnit scriptUnit) {
 		scriptUnit.getSuccessCallback()->setCompletion(!failedLastScript);
 	}
 	
+	//increment counter
+	pCounter.increment();
 }
 
 void ScriptMaster::addScriptUnit(ScriptUnit scriptUnit) {
@@ -218,11 +220,11 @@ void ScriptMaster::addScriptUnit(ScriptUnit scriptUnit) {
 //if true, the script pipeline is closed
 atomic<bool> closedScriptPipeLine = false;
 
-void closeScriptPipeline() {
+void g_script::closeScriptPipeline() {
 	closedScriptPipeLine = true;
 }
 
-void executeScriptUnit(ScriptUnit scriptUnit) {
+void g_script::executeScriptUnit(ScriptUnit scriptUnit) {
 	if (closedScriptPipeLine) {
 		//pipeline is closed, new script units are disposed
 		if (scriptUnit.getSuccessCallback()) {

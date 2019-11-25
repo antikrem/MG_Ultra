@@ -79,7 +79,7 @@ public:
 
 		for (auto& i : buffer) {
 			//create a scriptunit and send to be execute
-			executeScriptUnit(ScriptUnit(SS_commandLine, i));
+			g_script::executeScriptUnit(ScriptUnit(SS_commandLine, i));
 		}
 	}
 

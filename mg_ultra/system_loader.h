@@ -287,7 +287,7 @@ class SystemLoader : public System {
 		su.attachEntity(ent);
 		sc.reset();
 		su.attachSuccessCallback(&sc);
-		executeScriptUnit(su);
+		g_script::executeScriptUnit(su);
 		return sc.waitForCompletion();
 	}
 

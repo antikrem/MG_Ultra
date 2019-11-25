@@ -29,7 +29,7 @@ public:
 			ScriptUnit su(SS_timedCallBack, i);
 			su.attachEntity(ent);
 			su.addDebugData(to_string(id) + " " + to_string(comText->getCycle()));
-			executeScriptUnit(su);
+			g_script::executeScriptUnit(su);
 		}
 
 	}

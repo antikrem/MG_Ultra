@@ -8,7 +8,7 @@ void FunctionalCallbackSystem::executeAnyScript(string systemName, string script
 	}
 	sc->reset();
 	su.attachSuccessCallback(sc);
-	executeScriptUnit(su);
+	g_script::executeScriptUnit(su);
 
 	if (!sc->waitForCompletion()) {
 		err::logMessage("Setup script failed in " + systemName);
@@ -38,7 +38,7 @@ bool FunctionalCallbackSystem::executeInternalScript(string systemName, string s
 	su.attachEntity(ent);
 	sc->reset();
 	su.attachSuccessCallback(sc);
-	executeScriptUnit(su);
+	g_script::executeScriptUnit(su);
 
 	if (!sc->waitForCompletion()) {
 		err::logMessage(systemErrorMessage);
