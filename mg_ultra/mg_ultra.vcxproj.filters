@@ -371,6 +371,9 @@
     <ClInclude Include="subpooling.h">
       <Filter>Header Files\ECS</Filter>
     </ClInclude>
+    <ClInclude Include="performance_counter.h">
+      <Filter>Header Files\Support</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="wd\shaders\base.vert">

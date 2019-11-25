@@ -237,6 +237,7 @@
     <ClInclude Include="math_ex.h" />
     <ClInclude Include="mmap.h" />
     <ClInclude Include="os_kit.h" />
+    <ClInclude Include="performance_counter.h" />
     <ClInclude Include="reader.h" />
     <ClInclude Include="registar.h" />
     <ClInclude Include="scriptable_class.h" />
