@@ -17,6 +17,8 @@ if g_d_profiler_currentSampleCount % g_d_profiler_samples == 0 then
 			)
 	end
 
+	profileString = profileString .. reportDistinguishedMaster()
+
 	cText:set_text(profileString)
 	g_d_profiler_slice = {}
 end

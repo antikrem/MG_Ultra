@@ -4,10 +4,12 @@ void GLHandler::postrender() {
 	glfwSwapBuffers(window);
 	performanceCounter.increment();
 	gl_query::setFPS(performanceCounter.getFPS());
+	gl_query::setLastCalls(performanceCounter.getReportedCalls());
 }
 
 ///GL QUERY
 atomic<float> glfps = 0;
+atomic<int> glLastCalls = 0;
 
 void gl_query::setFPS(float fps) {
 	glfps = fps;
@@ -15,4 +17,12 @@ void gl_query::setFPS(float fps) {
 
 float gl_query::getFPS() {
 	return glfps;
+}
+
+void gl_query::setLastCalls(int lastCalls) {
+	glLastCalls = lastCalls;
+}
+
+int gl_query::getLastCalls() {
+	return glLastCalls;
 }

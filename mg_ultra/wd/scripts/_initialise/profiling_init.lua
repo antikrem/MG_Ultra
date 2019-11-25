@@ -58,5 +58,13 @@ function convertToProfileString(name, slice)
 	end
 end
 
-
+--generates a small string of all distinguished masters
+function reportDistinguishedMaster()
+	return 
+		"Distinguished Master\n"
+		.. "ScriptMaster: count: " .. string.pad_sub(tostring(getScriptMasterLastCalls()), 5)
+		.. " last: " .. string.pad_sub(tostring(getScriptMasterLastFPS()), 5)
+		.. "\nGLHandler: count: " .. string.pad_sub(tostring(getGLHandlerLastCalls()), 5)
+		.. " last: " .. string.pad_sub(tostring(getGLHandlerLastFPS()), 5)
+end
 

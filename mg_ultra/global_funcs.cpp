@@ -110,6 +110,7 @@ void registerGlobalFunctions(kaguya::State &kaguya) {
 	kaguya["getProfileInfo"] = getProfileInfoMap;
 	kaguya["getScriptMasterLastCalls"] = g_script::callsLastSecond;
 	kaguya["getScriptMasterLastFPS"] = g_script::FPS;
+	kaguya["getGLHandlerLastCalls"] = gl_query::getLastCalls;
 	kaguya["getGLHandlerLastFPS"] = gl_query::getFPS;
 
 	//animation master
