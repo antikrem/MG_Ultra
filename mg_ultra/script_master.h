@@ -111,6 +111,16 @@ public:
 		thread scriptHandler(&ScriptMaster::scriptHandling, this);
 		scriptHandler.detach();
 	}
+
+	//reports counts last second
+	float getExecutionsLastSecond() {
+		return pCounter.getReportedCalls();
+	}
+
+	//reports fps
+	float getFPS() {
+		return pCounter.getFPS();
+	}
 };
 
 namespace g_script {
@@ -119,6 +129,12 @@ namespace g_script {
 
 	//execute a script unit globally
 	void executeScriptUnit(ScriptUnit scriptUnit);
+
+	//returns the last reports count of calls
+	float callsLastSecond();
+
+	//gets fps
+	float FPS();
 }
 
 #endif

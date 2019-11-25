@@ -234,3 +234,11 @@ void g_script::executeScriptUnit(ScriptUnit scriptUnit) {
 	}
 	globalScriptMasterPtr->addScriptUnit(scriptUnit);
 }
+
+float g_script::callsLastSecond() {
+	return globalScriptMasterPtr->getExecutionsLastSecond();
+}
+
+float g_script::FPS() {
+	return globalScriptMasterPtr->getFPS();
+}
