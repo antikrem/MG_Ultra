@@ -10,6 +10,7 @@
 #include "pool.h"
 #include "texture.h"
 #include "script_master.h"
+#include "gl_handler.h"
 
 ///print
 //For use with print function, holds a buffer sting to print
@@ -109,6 +110,7 @@ void registerGlobalFunctions(kaguya::State &kaguya) {
 	kaguya["getProfileInfo"] = getProfileInfoMap;
 	kaguya["getScriptMasterLastCalls"] = g_script::callsLastSecond;
 	kaguya["getScriptMasterLastFPS"] = g_script::FPS;
+	kaguya["getGLHandlerLastFPS"] = gl_query::getFPS;
 
 	//animation master
 	kaguya["queryAnimation"] = g_aniquery::getAnimationSize;
