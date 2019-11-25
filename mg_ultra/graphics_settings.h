@@ -1,6 +1,10 @@
 #ifndef __GRAPHICS_SETTINGS__
 #define __GRAPHICS_SETTINGS__
 
+#include <mutex>
+
+using namespace std;
+
 //A struct that contains all the settings for graphics
 struct GraphicsSettings {
 	//Access lock
