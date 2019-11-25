@@ -126,6 +126,9 @@
     <ClCompile Include="subpooling.cpp">
       <Filter>Source Files\ECS</Filter>
     </ClCompile>
+    <ClCompile Include="gl_handler.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="graphics_state.h">

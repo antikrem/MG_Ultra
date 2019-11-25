@@ -10,6 +10,7 @@
 
 #include "frame_buffer.h"
 #include "timed_block.h"
+#include "performance_counter.h"
 
 #include <thread>
 
@@ -26,6 +27,8 @@ private:
 
 	//An attached TimedBlock that can be activated
 	TimedBlock periodBlock;
+	//performance viewer
+	PerformanceCounter performanceCounter;
 
 	//gl handle thread, it will do all gl calls, containing current context
 	thread* glThread = nullptr;
@@ -103,6 +106,8 @@ private:
 	//Called after a render
 	void postrender() {
 		glfwSwapBuffers(window);
+		performanceCounter.increment();
+		gl_query::setFPS(performanceCounter.getFPS());
 	}
 	
 	//renders everything in the render buffer
@@ -180,6 +185,10 @@ public:
 	}
 };
 
+namespace gl_query {
+	void setFPS(float fps);
 
+	float getFPS();
+}
 
 #endif
