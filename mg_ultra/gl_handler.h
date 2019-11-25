@@ -104,11 +104,7 @@ private:
 	}
 
 	//Called after a render
-	void postrender() {
-		glfwSwapBuffers(window);
-		performanceCounter.increment();
-		gl_query::setFPS(performanceCounter.getFPS());
-	}
+	void postrender();
 	
 	//renders everything in the render buffer
 	void render() {
