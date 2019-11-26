@@ -61,7 +61,7 @@ end
 --generates a small string of all distinguished masters
 function reportDistinguishedMaster()
 	return 
-		"Distinguished Master\n"
+		"Distinguished Masters:\n"
 		.. "ScriptMaster: count: " .. string.pad_sub(tostring(getScriptMasterLastCalls()), 5)
 		.. " last: " .. string.pad_sub(tostring(getScriptMasterLastFPS()), 5)
 		.. "\nGLHandler: count: " .. string.pad_sub(tostring(getGLHandlerLastCalls()), 5)
