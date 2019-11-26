@@ -198,6 +198,7 @@
     <ClCompile Include="str_kit.cpp" />
     <ClCompile Include="subpooling.cpp" />
     <ClCompile Include="success_callback.cpp" />
+    <ClCompile Include="systems_master.cpp" />
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="timed_event_callback.cpp" />
     <ClCompile Include="timer.cpp" />

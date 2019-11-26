@@ -3,15 +3,15 @@
 
 #include "system.h"
 #include "pool.h"
+#include "str_kit.h"
+#include "success_callback.h"
 #include "timed_event_callback.h"
 
 #include <chrono>
 #include <future>
 
 //A static function that does nothing!
-void emptyFunc() {
-
-}
+void emptyFunc();
 
 //A object that will handle a bunch of systems, 
 //Will do thread behaviour
@@ -58,7 +58,7 @@ class SystemsMaster {
 	atomic<int64t> executionProfileTime = 0;
 
 	//cycles through the systems, applying what ever needs to be done
-	void cycleSystems() {
+	void cycleSystems(SuccessCallback* sc) {
 		//calculate difference for timePeriod
 		auto now = chrono::high_resolution_clock::now();
 		periodProfileTime = chrono::duration_cast<std::chrono::microseconds>(now - mastersClock).count();
@@ -80,6 +80,12 @@ class SystemsMaster {
 			g_events::pushEvent(starterEvent);
 		}
 
+		//if we get a success callback set to true
+		if (sc) {
+			sc->setCompletion(true);
+		}
+
+		//set time taken
 		executionProfileTime = chrono::duration_cast<std::chrono::microseconds>(
 			chrono::high_resolution_clock::now() - mastersClock
 			).count();
@@ -171,12 +177,14 @@ public:
 
 	//Calls cycleSystems asyncronously
 	//If the function is already in execution, sets latecall to be true
-	void executeSystemMaster() {
+	//takes an optional pointer to sucess callback
+	//will pause execution until complete
+	void executeSystemMaster(SuccessCallback* sucessCallback = nullptr) {
 		if not(inExec) {
 			inExec = true;
 			lateCall = false;
 			calls++;
-			lastFuture = async(launch::async, &SystemsMaster::cycleSystems, this);
+			lastFuture = async(launch::async, &SystemsMaster::cycleSystems, this, sucessCallback);
 		} 
 		//handle if inExec is true
 		else {

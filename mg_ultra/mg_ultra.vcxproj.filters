@@ -70,6 +70,9 @@
     <Filter Include="Resource Files\scripts\backgrounds">
       <UniqueIdentifier>{bd295cff-2119-49de-bd78-18ec0db8c466}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\ECS\Systems\g_links">
+      <UniqueIdentifier>{5f360fdc-0af4-45ce-bb74-06a68b828f9a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -129,6 +132,9 @@
     <ClCompile Include="gl_handler.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="systems_master.cpp">
+      <Filter>Source Files\ECS</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="graphics_state.h">
@@ -175,9 +181,6 @@
     </ClInclude>
     <ClInclude Include="component_position.h">
       <Filter>Header Files\ECS\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="system_graphics.h">
-      <Filter>Header Files\ECS\Systems</Filter>
     </ClInclude>
     <ClInclude Include="component_graphics.h">
       <Filter>Header Files\ECS\Components</Filter>
@@ -376,6 +379,9 @@
     </ClInclude>
     <ClInclude Include="performance_counter.h">
       <Filter>Header Files\Support</Filter>
+    </ClInclude>
+    <ClInclude Include="system_graphics.h">
+      <Filter>Header Files\ECS\Systems\g_links</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
