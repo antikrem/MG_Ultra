@@ -1,13 +1,13 @@
 /*The interface between gamestate and GLHandler,
 Doesnt actually do much gl tho*/
+#ifndef __GRAPHICS_STATE__
+#define __GRAPHICS_STATE__
+
 #include <mutex>
 
 #include "shaders.h"
 #include "constants.h"
 #include "gl_handler.h"
-
-#ifndef __GRAPHICS_STATE__
-#define __GRAPHICS_STATE__
 
 class GraphicsState {
 private:
