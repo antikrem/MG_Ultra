@@ -9,6 +9,9 @@
 #include "component_text.h"
 #include "component_camera.h"
 
+#include "camera.h"
+#include "graphics_state.h"
+
 class SystemGraphics : public System {
 	//Pointer to camera
 	Camera* camera = nullptr;
