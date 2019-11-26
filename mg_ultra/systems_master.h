@@ -19,6 +19,9 @@ class SystemsMaster {
 	//name of system
 	string name;
 
+	//sets continuation, where calls occur in continuation
+	bool continuation = true;
+
 	//Internal counter of times called
 	unsigned long int calls = 0;
 
@@ -70,7 +73,7 @@ class SystemsMaster {
 
 		inExec = false;
 		//if not timer, this cycle system will invoke another cycle
-		if (!timer && inUse) {
+		if (!timer && inUse && continuation) {
 			Event* starterEvent = new Event(EV_invokeSystemMaster);
 			starterEvent->data.push_back(name);
 			starterEvent->data.push_back("starter");
@@ -129,9 +132,19 @@ public:
 		timer = new TimedEventCallback(n, name);
 	}
 
+	//puts the system into use
+	void setInUse() {
+		inUse = true;
+	}
+
+	//turn off continuation
+	void setContinuation(bool continuation) {
+		this->continuation = continuation;
+	}
+
 	//starts the systems execution
 	void start() {
-		inUse = true;
+		setInUse();
 		if (timer) {
 			//start the timer to send off events
 			timer->startTimer();
