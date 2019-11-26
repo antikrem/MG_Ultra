@@ -9,7 +9,7 @@ void GLHandler::postrender() {
 
 ///GL QUERY
 atomic<float> glfps = 0;
-atomic<int> glLastCalls = 0;
+atomic<float> glLastCalls = 0;
 
 void gl_query::setFPS(float fps) {
 	glfps = fps;
@@ -19,10 +19,10 @@ float gl_query::getFPS() {
 	return glfps;
 }
 
-void gl_query::setLastCalls(int lastCalls) {
+void gl_query::setLastCalls(float lastCalls) {
 	glLastCalls = lastCalls;
 }
 
-int gl_query::getLastCalls() {
+float gl_query::getLastCalls() {
 	return glLastCalls;
 }

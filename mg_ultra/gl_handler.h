@@ -186,9 +186,9 @@ namespace gl_query {
 
 	float getFPS();
 
-	void setLastCalls(int lastCalls);
+	void setLastCalls(float lastCalls);
 
-	int getLastCalls();
+	float getLastCalls();
 }
 
 #endif
