@@ -5,6 +5,7 @@ void GLHandler::postrender() {
 	performanceCounter.increment();
 	gl_query::setFPS(performanceCounter.getFPS());
 	gl_query::setLastCalls(performanceCounter.getReportedCalls());
+	periodBlock.blockForTime();
 }
 
 ///GL QUERY

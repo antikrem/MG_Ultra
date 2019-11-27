@@ -12,8 +12,6 @@
 #include "timed_block.h"
 #include "performance_counter.h"
 
-#include <thread>
-
 #include "vao_boxdata.h"
 #include "vao_screenbuffer.h"
 
@@ -22,9 +20,6 @@ Only one thread calls openGL at a time
 */
 class GLHandler {
 private:
-	atomic<bool> active = false;
-	atomic<bool> ended = false;
-
 	//An attached TimedBlock that can be activated
 	TimedBlock periodBlock;
 	//performance viewer
@@ -54,6 +49,34 @@ private:
 	VAOBoxData boxVAOBuffer;
 	VAOScreenBuffer screenVAO;
 
+	//Called before a render
+	void prerender() {
+		glDisable(GL_CULL_FACE);
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
+
+	//Called after a render
+	void postrender();
+
+public:
+	//GL calls are done in a seperate thread
+	//Requests made to gl thread will be handled async
+	GLHandler(GLFWwindow *window, GraphicsSettings* gSettings, AnimationsMaster* textureMaster, Camera* camera) 
+	: boxVAOBuffer(1000), periodBlock(60) {
+		this->window = window;
+		this->gSettings = gSettings;
+		this->camera = camera;
+		this->textureMaster = textureMaster;
+		//detach current process
+		glfwMakeContextCurrent(NULL);
+		//glThread = new thread(&GLHandler::glThreadProcess, this, window, gSettings);
+	}
+
+	~GLHandler() {
+		glfwDestroyWindow(window);
+	}
+
 	//initialises last part of gl
 	int glThreadInitialise(GLFWwindow *window, GraphicsSettings* gSettings) {
 		glfwMakeContextCurrent(window);
@@ -72,7 +95,7 @@ private:
 		glDepthFunc(GL_LESS);
 
 		//create frame buffers
-		geometryFrameBuffer.initialiseFrameBuffer(gSettings, {"firstPassSampler"}, true);
+		geometryFrameBuffer.initialiseFrameBuffer(gSettings, {"firstPassSampler" }, true);
 
 		shaderMaster = new ShaderMaster();
 
@@ -83,30 +106,8 @@ private:
 		return EXIT_SUCCESS;
 	}
 
-	//The process of gl handling
-	void glThreadProcess(GLFWwindow *window, GraphicsSettings* gSettings) {
-		glThreadInitialise(window, gSettings);
-
-		active = true;
-		while (active) {
-			render();
-		}
-		ended = true;
-	}
-
-	//Called before a render
-	void prerender() {
-		glDisable(GL_CULL_FACE);
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		periodBlock.blockForTime();
-	}
-
-	//Called after a render
-	void postrender();
-	
 	//renders everything in the render buffer
+	//consitutes a full render cycle
 	void render() {
 		prerender();
 
@@ -132,36 +133,8 @@ private:
 		postrender();
 	}
 
-public:
-	//GL calls are done in a seperate thread
-	//Requests made to gl thread will be handled async
-	GLHandler(GLFWwindow *window, GraphicsSettings* gSettings, AnimationsMaster* textureMaster, Camera* camera) 
-	: boxVAOBuffer(1000), periodBlock(60) {
-		this->window = window;
-		this->gSettings = gSettings;
-		this->camera = camera;
-		this->textureMaster = textureMaster;
-		//detach current process
-		glfwMakeContextCurrent(NULL);
-		glThread = new thread(&GLHandler::glThreadProcess, this, window, gSettings);
-	}
-
-	~GLHandler() {
-		active = false;
-		while not(ended) {
-
-		}
-		glfwDestroyWindow(window);
-	}
-
 	GLFWwindow* getWindow() {
 		return window;
-	}
-
-	void blockUntilActive() {
-		while not(active.load()) {
-
-		}
 	}
 
 	//gets a boxdata buffer and commits the last one
