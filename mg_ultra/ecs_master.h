@@ -49,17 +49,14 @@ class ECSMaster {
 		-system_bounds_control
 		-system_multi_ent
 
-	master1: graphics
-	    -system_graphics
-
-	master2: non-essential gameplay
+	master1: non-essential gameplay
 	    -system_animation
 		-system_text
 		-system_console
 		-system_spawner
 		-system_backgroun
 
-	master3: main gameloop
+	master2: main gameloop
 	    -system_timer
 		-system_player
 		-system_camera
@@ -67,7 +64,7 @@ class ECSMaster {
 		-system_rotation
 	    -system_game_state_control
 
-	master4: loading
+	master3: loading
 		-system_loader
 	
 	*/
@@ -80,14 +77,8 @@ class ECSMaster {
 		master->createSystem<SystemBoundsControl>(registar);
 		master->createSystem<SystemMultiEnt>(registar);
 		master->createSystem<SystemProfiler>(registar);
-		
-		//ring 1
-		master = newSystemsMaster("m_graphics");
-		auto graphicsMaster = master->createSystem<SystemGraphics>(registar);
-		graphicsMaster->setGraphicsState(gMaster->getGraphicsState());
-		graphicsMaster->setCamera(gMaster->getCamera());
 
-		//ring 2
+		//ring 1
 		master = newSystemsMaster("m_graphics2");
 		master->setTimer(100);
 		auto animationSystem = master->createSystem<SystemAnimation>(registar);
@@ -99,7 +90,7 @@ class ECSMaster {
 		master->createSystem<SystemBackground>(registar);
 		master->createSystem<SystemDriftable>(registar);
 
-		//ring 3
+		//ring 2
 		master = newSystemsMaster("m_gameplay");
 		master->setTimer(100);
 		master->createSystem<SystemTimer>(registar);
@@ -109,7 +100,7 @@ class ECSMaster {
 		master->createSystem<SystemRotation>(registar);
 		master->createSystem<SystemGameStateControl>(registar);
 
-		//ring 4
+		//ring 3
 		master = newSystemsMaster("m_loader");
 		master->setTimer(5);
 		master->createSystem<SystemLoader>(registar);
