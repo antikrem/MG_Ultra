@@ -3,6 +3,7 @@ i.e holds the state(graphics state) and the state transition(gl_handler)*/
 #ifndef __GRAPHICS_MASTER__
 #define __GRAPHICS_MASTER__
 
+#include <atomic>
 #include <thread>
 
 #include "graphics_state.h"
@@ -10,15 +11,45 @@ i.e holds the state(graphics state) and the state transition(gl_handler)*/
 
 
 class GraphicsMaster {
-	thread* graphicsThread = nullptr;
+	atomic<bool> active = true;
+	atomic<bool> end = false;
+
 	GraphicsState graphicsState;
 	GraphicsLink graphicsLink;
+
+
+
+	//the process of rendering a single frame
+	void renderCycle() {
+		graphicsLink.linkGraphics();
+		graphicsState.renderGL();
+	}
+
+	//full rendering process
+	void renderProcess() {
+		graphicsState.initialiseCallingThread();
+		while (!end) {
+			renderCycle();
+		}
+		active = false;
+	}
+
 
 public:
 	GraphicsMaster(EntityPool* entityPool, Registar* registar) 
 		: graphicsState(), graphicsLink(entityPool) {
 		graphicsLink.startGLinking(&graphicsState, registar);
+		//start the graphics thread
+		thread graphicsThread(&GraphicsMaster::renderProcess, this);
+		graphicsThread.detach();
+	}
 
+	~GraphicsMaster() {
+		end = true;
+		//wait for graphics thread to end
+		while (active) {
+
+		}
 	}
 
 	Camera* getCamera() {
