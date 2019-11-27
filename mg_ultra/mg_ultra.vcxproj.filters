@@ -61,17 +61,11 @@
     <Filter Include="Source Files\ECS">
       <UniqueIdentifier>{d0cecc33-a185-4166-9035-ba85a1c02dae}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\ECS\Systems">
-      <UniqueIdentifier>{1fefb6dc-3f8d-4544-a9b7-53739ea96e1b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Graphics">
       <UniqueIdentifier>{47a1f7b3-5a59-42f9-b996-1e854235c58f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource Files\scripts\backgrounds">
       <UniqueIdentifier>{bd295cff-2119-49de-bd78-18ec0db8c466}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\ECS\Systems\g_links">
-      <UniqueIdentifier>{5f360fdc-0af4-45ce-bb74-06a68b828f9a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -381,7 +375,13 @@
       <Filter>Header Files\Support</Filter>
     </ClInclude>
     <ClInclude Include="system_graphics.h">
-      <Filter>Header Files\ECS\Systems\g_links</Filter>
+      <Filter>Header Files\ECS\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics_master.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="graphics_link.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

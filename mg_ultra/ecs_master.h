@@ -7,6 +7,7 @@
 #include "systems_master.h"
 #include "timer.h"
 #include "graphics_state.h"
+#include "graphics_master.h"
 #include "input.h"
 #include "script_master.h"
 #include "registar.h"
@@ -23,7 +24,7 @@ class ECSMaster {
 	map<string, SystemsMaster*> systemsMasters;
 
 	//global graphics state
-	GraphicsState* gState = nullptr;
+	GraphicsMaster* gMaster = nullptr;
 
 	//script master
 	ScriptMaster* scriptMaster = nullptr;
@@ -83,16 +84,16 @@ class ECSMaster {
 		//ring 1
 		master = newSystemsMaster("m_graphics");
 		auto graphicsMaster = master->createSystem<SystemGraphics>(registar);
-		graphicsMaster->setGraphicsState(gState);
-		graphicsMaster->setCamera(gState->getCamera());
+		graphicsMaster->setGraphicsState(gMaster->getGraphicsState());
+		graphicsMaster->setCamera(gMaster->getCamera());
 
 		//ring 2
 		master = newSystemsMaster("m_graphics2");
 		master->setTimer(100);
 		auto animationSystem = master->createSystem<SystemAnimation>(registar);
-		animationSystem->setAnimationMaster(gState->getAnimationsMaster());
+		animationSystem->setAnimationMaster(gMaster->getAnimationsMaster());
 		auto textSystem = master->createSystem<SystemText>(registar);
-		textSystem->setAnimationMaster(gState->getAnimationsMaster());
+		textSystem->setAnimationMaster(gMaster->getAnimationsMaster());
 		master->createSystem<SystemConsole>(registar);
 		master->createSystem<SystemSpawner>(registar);
 		master->createSystem<SystemBackground>(registar);
@@ -127,10 +128,10 @@ public:
 
 		entityPool = new EntityPool();
 		setGlobalPool(entityPool);
-		gState = new GraphicsState();
 		registar = new Registar();
 		g_registar::setGlobalRegistar(registar);
-		inputMaster = new InputMaster(gState->getWindow());
+		gMaster = new GraphicsMaster(entityPool, registar);
+		inputMaster = new InputMaster(gMaster->getWindow());
 		input::setCurrentInputMaster(inputMaster);
 		scriptMaster = new ScriptMaster();
 
@@ -155,8 +156,8 @@ public:
 			delete i.second;
 		}
 
+		delete gMaster;
 		delete entityPool;
-		delete gState;
 		delete inputMaster;
 		delete registar;
 		delete scriptMaster;
@@ -294,13 +295,13 @@ public:
 			glfwPollEvents();
 
 			//update input master
-			inputMaster->updateKeyPressStates(gState->getWindow());
+			inputMaster->updateKeyPressStates(gMaster->getWindow());
 
 			//handle events
 			handleEvents();
 
 			//check executing conditions
-			if (glfwWindowShouldClose( gState->getWindow() )) {
+			if (glfwWindowShouldClose(gMaster->getWindow())) {
 				g_events::pushEvent(new Event(EV_quit));
 			}
 		}
@@ -310,7 +311,7 @@ public:
 		string message = "MASTERS DEBUG:";
 		int i = 0;
 		for (auto it = systemsMasters.begin(); it != systemsMasters.end(); it++) {
-			message += "\n";
+			message += "\n";  
 			message += it->second->print(i);
 			i++;
 		}

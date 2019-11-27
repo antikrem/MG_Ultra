@@ -231,6 +231,8 @@
     <ClInclude Include="frame_buffer.h" />
     <ClInclude Include="global_funcs.h" />
     <ClInclude Include="gl_handler.h" />
+    <ClInclude Include="graphics_link.h" />
+    <ClInclude Include="graphics_master.h" />
     <ClInclude Include="graphics_settings.h" />
     <ClInclude Include="graphics_state.h" />
     <ClInclude Include="component_health.h" />
