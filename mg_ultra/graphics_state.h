@@ -59,7 +59,6 @@ private:
 
 		//Switch over to the GLHandler
 		glHandler = new GLHandler(window, gSettings, animationsMaster, camera);
-		glHandler->blockUntilActive();
 
 		return EXIT_SUCCESS;
 	}
@@ -89,6 +88,16 @@ public:
 
 	AnimationsMaster* getAnimationsMaster() {
 		return animationsMaster;
+	}
+
+	//initialises the GLHandler into calling thread
+	void initialiseCallingThread() {
+		glHandler->glThreadInitialise(getWindow(), gSettings);
+	}
+
+	//gets the GLHandler to render
+	void renderGL() {
+		glHandler->render();
 	}
 
 	BoxData evaluateToBox(AnimationState state, float scale, bool renderIn3D) {
