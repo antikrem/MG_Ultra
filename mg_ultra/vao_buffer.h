@@ -29,11 +29,6 @@ private:
 	//vao associated with this buffer
 	GLuint vaoID;
 
-	//mutex lock for switching thread context
-	mutex lock;
-	//conditional variable for blocking update side thread
-	condition_variable cv;
-
 	//buffer for renderable, will be of size maxsize
 	T* buffer = nullptr;
 	//size of current buffer
@@ -42,10 +37,6 @@ private:
 	//write buffer for renderable, will be of size maxsize
 	//used by updateSide to give new values
 	T* writeBuffer = nullptr;
-	//set to true when writeBuffer has been updated
-	atomic<bool> copyBuffer = false;
-	//contains the size of the copy buffer
-	int copyBufferSize = 0;
 
 protected:
 	//instance index, index corresponds to VAO
@@ -73,23 +64,14 @@ public:
 
 	//handles the process of this VAO, from the gl side
 	void processGLSide() {
-		//check if a copy buffer has come in
-		if (copyBuffer) {
-			{
-				//copy over to buffer
-				unique_lock<mutex> lck(lock);
-				bufferSize = copyBufferSize;
-				copy(writeBuffer, writeBuffer + bufferSize, buffer);
-				copyBuffer = false;
-			}
-			//notify glUpdate to continue
-			cv.notify_one();
-			//move buffer data to gl
-			glBindVertexArray(vaoID);
-			glBindBuffer(GL_ARRAY_BUFFER, vboID);
-			glBufferSubData(GL_ARRAY_BUFFER, 0, bufferSize * sizeof(T), buffer);
-			glBindVertexArray(0);
-		}
+		//copy in data
+		copy(writeBuffer, writeBuffer + bufferSize, buffer);
+
+		//move buffer data to gl
+		glBindVertexArray(vaoID);
+		glBindBuffer(GL_ARRAY_BUFFER, vboID);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, bufferSize * sizeof(T), buffer);
+		glBindVertexArray(0);
 
 		glEnable(GL_DEPTH_TEST);
 		//need to render eitherway
@@ -107,11 +89,7 @@ public:
 	//the commit is recieved
 	//should be accessed update side
 	void commitBuffer(int size) {
-		unique_lock<mutex> lck(lock);
-		copyBufferSize = size;
-		//signal the glThread to handle
-		copyBuffer = true;
-		cv.wait(lck, [this] { return !copyBuffer.load(); });
+		bufferSize = size;
 	}
 
 	int getMaxSize() {
