@@ -74,8 +74,8 @@ void InputMaster::updateState(InputState* state) {
 			state->keyPressEventCount[i.first] = keyPressEventCount[i.first];
 		}
 
-		//check if state is larger
-		state->press[i.first] = (state->keyPressCount[i.first] != keyPressCount[i.first].load());
+		//check press directly, set press event by state check if state is larger
+		state->press[i.first] = keyPress[i.first];
 		state->pressEvent[i.first] = (state->keyPressEventCount[i.first] != keyPressEventCount[i.first].load());
 
 		state->keyPressCount[i.first] = keyPressCount[i.first];
