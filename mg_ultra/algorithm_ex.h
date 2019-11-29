@@ -14,7 +14,7 @@ using namespace std;
 
 //erase if for sequential STL containers
 template <class Container>
-void erase_sequential_if(Container &container, function<bool(typename Container::value_type&)> conditional) {
+void erase_sequential_if(Container& container, const function<bool(typename Container::value_type&)> conditional) {
 	//utilise erase/remove_if
 	container.erase(
 		remove_if(
@@ -29,7 +29,7 @@ void erase_sequential_if(Container &container, function<bool(typename Container:
 //erase if for associative STL containers
 //conditional will delete on true
 template <class Container>
-void erase_associative_if(Container &container, function<bool(typename Container::value_type&)> conditional) {
+void erase_associative_if(Container& container, const function<bool(typename Container::value_type&)> conditional) {
 	//use a while loop
 	auto it = container.begin();
 	while (it != container.end()) {
@@ -42,7 +42,13 @@ void erase_associative_if(Container &container, function<bool(typename Container
 	}
 }
 
-//deletes if not nulll
+//Checks if container contains element
+template <class Container>
+bool contains(const Container& container, const typename Container::value_type& element) {
+	return std::find(container.begin(), container.end(), element) != container.end();
+}
+
+//deletes if not null
 template <class T>
 void delete_or_null(T* &object) {
 	if (object) {
@@ -59,7 +65,6 @@ void clear_stack(T &s) {
 		s.pop();
 	}
 }
-
 
 //compares both pointers
 //if both are null, returns null
