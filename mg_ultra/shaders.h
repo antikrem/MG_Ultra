@@ -203,6 +203,11 @@ public:
 		glUniform1i(getUniformLocation(programName, uniformName), value);
 	}
 
+	//sets a single float in shader
+	void setUniformF(string programName, string uniformName, float value) {
+		glUniform1f(getUniformLocation(programName, uniformName), value);
+	}
+
 	//Attaches a framebuffer as the source for rendering
 	//sampler is the name of the sampler array in the 
 	void attachFrameBufferAsSource(string programName, FrameBuffer* frameBuffer) {
@@ -218,6 +223,7 @@ public:
 
 	ShaderMaster() {
 		loadProgramFromFile("base");
+		loadProgramFromFile("unified_lighting");
 		loadProgramFromFile("finalise");
 	}
 
