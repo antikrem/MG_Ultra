@@ -19,6 +19,8 @@ const float SCREEN_SPACE_UV[] = {
 	1.0f, 1.0f
 };
 
+/*A vao for rendering an entire screen space
+quad, can efficiently handle any screen space quad*/
 class VAOScreenBuffer {
 private:
 	//vao associated with this buffer
