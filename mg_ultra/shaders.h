@@ -7,17 +7,24 @@ including loading, compiling, using and deleting*/
 
 #include <string>
 #include <map>
+#include <regex>
 
 #include "_graphics_headers.h"
 
 #include "frame_buffer.h"
 
 #include "constants.h"
+#include "algorithm_ex.h"
 #include "str_kit.h"
 #include "vec_kit.h"
 #include "os_kit.h"
 
 #include "error.h"
+
+#include <iostream>
+
+//capture pattern for #includes
+#define INCLUDE_CAPTURE_PATTERN "#include \"(.*)\""
 
 //Contains a single program
 //and all the associated uniforms
@@ -53,7 +60,6 @@ struct ProgramDetails {
 	}
 };
 
-
 using ProgramMap_t = map<string, ProgramDetails>;
 
 //Stores all the shaders, should only be one stored in gState
@@ -61,6 +67,49 @@ class ShaderMaster {
 private:
 	ProgramMap_t programMap;
 	string currentProgram = "";
+
+	vector<string> includes;
+
+	//conducts the internal inclusion recusivly
+	bool internalHandleIncludes(string& input) {
+		smatch locations;
+		if (regex_search(input, locations, std::regex(INCLUDE_CAPTURE_PATTERN))) {
+			auto includedfile = locations[1].str();
+
+			//if already included return false and error
+			if (contains(includes, includedfile)) {
+				err::logMessage("GRAPHICS: Fatal Error, recursion error parsing includes in: " + includes[0] + "\n"
+					+ "Error was in including " + includedfile);
+				return false;
+			}
+
+			//otherwise add to list
+			includes.push_back(includedfile);
+
+			//get contents
+			string includedContents = os_kit::getFileAsString(PATH_TO_SHADER + includedfile);
+			if (!includedContents.size()) {
+				err::logMessage("GRAPHICS: Fatal Error, was not able to open: " PATH_TO_SHADER + includes[0]);
+				return false;
+			}
+
+			//replace include with file
+			input.replace(locations.position(), locations[0].length(), includedContents);
+
+			//continue scanning
+			return internalHandleIncludes(input);
+
+		}
+		return true;
+	}
+
+	//a simple function to handle #include
+	//returns bool on sucess, otherwise false
+	bool handleIncludes(string& input, const string& parseFile) {
+		includes.clear();
+		includes.push_back(parseFile);
+		return internalHandleIncludes(input);
+	}
 
 public:
 	//Loads program, returns EXIT value, and success will update programMap
@@ -79,10 +128,18 @@ public:
 			return EXIT_FAILURE;
 		}
 
+		if not(handleIncludes(vertexShaderCode, programName + ".vert")) {
+			return EXIT_FAILURE;
+		}
+
 		// Read the Fragment Shader code from the file
 		std::string fragmentShaderCode = os_kit::getFileAsString(fragPath);
 		if not(fragmentShaderCode.size()) {
 			err::logMessage("GRAPHICS: Failed to load fragment shader at " + fragPath);
+			return EXIT_FAILURE;
+		}
+
+		if not(handleIncludes(fragmentShaderCode, programName + ".frag")) {
 			return EXIT_FAILURE;
 		}
 
