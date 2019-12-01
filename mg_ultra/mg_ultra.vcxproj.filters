@@ -67,6 +67,12 @@
     <Filter Include="Resource Files\scripts\backgrounds">
       <UniqueIdentifier>{bd295cff-2119-49de-bd78-18ec0db8c466}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Graphics\Unified Lighting">
+      <UniqueIdentifier>{0bf8ae7f-cb2d-4be6-8c66-8b0f3bf8e83e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\Unified Lighting">
+      <UniqueIdentifier>{c4fc8338-4baa-4645-afb4-e272cba26245}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -128,6 +134,9 @@
     </ClCompile>
     <ClCompile Include="systems_master.cpp">
       <Filter>Source Files\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="ambient_illumination.cpp">
+      <Filter>Source Files\Graphics\Unified Lighting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -383,6 +392,12 @@
     <ClInclude Include="graphics_link.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="ambient_illumination.h">
+      <Filter>Header Files\Graphics\Unified Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="unified_lighting.h">
+      <Filter>Header Files\Graphics\Unified Lighting</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="wd\shaders\base.vert">
@@ -444,6 +459,18 @@
     </None>
     <None Include="wd\scripts\backgrounds\background_master.lua">
       <Filter>Resource Files\scripts\backgrounds</Filter>
+    </None>
+    <None Include="wd\shaders\unified_lighting.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="wd\shaders\unified_lighting.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="wd\shaders\helper.glsl">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="wd\scripts\_initialise\unified_lighting.lua">
+      <Filter>Resource Files\scripts\_initialise</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -11,6 +11,7 @@
 #include "texture.h"
 #include "script_master.h"
 #include "gl_handler.h"
+#include "ambient_illumination.h"
 
 ///print
 //For use with print function, holds a buffer sting to print
@@ -115,4 +116,11 @@ void registerGlobalFunctions(kaguya::State &kaguya) {
 
 	//animation master
 	kaguya["queryAnimation"] = g_aniquery::getAnimationSize;
+
+	//ambient lighting
+	kaguya["setAmbientLightStrength"] = g_ambient::setStrength;
+	kaguya["getAmbientLightStrength"] = g_ambient::getStrength;
+	kaguya["setAmbientLightColour"] = g_ambient::l_setColour;
+	kaguya["getAmbientLightColour"] = g_ambient::l_getColour;
+
 }

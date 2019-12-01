@@ -183,6 +183,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ambient_illumination.cpp" />
     <ClCompile Include="entity_types.cpp" />
     <ClCompile Include="error.cpp" />
     <ClCompile Include="events.cpp" />
@@ -206,6 +207,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="algorithm_ex.h" />
+    <ClInclude Include="ambient_illumination.h" />
     <ClInclude Include="animations.h" />
     <ClInclude Include="any_type.h" />
     <ClInclude Include="camera.h" />
@@ -284,6 +286,7 @@
     <ClInclude Include="timed_event_callback.h" />
     <ClInclude Include="timer.h" />
     <ClInclude Include="n_buffer.h" />
+    <ClInclude Include="unified_lighting.h" />
     <ClInclude Include="vao_boxdata.h" />
     <ClInclude Include="vao_buffer.h" />
     <ClInclude Include="vao_screenbuffer.h" />
@@ -302,6 +305,7 @@
     <None Include="wd\scripts\_initialise\profiler.lua" />
     <None Include="wd\scripts\_initialise\profiling_init.lua" />
     <None Include="wd\scripts\_initialise\registar.lua" />
+    <None Include="wd\scripts\_initialise\unified_lighting.lua" />
     <None Include="wd\scripts\_library\library.lua" />
     <None Include="wd\scripts\_library\library_ex.lua" />
     <None Include="wd\scripts\_library\math_utils.lua" />
@@ -311,6 +315,9 @@
     <None Include="wd\shaders\base.vert" />
     <None Include="wd\shaders\finalise.frag" />
     <None Include="wd\shaders\finalise.vert" />
+    <None Include="wd\shaders\helper.glsl" />
+    <None Include="wd\shaders\unified_lighting.frag" />
+    <None Include="wd\shaders\unified_lighting.vert" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="wd\log.txt" />
