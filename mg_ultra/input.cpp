@@ -100,6 +100,8 @@ InputMaster::InputMaster(GLFWwindow* window) {
 	addToKeyMap("console_tab", GLFW_KEY_TAB);
 	addToKeyMap("console_previousline", GLFW_KEY_UP);
 	addToKeyMap("console_nextline", GLFW_KEY_DOWN);
+	addToKeyMap("console_ctrl", GLFW_KEY_LEFT_CONTROL);
+	addToKeyMap("console_paste", GLFW_KEY_V);
 
 	glfwSetCharCallback(window, &textModeCallBack);
 }

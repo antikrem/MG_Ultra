@@ -4,6 +4,7 @@
 
 #include "system.h"
 #include "input.h"
+#include "os_kit.h"
 
 #include "component_console.h"
 #include "component_no_bounds_control.h"
@@ -54,6 +55,10 @@ public:
 			//check if tab has been pressed
 			else if (inputState.pressEvent["console_tab"]) {
 				consoleComponent->addText("    ");
+			}
+			//check if paste has been pressed
+			else if (inputState.press["console_ctrl"] && inputState.pressEvent["console_paste"]) {
+				consoleComponent->addText(os_kit::getClipboard());
 			}
 			//check if previous line has been request
 			else if (inputState.pressEvent["console_previousline"]) {
