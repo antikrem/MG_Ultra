@@ -138,6 +138,7 @@ public:
 		
 	}
 
+	/*stops ecs loop*/
 	~ECSMaster() {
 		scriptMaster->disable();
 		g_events::closeEventPipeline();
@@ -153,9 +154,6 @@ public:
 		delete registar;
 		delete scriptMaster;
 	}
-
-	/*stops ecs loop*/
-
 	
 private:
 

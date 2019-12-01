@@ -1,11 +1,11 @@
 #version 330 core
-//The first pass will create a frame buffer, this is the colour value
-uniform sampler2D firstPassSampler;
+//Renders to screen
+uniform sampler2D scene;
 
 in vec2 uv;
 
 out vec4 colour;
 
 void main() { 
-    colour = vec4(texture(firstPassSampler, uv).rgb, 1.0);
+    colour = vec4(texture(scene, uv).rgb, 1.0);
 }
