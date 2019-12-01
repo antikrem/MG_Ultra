@@ -246,7 +246,7 @@ public:
 	}
 
 	//sets a uniform 4x4 matrix in the target shader
-	void setUniform4f(string programName, string uniformName, glm::mat4& value) {
+	void setUniformMatrix4F(string programName, string uniformName, const glm::mat4& value) {
 		glUniformMatrix4fv(getUniformLocation(programName, uniformName), 1, GL_FALSE, &value[0][0]);
 	}
 
@@ -263,6 +263,11 @@ public:
 	//sets a single float in shader
 	void setUniformF(string programName, string uniformName, float value) {
 		glUniform1f(getUniformLocation(programName, uniformName), value);
+	}
+
+	//sets a uniform vec3
+	void setUniform3F(string programName, string uniformName, const glm::vec3& value) {
+		glUniform3f(getUniformLocation(programName, uniformName), value[0], value[1], value[2]);
 	}
 
 	//Attaches a framebuffer as the source for rendering
