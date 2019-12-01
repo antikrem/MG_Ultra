@@ -89,13 +89,13 @@ string os_kit::getClipboard() {
 
 	 //Get handle of clipboard
 	HANDLE hClipBoard = GetClipboardData(CF_TEXT);
-	if (hClipBoard == nullptr) {
+	if (!hClipBoard) {
 		return "";
 	}
 
 	//Lock the handle and get text from clipboad
 	char* clipTextPtr = static_cast<char*>(GlobalLock(hClipBoard));
-	if (clipTextPtr == nullptr) {
+	if (!clipTextPtr) {
 		return "";
 	}
 
