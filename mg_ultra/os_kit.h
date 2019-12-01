@@ -23,6 +23,10 @@ namespace os_kit {
 
 	//returns a vector of all file names in a folder
 	vector<string> getFilesInFolder(const std::string& filePath);
+
+	//returns what evers currently in the clipboard
+	//returns empty string on error
+	string getClipboard();
 }
 
 #endif

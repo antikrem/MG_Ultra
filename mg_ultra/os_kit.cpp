@@ -61,3 +61,48 @@ vector<string> os_kit::getFilesInFolder(const std::string& filePath) {
 	}
 	return locations;
 }
+
+//RAII style open clipboad
+class ClipboardOpenWrapper {
+	bool success = false;
+public:
+	ClipboardOpenWrapper() {
+		success = OpenClipboard(nullptr);
+	}
+
+	~ClipboardOpenWrapper() {
+		if (success) {
+			CloseClipboard();
+		}
+	}
+
+	bool getSucess() {
+		return success;
+	}
+};
+
+string os_kit::getClipboard() {
+	ClipboardOpenWrapper clipboardOpen;
+	if (!clipboardOpen.getSucess()) {
+		return "";
+	}
+
+	 //Get handle of clipboard
+	HANDLE hClipBoard = GetClipboardData(CF_TEXT);
+	if (hClipBoard == nullptr) {
+		return "";
+	}
+
+	//Lock the handle and get text from clipboad
+	char* clipTextPtr = static_cast<char*>(GlobalLock(hClipBoard));
+	if (clipTextPtr == nullptr) {
+		return "";
+	}
+
+	string clipboardText(clipTextPtr);
+
+	// Release the lock 
+	GlobalUnlock(hClipBoard);
+
+	return clipboardText;
+}
