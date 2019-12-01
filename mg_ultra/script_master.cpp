@@ -92,6 +92,7 @@ ScriptMaster::ScriptMaster()
 
 	quickLoadAndExecute("scripts/_initialise/registar.lua");
 	quickLoadAndExecute("scripts/_initialise/animations.lua");
+	quickLoadAndExecute("scripts/_initialise/unified_lighting.lua");
 
 	globalScriptMasterPtr = this;
 }
