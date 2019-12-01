@@ -15,6 +15,8 @@
 #include "vao_boxdata.h"
 #include "vao_screenbuffer.h"
 
+#include "ambient_illumination.h"
+
 /*Handles openGL handling
 Only one thread calls openGL at a time
 */
@@ -45,6 +47,12 @@ private:
 	//frame buffer for geometry
 	FrameBuffer geometryFrameBuffer;
 
+	//frame buffer for post effects
+	FrameBuffer lightingFrameBuffer;
+
+	//post effects frame buffer
+	FrameBuffer postEffects;
+
 	//buffer for all boxes in the render view
 	VAOBoxData boxVAOBuffer;
 	VAOScreenBuffer screenVAO;
@@ -70,7 +78,6 @@ public:
 		this->textureMaster = textureMaster;
 		//detach current process
 		glfwMakeContextCurrent(NULL);
-		//glThread = new thread(&GLHandler::glThreadProcess, this, window, gSettings);
 	}
 
 	~GLHandler() {
@@ -95,7 +102,9 @@ public:
 		glDepthFunc(GL_LESS);
 
 		//create frame buffers
-		geometryFrameBuffer.initialiseFrameBuffer(gSettings, {"firstPassSampler" }, true);
+		geometryFrameBuffer.initialiseFrameBuffer(gSettings, { "spriteColour", "spriteWorldPosition", "lightingSensitivity" }, true);
+		lightingFrameBuffer.initialiseFrameBuffer(gSettings, { "pointLightScene" }, false);
+		postEffects.initialiseFrameBuffer(gSettings, { "scene" }, false);
 
 		shaderMaster = new ShaderMaster();
 
@@ -113,10 +122,8 @@ public:
 
 		//FIRST PASS - render basic stuff
 		shaderMaster->useShader("base");
-		glm::mat4 mvp = camera->getVPMatrix();
-		shaderMaster->setUniform4f("base", "MVP", mvp);
-		glm::mat4 uimvp = camera->getUiVPMatrix();
-		shaderMaster->setUniform4f("base", "uiMVP", uimvp);
+		shaderMaster->setUniformMatrix4F("base", "MVP", camera->getVPMatrix());
+		shaderMaster->setUniformMatrix4F("base", "uiMVP", camera->getUiVPMatrix());
 		geometryFrameBuffer.bindBuffer();
 		//process the box buffer, which renders the geometry
 		//set mgt textures in shader
@@ -124,10 +131,27 @@ public:
 		boxVAOBuffer.processGLSide();
 		geometryFrameBuffer.unbindBuffer();
 
-		//SECOND PASS - render buffer to screenspace
+		//SECOND PASS - calculate individual lighting components
+		//shaderMaster->useShader("ambient_lighting");
+		//lightingFrameBuffer.bindBuffer();
+		//shaderMaster->attachFrameBufferAsSource("ambient_lighting", &geometryFrameBuffer);
+		//screenVAO.processGLSide();
+		//lightingFrameBuffer.unbindBuffer();
+
+		//THIRD PASS - combine all light values into post processing buffer
+		shaderMaster->useShader("unified_lighting");
+		shaderMaster->setUniformF("unified_lighting", "ambientStrength", g_ambient::getStrength());
+		shaderMaster->setUniform3F("unified_lighting", "ambientColor", g_ambient::getColour().getVec3());
+		postEffects.bindBuffer();
+		shaderMaster->attachFrameBufferAsSource("unified_lighting", &lightingFrameBuffer);
+		shaderMaster->attachFrameBufferAsSource("unified_lighting", &geometryFrameBuffer);
+		screenVAO.processGLSide();
+		postEffects.unbindBuffer();
+
+		//FOURTH PASS - render buffer to screenspace
 		//set the geometry frame buffer as the source
 		shaderMaster->useShader("finalise");
-		shaderMaster->attachFrameBufferAsSource("finalise", &geometryFrameBuffer);
+		shaderMaster->attachFrameBufferAsSource("finalise", &postEffects);
 		screenVAO.processGLSide();
 
 		postrender();
