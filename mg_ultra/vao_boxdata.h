@@ -122,9 +122,6 @@ public:
 		glVertexAttribDivisor(4, 1); //texture access
 		glVertexAttribDivisor(5, 1); //render3DFlag
 		glVertexAttribDivisor(6, 1); //wrapfactor
-
-		//unbind VAO
-		glBindVertexArray(0);
 	}
 
 	//render what there, the correct vao has been bound
