@@ -48,6 +48,14 @@ bool contains(const Container& container, const typename Container::value_type& 
 	return std::find(container.begin(), container.end(), element) != container.end();
 }
 
+//finds the index of a given value in a container
+//returns -1 on not finding element
+template <class Container>
+int index_of(const Container& container, const typename Container::value_type& element) {
+	auto it = std::find(container.begin(), container.end(), element);
+	return it != container.end() ? distance(container.begin(), it) : -1;
+}
+
 //deletes if not null
 template <class T>
 void delete_or_null(T* &object) {
