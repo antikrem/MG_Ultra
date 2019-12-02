@@ -112,6 +112,9 @@ public:
 		scriptHandler.detach();
 	}
 
+	//creates an entity to handle anonymous adding of ents
+	void createAnonymousEntityHandling();
+
 	//reports counts last second
 	float getExecutionsLastSecond() {
 		return pCounter.getReportedCalls();

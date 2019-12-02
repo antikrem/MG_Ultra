@@ -13,8 +13,10 @@
 #include "component_spawner.h"
 #include "component_driftable.h"
 #include "component_no_bounds_control.h"
+#include "component_directional_light.h"
 
-#include "system.h"
+#include "registar.h"
+#include "pool.h"
 
 //lua error reporting catch, no error when empty
 vector<string> luaErrorMessage;
@@ -80,6 +82,7 @@ ScriptMaster::ScriptMaster()
 	forceLuaRegistration<ComponentSpawner>(kaguya);
 	forceLuaRegistration<ComponentDriftable>(kaguya);
 	forceLuaRegistration<ComponentNoBoundsControl>(kaguya);
+	forceLuaRegistration<ComponentDirectionalLight>(kaguya);
 
 	//set contextual script functions
 	kaguya["getEntityPool"] = getGlobalPool;
@@ -93,6 +96,7 @@ ScriptMaster::ScriptMaster()
 	quickLoadAndExecute("scripts/_initialise/registar.lua");
 	quickLoadAndExecute("scripts/_initialise/animations.lua");
 	quickLoadAndExecute("scripts/_initialise/unified_lighting.lua");
+
 
 	globalScriptMasterPtr = this;
 }
@@ -215,6 +219,15 @@ void ScriptMaster::addScriptUnit(ScriptUnit scriptUnit) {
 	unique_lock<mutex> lck(scriptBufferLock);
 	scriptQueue.push(scriptUnit);
 	cv.notify_one();
+}
+
+void ScriptMaster::createAnonymousEntityHandling() {
+	//create an entity for anonymous spawning
+	Entity* anonymousSpawner = new Entity(ETAnonymousSpawner);
+	auto cSpawner = new ComponentSpawner();
+	anonymousSpawner->addComponent(cSpawner->pullForEntity());
+	getGlobalPool()->addEnt(anonymousSpawner, true);
+	quickLoadAndExecute("scripts/_initialise/anonymous_spawner.lua");
 }
 
 

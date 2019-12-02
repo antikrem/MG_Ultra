@@ -130,6 +130,8 @@ public:
 		createBasicSystems();
 		cout << print() << endl;
 
+		scriptMaster->createAnonymousEntityHandling();
+
 		//start the script handler
 		scriptMaster->beginScriptHandling();
 

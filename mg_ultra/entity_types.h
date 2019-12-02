@@ -15,7 +15,9 @@ enum EntityTypes {
 	ETPlayerBullets,
 	ETProfile,
 	ETBackgroundMaster,
-	ETBackgroundLayer
+	ETBackgroundLayer,
+	ETAnonymousSpawner,
+	ETDirectionalLight
 };
 
 //String to Entity type
