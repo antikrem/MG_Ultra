@@ -65,7 +65,8 @@ public:
 			newComponent1->setText("Console");
 			newComponent1->setFont("text_consolas58");
 			newComponent1->setVisible(true);
-			newComponent1->setScale(0.5f);
+			newComponent1->setScale(0.75f);
+			newComponent1->setRenderIn3D(false);
 			newEnt->addComponent(newComponent1->pullForEntity());
 			pool->addEnt(newEnt, true);
 		}
