@@ -5,7 +5,7 @@
 #include "component.h"
 #include "cus_struct2.h"
 
-#include "script_master.h"
+#include "scriptable_class.h"
 
 #include <atomic>
 
