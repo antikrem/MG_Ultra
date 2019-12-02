@@ -201,7 +201,6 @@ public:
 		programMap.insert(ProgramMap_t::value_type(programName, ProgramDetails(programID, programName)));
 
 		err::logMessage("GRAPHICS: Shader compilation done");
-		err::logMessage("GRAPHICS: Shader program " + programName + " loaded");
 
 		return EXIT_SUCCESS;
 	}
@@ -271,20 +270,24 @@ public:
 	}
 
 	//Attaches a framebuffer as the source for rendering
-	//sampler is the name of the sampler array in the 
-	void attachFrameBufferAsSource(string programName, FrameBuffer* frameBuffer) {
+	//sampler is the name of the sampler array in the
+	//returns the next starting TU, and takes an optional starting TU
+	int attachFrameBufferAsSource(string programName, FrameBuffer* frameBuffer, int start = 0) {
 		auto colourTextures = frameBuffer->getColourTexture();
 		auto targets = frameBuffer->getTargetNames();
 
-		for (int i = 0; i < (int)targets.size(); i++) {
+		int i = start;
+		for (; i < (int)targets.size() + start; i++) {
 			glActiveTexture(GL_TEXTURE0 + i);
-			glBindTexture(GL_TEXTURE_2D, colourTextures[i]);
-			setUniformI(programName, targets[i], i);
+			glBindTexture(GL_TEXTURE_2D, colourTextures[i - start]);
+			setUniformI(programName, targets[i - start], i);
 		}
+		return i + 1;
 	}
 
 	ShaderMaster() {
 		loadProgramFromFile("base");
+		loadProgramFromFile("directional_lighting");
 		loadProgramFromFile("unified_lighting");
 		loadProgramFromFile("finalise");
 	}
