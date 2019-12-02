@@ -105,13 +105,11 @@ public:
 	}
 
 	//gets a pointer to a buffered map
-	//blocks until fufiled
-	//also commits the last block
 	BoxData* getBoxDataBuffer() {
 		return glHandler->getBoxDataBuffer();
 	}
 
-	//commit the buffer, waiting until operation is complete
+	//commit the directionalLightVAOBuffer buffer
 	void commitBoxDataBuffer(int boxCount) {
 		glHandler->commitBoxDataBuffer(boxCount);
 	}
@@ -119,6 +117,21 @@ public:
 	//returns the size of the GLHandler's boxBufferDataBuffer size
 	int getBoxDataBufferSize() {
 		return glHandler->getBoxDataBufferSize();
+	}
+
+	//gets a pointer to a buffered map
+	DirectionalData* getDirectionDataBuffer() {
+		return glHandler->getDirectionalLightBuffer().getWriteBuffer();
+	}
+
+	//commit the directionalLightVAOBuffer buffer
+	void commitDirectionalDataBuffer(int directionCount) {
+		glHandler->getDirectionalLightBuffer().commitBuffer(directionCount);
+	}
+
+	//returns the size of the GLHandler's directionalLightVAOBuffer size
+	int getDirectionalDataBufferSize() {
+		return glHandler->getDirectionalLightBuffer().getMaxSize();
 	}
 };
 

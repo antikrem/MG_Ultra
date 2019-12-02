@@ -13,6 +13,7 @@
 #include "performance_counter.h"
 
 #include "vao_boxdata.h"
+#include "vao_directional_light.h"
 #include "vao_screenbuffer.h"
 
 #include "ambient_illumination.h"
@@ -55,6 +56,7 @@ private:
 
 	//buffer for all boxes in the render view
 	VAOBoxData boxVAOBuffer;
+	VAODirectionalLight directionalLightVAOBuffer;
 	VAOScreenBuffer screenVAO;
 
 	//Called before a render
@@ -71,7 +73,7 @@ public:
 	//GL calls are done in a seperate thread
 	//Requests made to gl thread will be handled async
 	GLHandler(GLFWwindow *window, GraphicsSettings* gSettings, AnimationsMaster* textureMaster, Camera* camera) 
-	: boxVAOBuffer(1000), periodBlock(60) {
+	: boxVAOBuffer(1000), directionalLightVAOBuffer(10), periodBlock(0) {
 		this->window = window;
 		this->gSettings = gSettings;
 		this->camera = camera;
@@ -102,8 +104,8 @@ public:
 		glDepthFunc(GL_LESS);
 
 		//create frame buffers
-		geometryFrameBuffer.initialiseFrameBuffer(gSettings, { "spriteColour", "spriteWorldPosition", "lightingSensitivity" }, true);
-		lightingFrameBuffer.initialiseFrameBuffer(gSettings, { "pointLightScene" }, false);
+		geometryFrameBuffer.initialiseFrameBuffer(gSettings, { "spriteColour", "spriteWorldPosition", "normals", "lightingSensitivity" }, true);
+		lightingFrameBuffer.initialiseFrameBuffer(gSettings, { "directionalLightScene" }, false);
 		postEffects.initialiseFrameBuffer(gSettings, { "scene" }, false);
 
 		shaderMaster = new ShaderMaster();
@@ -132,19 +134,20 @@ public:
 		geometryFrameBuffer.unbindBuffer();
 
 		//SECOND PASS - calculate individual lighting components
-		//shaderMaster->useShader("ambient_lighting");
-		//lightingFrameBuffer.bindBuffer();
-		//shaderMaster->attachFrameBufferAsSource("ambient_lighting", &geometryFrameBuffer);
-		//screenVAO.processGLSide();
-		//lightingFrameBuffer.unbindBuffer();
+		shaderMaster->useShader("directional_lighting");
+		lightingFrameBuffer.bindBuffer();
+		//lightingFrameBuffer.setBlendFunction("directionalLightScene", GL_FUNC_ADD);
+		shaderMaster->attachFrameBufferAsSource("directional_lighting", &geometryFrameBuffer);
+		directionalLightVAOBuffer.processGLSide();
+		lightingFrameBuffer.unbindBuffer();
 
 		//THIRD PASS - combine all light values into post processing buffer
 		shaderMaster->useShader("unified_lighting");
 		shaderMaster->setUniformF("unified_lighting", "ambientStrength", g_ambient::getStrength());
 		shaderMaster->setUniform3F("unified_lighting", "ambientColor", g_ambient::getColour().getVec3());
 		postEffects.bindBuffer();
-		shaderMaster->attachFrameBufferAsSource("unified_lighting", &lightingFrameBuffer);
-		shaderMaster->attachFrameBufferAsSource("unified_lighting", &geometryFrameBuffer);
+		int chain = shaderMaster->attachFrameBufferAsSource("unified_lighting", &lightingFrameBuffer);
+		shaderMaster->attachFrameBufferAsSource("unified_lighting", &geometryFrameBuffer, chain);
 		screenVAO.processGLSide();
 		postEffects.unbindBuffer();
 
@@ -161,8 +164,7 @@ public:
 		return window;
 	}
 
-	//gets a boxdata buffer and commits the last one
-	//blocks until operation is done
+	//gets a boxdata buffer
 	BoxData* getBoxDataBuffer() {
 		return boxVAOBuffer.getWriteBuffer();
 	}
@@ -175,6 +177,11 @@ public:
 	//gets the size of the BoxDataBuffer
 	int getBoxDataBufferSize() {
 		return boxVAOBuffer.getMaxSize();
+	}
+
+	//returns reference to directionalLightVAOBuffer
+	VAODirectionalLight& getDirectionalLightBuffer() {
+		return directionalLightVAOBuffer;
 	}
 };
 
