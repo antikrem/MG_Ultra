@@ -53,6 +53,10 @@ public:
 	void pushFactoryEntity() {
 		unique_lock<mutex>(entitiesLock);
 		unique_lock<mutex>(factoryLock);
+		if (!factoryEntity) {
+			err::logMessage("SPAWNER ERROR: An entity was pushed when a factory entity does not exist");
+			return;
+		}
 		entities.push_back(factoryEntity);
 		factoryEntity = nullptr;
 
