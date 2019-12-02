@@ -5,6 +5,7 @@
 
 #include "_graphics_headers.h"
 #include "graphics_settings.h"
+#include "algorithm_ex.h"
 
 class FrameBuffer {
 	unsigned int fbo;
@@ -92,6 +93,23 @@ public:
 	//gets the vector of names
 	vector<string>& getTargetNames() {
 		return targetNames;
+	}
+
+	//only valid after binding
+	//specifies a blend function for a specified buffer 
+	void setBlendFunction(const string& buffer, GLenum mode) {
+		int location = index_of(targetNames, buffer);
+		if (location < 0) {
+			throw GraphicsException("Invalid buffer in in setBlendFunction");
+		}
+		else {
+			glBlendEquationi(location, mode);
+		}
+	}
+
+	//disables all blending
+	void disableBlending() {
+		glDisable(GL_BLEND);
 	}
 };
 
