@@ -120,15 +120,17 @@ public:
 
 	//only valid after binding
 	//specifies a blend function for a specified buffer 
-	void setBlendFunction(const string& buffer, GLenum mode) {
+	void setBlendFunction(const string& buffer, GLenum mode, GLenum sfactor, GLenum dfactor) {
 		int location = index_of(targetNames, buffer);
 		if (location < 0) {
 			throw GraphicsException("Invalid buffer in in setBlendFunction");
 		}
 		else {
 			glBlendEquationi(location, mode);
+			glBlendFunci(location, sfactor, dfactor);
 		}
 	}
+
 
 	//disables all blending
 	void disableBlending() {

@@ -148,11 +148,13 @@ public:
 		//SECOND PASS - calculate individual lighting components
 		shaderMaster->useShader("directional_lighting");
 		lightingFrameBuffer.bindBuffer();
-		//lightingFrameBuffer.setBlendFunction("directionalLightScene", GL_FUNC_ADD);
+		glEnable(GL_BLEND);
+		lightingFrameBuffer.setBlendFunction("directionalLightScene", GL_FUNC_ADD, GL_ONE, GL_ONE);
 		shaderMaster->attachFrameBufferAsSource("directional_lighting", &geometryFrameBuffer);
 		directionalLightVAOBuffer.processGLSide();
+		glDisable(GL_BLEND);
 		lightingFrameBuffer.unbindBuffer();
-
+		
 		//THIRD PASS - combine all light values into post processing buffer
 		shaderMaster->useShader("unified_lighting");
 		shaderMaster->setUniformF("unified_lighting", "ambientStrength", g_ambient::getStrength());
