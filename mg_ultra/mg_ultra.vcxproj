@@ -290,7 +290,6 @@
     <ClInclude Include="timed_event_callback.h" />
     <ClInclude Include="timer.h" />
     <ClInclude Include="n_buffer.h" />
-    <ClInclude Include="unified_lighting.h" />
     <ClInclude Include="vao_boxdata.h" />
     <ClInclude Include="vao_buffer.h" />
     <ClInclude Include="vao_directional_light.h" />

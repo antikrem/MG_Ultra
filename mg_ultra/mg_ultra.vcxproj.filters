@@ -395,9 +395,6 @@
     <ClInclude Include="ambient_illumination.h">
       <Filter>Header Files\Graphics\Unified Lighting</Filter>
     </ClInclude>
-    <ClInclude Include="unified_lighting.h">
-      <Filter>Header Files\Graphics\Unified Lighting</Filter>
-    </ClInclude>
     <ClInclude Include="directional_light.h">
       <Filter>Header Files\Graphics\Unified Lighting</Filter>
     </ClInclude>
