@@ -61,6 +61,7 @@ class SystemLoader : public System {
 	string file;
 
 	static string loadTableComponentNameToScriptName(string loadName) {
+		loadName = loadName.substr(1);
 		string name = "Component" + loadName;
 		name[9] = name[9] - 32;
 		return name;
@@ -209,74 +210,75 @@ class SystemLoader : public System {
 		return false;
 	}
 
+	//splits a component directive into a script master directive
+	//will return empty string on error
+	string evaluateComponentLine(string line, string& componentName) {
+		line = str_kit::trimString(line);
+		//need to find first space
+		auto it = line.find(' ');
+
+		//if invalid, return
+		if (it == std::string::npos) {
+			return "";
+		}
+
+		//compute script name of component
+		componentName = loadTableComponentNameToScriptName(line.substr(0, it));
+
+		//convert parameter list into parameters for create
+		string scriptCall = line.substr(it);
+		scriptCall = str_kit::trimString(scriptCall);
+
+		//takes a string reference and a starting index
+		//scans the token, if the token cannnot be casted to an int or float
+		//it will be converted to an int
+		int scanLocation = 0;
+		while (scanLocation != string::npos) {
+			int end = scriptCall.find(' ', scanLocation );
+			if (end == string::npos) {
+				//set for end of string
+				end = scriptCall.size();
+			}
+			int length = end - scanLocation;
+
+			string sub = scriptCall.substr(scanLocation, length);
+			if (!str_kit::isInt(sub) && !str_kit::isFloat(sub)) {
+				scriptCall.insert(scanLocation, "\"");
+				length ++;
+				scriptCall.insert(scanLocation + length, "\"");
+				length++;
+			}
+
+			//find new scan location
+			scanLocation = scriptCall.find(' ', scanLocation + length) + 1;
+			//if we couldn't find a space, we get 0
+			scanLocation = scanLocation ? scanLocation : string::npos;
+		}
+
+		
+		replace(scriptCall, ' ', ',');
+		scriptCall = "this:add_component(" + componentName +".create(" + scriptCall + "))";
+
+		return scriptCall;
+	}
+
 	//Adds a component to the lates ent
-	bool addComponent(string line, shared_ptr<Entity> ent, string* componentName) {
+	bool addComponent(string line, shared_ptr<Entity> ent, string& componentName) {
 		if not(ent) {
 			err::logMessage("LOAD: Error, attempting to add a component with no prior entity declaration " + to_string(lineNumber) + " in file " + file);
 			return false;
 		}
 		
-		//conduct lexical analysis
-		str_kit::LexicalAnalysisResult result;
+		//get call
+		string call = evaluateComponentLine(line, componentName);
 
-		//position
-		if (result = str_kit::lexicalAnalysis(line, "+position", "ff")) {
-			*componentName = loadTableComponentNameToScriptName("position");
-			if (result == str_kit::LAR_valid) {
-				auto newComponent = new ComponentPosition(str_kit::qStringToFloat(line, 1), str_kit::qStringToFloat(line, 2), 0);
-				ent->addComponent( newComponent->pullForEntity() );
-				return true;
-			}
-
-			else if (result == str_kit::LAR_lexLengthFail) {
-				if (str_kit::lexicalAnalysis(line, "+position", "fff") == str_kit::LAR_valid) {
-					auto newComponent = 
-						new ComponentPosition(str_kit::qStringToFloat(line, 1), str_kit::qStringToFloat(line, 2), str_kit::qStringToFloat(line, 3));
-					ent->addComponent(newComponent->pullForEntity());
-					return true;
-				}
-			}
-
-			//at this point everything has failed, just return
-			err::logMessage("LOAD: Error, attempting to add a component with +position prefix" + to_string(lineNumber) + " in file " + file
-				+ "\n --> Expected: +Position [float:x] [float:y] [float:z=0]");
-			return false;
-		}
-
-		//graphics
-		else if (result = str_kit::lexicalAnalysis(line, "+graphics", "s")) {
-			*componentName = loadTableComponentNameToScriptName("graphics");
-			if (result == str_kit::LAR_valid) {
-				auto newComponent = new ComponentGraphics(str_kit::splitOnToken(line, ' ')[1]);
-				ent->addComponent(newComponent->pullForEntity());
-				return true;
-			}
-			
-			else {
-				err::logMessage("LOAD: Error, attempting to add a component with +graphics prefix" + to_string(lineNumber) + " in file " + file
-					+ "\n --> Expected: +graphics [string:set_name]");
-				return false;
-			}
-		}
-
-		//callback
-		else if (result = str_kit::lexicalAnalysis(line, "+timer", "")) {
-			*componentName = loadTableComponentNameToScriptName("timer");
-			if (result == str_kit::LAR_valid) {
-				auto newComponent = new ComponentTimer();
-				ent->addComponent(newComponent->pullForEntity());
-				return true;
-			}
-
-			else {
-				err::logMessage("LOAD: Error, attempting to add a component with +timer prefix" + to_string(lineNumber) + " in file " + file
-					+ "\n --> Expected: +timer");
-				return false;
-			}
-		}
-
-		err::logMessage("LOAD: Error, Unknown token used with \"+\" at " + to_string(lineNumber) + " in file " + file);
-		return false;
+		ScriptUnit su(SS_inlineLoader, call);
+		su.addDebugData(" in " + file + " at line " + to_string(lineNumber) + " ");
+		su.attachEntity(ent);
+		sc.reset();
+		su.attachSuccessCallback(&sc);
+		g_script::executeScriptUnit(su);
+		return sc.waitForCompletion();
 	}
 
 	//executes the given command against a component of an ent
@@ -325,7 +327,7 @@ class SystemLoader : public System {
 			}
 			//else check if an component needs to be added'
 			else if (line[0] == '+') {
-				valid = addComponent(line, ent, &componentName);
+				valid = addComponent(line, ent, componentName);
 			}
 			//else check if a inline component script ahs been requested
 			else if (line.size() > 1 && line[0] == '-' && line[1] == '>') {
