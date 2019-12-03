@@ -62,6 +62,7 @@ ScriptMaster::ScriptMaster()
 		kaguya::UserdataMetatable<Entity>()
 		.setConstructors<Entity(int)>()
 		.addFunction("getComponent", &Entity::l_getComponent)
+		.addFunction("addComponent", &Entity::l_addComponent)
 	);
 
 	//register entity pool

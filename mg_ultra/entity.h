@@ -51,6 +51,15 @@ public:
 		return components[component.first];
 	}
 
+	//a lua bindable addComponent
+	bool l_addComponent(type_index index, Component* component) {
+		if (components.count(index)) {
+			return false;
+		}
+		components[index] = shared_ptr<Component>(component);
+		return true;
+	}
+
 	//A general update to set entity flag
 	void entityUpdate() {
 		for (auto i : components) {
