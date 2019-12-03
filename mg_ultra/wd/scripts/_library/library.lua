@@ -29,7 +29,7 @@ end
 --Variadic print to console/log
 function print(...) 
 	--get size of input
-	size = #{...}
+	local size = #{...}
 
 	--handle single input of type table, for doing things like printing classes
 	if size == 1 and type(select(1, ...)) == "table" then
@@ -49,7 +49,7 @@ function print(...)
 	--otherwise general print
 	for i = 1,size do
 
-		v = select(i, ...)
+		local v = select(i, ...)
 	
 		if v == nil then
 			printAdd("nil")
