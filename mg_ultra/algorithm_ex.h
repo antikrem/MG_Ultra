@@ -56,6 +56,16 @@ int index_of(const Container& container, const typename Container::value_type& e
 	return it != container.end() ? distance(container.begin(), it) : -1;
 }
 
+//replaces the value of a container
+template <class Container>
+void replace(Container& container, const typename Container::value_type& element, const typename Container::value_type& replacement) {
+	auto it = std::find(container.begin(), container.end(), element);
+	while (it != container.end()) {
+		*it = replacement;
+		it = std::find(container.begin(), container.end(), element);
+	}
+}
+
 //deletes if not null
 template <class T>
 void delete_or_null(T* &object) {
