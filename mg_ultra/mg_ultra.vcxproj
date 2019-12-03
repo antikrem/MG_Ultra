@@ -187,6 +187,7 @@
     <ClCompile Include="entity_types.cpp" />
     <ClCompile Include="error.cpp" />
     <ClCompile Include="events.cpp" />
+    <ClCompile Include="frame_buffer.cpp" />
     <ClCompile Include="functional_callback_system.cpp" />
     <ClCompile Include="global_funcs.cpp" />
     <ClCompile Include="gl_handler.cpp" />

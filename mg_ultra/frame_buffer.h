@@ -7,6 +7,19 @@
 #include "graphics_settings.h"
 #include "algorithm_ex.h"
 
+struct BufferSpecification {
+	string name;
+	GLint internalFormat;
+
+	BufferSpecification(string name, GLint internalFormat) {
+		this->name = name;
+		this->internalFormat = internalFormat;
+	}
+};
+
+//provides lookup for format given an internal format
+GLint lookUpFormat(GLint internalFormat);
+
 class FrameBuffer {
 	unsigned int fbo;
 	//vector of colour buffers
@@ -17,7 +30,7 @@ class FrameBuffer {
 	vector<string> targetNames;
 
 	//Creates an attaches a new colour buffer at the given level
-	void createAndAttachColourBuffer(GraphicsSettings* graphicsSettings, int i, string name) {
+	void createAndAttachColourBuffer(GraphicsSettings* graphicsSettings, int i, BufferSpecification specification) {
 		//Create colour buffer
 		GLuint texColorBuffer;
 		glGenTextures(1, &texColorBuffer);
@@ -25,7 +38,17 @@ class FrameBuffer {
 		glBindTexture(GL_TEXTURE_2D, texColorBuffer);
 
 		graphicsSettings->accessLock.lock();
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, graphicsSettings->screenWidth, graphicsSettings->screenHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+		glTexImage2D(
+			GL_TEXTURE_2D, 
+			0, 
+			specification.internalFormat,
+			graphicsSettings->screenWidth, 
+			graphicsSettings->screenHeight, 
+			0, 
+			lookUpFormat(specification.internalFormat),
+			GL_FLOAT,
+			NULL
+		);
 		graphicsSettings->accessLock.unlock();
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -35,20 +58,20 @@ class FrameBuffer {
 		drawTargets.push_back(GL_COLOR_ATTACHMENT0 + i);
 		glBindTexture(GL_TEXTURE_2D, 0);
 
-		targetNames.push_back(name);
+		targetNames.push_back(specification.name);
 	}
 
 public:
 	//returns true if creation was succesful
-	void initialiseFrameBuffer(GraphicsSettings* graphicsSettings, vector<string> names, bool attachDepthBuffer) {
+	void initialiseFrameBuffer(GraphicsSettings* graphicsSettings, vector<BufferSpecification> specifications, bool attachDepthBuffer) {
 		glGenFramebuffers(1, &fbo);
 		bindBuffer();
 
 		//create all of the colour buffers desired
-		for (unsigned int i = 0; i < names.size(); i++) {
-			createAndAttachColourBuffer(graphicsSettings, i, names[i]);
+		for (unsigned int i = 0; i < specifications.size(); i++) {
+			createAndAttachColourBuffer(graphicsSettings, i, specifications[i]);
 		}
-		glDrawBuffers((int)names.size(), &drawTargets[0]);
+		glDrawBuffers((int)specifications.size(), &drawTargets[0]);
 
 		if (attachDepthBuffer) {
 			//Create depth buffer
@@ -77,7 +100,7 @@ public:
 	void bindBuffer() {
 		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 		//depth test
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 

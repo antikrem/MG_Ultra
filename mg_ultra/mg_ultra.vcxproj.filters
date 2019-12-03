@@ -144,6 +144,9 @@
     <ClCompile Include="ambient_illumination.cpp">
       <Filter>Source Files\Graphics\Unified Lighting</Filter>
     </ClCompile>
+    <ClCompile Include="frame_buffer.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="graphics_state.h">

@@ -104,9 +104,21 @@ public:
 		glDepthFunc(GL_LESS);
 
 		//create frame buffers
-		geometryFrameBuffer.initialiseFrameBuffer(gSettings, { "spriteColour", "spriteWorldPosition", "normals", "lightingSensitivity" }, true);
-		lightingFrameBuffer.initialiseFrameBuffer(gSettings, { "directionalLightScene" }, false);
-		postEffects.initialiseFrameBuffer(gSettings, { "scene" }, false);
+		geometryFrameBuffer.initialiseFrameBuffer(
+			gSettings,
+			{ {"spriteColour", GL_RGB}, {"spriteWorldPosition", GL_RGB16F}, {"normals", GL_RGB16_SNORM}, {"lightingSensitivity", GL_RGB} },
+			true
+		);
+		lightingFrameBuffer.initialiseFrameBuffer(
+			gSettings, 
+			{ {"directionalLightScene", GL_RGBA16F} },
+			false
+		);
+		postEffects.initialiseFrameBuffer(
+			gSettings, 
+			{ {"scene", GL_RGB} },
+			false
+		);
 
 		shaderMaster = new ShaderMaster();
 
