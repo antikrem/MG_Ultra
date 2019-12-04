@@ -13,9 +13,10 @@ using namespace std;
 template <class Key, class Value>
 class MMap {
 	map<Key, vector<Value>> internalMap;
-	using iterator = map<Key, vector<Value>>::iterator;
 
 public:
+	using iterator = typename map<Key, vector<Value>>::iterator;
+
 	~MMap() {
 		clear();
 	}
@@ -77,6 +78,11 @@ public:
 			i.second.clear();
 		}
 		internalMap.clear();
+	}
+
+	//erases by key
+	void erase(const Key& key) {
+		internalMap.erase(key);
 	}
 };
 
