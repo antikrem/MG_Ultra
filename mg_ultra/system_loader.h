@@ -34,6 +34,7 @@ ent [string] - ent table look up
 #include "registar.h"
 #include "os_kit.h"
 #include "script_master.h"
+#include "mmap.h"
 
 #include "component_timer.h"
 #include "component_graphics.h"
@@ -54,7 +55,7 @@ struct TargetFullSpecification {
 };
 
 class SystemLoader : public System {
-	map<int, shared_ptr<Entity>> cycleEnt;
+	MMap<int, shared_ptr<Entity>> cycleEnts;
 
 	//error stuff
 	int lineNumber;
@@ -74,15 +75,18 @@ class SystemLoader : public System {
 		registar->get("cycle", &cycle);
 		
 		//get ents equal to cycle
-		for (auto it = cycleEnt.begin(); it != cycleEnt.end() && it->first < cycle; it = cycleEnt.begin()) {
-			pool->addEnt(it->second);
-			cycleEnt.erase(it);
+		for (auto it = cycleEnts.begin(); it != cycleEnts.end() && it->first < cycle; it = cycleEnts.begin()) {
+			auto ents = cycleEnts.peel(it->first);
+			for (auto i : ents) {
+				pool->addEnt(i);
+			}
+			cycleEnts.erase(it->first);
 		}
 	}
 
 	//clears all ents in future queue
 	void deleteAllFutureEnts() {
-		cycleEnt.clear();
+		cycleEnts.clear();
 	}
 
 	//converts registar values to next file path, returns empty string on error
@@ -204,7 +208,7 @@ class SystemLoader : public System {
 			return false;
 		}
 		else if (target.target == TaSp_cycle) {
-			cycleEnt[target.cycle] = ent;
+			cycleEnts.add(target.cycle, ent);
 			return true;
 		}
 		return false;
