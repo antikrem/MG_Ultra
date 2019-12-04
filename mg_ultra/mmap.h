@@ -18,28 +18,47 @@ public:
 		clear();
 	}
 
-	int count(Key key) {
-		if (map.count(key)) {
-			return map[key].size();
-		}
-		return 0;
+	//counts the number of values indexed by key
+	int count(const Key& key) {
+		return map.count(key) ? map[key].size() : 0;
 	}
 
 	//returns reference to vector values at key
 	//if previously no value to key, will make value
-	vector<Value>& get(Key key) {
+	vector<Value>& get(const Key& key) {
 		if not(map.count(key)) {
 			map[key] = vector<Value>();
-
 		}
 		return map[key];
 	}
 
+	//adds a value to a key
+	void add(const Key& key, const Value& value) {
+		if (!count(key)) {
+			map[key] = vector<Value>();
+		}
+		map[key].push_back(value);
+	}
+
+	//Peels a given key, returning a vector of values
+	//and removing that key from map
+	//returns empty vector on empty key
+	vector<Value> peel(const Key& key) {
+		auto it = map.find(key);
+		if (it == map.end()) {
+			return vector<Value>();
+		}
+		vector<Value> peeled = it->second;
+		map.erase(it);
+		return peeled;
+	}
+
 	//overlods [] operator
-	vector<Value>& operator[](Key key) {
+	vector<Value>& operator[](const Key& key) {
 		return get(key);
 	}
 
+	//clear all values from map
 	void clear() {
 		for (auto i : map) {
 			i.second.clear();
