@@ -56,6 +56,7 @@ struct TargetFullSpecification {
 
 class SystemLoader : public System {
 	MMap<int, shared_ptr<Entity>> cycleEnts;
+	map<int, string> cycleStrings;
 
 	//error stuff
 	int lineNumber;
@@ -80,7 +81,6 @@ class SystemLoader : public System {
 			for (auto i : ents) {
 				pool->addEnt(i);
 			}
-			cycleEnts.erase(it->first);
 		}
 	}
 
@@ -297,6 +297,19 @@ class SystemLoader : public System {
 		return sc.waitForCompletion();
 	}
 
+	//Adds a line of scripting to level manifest
+	bool loadScriptLevel(string line, const TargetFullSpecification& destination) {
+		line = line.substr(2);
+		if (destination.target == TaSp_cycle) {
+			//attach script
+			if (!cycleStrings.count(destination.cycle)) {
+				cycleStrings[destination.cycle] = "";
+			}
+			cycleStrings[destination.cycle].append(line);
+		}
+
+		return true;
+	}
 
 	bool parseLoadTable(string filepath) {
 		file = filepath;
@@ -336,6 +349,10 @@ class SystemLoader : public System {
 			//else check if a inline component script ahs been requested
 			else if (line.size() > 1 && line[0] == '-' && line[1] == '>') {
 				valid = inlineExecuteOnComponent(ent, componentName, line);
+			}
+			//else check if a fixed script is added
+			else if (line.size() > 1 && line[0] == '<' && line[1] == '<') {
+				valid = loadScriptLevel(line, currentTarget);
 			}
 		}
 
