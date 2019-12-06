@@ -167,10 +167,3 @@ function arrays.multiply(m, A)
 		return A
 	end
 end
-
-function testy() 
-	a = {1, 2, 4, 5}
-	b =	{7, 8, 10, 11}
-	c = arrays.multiply(10, b)
-	print(c)
-end
