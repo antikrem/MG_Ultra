@@ -100,9 +100,11 @@ public:
 		glHandler->render();
 	}
 
-	BoxData evaluateToBox(AnimationState state, float scale, bool renderIn3D) {
-		return animationsMaster->evaluateToBox(state, scale, renderIn3D);
+	BoxData evaluateToBox(AnimationState state, float scale) {
+		return animationsMaster->evaluateToBox(state, scale);
 	}
+
+	///BoxDataBuffer
 
 	//gets a pointer to a buffered map
 	BoxData* getBoxDataBuffer() {
@@ -118,6 +120,25 @@ public:
 	int getBoxDataBufferSize() {
 		return glHandler->getBoxDataBuffer().getMaxSize();
 	}
+
+	///UI BoxData
+
+	//gets a pointer to a buffered map
+	BoxData* getUIBoxDataBuffer() {
+		return glHandler->getUIBoxDataBuffer().getWriteBuffer();
+	}
+
+	//commit the directionalLightVAOBuffer buffer
+	void commitUIBoxDataBuffer(int boxCount) {
+		glHandler->getUIBoxDataBuffer().commitBuffer(boxCount);
+	}
+
+	//returns the size of the GLHandler's boxBufferDataBuffer size
+	int getUIBoxDataBufferSize() {
+		return glHandler->getUIBoxDataBuffer().getMaxSize();
+	}
+
+	///DirectionalDataBuffer
 
 	//gets a pointer to a buffered map
 	DirectionalData* getDirectionDataBuffer() {

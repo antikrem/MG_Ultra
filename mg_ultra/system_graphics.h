@@ -20,8 +20,11 @@ class SystemGraphics : public System {
 
 	int boxCount = 0;
 	BoxData* buffer = nullptr;
-
 	int bufferSize = 0;
+
+	int uiBoxCount = 0;
+	BoxData* uiBuffer = nullptr;
+	int uiBufferSize = 0;
 
 public:
 	SystemGraphics() {
@@ -51,8 +54,14 @@ public:
 			auto state = gra->getAnimationState(&toDraw, pos->getPosition3());
 
 			if (toDraw && boxCount < bufferSize) {
-				buffer[boxCount] = graphicsState->evaluateToBox(state, 1.0f, gra->getRenderIn3D());
-				boxCount++;
+				if (gra->getRenderIn3D()) {
+					buffer[boxCount] = graphicsState->evaluateToBox(state, 1.0f);
+					boxCount++;
+				}
+				else {
+					uiBuffer[uiBoxCount] = graphicsState->evaluateToBox(state, 1.0f);
+					uiBoxCount++;
+				}
 			}
 		}
 		//if otherwise a text component is found, get cached frames
@@ -67,8 +76,17 @@ public:
 			//pull all the states 
 			auto stateList = tex->getStates(pos->getPosition3());
 		
-			for (int i = 0; (i < (int)stateList.size()) && (boxCount < bufferSize); i++) {
-				buffer[boxCount++] = graphicsState->evaluateToBox(stateList[i], tex->getScale(), tex->getRenderIn3D());
+			
+
+			if (tex->getRenderIn3D()) {
+				for (int i = 0; (i < (int)stateList.size()) && (boxCount < bufferSize); i++) {
+					buffer[boxCount++] = graphicsState->evaluateToBox(stateList[i], tex->getScale());
+				}
+			}
+			else {
+				for (int i = 0; (i < (int)stateList.size()) && (uiBoxCount < uiBufferSize); i++) {
+					uiBuffer[uiBoxCount++] = graphicsState->evaluateToBox(stateList[i], tex->getScale());
+				}
 			}
 		}
 	}
@@ -77,6 +95,10 @@ public:
 		boxCount = 0;
 		buffer = graphicsState->getBoxDataBuffer();
 		bufferSize = graphicsState->getBoxDataBufferSize();
+
+		uiBoxCount = 0;
+		uiBuffer = graphicsState->getUIBoxDataBuffer();
+		uiBufferSize = graphicsState->getUIBoxDataBufferSize();
 	}
 
 	void postcycle(EntityPool* pool) override {
@@ -94,6 +116,7 @@ public:
 		}
 
 		graphicsState->commitBoxDataBuffer(boxCount);
+		graphicsState->commitUIBoxDataBuffer(uiBoxCount);
 	}
 
 };
