@@ -178,19 +178,9 @@ public:
 		return window;
 	}
 
-	//gets a boxdata buffer
-	BoxData* getBoxDataBuffer() {
-		return boxVAOBuffer.getWriteBuffer();
-	}
-
-	//Commit current write buffer and waot until its processed
-	void commitBoxDataBuffer(int boxCount) {
-		boxVAOBuffer.commitBuffer(boxCount);
-	}
-
-	//gets the size of the BoxDataBuffer
-	int getBoxDataBufferSize() {
-		return boxVAOBuffer.getMaxSize();
+	//returns reference to directionalLightVAOBuffer
+	VAOBoxData& getBoxDataBuffer() {
+		return boxVAOBuffer;
 	}
 
 	//returns reference to directionalLightVAOBuffer

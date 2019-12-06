@@ -106,17 +106,17 @@ public:
 
 	//gets a pointer to a buffered map
 	BoxData* getBoxDataBuffer() {
-		return glHandler->getBoxDataBuffer();
+		return glHandler->getBoxDataBuffer().getWriteBuffer();
 	}
 
 	//commit the directionalLightVAOBuffer buffer
 	void commitBoxDataBuffer(int boxCount) {
-		glHandler->commitBoxDataBuffer(boxCount);
+		glHandler->getBoxDataBuffer().commitBuffer(boxCount);
 	}
 
 	//returns the size of the GLHandler's boxBufferDataBuffer size
 	int getBoxDataBufferSize() {
-		return glHandler->getBoxDataBufferSize();
+		return glHandler->getBoxDataBuffer().getMaxSize();
 	}
 
 	//gets a pointer to a buffered map
