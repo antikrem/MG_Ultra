@@ -57,6 +57,7 @@ struct TargetFullSpecification {
 class SystemLoader : public System {
 	MMap<int, shared_ptr<Entity>> cycleEnts;
 	map<int, string> cycleStrings;
+	string immediateScript = "";
 
 	//error stuff
 	int lineNumber;
@@ -198,7 +199,7 @@ class SystemLoader : public System {
 
 		else if (result = str_kit::lexicalAnalysis(line, "@immediate", "")) {
 			if (result == str_kit::LAR_valid) {
-				spec->target = TaSp_counter;
+				spec->target = TaSp_immediate;
 				return true;
 			}
 			else {
@@ -341,7 +342,7 @@ class SystemLoader : public System {
 		}
 		else if (destination.target == TaSp_immediate) {
 			//attach script
-			executeScript(line);
+			immediateScript.append(line + "\n");
 		}
 
 		return true;
@@ -350,6 +351,7 @@ class SystemLoader : public System {
 	bool parseLoadTable(string filepath) {
 		file = filepath;
 		lineNumber = -1;
+		immediateScript = "";
 
 		TargetFullSpecification currentTarget;
 		shared_ptr<Entity> ent = nullptr;
@@ -438,6 +440,8 @@ public:
 			err::logMessage("LOAD: Successful, starting level at " + path);
 			registar->update("cycle", -1);
 		}
+
+		executeScript(immediateScript);
 
 		registar->update("loading", false);
 		registar->update("cycle_progress", true);
