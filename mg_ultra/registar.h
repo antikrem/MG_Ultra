@@ -37,6 +37,15 @@ public:
 		reg[name] = temp;
 	}
 
+	//add to base for ints
+	template <>
+	void addToBase<int>(string name, int data) {
+		unique_lock<shared_mutex> lck(lock);
+		//todo check if reg has same things
+		auto temp = new AnyType<float>((float)data);
+		reg[name] = temp;
+	}
+
 	//updates a current value
 	template <class T>
 	bool update(string name, T data) {
@@ -55,6 +64,27 @@ public:
 		
 		unique_lock<shared_mutex> lck(lock);
 		((AnyType<T>*)reg[name])->setValue(data);
+		return true;
+	}
+
+	//updates a current float value
+	template <>
+	bool update<int>(string name, int data) {
+		{
+			shared_lock<shared_mutex> lck(lock);
+			//check reg contains
+			if not(reg.count(name)) {
+				return false;
+			}
+
+			//check type is correct
+			if not(reg[name]->value().hash_code() == typeid(float).hash_code()) {
+				return false;
+			}
+		}
+
+		unique_lock<shared_mutex> lck(lock);
+		((AnyType<float>*)reg[name])->setValue((float)data);
 		return true;
 	}
 
@@ -79,6 +109,30 @@ public:
 
 		//cast down and return
 		*value = ((AnyType<T>*)reg[name])->pullValue();
+		return true;
+	}
+
+	//use valid to check, specialised for ints
+	template <>
+	bool get<int>(string name, int *value) {
+		shared_lock<shared_mutex> lck(lock);
+		//check reg contains
+		if not(reg.count(name)) {
+			return false;
+		}
+
+		//check type is correct
+		if not(reg[name]->value().hash_code() == typeid(float).hash_code()) {
+			return false;
+		}
+
+		//check ptr is legit
+		if not(value) {
+			return false;
+		}
+
+		//cast down and return
+		*value = (int)((AnyType<float>*)reg[name])->pullValue();
 		return true;
 	}
 
