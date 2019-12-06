@@ -269,6 +269,11 @@ public:
 		glUniform3f(getUniformLocation(programName, uniformName), value[0], value[1], value[2]);
 	}
 
+	//sets a uniform bool
+	void setUniformBool(string programName, string uniformName, bool value) {
+		glUniform1i(getUniformLocation(programName, uniformName), (int)value);
+	}
+
 	//Attaches a framebuffer as the source for rendering
 	//sampler is the name of the sampler array in the
 	//returns the next starting TU, and takes an optional starting TU
