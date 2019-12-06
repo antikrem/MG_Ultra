@@ -196,6 +196,17 @@ class SystemLoader : public System {
 			}
 		}
 
+		else if (result = str_kit::lexicalAnalysis(line, "@immediate", "")) {
+			if (result == str_kit::LAR_valid) {
+				spec->target = TaSp_counter;
+				return true;
+			}
+			else {
+				pushErrorLoading(line, "@immediate", "");
+				return false;
+			}
+		}
+
 		else {
 			err::logMessage("LOAD: Error loading file: " + file + " at line " + to_string(lineNumber) + ": unknown id");
 			return false;
@@ -327,6 +338,10 @@ class SystemLoader : public System {
 				cycleStrings[destination.cycle] = "";
 			}
 			cycleStrings[destination.cycle].append(line + "\n");
+		}
+		else if (destination.target == TaSp_immediate) {
+			//attach script
+			executeScript(line);
 		}
 
 		return true;
