@@ -69,12 +69,8 @@ class SystemLoader : public System {
 		return name;
 	}
 
-	//transfers ents from 
-	void transferBufferedEntsToGame(EntityPool* pool) {
-		//get cycle
-		int cycle;
-		registar->get("cycle", &cycle);
-		
+	//transfers ents from cycle ents to game
+	void transferBufferedEntsToGame(EntityPool* pool, int cycle) {		
 		//get ents equal to cycle
 		for (auto it = cycleEnts.begin(); it != cycleEnts.end() && it->first < cycle; it = cycleEnts.begin()) {
 			auto ents = cycleEnts.peel(it->first);
@@ -84,9 +80,34 @@ class SystemLoader : public System {
 		}
 	}
 
+	//executes a script
+	//returns sucess
+	bool executeScript(const string& script) {
+		ScriptUnit su(SS_inlineLoader, script);
+		su.addDebugData(" in " + file + " at line " + to_string(lineNumber) + " ");
+		sc.reset();
+		su.attachSuccessCallback(&sc);
+		g_script::executeScriptUnit(su);
+		return sc.waitForCompletion();
+	}
+
+	//execute cycle scipts to game
+	void executeBufferedCycleScripts(int cycle) {
+		for (auto it = cycleStrings.begin(); it != cycleStrings.end() && it->first < cycle; it = cycleStrings.begin()) {
+			auto& cycleScript = it->second;
+			executeScript(cycleScript);
+			cycleStrings.erase(it);
+		}
+	}
+
 	//clears all ents in future queue
 	void deleteAllFutureEnts() {
 		cycleEnts.clear();
+	}
+
+	//clears all scripts in future queue
+	void deleteAllFutureScripts() {
+		cycleStrings.clear();
 	}
 
 	//converts registar values to next file path, returns empty string on error
@@ -305,7 +326,7 @@ class SystemLoader : public System {
 			if (!cycleStrings.count(destination.cycle)) {
 				cycleStrings[destination.cycle] = "";
 			}
-			cycleStrings[destination.cycle].append(line);
+			cycleStrings[destination.cycle].append(line + "\n");
 		}
 
 		return true;
@@ -367,8 +388,14 @@ public:
 	}
 
 	void precycle(EntityPool* pool) override {
+		//get cycle
+		int cycle;
+		registar->get("cycle", &cycle);
+
 		//push current cycle of ents
-		transferBufferedEntsToGame(pool);
+		transferBufferedEntsToGame(pool, cycle);
+		//execute buffered scripts
+		executeBufferedCycleScripts(cycle);
 
 		//check if loading is requested
 		bool loading = false;
