@@ -118,6 +118,11 @@ public:
 		return targetNames;
 	}
 
+	//clears depth buffer of this frame buffer
+	void clearDepthBuffer() {
+		glClear(GL_DEPTH_BUFFER_BIT);
+	}
+
 	//only valid after binding
 	//specifies a blend function for a specified buffer 
 	void setBlendFunction(const string& buffer, GLenum mode, GLenum sfactor, GLenum dfactor) {
