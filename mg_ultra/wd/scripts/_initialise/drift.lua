@@ -11,7 +11,7 @@ function Drift.set_scroll_speed(x, y, z)
 	y = y or 1.0e-10
 	z = z or 1.0e-10
 
-	registar:update("drift_scrollspeed_x", x + 1.0e-10)
-	registar:update("drift_scrollspeed_y", y + 1.0e-10)
-	registar:update("drift_scrollspeed_z", z + 1.0e-10)
+	registar:update("drift_scrollspeed_x", x)
+	registar:update("drift_scrollspeed_y", y)
+	registar:update("drift_scrollspeed_z", z)
 end
