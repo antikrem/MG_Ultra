@@ -48,6 +48,9 @@ private:
 	//frame buffer for geometry
 	FrameBuffer geometryFrameBuffer;
 
+	//frame buffer for ui
+	FrameBuffer uiFrameBuffer;
+
 	//frame buffer for post effects
 	FrameBuffer lightingFrameBuffer;
 
@@ -56,6 +59,7 @@ private:
 
 	//buffer for all boxes in the render view
 	VAOBoxData boxVAOBuffer;
+	VAOBoxData boxUIVAOBuffer;
 	VAODirectionalLight directionalLightVAOBuffer;
 	VAOScreenBuffer screenVAO;
 
@@ -73,7 +77,7 @@ public:
 	//GL calls are done in a seperate thread
 	//Requests made to gl thread will be handled async
 	GLHandler(GLFWwindow *window, GraphicsSettings* gSettings, AnimationsMaster* textureMaster, Camera* camera) 
-	: boxVAOBuffer(1000), directionalLightVAOBuffer(10), periodBlock(0) {
+	: boxVAOBuffer(1000), boxUIVAOBuffer(1000), directionalLightVAOBuffer(10), periodBlock(0) {
 		this->window = window;
 		this->gSettings = gSettings;
 		this->camera = camera;
@@ -106,7 +110,19 @@ public:
 		//create frame buffers
 		geometryFrameBuffer.initialiseFrameBuffer(
 			gSettings,
-			{ {"spriteColour", GL_RGB}, {"spriteWorldPosition", GL_RGB16F}, {"normals", GL_RGB16_SNORM}, {"lightingSensitivity", GL_RGB} },
+			{ 
+				{"spriteColour", GL_RGB}, 
+				{"spriteWorldPosition", GL_RGB16F}, 
+				{"normals", GL_RGB16_SNORM}, 
+				{"lightingSensitivity", GL_RGB}, 
+			},
+			true
+		);
+		uiFrameBuffer.initialiseFrameBuffer(
+			gSettings,
+			{
+				{"uiScene", GL_RGBA}
+			},
 			true
 		);
 		lightingFrameBuffer.initialiseFrameBuffer(
@@ -137,7 +153,6 @@ public:
 		//FIRST PASS - render basic stuff
 		shaderMaster->useShader("base");
 		shaderMaster->setUniformMatrix4F("base", "MVP", camera->getVPMatrix());
-		shaderMaster->setUniformMatrix4F("base", "uiMVP", camera->getUiVPMatrix());
 		geometryFrameBuffer.bindBuffer();
 		//process the box buffer, which renders the geometry
 		//set mgt textures in shader
@@ -145,6 +160,13 @@ public:
 		boxVAOBuffer.processGLSide();
 		geometryFrameBuffer.unbindBuffer();
 
+		//render ui as well
+		shaderMaster->useShader("ui");
+		shaderMaster->setUniformMatrix4F("base", "MVP", camera->getUiVPMatrix());
+		uiFrameBuffer.bindBuffer();
+		boxUIVAOBuffer.processGLSide();
+		uiFrameBuffer.unbindBuffer();
+		
 		//SECOND PASS - calculate individual lighting components
 		shaderMaster->useShader("directional_lighting");
 		lightingFrameBuffer.bindBuffer();
@@ -168,7 +190,8 @@ public:
 		//FOURTH PASS - render buffer to screenspace
 		//set the geometry frame buffer as the source
 		shaderMaster->useShader("finalise");
-		shaderMaster->attachFrameBufferAsSource("finalise", &postEffects);
+		chain = shaderMaster->attachFrameBufferAsSource("finalise", &postEffects);
+		shaderMaster->attachFrameBufferAsSource("finalise", &uiFrameBuffer, chain);
 		screenVAO.processGLSide();
 
 		postrender();
@@ -178,9 +201,14 @@ public:
 		return window;
 	}
 
-	//returns reference to directionalLightVAOBuffer
+	//returns reference to BoxDataVAOBuffer
 	VAOBoxData& getBoxDataBuffer() {
 		return boxVAOBuffer;
+	}
+
+	//returns reference to uiBoxDataVaoBuffer
+	VAOBoxData& getUIBoxDataBuffer() {
+		return boxUIVAOBuffer;
 	}
 
 	//returns reference to directionalLightVAOBuffer

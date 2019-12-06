@@ -90,23 +90,11 @@ public:
 			(void*)(offsetof(BoxData, BoxData::uvwh)) //texture access
 		);
 
-		//Set up render in 3D flag
+		//Set up wrapfactor
 		glEnableVertexAttribArray(5);
 		glBindBuffer(GL_ARRAY_BUFFER, vboID);
 		glVertexAttribPointer(
-			5, //layout = 5
-			1, //single float
-			GL_FLOAT,
-			GL_FALSE,
-			sizeof(BoxData), //stride the length of boxdata
-			(void*)(offsetof(BoxData, BoxData::render3D)) //render3D flag
-		);
-
-		//Set up wrapfactor
-		glEnableVertexAttribArray(6);
-		glBindBuffer(GL_ARRAY_BUFFER, vboID);
-		glVertexAttribPointer(
-			6, //layout = 6
+			5, //layout = 6
 			1, //single float
 			GL_FLOAT,
 			GL_FALSE,
@@ -120,8 +108,7 @@ public:
 		glVertexAttribDivisor(2, 1); //size
 		glVertexAttribDivisor(3, 1); //rotation
 		glVertexAttribDivisor(4, 1); //texture access
-		glVertexAttribDivisor(5, 1); //render3DFlag
-		glVertexAttribDivisor(6, 1); //wrapfactor
+		glVertexAttribDivisor(5, 1); //wrapfactor
 	}
 
 	//render what there, the correct vao has been bound

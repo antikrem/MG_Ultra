@@ -46,8 +46,6 @@ struct BoxData {
 	float uvwh[4];
 	//rotation amount in radians
 	float rotation = 0;
-	//sets if this is a 3d element, which uses a different projection and shading method to 2d
-	float render3D = 1.0f;
 	//Used to overshoot wrapping
 	float wrapFactor = 1.0f;
 	//set to true if this box is valid
@@ -249,7 +247,7 @@ public:
 
 	//takes an animation state and returns boxdata
 	//error checking here is superflous todo
-	BoxData evaluateToBox(AnimationState state, float scale, bool renderIn3D) {
+	BoxData evaluateToBox(AnimationState state, float scale) {
 		BoxData boxData;
 
 		shared_lock<shared_mutex> lock(mtx);
@@ -276,7 +274,6 @@ public:
 		boxData.wh[1] = scale * state.scale*(float)ani->getHeight();
 		boxData.rotation = DEG2RAD(state.rotation);
 		memcpy(boxData.uvwh, &ani->getUVWH(state.currentFrame), 4 * sizeof(float));
-		boxData.render3D = (float)(int)renderIn3D;
 		boxData.wrapFactor = state.wrapFactor;
 		
 		return boxData;

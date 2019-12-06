@@ -502,6 +502,12 @@
     <None Include="wd\shaders\directional_lighting.vert">
       <Filter>Resource Files\shaders</Filter>
     </None>
+    <None Include="wd\shaders\ui.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="wd\shaders\ui.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="wd\log.txt">

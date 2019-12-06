@@ -20,5 +20,5 @@ void main() {
 	vec3 ls = texture(lightingSensitivity, uv).rgb;
 	vec3 ambient = ambientStrength * texelColor * ambientColor;
 	vec3 directional = texture(directionalLightScene, uv).rgb;
-	color = mix3(ls, ambient, directional, vec3(0), texelColor);
+	color = mix3(ls, ambient, directional, vec3(0));
 }

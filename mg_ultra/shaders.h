@@ -292,6 +292,7 @@ public:
 
 	ShaderMaster() {
 		loadProgramFromFile("base");
+		loadProgramFromFile("ui");
 		loadProgramFromFile("directional_lighting");
 		loadProgramFromFile("unified_lighting");
 		loadProgramFromFile("finalise");
