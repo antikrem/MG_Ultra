@@ -1,6 +1,21 @@
 ---sets g-registar variables, these are used for game control
 registar = getGlobalRegistar();
 
+--global registar modifiers
+GlobalRegistar = {}
+
+function GlobalRegistar.add(name, value)
+	registar:add(name, value)
+end
+
+function GlobalRegistar.update(name, value)
+	registar:update(name, value)
+end
+
+function GlobalRegistar.get(name)
+	return registar:get(name)
+end
+
 ----Engine level variables
 
 --levels are on cycles, with scripted events occuring on the tick
