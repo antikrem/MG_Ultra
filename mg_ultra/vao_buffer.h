@@ -56,7 +56,8 @@ protected:
 	}
 
 	~VAOBuffer() {
-		delete buffer;
+		delete[] buffer;
+		delete[] writeBuffer;
 	}
 
 
