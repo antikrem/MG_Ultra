@@ -42,11 +42,6 @@ public:
 	}
 
 	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, shared_ptr<Entity> ent, int id) override {
-		//if buffer is null, dont write yet
-		if (!buffer || (boxCount >= bufferSize)) {
-			return;
-		}
-
 		//if both position and graphics components are present, this is a simple single state push case 
 		if (components.count(typeid(ComponentGraphics)) ) {
 			auto pos = getComponent<ComponentPosition>(components);
@@ -55,7 +50,7 @@ public:
 			bool toDraw;
 			auto state = gra->getAnimationState(&toDraw, pos->getPosition3());
 
-			if (toDraw) {
+			if (toDraw && boxCount < bufferSize) {
 				buffer[boxCount] = graphicsState->evaluateToBox(state, 1.0f, gra->getRenderIn3D());
 				boxCount++;
 			}
