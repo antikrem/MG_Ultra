@@ -135,6 +135,10 @@ public:
 		return Point3(this->x + b.x, this->y + b.y, this->z + b.z);
 	}
 
+	//returns x, y as point2
+	Point2 getXY() const {
+		return Point2(x, y);
+	}
 
 #ifdef GLM_ADDED
 	//as glm is avalible use the following conversion
