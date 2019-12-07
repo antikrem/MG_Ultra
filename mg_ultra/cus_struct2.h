@@ -100,6 +100,10 @@ public:
 		return Point2(this->x / magnitude, this->y / magnitude);
 	}
 
+	//computes distance to another point
+	float distanceTo(const Point2& point) {
+		return sqrt(pow(point.x - this->x, 2) + pow(point.y - this->y, 2));
+	}
 };
 
 /*Use for rectangular points in 3d*/
