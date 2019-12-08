@@ -1,26 +1,48 @@
 #ifndef __COMPONENT_COLLISION__
 #define __COMPONENT_COLLISION__
 
-/*Defines a type of collision
-There are two types of collisions,
-A box collision and a cicle collision
+#include "component.h"
+#include "collision.h"
 
-*/
-class CollisionBox {
+//Allocates a collision to an entity
+//Collidable box can take multiple forms
+class ComponentCollision : public Component {
 private:
-	//if not box, circle
-	bool boxShape = false;
-	//radius if boxShape is false, else one length of box
-	float dim1=0;
-	//if boxShape, the other length
-	float dim2=0;
+	//set to true when added to system
+	bool addedToSystem = false;
+	CollisionSpecification specification;
+
 public:
+	ComponentCollision(float radius)
+	: specification(CollisionCircle(radius)) {
 
-};
+	}
 
-//CollisionSystem will keep a list of ids of entities that touch this object
-//Any system that uses collision to keep touch will use this interface
-class ComponentCollision {
+	ComponentCollision(float width, float height)
+	: specification(CollisionRectangle(width, height)) {
+
+	}
+
+	//Updates collision position
+	void update(Point3 position) {
+		specification.updatePosition(position);
+	}
+
+	//returns reference to CollisionSpecification
+	CollisionSpecification& getSpecification() {
+		return specification;
+	}
+
+	//returns if the entity this component is added to is in system
+	//collision
+	bool getAddedToSystem() {
+		return addedToSystem;
+	}
+
+	//sets addedToSystem to true
+	void setAddedToSystem() {
+		addedToSystem = true;
+	}
 
 };
 

@@ -103,7 +103,11 @@ class ECSMaster {
 		//ring 3
 		master = newSystemsMaster("m_loader");
 		master->setTimer(5);
-		master->createSystem<SystemLoader>(registar);
+		master->createSystem<SystemCollision>(registar);
+
+		//ring 4
+		master = newSystemsMaster("m_collision");
+		master->setTimer(100);
 	}
 
 	//starts all of the masters

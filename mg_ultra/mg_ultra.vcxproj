@@ -184,6 +184,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ambient_illumination.cpp" />
+    <ClCompile Include="collision.cpp" />
     <ClCompile Include="entity_types.cpp" />
     <ClCompile Include="error.cpp" />
     <ClCompile Include="events.cpp" />
@@ -212,6 +213,7 @@
     <ClInclude Include="animations.h" />
     <ClInclude Include="any_type.h" />
     <ClInclude Include="camera.h" />
+    <ClInclude Include="collision.h" />
     <ClInclude Include="component_animation.h" />
     <ClInclude Include="component_camera.h" />
     <ClInclude Include="component_collision.h" />
@@ -260,6 +262,7 @@
     <ClInclude Include="system_background.h" />
     <ClInclude Include="system_bounds_control.h" />
     <ClInclude Include="system_camera.h" />
+    <ClInclude Include="system_collision.h" />
     <ClInclude Include="system_console.h" />
     <ClInclude Include="system_directional_lighting.h" />
     <ClInclude Include="system_driftable.h" />

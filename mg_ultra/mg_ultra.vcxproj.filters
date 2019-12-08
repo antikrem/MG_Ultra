@@ -147,6 +147,9 @@
     <ClCompile Include="frame_buffer.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="collision.cpp">
+      <Filter>Source Files\Support</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="graphics_state.h">
@@ -418,6 +421,12 @@
     </ClInclude>
     <ClInclude Include="system_directional_lighting.h">
       <Filter>Header Files\ECS\Systems\Graphics System</Filter>
+    </ClInclude>
+    <ClInclude Include="collision.h">
+      <Filter>Header Files\Support</Filter>
+    </ClInclude>
+    <ClInclude Include="system_collision.h">
+      <Filter>Header Files\ECS\Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
