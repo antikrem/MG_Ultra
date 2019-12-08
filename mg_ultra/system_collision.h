@@ -17,6 +17,12 @@ struct CollisionEvent {
 	EntityTypes types[2];
 	//if non-empty, execute script on collision
 	string suplementaryScript = "";
+
+	CollisionEvent(EntityTypes source, EntityTypes target, const string& suplementaryScript = "") {
+		types[SOURCE] = source;
+		types[TARGET] = target;
+		this->suplementaryScript = suplementaryScript;
+	}
 };
 
 class SystemCollision : public System {
@@ -32,11 +38,11 @@ class SystemCollision : public System {
 	}
 
 	//conducts collision comparison between two entity types
-	void comparedCollisionLists(CollisionEvent& collisionEvent) {
+	void compareCollisionLists(CollisionEvent& collisionEvent) {
 		for (auto source : internalEntityLists.get(collisionEvent.types[SOURCE])) {
+
+			auto& sCol = source->getComponent<ComponentCollision>()->getSpecification();
 			for (auto target : internalEntityLists.get(collisionEvent.types[TARGET])) {
-				
-				auto& sCol = source->getComponent<ComponentCollision>()->getSpecification();
 				auto& tCol = target->getComponent<ComponentCollision>()->getSpecification();
 
 				if (CollisionSpecification::isColliding(sCol, tCol)) {
@@ -52,6 +58,7 @@ public:
 		target = SubPoolTarget(
 			SubPoolComponents::ByComponents<ComponentPosition, ComponentCollision>()
 		);
+		collisionEvents.push_back(CollisionEvent(ETPlayerBullets, ETEnemy));
 	}
 
 	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, shared_ptr<Entity> ent, int id) override {
@@ -78,7 +85,7 @@ public:
 		for (auto& i : collisionEvents) {
 			if (internalEntityLists.count(i.types[SOURCE])
 				&& internalEntityLists.count(i.types[TARGET])) {
-
+				compareCollisionLists(i);
 			}
 		}
 
