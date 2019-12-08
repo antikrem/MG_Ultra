@@ -14,6 +14,7 @@
 #include "component_driftable.h"
 #include "component_no_bounds_control.h"
 #include "component_directional_light.h"
+#include "component_collision.h"
 
 #include "registar.h"
 #include "pool.h"
@@ -84,6 +85,7 @@ ScriptMaster::ScriptMaster()
 	forceLuaRegistration<ComponentDriftable>(kaguya);
 	forceLuaRegistration<ComponentNoBoundsControl>(kaguya);
 	forceLuaRegistration<ComponentDirectionalLight>(kaguya);
+	forceLuaRegistration<ComponentCollision>(kaguya);
 
 	//set contextual script functions
 	kaguya["getEntityPool"] = getGlobalPool;

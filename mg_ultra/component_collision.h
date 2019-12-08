@@ -3,16 +3,23 @@
 
 #include "component.h"
 #include "collision.h"
+#include "scriptable_class.h"
 
 //Allocates a collision to an entity
 //Collidable box can take multiple forms
-class ComponentCollision : public Component {
+class ComponentCollision : public Component, public ScriptableClass {
 private:
 	//set to true when added to system
 	bool addedToSystem = false;
 	CollisionSpecification specification;
 
 public:
+	//default collision box of 10 units
+	ComponentCollision()
+		: specification(CollisionCircle(10)) {
+
+	}
+
 	ComponentCollision(float radius)
 	: specification(CollisionCircle(radius)) {
 
@@ -44,6 +51,18 @@ public:
 		addedToSystem = true;
 	}
 
+	void registerToLua(kaguya::State& state) override {
+		state["ComponentCollision"].setClass(kaguya::UserdataMetatable<ComponentCollision, Component>()
+			.setConstructors<ComponentCollision()>()
+			.addOverloadedFunctions(
+				"create",
+				ScriptableClass::create<ComponentCollision, float>,
+				ScriptableClass::create<ComponentCollision, float, float>
+			)
+			.addStaticFunction("type", &getType<ComponentCollision>)
+			.addStaticFunction("cast", &Component::castDown<ComponentCollision>)
+		);
+	}
 };
 
 #endif
