@@ -5,23 +5,47 @@
 #include <atomic>
 #include "component.h"
 #include "constants.h"
+#include "scriptable_class.h"
 
-class ComponentHealth : public Component {
+class ComponentHealth : public Component, public ScriptableClass {
 private:
-	atomic<int> health = 1;
+	atomic<float> health;
+
 public:
-	ComponentHealth(int startingHealth) {
-		health.store(startingHealth);
+	ComponentHealth() {
+
 	}
 
-	void damage(int damage) {
-		health -= damage;
-		if (health <= 0) {
-			killEntity();
-		}
+	ComponentHealth(float health) {
+		this->health = health;
 	}
 
+	void damageHealth(float damage) {
+		health = health - damage;
+	}
 
+	void setHealth(float health) {
+		this->health = health;
+	}
+
+	float getHealth() {
+		return health;
+	}
+
+	void registerToLua(kaguya::State& state) override {
+		state["ComponentHealth"].setClass(kaguya::UserdataMetatable<ComponentHealth, Component>()
+			.setConstructors<ComponentHealth()>()
+			.addFunction("get_health", &ComponentHealth::getHealth)
+			.addFunction("set_health", &ComponentHealth::setHealth)
+			.addFunction("damage_health", &ComponentHealth::damageHealth)
+			.addOverloadedFunctions(
+				"create",
+				ScriptableClass::create<ComponentHealth, float>
+			)
+			.addStaticFunction("type", &getType<ComponentHealth>)
+			.addStaticFunction("cast", &Component::castDown<ComponentHealth>)
+		);
+	}
 };
 
 

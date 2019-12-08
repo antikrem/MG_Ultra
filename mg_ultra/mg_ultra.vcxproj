@@ -218,6 +218,7 @@
     <ClInclude Include="component_camera.h" />
     <ClInclude Include="component_collision.h" />
     <ClInclude Include="component_console.h" />
+    <ClInclude Include="component_damage.h" />
     <ClInclude Include="component_directional_light.h" />
     <ClInclude Include="component_driftable.h" />
     <ClInclude Include="component_extended_scripting.h" />
@@ -264,6 +265,7 @@
     <ClInclude Include="system_camera.h" />
     <ClInclude Include="system_collision.h" />
     <ClInclude Include="system_console.h" />
+    <ClInclude Include="system_health.h" />
     <ClInclude Include="system_directional_lighting.h" />
     <ClInclude Include="system_driftable.h" />
     <ClInclude Include="system_game_state_control.h" />
