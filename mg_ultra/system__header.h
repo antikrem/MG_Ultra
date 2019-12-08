@@ -15,6 +15,7 @@
 #include "system_console.h"
 #include "system_spawner.h"
 #include "system_driftable.h"
+#include "system_health.h"
 
 //ring 2 - main game loop - most important main gameplay loop
 #include "system_timer.h"
@@ -26,6 +27,9 @@
 
 //ring 3 - loading
 #include "system_loader.h"
+
+//ring 4 - collision
+#include "system_collision.h"
 
 
 #endif
