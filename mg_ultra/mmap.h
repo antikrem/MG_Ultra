@@ -3,10 +3,13 @@
 #define __M_MAP__
 
 #include <map>
+#include <functional>
 #include <vector>
 #include <type_traits>
 
 #include "constants.h"
+
+#include "algorithm_ex.h"
 
 using namespace std;
 
@@ -74,10 +77,17 @@ public:
 
 	//clear all values from map
 	void clear() {
-		for (auto i : internalMap) {
+		for (auto& i : internalMap) {
 			i.second.clear();
 		}
 		internalMap.clear();
+	}
+
+	//clears all values from the mmap with given function
+	void conditionalClear(function<bool(const Value&)> condition) {
+		for (auto& i : internalMap) {
+			erase_sequential_if(i.second, condition);
+		}
 	}
 
 	//erases by key
