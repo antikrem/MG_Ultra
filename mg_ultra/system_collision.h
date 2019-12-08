@@ -7,6 +7,8 @@
 
 #include "component_position.h"
 #include "component_collision.h"
+#include "component_damage.h"
+#include "component_health.h"
 
 #define SOURCE 0
 #define TARGET 1
@@ -32,13 +34,27 @@ class SystemCollision : public System {
 	//vector of CollisionEvents
 	vector<CollisionEvent> collisionEvents;
 
+	//standard combat interaction
+	//will do nothing if correct components are not found
+	void standardCombatHandle(shared_ptr<Entity> source, shared_ptr<Entity> target) {
+		auto sourceDamage = source->getComponent<ComponentDamage>();
+		auto targetHealth = target->getComponent<ComponentHealth>();
+		if (sourceDamage && targetHealth) {
+			targetHealth->damageHealth(sourceDamage->getDamage());
+			sourceDamage->setDamage(0);
+		}
+	}
+
+
 	//handles the collision between two collisions
-	void handleCollision(shared_ptr<Entity> source, shared_ptr<Entity> target) {
-		cout << "collision" << endl;
+	void handleCollision(shared_ptr<Entity> source, shared_ptr<Entity> target, const CollisionEvent& collisionEvent) {
+		standardCombatHandle(source, target);
+		standardCombatHandle(target, source);
+		
 	}
 
 	//conducts collision comparison between two entity types
-	void compareCollisionLists(CollisionEvent& collisionEvent) {
+	void compareCollisionLists(const CollisionEvent& collisionEvent) {
 		for (auto source : internalEntityLists.get(collisionEvent.types[SOURCE])) {
 
 			auto& sCol = source->getComponent<ComponentCollision>()->getSpecification();
@@ -46,7 +62,7 @@ class SystemCollision : public System {
 				auto& tCol = target->getComponent<ComponentCollision>()->getSpecification();
 
 				if (CollisionSpecification::isColliding(sCol, tCol)) {
-					handleCollision(source, target);
+					handleCollision(source, target, collisionEvent);
 				}
 
 			}
