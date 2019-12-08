@@ -16,6 +16,7 @@ EntityBackgroundMaster = 8
 EntityBackgroundLayer = 9
 EntityAnonymousSpawner = 10
 EntityDirectionalLight = 11
+EntityEnemy = 12
 
 --returns the entity cached with this types
 --or nil on failure due to invalid type or no respective cached ent
