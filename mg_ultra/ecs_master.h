@@ -89,6 +89,7 @@ class ECSMaster {
 		master->createSystem<SystemSpawner>(registar);
 		master->createSystem<SystemBackground>(registar);
 		master->createSystem<SystemDriftable>(registar);
+		master->createSystem<SystemHealth>(registar);
 
 		//ring 2
 		master = newSystemsMaster("m_gameplay");
@@ -102,12 +103,13 @@ class ECSMaster {
 
 		//ring 3
 		master = newSystemsMaster("m_loader");
-		master->setTimer(5);
-		master->createSystem<SystemCollision>(registar);
+		master->setTimer(10);
+		master->createSystem<SystemLoader>(registar);
 
 		//ring 4
 		master = newSystemsMaster("m_collision");
-		master->setTimer(100);
+		master->setTimer(50);
+		master->createSystem<SystemCollision>(registar);
 	}
 
 	//starts all of the masters
