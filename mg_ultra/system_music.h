@@ -18,7 +18,7 @@ public:
 	}
 
 	//Do nothing
-	void cacheHandle(shared_ptr<Entity> ent) {
+	void cacheHandle(shared_ptr<Entity> ent) override {
 	}
 
 	void cacheFail(EntityPool* pool) override {
