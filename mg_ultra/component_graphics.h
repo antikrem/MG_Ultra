@@ -53,7 +53,6 @@ public:
 			state.animationType = 1;
 			state.currentFrame = 0;
 		}
-		this->state = state;
 	}
 
 	//sets the animation state directly
