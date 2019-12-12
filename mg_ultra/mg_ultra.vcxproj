@@ -104,11 +104,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)/api/glfw/include;$(SolutionDir)/api/glm;$(SolutionDir)/api/glew/include;$(SolutionDir)/api/lua/include;$(SolutionDir)/api/kaguya/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/api/glfw/include;$(SolutionDir)/api/glm;$(SolutionDir)/api/glew/include;$(SolutionDir)/api/lua/include;$(SolutionDir)/api/kaguya/include;$(SolutionDir)/api/libsndfile/include;$(SolutionDir)/api/openAL/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)/api/glfw/lib-vc2015;$(SolutionDir)/api/glew/lib/Release/Win32;$(SolutionDir)/api/lua/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)/api/glfw/lib-vc2015;$(SolutionDir)/api/glew/lib/Release/Win32;$(SolutionDir)/api/lua/lib;$(SolutionDir)/api/libsndfile/lib;$(SolutionDir)/api/openAL/libs/Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;libsndfile-1.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -127,13 +127,13 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)/api/glfw/include;$(SolutionDir)/api/glm;$(SolutionDir)/api/glew/include;$(SolutionDir)/api/lua/include;$(SolutionDir)/api/kaguya/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/api/glfw/include;$(SolutionDir)/api/glm;$(SolutionDir)/api/glew/include;$(SolutionDir)/api/lua/include;$(SolutionDir)/api/kaguya/include;$(SolutionDir)/api/libsndfile/include;$(SolutionDir)/api/openAL/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)/api/glfw/lib-vc2015;$(SolutionDir)/api/glew/lib/Release/Win32;$(SolutionDir)/api/lua/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)/api/glfw/lib-vc2015;$(SolutionDir)/api/glew/lib/Release/Win32;$(SolutionDir)/api/lua/lib;$(SolutionDir)/api/libsndfile/lib;$(SolutionDir)/api/openAL/libs/Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;libsndfile-1.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'">
@@ -144,13 +144,13 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)/api/glfw/include;$(SolutionDir)/api/glm;$(SolutionDir)/api/glew/include;$(SolutionDir)/api/lua/include;$(SolutionDir)/api/kaguya/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/api/glfw/include;$(SolutionDir)/api/glm;$(SolutionDir)/api/glew/include;$(SolutionDir)/api/lua/include;$(SolutionDir)/api/kaguya/include;$(SolutionDir)/api/libsndfile/include;$(SolutionDir)/api/openAL/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)/api/glfw/lib-vc2015;$(SolutionDir)/api/glew/lib/Release/Win32;$(SolutionDir)/api/lua/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)/api/glfw/lib-vc2015;$(SolutionDir)/api/glew/lib/Release/Win32;$(SolutionDir)/api/lua/lib;$(SolutionDir)/api/libsndfile/lib;$(SolutionDir)/api/openAL/libs/Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;libsndfile-1.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
@@ -184,6 +184,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ambient_illumination.cpp" />
+    <ClCompile Include="audio_master.cpp" />
     <ClCompile Include="collision.cpp" />
     <ClCompile Include="entity_types.cpp" />
     <ClCompile Include="error.cpp" />
@@ -212,9 +213,13 @@
     <ClInclude Include="ambient_illumination.h" />
     <ClInclude Include="animations.h" />
     <ClInclude Include="any_type.h" />
+    <ClInclude Include="audio_file.h" />
+    <ClInclude Include="audio_master.h" />
+    <ClInclude Include="audio_source.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="collision.h" />
     <ClInclude Include="component_animation.h" />
+    <ClInclude Include="component_audio.h" />
     <ClInclude Include="component_camera.h" />
     <ClInclude Include="component_collision.h" />
     <ClInclude Include="component_console.h" />
@@ -260,6 +265,7 @@
     <ClInclude Include="subpooling.h" />
     <ClInclude Include="success_callback.h" />
     <ClInclude Include="system_animation.h" />
+    <ClInclude Include="system_audio.h" />
     <ClInclude Include="system_background.h" />
     <ClInclude Include="system_bounds_control.h" />
     <ClInclude Include="system_camera.h" />
@@ -274,6 +280,7 @@
     <ClInclude Include="system_loader.h" />
     <ClInclude Include="system_movement.h" />
     <ClInclude Include="system_multi_ent.h" />
+    <ClInclude Include="system_music.h" />
     <ClInclude Include="system_player.h" />
     <ClInclude Include="shaders.h" />
     <ClInclude Include="str_kit.h" />
@@ -312,6 +319,7 @@
     <None Include="wd\scripts\player\player.lua" />
     <None Include="wd\scripts\_initialise\animations.lua" />
     <None Include="wd\scripts\_initialise\anonymous_spawner.lua" />
+    <None Include="wd\scripts\_initialise\audio.lua" />
     <None Include="wd\scripts\_initialise\drift.lua" />
     <None Include="wd\scripts\_initialise\profiler.lua" />
     <None Include="wd\scripts\_initialise\profiling_init.lua" />

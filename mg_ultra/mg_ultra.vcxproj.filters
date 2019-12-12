@@ -79,6 +79,12 @@
     <Filter Include="Header Files\ECS\Components\Graphics Component">
       <UniqueIdentifier>{7af6c3fc-e46a-4332-93ab-4073b01ecf86}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Audio">
+      <UniqueIdentifier>{f8795f38-7395-4b23-ab8a-1934cc0e27f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Audio">
+      <UniqueIdentifier>{868368bf-e3c6-4ad8-b2a5-7cf8325e8c69}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -149,6 +155,9 @@
     </ClCompile>
     <ClCompile Include="collision.cpp">
       <Filter>Source Files\Support</Filter>
+    </ClCompile>
+    <ClCompile Include="audio_master.cpp">
+      <Filter>Source Files\Audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -434,6 +443,24 @@
     <ClInclude Include="system_health.h">
       <Filter>Header Files\ECS\Systems</Filter>
     </ClInclude>
+    <ClInclude Include="audio_master.h">
+      <Filter>Header Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="audio_file.h">
+      <Filter>Header Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="audio_source.h">
+      <Filter>Header Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="system_audio.h">
+      <Filter>Header Files\ECS\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="component_audio.h">
+      <Filter>Header Files\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="system_music.h">
+      <Filter>Header Files\ECS\Systems</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="wd\shaders\base.vert">
@@ -522,6 +549,9 @@
     </None>
     <None Include="wd\shaders\ui.frag">
       <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="wd\scripts\_initialise\audio.lua">
+      <Filter>Resource Files\scripts\_initialise</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
