@@ -33,6 +33,7 @@
 
 //ring 5 - audio
 #include "system_audio.h"
+#include "system_music.h"
 
 
 #endif

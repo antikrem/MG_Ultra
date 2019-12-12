@@ -9,6 +9,14 @@ Audio.load_file = addAudioFile
 
 --plays a track, replacing last track
 Audio.play_track = function(track) 
+	local musicPlayer = EntityPool.get_cached_entity(EntityMusic)
+	
+	if not is_nil(musicPlayer) then
+		local cAudio = musicPlayer:get_component(ComponentAudio)
+		cAudio:play(track)
+	else 
+		print("AUDIO, Error playing track " .. track .. ", music player was not found")
+	end
 	
 end
 

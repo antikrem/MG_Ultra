@@ -18,7 +18,8 @@ enum EntityTypes {
 	ETBackgroundLayer,
 	ETAnonymousSpawner,
 	ETDirectionalLight,
-	ETEnemy
+	ETEnemy,
+	ETMusic
 };
 
 //String to Entity type

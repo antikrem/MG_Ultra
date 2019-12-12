@@ -76,6 +76,7 @@ class ECSMaster {
 
 	master5: audio 
 		-system_audio
+		-system_music
 	*/
 	void createBasicSystems() {
 		
@@ -125,6 +126,7 @@ class ECSMaster {
 		master->setTimer(50);
 		auto audioSystem = master->createSystem<SystemAudio>(registar);
 		audioSystem->setAudioMaster(aMaster);
+		master->createSystem<SystemMusic>(registar);
 	}
 
 	//starts all of the masters
@@ -145,7 +147,7 @@ public:
 		gMaster = new GraphicsMaster(entityPool, registar);
 		aMaster = new AudioMaster();
 		g_audio::setAudioMaster(aMaster);
-		aMaster->releaseContext();
+		
 		inputMaster = new InputMaster(gMaster->getWindow());
 		input::setCurrentInputMaster(inputMaster);
 		scriptMaster = new ScriptMaster();
