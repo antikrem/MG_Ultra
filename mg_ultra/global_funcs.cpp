@@ -12,6 +12,7 @@
 #include "script_master.h"
 #include "gl_handler.h"
 #include "ambient_illumination.h"
+#include "audio_master.h"
 
 ///print
 //For use with print function, holds a buffer sting to print
@@ -122,5 +123,9 @@ void registerGlobalFunctions(kaguya::State &kaguya) {
 	kaguya["getAmbientLightStrength"] = g_ambient::getStrength;
 	kaguya["setAmbientLightColour"] = g_ambient::l_setColour;
 	kaguya["getAmbientLightColour"] = g_ambient::l_getColour;
+
+	//audio
+	kaguya["addAudioFile"] = g_audio::addAudioFile;
+	kaguya["printAudioReport"] = g_audio::print;
 
 }

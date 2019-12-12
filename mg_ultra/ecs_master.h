@@ -8,6 +8,7 @@
 #include "timer.h"
 #include "graphics_state.h"
 #include "graphics_master.h"
+#include "audio_master.h"
 #include "input.h"
 #include "script_master.h"
 #include "registar.h"
@@ -25,6 +26,9 @@ class ECSMaster {
 
 	//global graphics state
 	GraphicsMaster* gMaster = nullptr;
+
+	//global audio master
+	AudioMaster* aMaster = nullptr;
 
 	//script master
 	ScriptMaster* scriptMaster = nullptr;
@@ -66,7 +70,12 @@ class ECSMaster {
 
 	master3: loading
 		-system_loader
-	
+
+	master4: collision
+		-system_collision
+
+	master5: audio 
+		-system_audio
 	*/
 	void createBasicSystems() {
 		
@@ -110,6 +119,12 @@ class ECSMaster {
 		master = newSystemsMaster("m_collision");
 		master->setTimer(50);
 		master->createSystem<SystemCollision>(registar);
+
+		//ring 5
+		master = newSystemsMaster("m_audio");
+		master->setTimer(50);
+		auto audioSystem = master->createSystem<SystemAudio>(registar);
+		audioSystem->setAudioMaster(aMaster);
 	}
 
 	//starts all of the masters
@@ -128,6 +143,9 @@ public:
 		registar = new Registar();
 		g_registar::setGlobalRegistar(registar);
 		gMaster = new GraphicsMaster(entityPool, registar);
+		aMaster = new AudioMaster();
+		g_audio::setAudioMaster(aMaster);
+		aMaster->releaseContext();
 		inputMaster = new InputMaster(gMaster->getWindow());
 		input::setCurrentInputMaster(inputMaster);
 		scriptMaster = new ScriptMaster();
@@ -157,6 +175,7 @@ public:
 		}
 
 		delete gMaster;
+		delete aMaster;
 		delete entityPool;
 		delete inputMaster;
 		delete registar;

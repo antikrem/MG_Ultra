@@ -17,6 +17,7 @@
 #include "component_collision.h"
 #include "component_damage.h"
 #include "component_health.h"
+#include "component_audio.h"
 
 #include "registar.h"
 #include "pool.h"
@@ -90,6 +91,7 @@ ScriptMaster::ScriptMaster()
 	forceLuaRegistration<ComponentCollision>(kaguya);
 	forceLuaRegistration<ComponentDamage>(kaguya);
 	forceLuaRegistration<ComponentHealth>(kaguya);
+	forceLuaRegistration<ComponentAudio>(kaguya);
 
 	//set contextual script functions
 	kaguya["getEntityPool"] = getGlobalPool;
@@ -101,6 +103,7 @@ ScriptMaster::ScriptMaster()
 	quickLoadAndExecute("scripts/_library/string_ex.lua");
 
 	quickLoadAndExecute("scripts/_initialise/registar.lua");
+	quickLoadAndExecute("scripts/_initialise/audio.lua");
 	quickLoadAndExecute("scripts/_initialise/animations.lua");
 	quickLoadAndExecute("scripts/_initialise/unified_lighting.lua");
 
