@@ -99,11 +99,6 @@ public:
 		}
 	}
 
-	//relinquishes thread control of this thread
-	void releaseContext() {
-		alcMakeContextCurrent(NULL);
-	}
-
 	//takes ownership of context into this thread
 	void reclaimContext() {
 		alcMakeContextCurrent(context);

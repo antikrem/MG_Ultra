@@ -28,20 +28,15 @@ public:
 	//reclaims the audio master
 	void precycle(EntityPool* pool) override {
 		audioMaster->reclaimContext();
+		audioMaster->updateMaster();
+		if (audioMaster->getLastError()) {
+			err::logMessage("AUDIO, Audio subsystem recieved an error");
+		}
 	}
 
 	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, shared_ptr<Entity> ent, int id) override {
 		auto comAudio = getComponent<ComponentAudio>(components);
 		comAudio->alComponentHandle(audioMaster->getAudioFiles(), Point3(0, 0, 0));
-	}
-
-	//release the current context
-	void postcycle(EntityPool* pool) override {
-		audioMaster->updateMaster();
-		if (audioMaster->getLastError()) {
-			err::logMessage("FUCK!");
-		}
-		audioMaster->releaseContext();
 	}
 };
 
