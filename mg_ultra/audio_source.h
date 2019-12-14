@@ -24,6 +24,12 @@ private:
 
 	bool initialised = false;
 
+	bool resetOnDoubleCall = false;
+
+	//when set to >= 0, indicates rquest for audio change
+	int requestedRepeat = -1;
+
+	string currentAudio;
 	string requestedAudio;
 
 	//id of source
@@ -38,10 +44,16 @@ public:
 		}
 	}
 
-	//plays a sound through this audio
+	//plays a sound through this audio source
 	void playAudio(const string& audioName) {
 		unique_lock<mutex> lck(lock);
 		requestedAudio = audioName;
+	}
+
+	//sets this source to a certain repeat value
+	void setRepeat(bool repeat) {
+		unique_lock<mutex> lck(lock);
+		requestedRepeat = (int)repeat;
 	}
 
 	//AL side updating
@@ -52,12 +64,19 @@ public:
 			initialised = true;
 		}
 
+		//handle new repeat mode
+		if (requestedRepeat >= 0) {
+			alSourcei(sourceID, AL_LOOPING, requestedRepeat);
+			requestedRepeat = -1;
+		}
+
 		//if a requested audio is in, siwtch to it
 		if (requestedAudio.size()) {
 			//get new bufferID to play
 			int bufferID = audioFiles[requestedAudio]->getBufferID();
 			alSourcei(sourceID, AL_BUFFER, bufferID);
 			alSourcePlay(sourceID);
+			currentAudio = requestedAudio;
 			requestedAudio = "";
 		}
 
