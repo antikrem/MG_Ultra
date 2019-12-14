@@ -20,6 +20,11 @@ public:
 		source.playAudio(audioName);
 	}
 
+	//sets the repeat value
+	void setRepeat(bool repeat) {
+		source.setRepeat(repeat);
+	}
+
 	//al processing of audio component
 	void alComponentHandle(map<string, AudioFile*>& audioFiles, const Point3& position) {
 		source.alSideUpdate(audioFiles, position);
@@ -29,6 +34,7 @@ public:
 		state["ComponentAudio"].setClass(kaguya::UserdataMetatable<ComponentAudio, Component>()
 			.setConstructors<ComponentAudio()>()
 			.addFunction("play", &ComponentAudio::playAudio)
+			.addFunction("set_repeat", &ComponentAudio::setRepeat)
 			.addOverloadedFunctions(
 				"create",
 				&ScriptableClass::create<ComponentAudio>
