@@ -140,6 +140,11 @@ public:
 		return Point2(x, y);
 	}
 
+	//calculate distance from one vector to another
+	float distanceTo(Point3& b) {
+		return sqrt(pow((x - b.x), 2) + pow((y - b.y), 2) + pow((z - b.z), 2));
+	}
+
 #ifdef GLM_ADDED
 	//as glm is avalible use the following conversion
 	glm::vec3 getVec3() {
