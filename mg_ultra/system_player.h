@@ -12,6 +12,7 @@
 #include "component_extended_scripting.h"
 #include "component_multi_entity.h"
 #include "component_collision.h"
+#include "component_audio.h"
 
 #include "functional_callback_system.h"
 
@@ -63,6 +64,8 @@ public:
 		newEnt->addComponent(newComponent8->pullForEntity());
 		auto newComponent9 = new ComponentCollision(10.0f);
 		newEnt->addComponent(newComponent9->pullForEntity());
+		auto newComponent10 = new ComponentAudio();
+		newEnt->addComponent(newComponent10->pullForEntity());
 
 		//execute a script to initialise the player
 		executeAnyScript(debugName, 
