@@ -13,6 +13,7 @@ Including range based algorithm functions*/
 using namespace std;
 
 //erase if for sequential STL containers
+//removes on true
 template <class Container>
 void erase_sequential_if(Container& container, const function<bool(typename Container::value_type&)> conditional) {
 	//utilise erase/remove_if
@@ -64,6 +65,15 @@ void replace(Container& container, const typename Container::value_type& element
 		*it = replacement;
 		it = std::find(container.begin(), container.end(), element);
 	}
+}
+
+//sorts a container
+template <class Container>
+void sort(Container& container,
+		const function<bool(typename Container::value_type&, typename Container::value_type&)> comparator
+	) {
+	std::sort(container.begin(), container.end(), comparator);
+	
 }
 
 //deletes if not null
