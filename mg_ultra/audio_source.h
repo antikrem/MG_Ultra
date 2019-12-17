@@ -64,6 +64,8 @@ public:
 			initialised = true;
 		}
 
+		alSource3f(sourceID, AL_POSITION, position.x, position.y, position.z);
+
 		//handle new repeat mode
 		if (requestedRepeat >= 0) {
 			alSourcei(sourceID, AL_LOOPING, requestedRepeat);

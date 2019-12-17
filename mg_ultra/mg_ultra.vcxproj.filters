@@ -85,6 +85,9 @@
     <Filter Include="Source Files\Audio">
       <UniqueIdentifier>{868368bf-e3c6-4ad8-b2a5-7cf8325e8c69}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Particle">
+      <UniqueIdentifier>{fa9e892c-cdb6-436f-b4d3-5ecfa2baac0b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -460,6 +463,15 @@
     </ClInclude>
     <ClInclude Include="system_music.h">
       <Filter>Header Files\ECS\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="particle_manager.h">
+      <Filter>Header Files\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="audio_listener.h">
+      <Filter>Header Files\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="component_listener.h">
+      <Filter>Header Files\ECS\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -214,6 +214,7 @@
     <ClInclude Include="animations.h" />
     <ClInclude Include="any_type.h" />
     <ClInclude Include="audio_file.h" />
+    <ClInclude Include="audio_listener.h" />
     <ClInclude Include="audio_master.h" />
     <ClInclude Include="audio_source.h" />
     <ClInclude Include="camera.h" />
@@ -229,6 +230,7 @@
     <ClInclude Include="component_extended_scripting.h" />
     <ClInclude Include="component_graphics.h" />
     <ClInclude Include="component_input.h" />
+    <ClInclude Include="component_listener.h" />
     <ClInclude Include="component_multi_entity.h" />
     <ClInclude Include="component_no_bounds_control.h" />
     <ClInclude Include="component_spawner.h" />
@@ -254,6 +256,7 @@
     <ClInclude Include="math_ex.h" />
     <ClInclude Include="mmap.h" />
     <ClInclude Include="os_kit.h" />
+    <ClInclude Include="particle_manager.h" />
     <ClInclude Include="performance_counter.h" />
     <ClInclude Include="reader.h" />
     <ClInclude Include="registar.h" />
