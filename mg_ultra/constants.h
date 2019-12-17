@@ -22,6 +22,8 @@ using namespace std;
 
 #define MS_IN_SECOND 1000
 
+#define XOR(a,b) !a != !b
+
 //unsigned long long max
 const unsigned long long ULLINT_MAX = (unsigned long long int) -1;
 
