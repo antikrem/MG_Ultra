@@ -11,25 +11,47 @@
 
 class AudioListener {
 	mutex lock;
-	bool listenTargetUpdated = false;
-	Point3 listenTarget = Point3(0, 1, 0);
+
+	bool updated = false;
+	Point3 listenTarget = Point3(0, 0, -1);
+	Point3 upTarget = Point3(0, 1, 0);
 
 public:
-	void setTarget(const Point3& position) {
+	void setListenTarget(const Point3& position) {
 		unique_lock<mutex> lck(lock);
-		listenTargetUpdated = false;
+		updated = false;
 		this->listenTarget = position;
 	}
 
-	Point3 getTarget() {
+	Point3 getListenTarget() {
 		unique_lock<mutex> lck(lock);
 		return listenTarget;
 	}
 
-	//returns true if an udpate is required
-	bool listenTargetUpdateRequired() {
-		return XOR(listenTargetUpdated, (listenTargetUpdated = true));
+	void setUpTarget(const Point3& position) {
+		unique_lock<mutex> lck(lock);
+		updated = false;
+		this->upTarget = position;
 	}
+
+	Point3 getUpTarget() {
+		unique_lock<mutex> lck(lock);
+		return upTarget;
+	}
+
+	//updates listener
+	void updateListener() {
+		unique_lock<mutex> lck(lock);
+		if (!updated) {
+			updated = false;
+			float orentation[6] = {
+				listenTarget.x, listenTarget.y, listenTarget.z,
+				upTarget.x, upTarget.y, upTarget.z
+			};
+			alListenerfv(AL_ORIENTATION, orentation);
+		}
+	}
+
 };
 
 

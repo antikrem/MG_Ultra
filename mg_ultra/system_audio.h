@@ -44,15 +44,17 @@ public:
 
 	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, shared_ptr<Entity> ent, int id) override {
 		shared_ptr<ComponentPosition> comPos = getComponent<ComponentPosition>(components);
+		shared_ptr<ComponentListener> comListener = getComponent<ComponentListener>(components);
+		shared_ptr<ComponentAudio> comAudio = getComponent<ComponentAudio>(components);
 
-		shared_ptr<ComponentListener> comListener;
-		if ((comListener = getComponent<ComponentListener>(components))
-			&& comPos) {
+		if (comListener && comPos) {
+			//set new position
 			listenerLocation = comPos->getPosition3() * -1;
+			//conduct general update
+			comListener->updateListener();
 		}
 		
-		shared_ptr<ComponentAudio> comAudio;
-		if ((comAudio = getComponent<ComponentAudio>(components))) {
+		if (comAudio) {
 			//if there is a position, update according to position
 			if (comPos) { 
 				comAudio->alComponentHandle(audioMaster->getAudioFiles(), comPos->getPosition3() + listenerLocation);
@@ -61,10 +63,7 @@ public:
 			else {
 				comAudio->alComponentHandle(audioMaster->getAudioFiles(), Point3(0,0,0));
 			}
-			
 		}
-
-		
 		
 	}
 };
