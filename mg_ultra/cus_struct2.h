@@ -92,7 +92,7 @@ public:
 	}
 
 	Point2 operator*(const float& b) {
-		return Point2(b*this->x, b*this->y);
+		return Point2(b * this->x, b * this->y);
 	}
 
 	Point2 getUnitVector() {
@@ -133,6 +133,20 @@ public:
 
 	Point3 operator+(const Point3& b) {
 		return Point3(this->x + b.x, this->y + b.y, this->z + b.z);
+	}
+
+	Point3 operator-(const Point3& b) {
+		return Point3(this->x - b.x, this->y - b.y, this->z - b.z);
+	}
+
+	void operator+=(const Point3& b) {
+		this->x += b.x;
+		this->y += b.y;
+		this->z += b.z;
+	}
+
+	Point3 operator*(const float& b) {
+		return Point3(b * this->x, b* this->y, b * this->z);
 	}
 
 	//returns x, y as point2

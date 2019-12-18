@@ -49,7 +49,7 @@ public:
 
 		if (comListener && comPos) {
 			//set new position
-			listenerLocation = comPos->getPosition3() * -1;
+			listenerLocation = comPos->getPosition3();
 			//conduct general update
 			comListener->updateListener();
 		}
@@ -57,7 +57,7 @@ public:
 		if (comAudio) {
 			//if there is a position, update according to position
 			if (comPos) { 
-				comAudio->alComponentHandle(audioMaster->getAudioFiles(), comPos->getPosition3() + listenerLocation);
+				comAudio->alComponentHandle(audioMaster->getAudioFiles(), comPos->getPosition3() - listenerLocation);
 			}
 			//otherwise update for origin
 			else {
