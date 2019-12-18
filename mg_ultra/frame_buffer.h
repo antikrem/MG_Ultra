@@ -87,14 +87,42 @@ public:
 
 		if (attachDepthBuffer) {
 			//Create depth buffer
-			glGenRenderbuffers(1, &depthTexID);
-			glBindRenderbuffer(GL_RENDERBUFFER, depthTexID);
+			if (attachDepthBuffer & DepthAttachmentOptions::DEPTH_DEFAULT) {
+				glGenRenderbuffers(1, &depthTexID);
+				glBindRenderbuffer(GL_RENDERBUFFER, depthTexID);
 
-			graphicsSettings->accessLock.lock();
-			glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, graphicsSettings->screenWidth, graphicsSettings->screenHeight);
-			graphicsSettings->accessLock.unlock();
+				graphicsSettings->accessLock.lock();
+				glRenderbufferStorage(
+					GL_RENDERBUFFER, 
+					GL_DEPTH_COMPONENT, 
+					graphicsSettings->screenWidth, 
+					graphicsSettings->screenHeight
+				);
+				graphicsSettings->accessLock.unlock();
 
-			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthTexID);
+				glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthTexID);
+			}
+			else {
+				glGenTextures(1, &depthTexID);
+				glBindTexture(GL_TEXTURE_2D, depthTexID);
+
+				graphicsSettings->accessLock.lock();
+				glTexImage2D(
+					GL_TEXTURE_2D, 
+					0, 
+					GL_DEPTH_COMPONENT24, 
+					graphicsSettings->screenWidth, 
+					graphicsSettings->screenHeight, 
+					0, 
+					GL_DEPTH_COMPONENT, 
+					GL_UNSIGNED_INT, 
+					nullptr
+				);
+				graphicsSettings->accessLock.unlock();
+
+				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexID, 0);
+			}
+			
 		}
 		
 		//done, check and return
