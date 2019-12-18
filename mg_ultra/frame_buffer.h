@@ -29,6 +29,9 @@ class FrameBuffer {
 	//vector of strings associated with draw targets
 	vector<string> targetNames;
 
+	//depth buffer texture identifier, -1(wrapped) on no texture id
+	GLuint depthTexID = -1;
+
 	//Creates an attaches a new colour buffer at the given level
 	void createAndAttachColourBuffer(GraphicsSettings* graphicsSettings, int i, BufferSpecification specification) {
 		//Create colour buffer
@@ -75,15 +78,14 @@ public:
 
 		if (attachDepthBuffer) {
 			//Create depth buffer
-			GLuint texRenderBuffer;
-			glGenRenderbuffers(1, &texRenderBuffer);
-			glBindRenderbuffer(GL_RENDERBUFFER, texRenderBuffer);
+			glGenRenderbuffers(1, &depthTexID);
+			glBindRenderbuffer(GL_RENDERBUFFER, depthTexID);
 
 			graphicsSettings->accessLock.lock();
 			glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, graphicsSettings->screenWidth, graphicsSettings->screenHeight);
 			graphicsSettings->accessLock.unlock();
 
-			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, texRenderBuffer);
+			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthTexID);
 		}
 		
 		//done, check and return
