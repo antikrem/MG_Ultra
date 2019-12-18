@@ -116,24 +116,28 @@ public:
 				{"normals", GL_RGB16_SNORM}, 
 				{"lightingSensitivity", GL_RGB}, 
 			},
-			true
+			DepthAttachmentOptions::DEPTH_DEFAULT
 		);
 		uiFrameBuffer.initialiseFrameBuffer(
 			gSettings,
 			{
 				{"uiScene", GL_RGBA}
 			},
-			true
+			DepthAttachmentOptions::DEPTH_DEFAULT
 		);
 		lightingFrameBuffer.initialiseFrameBuffer(
 			gSettings, 
-			{ {"directionalLightScene", GL_RGBA16F} },
-			false
+			{ 
+				{"directionalLightScene", GL_RGBA16F} 
+			},
+			DepthAttachmentOptions::DEPTH_DEFAULT
 		);
 		postEffects.initialiseFrameBuffer(
 			gSettings, 
-			{ {"scene", GL_RGB} },
-			false
+			{ 
+				{"scene", GL_RGB} 
+			},
+			DepthAttachmentOptions::DEPTH_DEFAULT
 		);
 
 		shaderMaster = new ShaderMaster();

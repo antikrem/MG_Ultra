@@ -20,6 +20,14 @@ struct BufferSpecification {
 //provides lookup for format given an internal format
 GLint lookUpFormat(GLint internalFormat);
 
+//enumeration of depth buffer attachment options
+enum DepthAttachmentOptions {
+	ATTACH_NONE = 0b00,
+	DEPTH_DEFAULT = 0b01,
+	DEPTH_24 = 0b10,
+
+};
+
 class FrameBuffer {
 	unsigned int fbo;
 	//vector of colour buffers
@@ -66,7 +74,8 @@ class FrameBuffer {
 
 public:
 	//returns true if creation was succesful
-	void initialiseFrameBuffer(GraphicsSettings* graphicsSettings, vector<BufferSpecification> specifications, bool attachDepthBuffer) {
+	//takes bit ored combination of DepthAttachmentOptions
+	void initialiseFrameBuffer(GraphicsSettings* graphicsSettings, vector<BufferSpecification> specifications, DepthAttachmentOptions attachDepthBuffer) {
 		glGenFramebuffers(1, &fbo);
 		bindBuffer();
 
