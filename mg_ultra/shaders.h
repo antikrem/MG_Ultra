@@ -47,12 +47,12 @@ struct ProgramDetails {
 			return uniforms[name];
 		}
 		else {
-			GLuint location;
+			GLint location;
 			if ((location = glGetUniformLocation(programID, name.c_str())) < 0) {
 				throw GraphicsException("Invalid uniform: " + name + " in program: " + programName);
 			}
 			else {
-				uniforms[name] = location;
+				uniforms[name] = (GLuint)location;
 			}
 			return location;
 		}
