@@ -100,6 +100,11 @@ public:
 	}
 
 	//gets far clip distance
+	float getClipFar() {
+		return clipFar;
+	}
+
+	//sets far clip distance
 	void setClipFar(float clipFar) {
 		this->clipFar = clipFar;
 	}
