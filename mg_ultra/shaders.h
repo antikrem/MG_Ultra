@@ -31,7 +31,7 @@ including loading, compiling, using and deleting*/
 struct ProgramDetails {
 	GLuint programID;
 	string programName;
-	map<string, GLuint> uniforms;
+	map<string, GLint> uniforms;
 
 	ProgramDetails(GLuint programID, string programName) {
 		this->programID = programID;
@@ -42,17 +42,20 @@ struct ProgramDetails {
 	//uniform name
 	//if it doesnt exist will find
 	//throws GraphicsException on error
-	GLuint getUniformLocation(string name) {
+	GLint getUniformLocation(string name, bool failSilently = false) {
 		if (uniforms.count(name)) {
 			return uniforms[name];
 		}
 		else {
 			GLint location;
 			if ((location = glGetUniformLocation(programID, name.c_str())) < 0) {
+				if (failSilently) {
+					return -1;
+				}
 				throw GraphicsException("Invalid uniform: " + name + " in program: " + programName);
 			}
 			else {
-				uniforms[name] = (GLuint)location;
+				uniforms[name] = location;
 			}
 			return location;
 		}
@@ -234,9 +237,9 @@ public:
 	//uniform name
 	//if it doesnt exist will find
 	//throws GraphicsException on error
-	GLuint getUniformLocation(string programName, string uniformName) {
+	GLint getUniformLocation(string programName, string uniformName, bool failSilently = false) {
 		if (programMap.count(programName)) {
-			return programMap.find(programName)->second.getUniformLocation(uniformName);
+			return programMap.find(programName)->second.getUniformLocation(uniformName, failSilently);
 		}
 		else {
 			throw GraphicsException("Invalid program: " + programName);
@@ -257,6 +260,15 @@ public:
 	//sets a single int in shader
 	void setUniformI(string programName, string uniformName, int value) {
 		glUniform1i(getUniformLocation(programName, uniformName), value);
+	}
+
+	//sets a single int in a failing manner
+	//has no effect on invalid values
+	void setUniformINoException(string programName, string uniformName, int value) {
+		GLint location = getUniformLocation(programName, uniformName, true);
+		if not(location < 0) {
+			glUniform1i(location, value);
+		}
 	}
 
 	//sets a single float in shader
@@ -285,7 +297,7 @@ public:
 		for (; i < (int)targets.size() + start; i++) {
 			glActiveTexture(GL_TEXTURE0 + i);
 			glBindTexture(GL_TEXTURE_2D, colourTextures[i - start]);
-			setUniformI(programName, targets[i - start], i);
+			setUniformINoException(programName, targets[i - start], i);
 		}
 		return i + 1;
 	}
