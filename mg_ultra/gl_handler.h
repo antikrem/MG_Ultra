@@ -45,6 +45,9 @@ private:
 	//Handles camera
 	Camera* camera = nullptr;
 
+	//frame buffer for front depth buffer
+	FrameBuffer frontDepthFrameBuffer;
+
 	//frame buffer for geometry
 	FrameBuffer geometryFrameBuffer;
 
@@ -108,13 +111,21 @@ public:
 		glDepthFunc(GL_LESS);
 
 		//create frame buffers
+		frontDepthFrameBuffer.initialiseFrameBuffer(
+			gSettings,
+			{
+				{"frontDepthBuffer", GL_R16F}
+			},
+			DepthAttachmentOptions::ATTACH_NONE
+		);
 		geometryFrameBuffer.initialiseFrameBuffer(
 			gSettings,
 			{ 
 				{"spriteColour", GL_RGB}, 
 				{"spriteWorldPosition", GL_RGB16F}, 
 				{"normals", GL_RGB16_SNORM}, 
-				{"lightingSensitivity", GL_RGB}, 
+				{"lightingSensitivity", GL_RGB},
+				{"frontDepthBuffer", GL_R16F}
 			},
 			DepthAttachmentOptions::DEPTH_DEFAULT
 		);
@@ -156,6 +167,8 @@ public:
 
 		//FIRST PASS - render basic stuff
 		shaderMaster->useShader("base");
+		shaderMaster->setUniformF("base", "clipNear", camera->getClipNear());
+		shaderMaster->setUniformF("base", "clipFar", camera->getClipFar());
 		shaderMaster->setUniformMatrix4F("base", "MVP", camera->getVPMatrix());
 		geometryFrameBuffer.bindBuffer();
 		//process the box buffer, which renders the geometry
@@ -167,6 +180,7 @@ public:
 		//render ui as well
 		shaderMaster->useShader("ui");
 		shaderMaster->setUniformMatrix4F("base", "MVP", camera->getUiVPMatrix());
+		
 		uiFrameBuffer.bindBuffer();
 		boxUIVAOBuffer.processGLSide();
 		uiFrameBuffer.unbindBuffer();
