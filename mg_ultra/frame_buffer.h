@@ -136,11 +136,17 @@ public:
 		glDeleteFramebuffers(1, &fbo);
 	}
 
+	//binds and clears depth buffer
 	void bindBuffer() {
 		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 		//depth test
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
+
+	//binds with no clear
+	void bindNoClearBuffer() {
+		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 	}
 
 	void unbindBuffer() {
