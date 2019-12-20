@@ -48,7 +48,6 @@ class FrameBuffer {
 		textureIDs.push_back(texColorBuffer);
 		glBindTexture(GL_TEXTURE_2D, texColorBuffer);
 
-		graphicsSettings->accessLock.lock();
 		glTexImage2D(
 			GL_TEXTURE_2D, 
 			0, 
@@ -60,7 +59,6 @@ class FrameBuffer {
 			GL_FLOAT,
 			NULL
 		);
-		graphicsSettings->accessLock.unlock();
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -91,14 +89,12 @@ public:
 				glGenRenderbuffers(1, &depthTexID);
 				glBindRenderbuffer(GL_RENDERBUFFER, depthTexID);
 
-				graphicsSettings->accessLock.lock();
 				glRenderbufferStorage(
 					GL_RENDERBUFFER, 
 					GL_DEPTH_COMPONENT, 
 					graphicsSettings->screenWidth, 
 					graphicsSettings->screenHeight
 				);
-				graphicsSettings->accessLock.unlock();
 
 				glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthTexID);
 			}
@@ -106,7 +102,6 @@ public:
 				glGenTextures(1, &depthTexID);
 				glBindTexture(GL_TEXTURE_2D, depthTexID);
 
-				graphicsSettings->accessLock.lock();
 				glTexImage2D(
 					GL_TEXTURE_2D, 
 					0, 
@@ -118,7 +113,6 @@ public:
 					GL_UNSIGNED_INT, 
 					nullptr
 				);
-				graphicsSettings->accessLock.unlock();
 
 				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexID, 0);
 			}
