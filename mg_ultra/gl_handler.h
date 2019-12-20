@@ -183,13 +183,16 @@ public:
 		//update front depth buffer
 		shaderMaster->useShader("front_depth_buffer");
 		frontDepthFrameBuffer.bindNoClearBuffer();
+		
 		shaderMaster->attachFrameBufferAsSource("front_depth_buffer", &geometryFrameBuffer);
 		screenVAO.processGLSide();
+
 		frontDepthFrameBuffer.unbindBuffer();
 
 		//render ui as well
 		shaderMaster->useShader("ui");
-		shaderMaster->setUniformMatrix4F("base", "MVP", camera->getUiVPMatrix());
+		textureMaster->attachTextures(shaderMaster, "ui", "mgtSamplers");
+		shaderMaster->setUniformMatrix4F("ui", "MVP", camera->getUiVPMatrix());
 		
 		uiFrameBuffer.bindBuffer();
 		boxUIVAOBuffer.processGLSide();
