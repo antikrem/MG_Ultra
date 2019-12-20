@@ -105,9 +105,6 @@
     <ClCompile Include="input.cpp">
       <Filter>Source Files\Support</Filter>
     </ClCompile>
-    <ClCompile Include="global_funcs.cpp">
-      <Filter>Source Files\Script</Filter>
-    </ClCompile>
     <ClCompile Include="script_master.cpp">
       <Filter>Source Files\Script</Filter>
     </ClCompile>
@@ -161,6 +158,9 @@
     </ClCompile>
     <ClCompile Include="audio_master.cpp">
       <Filter>Source Files\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="global_funcs.cpp">
+      <Filter>Source Files\Script</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -564,6 +564,12 @@
     </None>
     <None Include="wd\scripts\_initialise\audio.lua">
       <Filter>Resource Files\scripts\_initialise</Filter>
+    </None>
+    <None Include="wd\shaders\front_depth_buffer.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="wd\shaders\front_depth_buffer.frag">
+      <Filter>Resource Files\shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

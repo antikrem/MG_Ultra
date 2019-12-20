@@ -304,6 +304,7 @@ public:
 
 	ShaderMaster() {
 		loadProgramFromFile("base");
+		loadProgramFromFile("front_depth_buffer");
 		loadProgramFromFile("ui");
 		loadProgramFromFile("directional_lighting");
 		loadProgramFromFile("unified_lighting");

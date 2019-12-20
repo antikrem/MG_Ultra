@@ -173,9 +173,19 @@ public:
 		geometryFrameBuffer.bindBuffer();
 		//process the box buffer, which renders the geometry
 		//set mgt textures in shader
-		textureMaster->attachTextures(shaderMaster, "base", "mgtSamplers");
+		int chain = textureMaster->attachTextures(shaderMaster, "base", "mgtSamplers");
+		//Attach front depth buffer
+		shaderMaster->attachFrameBufferAsSource("base", &frontDepthFrameBuffer, chain);
+		//render boxes
 		boxVAOBuffer.processGLSide();
 		geometryFrameBuffer.unbindBuffer();
+
+		//update front depth buffer
+		shaderMaster->useShader("front_depth_buffer");
+		frontDepthFrameBuffer.bindNoClearBuffer();
+		shaderMaster->attachFrameBufferAsSource("front_depth_buffer", &geometryFrameBuffer);
+		screenVAO.processGLSide();
+		frontDepthFrameBuffer.unbindBuffer();
 
 		//render ui as well
 		shaderMaster->useShader("ui");
@@ -200,7 +210,7 @@ public:
 		shaderMaster->setUniformF("unified_lighting", "ambientStrength", g_ambient::getStrength());
 		shaderMaster->setUniform3F("unified_lighting", "ambientColor", g_ambient::getColour().getVec3());
 		postEffects.bindBuffer();
-		int chain = shaderMaster->attachFrameBufferAsSource("unified_lighting", &lightingFrameBuffer);
+		chain = shaderMaster->attachFrameBufferAsSource("unified_lighting", &lightingFrameBuffer);
 		shaderMaster->attachFrameBufferAsSource("unified_lighting", &geometryFrameBuffer, chain);
 		screenVAO.processGLSide();
 		postEffects.unbindBuffer();
