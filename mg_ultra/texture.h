@@ -335,7 +335,7 @@ public:
 		}
 		shaderMaster->setNUniformI(programName, textureVariableTargetName, (int)tuList.size(), tuList);
 
-		return i + 1;
+		return i;
 	}
 
 };
