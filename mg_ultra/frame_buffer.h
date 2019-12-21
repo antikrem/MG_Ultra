@@ -157,6 +157,13 @@ public:
 		return targetNames;
 	}
 
+	//clears the buffer
+	void clearBuffer() {
+		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
+
 	//clears depth buffer of this frame buffer
 	void clearDepthBuffer() {
 		glClear(GL_DEPTH_BUFFER_BIT);
@@ -172,6 +179,20 @@ public:
 		else {
 			glBlendEquationi(location, mode);
 			glBlendFunci(location, sfactor, dfactor);
+		}
+	}
+
+	//only valid after binding
+	//specifies a blend function for a specified buffer 
+	//colour and alpha are set seperatly
+	void setBlendFunctionSeperate(const string& buffer, GLenum mode, GLenum sRGBfactor, GLenum dRGBfactor, GLenum sAlphafactor, GLenum dAlphafactor) {
+		int location = index_of(targetNames, buffer);
+		if (location < 0) {
+			throw GraphicsException("Invalid buffer in in setBlendFunction");
+		}
+		else {
+			glBlendEquationi(location, mode);
+			glBlendFuncSeparatei(location, sRGBfactor, dRGBfactor, sAlphafactor, dAlphafactor);
 		}
 	}
 
