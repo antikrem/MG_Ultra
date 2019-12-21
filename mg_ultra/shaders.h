@@ -302,6 +302,16 @@ public:
 		return i + 1;
 	}
 
+	//attaches a single texture as source for rendering
+	//takes and returns chaining
+	int attachTextureAsSource(string programName, string uniformName, GLint texID, int start = 0) {
+		glActiveTexture(GL_TEXTURE0 + start);
+		glBindTexture(GL_TEXTURE_2D, texID);
+		setUniformINoException(programName, uniformName, start);
+
+		return start + 1;
+	}
+
 	ShaderMaster() {
 		loadProgramFromFile("base");
 		loadProgramFromFile("front_depth_buffer");
