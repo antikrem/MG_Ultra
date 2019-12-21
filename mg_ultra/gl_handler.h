@@ -114,7 +114,7 @@ public:
 		frontDepthFrameBuffer.initialiseFrameBuffer(
 			gSettings,
 			{
-				{"frontDepthBuffer", GL_R16F}
+				{"frontDepthBuffer", GL_R32F}
 			},
 			DepthAttachmentOptions::ATTACH_NONE
 		);
@@ -125,7 +125,7 @@ public:
 				{"spriteWorldPosition", GL_RGB16F}, 
 				{"normals", GL_RGB16_SNORM}, 
 				{"lightingSensitivity", GL_RGB},
-				{"frontDepthBuffer", GL_R16F}
+				{"frontDepthBuffer", GL_R32F}
 			},
 			DepthAttachmentOptions::DEPTH_DEFAULT
 		);

@@ -4,6 +4,7 @@
 
 const map<GLint, GLint> lookup = {
 	{GL_R16F, GL_RED},
+	{GL_R32F, GL_RED},
 	{GL_RGB, GL_RGB},
 	{GL_RGB12, GL_RGB},
 	{GL_RGB16F, GL_RGB},
