@@ -5,9 +5,9 @@
 //Contains all currently loaded mgt
 uniform sampler2D mgtSamplers[MAX_TEXTURES];
 
-//camera clipping distances
-uniform float clipNear;
-uniform float clipFar;
+//viewport sizeof
+uniform float viewport_w;
+uniform float viewport_h;
 
 //forward depth buffer
 uniform sampler2D frontDepthBuffer;
@@ -17,7 +17,7 @@ in vec2 uv;
 in vec2 wl;
 in vec2 texSize;
 
-layout(location = 0) out vec3 color;
+layout(location = 0) out vec4 color;
 layout(location = 1) out vec3 position;
 layout(location = 2) out vec3 normals;
 layout(location = 3) out vec3 lightingSensitivity;
@@ -25,11 +25,11 @@ layout(location = 4) out float nextFrontDepthBuffer;
 
 void main() {
 	//check if this fragment is infront of the current closest fragment 
-	float z = 
-		(2.0 * clipNear * clipFar) /
-		(clipFar + clipNear - (2.0 * gl_FragCoord.z - 1.0) * (clipFar - clipNear));
+	float z = gl_FragCoord.z;
 
-	if (z <= texture(frontDepthBuffer, uv).x) {
+	vec2 depthSampleTex = gl_FragCoord.xy / vec2(viewport_w, viewport_h);
+
+	if (z <= texture(frontDepthBuffer, depthSampleTex).x) {
 		discard;
 	}
 
@@ -42,7 +42,7 @@ void main() {
 		discard;
 	}
 
-	color = texel.xyz;
+	color = texel.rgba;
 	position =  worldPosition;
 
 	//normal for sprites always face towards the camera

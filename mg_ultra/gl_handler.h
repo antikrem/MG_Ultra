@@ -127,7 +127,7 @@ public:
 				{"lightingSensitivity", GL_RGB},
 				{"frontDepthBuffer", GL_R32F}
 			},
-			DepthAttachmentOptions::DEPTH_DEFAULT
+			DepthAttachmentOptions::DEPTH_32
 		);
 		uiFrameBuffer.initialiseFrameBuffer(
 			gSettings,
@@ -172,8 +172,6 @@ public:
 		for (int i = 0; i < gSettings->depthPeelingPasses; i++) {
 			//FIRST PASS - render basic stuff
 			shaderMaster->useShader("base");
-			shaderMaster->setUniformF("base", "clipNear", camera->getClipNear());
-			shaderMaster->setUniformF("base", "clipFar", camera->getClipFar());
 			shaderMaster->setUniformF("base", "viewport_w", (float)gSettings->screenWidth);
 			shaderMaster->setUniformF("base", "viewport_h", (float)gSettings->screenHeight);
 			shaderMaster->setUniformMatrix4F("base", "MVP", camera->getVPMatrix());

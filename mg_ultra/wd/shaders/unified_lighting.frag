@@ -13,12 +13,16 @@ uniform vec3 ambientColor;
 
 in vec2 uv;
 
-layout(location = 0) out vec3 color;
+layout(location = 0) out vec4 color;
 
 void main() {
-	vec3 texelColor = texture(spriteColour, uv).rgb;
+	vec4 texelColor = texture(spriteColour, uv).rgba;
 	vec3 ls = texture(lightingSensitivity, uv).rgb;
-	vec3 ambient = ambientStrength * texelColor * ambientColor;
+	vec3 ambient = ambientStrength * texelColor.xyz * ambientColor;
 	vec3 directional = texture(directionalLightScene, uv).rgb;
-	color = mix3(ls, ambient, directional, vec3(0));
+	color = vec4(
+		//combine individual components and premultiply by alpha
+		texelColor.a * mix3(ls, ambient, directional, vec3(0)),
+		texelColor.a
+	);
 }

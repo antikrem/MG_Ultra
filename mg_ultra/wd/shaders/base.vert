@@ -15,6 +15,7 @@ out vec3 worldPosition;
 out vec2 uv; //top left texture offset within atlas
 out vec2 wl; //scaling sample position
 out vec2 texSize; //the total size used for wrapping
+out vec2 speenSpace; //screen space location
 
 //MVP for sprites in 3D
 uniform mat4 MVP;
