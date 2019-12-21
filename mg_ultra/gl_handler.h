@@ -51,9 +51,6 @@ private:
 	//frame buffer for geometry
 	FrameBuffer geometryFrameBuffer;
 
-	//frame buffer for ui
-	FrameBuffer uiFrameBuffer;
-
 	//frame buffer for post effects
 	FrameBuffer lightingFrameBuffer;
 
@@ -128,13 +125,6 @@ public:
 				{"frontDepthBuffer", GL_R32F}
 			},
 			DepthAttachmentOptions::DEPTH_32
-		);
-		uiFrameBuffer.initialiseFrameBuffer(
-			gSettings,
-			{
-				{"uiScene", GL_RGBA}
-			},
-			DepthAttachmentOptions::ATTACH_NONE
 		);
 		lightingFrameBuffer.initialiseFrameBuffer(
 			gSettings, 
@@ -222,19 +212,21 @@ public:
 		}
 
 		//FOURTH PASS - render buffer to screenspace
-		//render ui as well
-		shaderMaster->useShader("ui");
-		textureMaster->attachTextures(shaderMaster, "ui", "mgtSamplers");
-		shaderMaster->setUniformMatrix4F("ui", "MVP", camera->getUiVPMatrix());
-		uiFrameBuffer.bindBuffer();
-		boxUIVAOBuffer.processGLSide();
-		uiFrameBuffer.unbindBuffer();
-
 		//set the geometry frame buffer as the source
 		shaderMaster->useShader("finalise");
-		chain = shaderMaster->attachFrameBufferAsSource("finalise", &postEffects);
-		shaderMaster->attachFrameBufferAsSource("finalise", &uiFrameBuffer, chain);
+		shaderMaster->attachFrameBufferAsSource("finalise", &postEffects);
+		//shaderMaster->attachFrameBufferAsSource("finalise", &uiFrameBuffer, chain);
 		screenVAO.processGLSide();
+
+		//draw UI
+		shaderMaster->useShader("ui");
+		shaderMaster->setUniformMatrix4F("ui", "MVP", camera->getUiVPMatrix());
+		textureMaster->attachTextures(shaderMaster, "ui", "mgtSamplers");
+		glEnable(GL_BLEND);
+		glBlendEquation(GL_FUNC_ADD);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		boxUIVAOBuffer.processGLSide();
+		glDisable(GL_BLEND);
 
 		postrender();
 	}

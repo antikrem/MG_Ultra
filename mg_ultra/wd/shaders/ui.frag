@@ -17,9 +17,9 @@ void main() {
 	vec2 ad_wl = mod(wl, texSize);
 	//adjust sampling: flip y coordinate
 	vec4 texel = texture( mgtSamplers[0], uv + ad_wl).rgba;
-	if (texel.a < 0.2) {
+	if (texel.a < 0.01) {
 		discard;
 	}
 
-	uiScene = vec4(texel.rgb, 1.0);
+	uiScene = texel.rgba;
 }
