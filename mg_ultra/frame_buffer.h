@@ -22,9 +22,10 @@ GLint lookUpFormat(GLint internalFormat);
 
 //enumeration of depth buffer attachment options
 enum DepthAttachmentOptions {
-	ATTACH_NONE = 0b00,
-	DEPTH_DEFAULT = 0b01,
-	DEPTH_24 = 0b10,
+	ATTACH_NONE = 0b000,
+	DEPTH_DEFAULT = 0b001,
+	DEPTH_24 = 0b010,
+	DEPTH_32 = 0b110,
 
 };
 
@@ -98,14 +99,14 @@ public:
 
 				glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthTexID);
 			}
-			else {
+			else if (attachDepthBuffer & DepthAttachmentOptions::DEPTH_24) {
 				glGenTextures(1, &depthTexID);
 				glBindTexture(GL_TEXTURE_2D, depthTexID);
 
 				glTexImage2D(
 					GL_TEXTURE_2D, 
 					0, 
-					GL_DEPTH_COMPONENT24, 
+					attachDepthBuffer == DEPTH_32 ? GL_DEPTH_COMPONENT32 : GL_DEPTH_COMPONENT24,
 					graphicsSettings->screenWidth, 
 					graphicsSettings->screenHeight, 
 					0, 
@@ -116,6 +117,9 @@ public:
 
 				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexID, 0);
 			}
+		else {
+			throw GraphicsException("Invalid enum");
+		}
 			
 		}
 		
