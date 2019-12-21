@@ -26,7 +26,6 @@ enum DepthAttachmentOptions {
 	DEPTH_DEFAULT = 0b001,
 	DEPTH_24 = 0b010,
 	DEPTH_32 = 0b110,
-
 };
 
 class FrameBuffer {
@@ -117,9 +116,9 @@ public:
 
 				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexID, 0);
 			}
-		else {
-			throw GraphicsException("Invalid enum");
-		}
+			else {
+				throw GraphicsException("Invalid enum");
+			}
 			
 		}
 		
@@ -200,6 +199,10 @@ public:
 		}
 	}
 
+	//returns the depth tex id
+	GLint getDepthTextID() {
+		return (GLint)depthTexID;
+	}
 
 	//disables all blending
 	void disableBlending() {
