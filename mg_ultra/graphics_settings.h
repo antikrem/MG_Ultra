@@ -12,6 +12,8 @@ struct GraphicsSettings {
 	atomic<int> antialiasing = 4;
 	//Size of window
 	atomic<int> screenWidth = 1366, screenHeight = 768;
+	//number of passes for depth peeling
+	atomic<int> depthPeelingPasses = 2;
 };
 
 #endif

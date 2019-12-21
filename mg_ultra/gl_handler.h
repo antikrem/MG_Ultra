@@ -121,7 +121,7 @@ public:
 		geometryFrameBuffer.initialiseFrameBuffer(
 			gSettings,
 			{ 
-				{"spriteColour", GL_RGB}, 
+				{"spriteColour", GL_RGBA}, 
 				{"spriteWorldPosition", GL_RGB16F}, 
 				{"normals", GL_RGB16_SNORM}, 
 				{"lightingSensitivity", GL_RGB},
@@ -134,21 +134,21 @@ public:
 			{
 				{"uiScene", GL_RGBA}
 			},
-			DepthAttachmentOptions::DEPTH_DEFAULT
+			DepthAttachmentOptions::ATTACH_NONE
 		);
 		lightingFrameBuffer.initialiseFrameBuffer(
 			gSettings, 
 			{ 
 				{"directionalLightScene", GL_RGBA16F} 
 			},
-			DepthAttachmentOptions::DEPTH_DEFAULT
+			DepthAttachmentOptions::ATTACH_NONE
 		);
 		postEffects.initialiseFrameBuffer(
 			gSettings, 
 			{ 
-				{"scene", GL_RGB} 
+				{"scene", GL_RGBA} 
 			},
-			DepthAttachmentOptions::DEPTH_DEFAULT
+			DepthAttachmentOptions::ATTACH_NONE
 		);
 
 		shaderMaster = new ShaderMaster();
@@ -165,60 +165,73 @@ public:
 	void render() {
 		prerender();
 
-		//FIRST PASS - render basic stuff
-		shaderMaster->useShader("base");
-		shaderMaster->setUniformF("base", "clipNear", camera->getClipNear());
-		shaderMaster->setUniformF("base", "clipFar", camera->getClipFar());
-		shaderMaster->setUniformMatrix4F("base", "MVP", camera->getVPMatrix());
-		geometryFrameBuffer.bindBuffer();
-		//process the box buffer, which renders the geometry
-		//set mgt textures in shader
-		int chain = textureMaster->attachTextures(shaderMaster, "base", "mgtSamplers");
-		//Attach front depth buffer
-		shaderMaster->attachFrameBufferAsSource("base", &frontDepthFrameBuffer, chain);
-		//render boxes
-		boxVAOBuffer.processGLSide();
-		geometryFrameBuffer.unbindBuffer();
+		frontDepthFrameBuffer.clearBuffer();
+		postEffects.clearBuffer();
+		int chain;
 
-		//update front depth buffer
-		shaderMaster->useShader("front_depth_buffer");
-		frontDepthFrameBuffer.bindNoClearBuffer();
-		
-		shaderMaster->attachFrameBufferAsSource("front_depth_buffer", &geometryFrameBuffer);
-		screenVAO.processGLSide();
+		for (int i = 0; i < gSettings->depthPeelingPasses; i++) {
+			//FIRST PASS - render basic stuff
+			shaderMaster->useShader("base");
+			shaderMaster->setUniformF("base", "clipNear", camera->getClipNear());
+			shaderMaster->setUniformF("base", "clipFar", camera->getClipFar());
+			shaderMaster->setUniformF("base", "viewport_w", (float)gSettings->screenWidth);
+			shaderMaster->setUniformF("base", "viewport_h", (float)gSettings->screenHeight);
+			shaderMaster->setUniformMatrix4F("base", "MVP", camera->getVPMatrix());
+			geometryFrameBuffer.bindBuffer();
+			//process the box buffer, which renders the geometry
+			//set mgt textures in shader
+			chain = textureMaster->attachTextures(shaderMaster, "base", "mgtSamplers");
+			//Attach front depth buffer
+			shaderMaster->attachFrameBufferAsSource("base", &frontDepthFrameBuffer, chain);
+			//render boxes
+			boxVAOBuffer.processGLSide();
+			geometryFrameBuffer.unbindBuffer();
 
-		frontDepthFrameBuffer.unbindBuffer();
+			//update front depth buffer
+			shaderMaster->useShader("front_depth_buffer");
+			frontDepthFrameBuffer.bindNoClearBuffer();
+			glEnable(GL_BLEND);
+			frontDepthFrameBuffer.setBlendFunction("frontDepthBuffer", GL_MAX, GL_ONE, GL_ONE);
+			shaderMaster->attachFrameBufferAsSource("front_depth_buffer", &geometryFrameBuffer);
+			screenVAO.processGLSide();
+			glDisable(GL_BLEND);
+			frontDepthFrameBuffer.unbindBuffer();
 
+
+			//SECOND PASS - calculate individual lighting components
+			shaderMaster->useShader("directional_lighting");
+			lightingFrameBuffer.bindBuffer();
+			glEnable(GL_BLEND);
+			lightingFrameBuffer.setBlendFunction("directionalLightScene", GL_FUNC_ADD, GL_ONE, GL_ONE);
+			shaderMaster->attachFrameBufferAsSource("directional_lighting", &geometryFrameBuffer);
+			directionalLightVAOBuffer.processGLSide();
+			glDisable(GL_BLEND);
+			lightingFrameBuffer.unbindBuffer();
+
+			//THIRD PASS - combine all light values into post processing buffer
+			shaderMaster->useShader("unified_lighting");
+			shaderMaster->setUniformF("unified_lighting", "ambientStrength", g_ambient::getStrength());
+			shaderMaster->setUniform3F("unified_lighting", "ambientColor", g_ambient::getColour().getVec3());
+			postEffects.bindNoClearBuffer();
+			glEnable(GL_BLEND);
+			postEffects.setBlendFunction("scene", GL_FUNC_ADD, GL_ONE_MINUS_DST_ALPHA, GL_DST_ALPHA);
+			chain = shaderMaster->attachFrameBufferAsSource("unified_lighting", &lightingFrameBuffer);
+			shaderMaster->attachFrameBufferAsSource("unified_lighting", &geometryFrameBuffer, chain);
+			screenVAO.processGLSide();
+			glDisable(GL_BLEND);
+			postEffects.unbindBuffer();
+			glFlush();
+		}
+
+		//FOURTH PASS - render buffer to screenspace
 		//render ui as well
 		shaderMaster->useShader("ui");
 		textureMaster->attachTextures(shaderMaster, "ui", "mgtSamplers");
 		shaderMaster->setUniformMatrix4F("ui", "MVP", camera->getUiVPMatrix());
-		
 		uiFrameBuffer.bindBuffer();
 		boxUIVAOBuffer.processGLSide();
 		uiFrameBuffer.unbindBuffer();
-		
-		//SECOND PASS - calculate individual lighting components
-		shaderMaster->useShader("directional_lighting");
-		lightingFrameBuffer.bindBuffer();
-		glEnable(GL_BLEND);
-		lightingFrameBuffer.setBlendFunction("directionalLightScene", GL_FUNC_ADD, GL_ONE, GL_ONE);
-		shaderMaster->attachFrameBufferAsSource("directional_lighting", &geometryFrameBuffer);
-		directionalLightVAOBuffer.processGLSide();
-		glDisable(GL_BLEND);
-		lightingFrameBuffer.unbindBuffer();
-		
-		//THIRD PASS - combine all light values into post processing buffer
-		shaderMaster->useShader("unified_lighting");
-		shaderMaster->setUniformF("unified_lighting", "ambientStrength", g_ambient::getStrength());
-		shaderMaster->setUniform3F("unified_lighting", "ambientColor", g_ambient::getColour().getVec3());
-		postEffects.bindBuffer();
-		chain = shaderMaster->attachFrameBufferAsSource("unified_lighting", &lightingFrameBuffer);
-		shaderMaster->attachFrameBufferAsSource("unified_lighting", &geometryFrameBuffer, chain);
-		screenVAO.processGLSide();
-		postEffects.unbindBuffer();
 
-		//FOURTH PASS - render buffer to screenspace
 		//set the geometry frame buffer as the source
 		shaderMaster->useShader("finalise");
 		chain = shaderMaster->attachFrameBufferAsSource("finalise", &postEffects);
