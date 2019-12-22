@@ -16,6 +16,7 @@ in vec3 worldPosition;
 in vec2 uv;
 in vec2 wl;
 in vec2 texSize;
+in float transparency;
 
 layout(location = 0) out vec4 color;
 layout(location = 1) out vec3 position;
@@ -38,12 +39,13 @@ void main() {
 
 	//remove fully transparent parts
 	vec4 texel = texture(mgtSamplers[0], uv + ad_wl).rgba;
-	if (texel.a < 0.2) {
+	if (texel.a < 0.01) {
 		discard;
 	}
 
-	color = texel.rgba;
-	position =  worldPosition;
+	//colours are pre multiplied by alpha
+	color =  transparency * texel.a * vec4(texel.rgb , 1.0);
+	position = worldPosition;
 
 	//normal for sprites always face towards the camera
 	normals = vec3(0.0, 0.0, 1.0);

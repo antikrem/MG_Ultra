@@ -9,6 +9,7 @@ layout(location = 2) in vec2 size;
 layout(location = 3) in float theta;
 layout(location = 4) in vec4 textureCoordinate; //xy is center, zw is width/length
 layout(location = 5) in float wrapFactor; //will overshoot texturing to allow wrapping, usually 1
+layout(location = 6) in float spriteTransparency; //transparency
 
 //out
 out vec3 worldPosition;
@@ -16,6 +17,7 @@ out vec2 uv; //top left texture offset within atlas
 out vec2 wl; //scaling sample position
 out vec2 texSize; //the total size used for wrapping
 out vec2 speenSpace; //screen space location
+out float transparency;
 
 //MVP for sprites in 3D
 uniform mat4 MVP;
@@ -37,6 +39,8 @@ void main() {
 
 	worldPosition = (rotation * basePos) * vec3(size,1) + centerPos;
 
+	transparency = spriteTransparency;
+
 	gl_Position 
-		=  MVP * vec4(worldPosition, 1);
+		= transparency * MVP * vec4(worldPosition, 1);
 }

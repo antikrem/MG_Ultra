@@ -202,7 +202,7 @@ public:
 			shaderMaster->setUniform3F("unified_lighting", "ambientColor", g_ambient::getColour().getVec3());
 			postEffects.bindNoClearBuffer();
 			glEnable(GL_BLEND);
-			postEffects.setBlendFunction("scene", GL_FUNC_ADD, GL_ONE_MINUS_DST_ALPHA, GL_DST_ALPHA);
+			postEffects.setBlendFunction("scene", GL_FUNC_ADD, GL_ONE_MINUS_DST_ALPHA, GL_ONE);
 			chain = shaderMaster->attachFrameBufferAsSource("unified_lighting", &lightingFrameBuffer);
 			shaderMaster->attachFrameBufferAsSource("unified_lighting", &geometryFrameBuffer, chain);
 			screenVAO.processGLSide();
@@ -215,7 +215,6 @@ public:
 		//set the geometry frame buffer as the source
 		shaderMaster->useShader("finalise");
 		shaderMaster->attachFrameBufferAsSource("finalise", &postEffects);
-		//shaderMaster->attachFrameBufferAsSource("finalise", &uiFrameBuffer, chain);
 		screenVAO.processGLSide();
 
 		//draw UI
@@ -227,7 +226,7 @@ public:
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		boxUIVAOBuffer.processGLSide();
 		glDisable(GL_BLEND);
-
+		
 		postrender();
 	}
 

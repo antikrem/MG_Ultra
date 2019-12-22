@@ -21,8 +21,8 @@ void main() {
 	vec3 ambient = ambientStrength * texelColor.xyz * ambientColor;
 	vec3 directional = texture(directionalLightScene, uv).rgb;
 	color = vec4(
-		//combine individual components and premultiply by alpha
-		texelColor.a * mix3(ls, ambient, directional, vec3(0)),
+		//combine individual components
+		mix3(ls, ambient, directional, vec3(0)),
 		texelColor.a
 	);
 }
