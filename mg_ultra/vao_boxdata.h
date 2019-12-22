@@ -94,12 +94,24 @@ public:
 		glEnableVertexAttribArray(5);
 		glBindBuffer(GL_ARRAY_BUFFER, vboID);
 		glVertexAttribPointer(
-			5, //layout = 6
+			5, //layout = 5
 			1, //single float
 			GL_FLOAT,
 			GL_FALSE,
 			sizeof(BoxData), //stride the length of boxdata
 			(void*)(offsetof(BoxData, BoxData::wrapFactor)) //wrap factor
+		);
+
+		//Set up transparency
+		glEnableVertexAttribArray(6);
+		glBindBuffer(GL_ARRAY_BUFFER, vboID);
+		glVertexAttribPointer(
+			6, //layout = 6
+			1, //single float
+			GL_FLOAT,
+			GL_FALSE,
+			sizeof(BoxData), //stride the length of boxdata
+			(void*)(offsetof(BoxData, BoxData::transparency)) //transparency
 		);
 
 		//set up striding
@@ -109,6 +121,7 @@ public:
 		glVertexAttribDivisor(3, 1); //rotation
 		glVertexAttribDivisor(4, 1); //texture access
 		glVertexAttribDivisor(5, 1); //wrapfactor
+		glVertexAttribDivisor(6, 1); //transparency
 	}
 
 	//render what there, the correct vao has been bound

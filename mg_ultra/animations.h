@@ -20,6 +20,7 @@ struct AnimationState {
 	float scale = 1.0f;
 	float wrapFactor = 1.0f;
 	float rotation = 0; 
+	float transparency = 1.0f;
 	string animationSetName;
 	unsigned int animationType;
 	unsigned int currentFrame; //the index of the frame in animation
@@ -50,6 +51,7 @@ struct AnimationState {
 		this->scale = state.scale;
 		this->wrapFactor = state.wrapFactor;
 		this->rotation = state.rotation;
+		this->transparency = state.transparency;
 		this->animationSetName = state.animationSetName;
 		this->animationType = state.animationType;
 		this->currentFrame = state.currentFrame;

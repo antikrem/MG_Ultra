@@ -28,6 +28,10 @@ private:
 	//rotaion value in degrees
 	atomic<float> rotation = 0;
 
+	//transparency of this graphic
+	//defaults at 1.0f;
+	atomic<float> transparency = 1.0f;
+
 public:
 	ComponentGraphics() {
 		visible.store(false);
@@ -116,6 +120,16 @@ public:
 		return wrapFactor;
 	}
 
+	//set transparency (0 - 1)
+	void setTransparency(float transparency) {
+		this->transparency = transparency;
+	}
+
+	//get transparency (0 - 1)
+	float getTransparency() {
+		return transparency;
+	}
+
 	//set animation, not to be used 
 	void setAnimationType(unsigned int animation) {
 		unique_lock<shared_mutex> lck(lock);
@@ -126,6 +140,7 @@ public:
 	AnimationState getAnimationState(bool* valid, Point3 pos) {
 		auto temp = getAnimationState();
 		*valid = temp.valid && temp.visible && visible.load();
+		temp.transparency = transparency;
 		temp.centerPostion = pos;
 		temp.rotation = rotation;
 		temp.wrapFactor = wrapFactor;
@@ -146,6 +161,8 @@ public:
 			.addFunction("get_render_in_3D", &ComponentGraphics::getRenderIn3D)
 			.addFunction("set_wrap_factor", &ComponentGraphics::setWrapFactor)
 			.addFunction("get_wrap_factor", &ComponentGraphics::getWrapFactor)
+			.addFunction("set_transparency", &ComponentGraphics::setTransparency)
+			.addFunction("get_transparency", &ComponentGraphics::getTransparency)
 			.addStaticFunction("create", ScriptableClass::create<ComponentGraphics, string>)
 			.addStaticFunction("type", &getType<ComponentGraphics>)
 			.addStaticFunction("cast", &Component::castDown<ComponentGraphics>)

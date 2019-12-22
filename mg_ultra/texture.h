@@ -48,6 +48,8 @@ struct BoxData {
 	float rotation = 0;
 	//Used to overshoot wrapping
 	float wrapFactor = 1.0f;
+	//transparency range from 0 to 1
+	float transparency = 1.0f;
 	//set to true if this box is valid
 	bool draw;
 };
@@ -266,6 +268,7 @@ public:
 		boxData.rotation = DEG2RAD(state.rotation);
 		memcpy(boxData.uvwh, &ani->getUVWH(state.currentFrame), 4 * sizeof(float));
 		boxData.wrapFactor = state.wrapFactor;
+		boxData.transparency = state.transparency;
 		
 		return boxData;
 	}
