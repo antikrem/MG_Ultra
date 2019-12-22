@@ -100,6 +100,7 @@ class ECSMaster {
 		master->createSystem<SystemBackground>(registar);
 		master->createSystem<SystemDriftable>(registar);
 		master->createSystem<SystemHealth>(registar);
+		master->createSystem<SystemTransparency>(registar);
 
 		//ring 2
 		master = newSystemsMaster("m_gameplay");

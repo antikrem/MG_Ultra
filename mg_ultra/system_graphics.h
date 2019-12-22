@@ -8,6 +8,7 @@
 #include "component_graphics.h"
 #include "component_text.h"
 #include "component_camera.h"
+#include "component_transparency.h"
 
 #include "camera.h"
 #include "graphics_state.h"
@@ -49,9 +50,13 @@ public:
 		if (components.count(typeid(ComponentGraphics)) ) {
 			auto pos = getComponent<ComponentPosition>(components);
 			auto gra = getComponent<ComponentGraphics>(components);
+			auto tra = getComponent<ComponentTransparency>(components);
 
 			bool toDraw;
-			auto state = gra->getAnimationState(&toDraw, pos->getPosition3());
+			AnimationState state = gra->getAnimationState(&toDraw, pos->getPosition3());
+			if (tra) {
+				state.transparency = tra->getCurrent();
+			}
 
 			if (toDraw && boxCount < bufferSize) {
 				if (gra->getRenderIn3D()) {
@@ -68,6 +73,8 @@ public:
 		else if (components.count(typeid(ComponentText)) ) {
 			auto pos = getComponent<ComponentPosition>(components);
 			auto tex = getComponent<ComponentText>(components);
+			auto tra = getComponent<ComponentTransparency>(components);
+
 			//exit early if not visible
 			if not(tex->getVisible()) {
 				return;
@@ -76,7 +83,12 @@ public:
 			//pull all the states 
 			auto stateList = tex->getStates(pos->getPosition3());
 		
-			
+			if (tra) {
+				float transparency = tra->getCurrent();
+				for (int i = 0; i < (int)stateList.size(); i++) {
+					stateList[i].transparency = transparency;
+				}
+			}
 
 			if (tex->getRenderIn3D()) {
 				for (int i = 0; (i < (int)stateList.size()) && (boxCount < bufferSize); i++) {

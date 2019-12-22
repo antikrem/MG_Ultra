@@ -19,6 +19,7 @@
 #include "component_health.h"
 #include "component_audio.h"
 #include "component_listener.h"
+#include "component_transparency.h"
 
 #include "registar.h"
 #include "pool.h"
@@ -94,6 +95,7 @@ ScriptMaster::ScriptMaster()
 	forceLuaRegistration<ComponentHealth>(kaguya);
 	forceLuaRegistration<ComponentAudio>(kaguya);
 	forceLuaRegistration<ComponentListener>(kaguya);
+	forceLuaRegistration<ComponentTransparency>(kaguya);
 
 	//set contextual script functions
 	kaguya["getEntityPool"] = getGlobalPool;

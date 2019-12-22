@@ -255,6 +255,7 @@
     <ClInclude Include="component_text.h" />
     <ClInclude Include="component_timer.h" />
     <ClInclude Include="component_movement.h" />
+    <ClInclude Include="component_transparency.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="cus_struct2.h" />
     <ClInclude Include="directional_light.h" />
@@ -310,6 +311,7 @@
     <ClInclude Include="system_spawner.h" />
     <ClInclude Include="system_text.h" />
     <ClInclude Include="system_timer.h" />
+    <ClInclude Include="system_transparency.h" />
     <ClInclude Include="system__header.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="component.h" />

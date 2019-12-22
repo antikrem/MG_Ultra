@@ -16,6 +16,7 @@
 #include "system_spawner.h"
 #include "system_driftable.h"
 #include "system_health.h"
+#include "system_transparency.h"
 
 //ring 2 - main game loop - most important main gameplay loop
 #include "system_timer.h"
