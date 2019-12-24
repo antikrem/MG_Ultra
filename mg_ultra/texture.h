@@ -279,7 +279,7 @@ public:
 
 	//gets an animation set tempalre, returns null if given animation doesn't exist
 	AnimationSetTemplate* getAnimationSetTemplate(string name) {
-		return animationSets[name];
+		return animationSets.count(name) ? animationSets[name] : nullptr;
 	}
 
 	//prints all the sets
