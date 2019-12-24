@@ -282,6 +282,13 @@ public:
 		return animationSets.count(name) ? animationSets[name] : nullptr;
 	}
 
+	//gets an animation set, returns null if not able to be found
+	AnimationTemplate* getAnimationTemplate(string setName, int aniType) {
+		AnimationSetTemplate* set = getAnimationSetTemplate(setName);
+		return set ? set->getAnimationTemplate((unsigned int)aniType) : nullptr;
+
+	}
+
 	//prints all the sets
 	string print() {
 		shared_lock<shared_mutex> lock(mtx);
