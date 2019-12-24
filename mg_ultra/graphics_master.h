@@ -13,6 +13,7 @@ i.e holds the state(graphics state) and the state transition(gl_handler)*/
 class GraphicsMaster {
 	atomic<bool> active = true;
 	atomic<bool> end = false;
+	atomic<bool> initialised = false;
 
 	GraphicsState graphicsState;
 	GraphicsLink graphicsLink;
@@ -28,6 +29,7 @@ class GraphicsMaster {
 	//full rendering process
 	void renderProcess() {
 		graphicsState.initialiseCallingThread();
+		initialised = true;
 		while (!end) {
 			renderCycle();
 		}
@@ -41,6 +43,9 @@ public:
 		graphicsLink.startGLinking(&graphicsState, registar);
 		//start the graphics thread
 		thread graphicsThread(&GraphicsMaster::renderProcess, this);
+		while (!initialised) {
+
+		}
 		graphicsThread.detach();
 	}
 
