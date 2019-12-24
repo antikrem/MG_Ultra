@@ -136,6 +136,9 @@ private:
 	//Map of currently loaded textures, index to texture*
 	map<int, Texture*> loadedTextures;
 
+	//next texture index to be used
+	int nextTextureIndex = 0;
+
 	//read write lock, write lock when adding or removing mgt files, resulting in loadedTextures changing
 	shared_mutex mtx;
 
@@ -157,12 +160,13 @@ private:
 	//gets the lowest texture unit that isn't allocated
 	//returns -1 if 16 texture units have been allocated
 	int getFreeTextureIndex() {
-		for (int i = 0; i < 16; i++) {
-			if not(loadedTextures.count(i)) {
-				return i;
-			}
+		if (loadedTextures.size() > 16) {
+			return -1;
 		}
-		return -1;
+		else {
+			//return next t index then iterate tex index
+			return nextTextureIndex++;
+		}
 	}
 
 public:
@@ -262,9 +266,9 @@ public:
 		boxData.draw = state.visible && state.valid;
 
 		//populate box data
-		memcpy(boxData.xyz, &state.centerPostion, 3*sizeof(float));
-		boxData.wh[0] = scale * state.scale*(float)ani->getWidth();
-		boxData.wh[1] = scale * state.scale*(float)ani->getHeight();
+		memcpy(boxData.xyz, &state.centerPostion, 3 * sizeof(float));
+		boxData.wh[0] = scale * state.scale * (float)ani->getWidth();
+		boxData.wh[1] = scale * state.scale * (float)ani->getHeight();
 		boxData.rotation = DEG2RAD(state.rotation);
 		memcpy(boxData.uvwh, &ani->getUVWH(state.currentFrame), 4 * sizeof(float));
 		boxData.wrapFactor = state.wrapFactor;
