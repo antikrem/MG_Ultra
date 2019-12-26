@@ -85,8 +85,14 @@
     <Filter Include="Source Files\Audio">
       <UniqueIdentifier>{868368bf-e3c6-4ad8-b2a5-7cf8325e8c69}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Particle">
+    <Filter Include="Header Files\Particles">
       <UniqueIdentifier>{fa9e892c-cdb6-436f-b4d3-5ecfa2baac0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ECS\Components\Particle Component">
+      <UniqueIdentifier>{cc60a9e5-8332-457b-9120-fc1ec57eb39d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ECS\Systems\Particle Component">
+      <UniqueIdentifier>{d2206ab9-a96a-4d6f-9004-429580a94728}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -161,6 +167,9 @@
     </ClCompile>
     <ClCompile Include="global_funcs.cpp">
       <Filter>Source Files\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="random_ex.cpp">
+      <Filter>Source Files\Support</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -464,9 +473,6 @@
     <ClInclude Include="system_music.h">
       <Filter>Header Files\ECS\Systems</Filter>
     </ClInclude>
-    <ClInclude Include="particle_manager.h">
-      <Filter>Header Files\Particle</Filter>
-    </ClInclude>
     <ClInclude Include="audio_listener.h">
       <Filter>Header Files\Audio</Filter>
     </ClInclude>
@@ -478,6 +484,24 @@
     </ClInclude>
     <ClInclude Include="component_transparency.h">
       <Filter>Header Files\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="system_particle_master.h">
+      <Filter>Header Files\ECS\Systems\Particle Component</Filter>
+    </ClInclude>
+    <ClInclude Include="particle_spawner.h">
+      <Filter>Header Files\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="particle.h">
+      <Filter>Header Files\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="component_particle_spawner.h">
+      <Filter>Header Files\ECS\Components\Particle Component</Filter>
+    </ClInclude>
+    <ClInclude Include="particle_master.h">
+      <Filter>Header Files\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="random_ex.h">
+      <Filter>Header Files\Support</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

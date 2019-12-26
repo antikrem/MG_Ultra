@@ -215,6 +215,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="os_kit.cpp" />
     <ClCompile Include="pool.cpp" />
+    <ClCompile Include="random_ex.cpp" />
     <ClCompile Include="registar.cpp" />
     <ClCompile Include="script_master.cpp" />
     <ClCompile Include="str_kit.cpp" />
@@ -251,6 +252,7 @@
     <ClInclude Include="component_listener.h" />
     <ClInclude Include="component_multi_entity.h" />
     <ClInclude Include="component_no_bounds_control.h" />
+    <ClInclude Include="component_particle_spawner.h" />
     <ClInclude Include="component_spawner.h" />
     <ClInclude Include="component_text.h" />
     <ClInclude Include="component_timer.h" />
@@ -275,8 +277,11 @@
     <ClInclude Include="math_ex.h" />
     <ClInclude Include="mmap.h" />
     <ClInclude Include="os_kit.h" />
-    <ClInclude Include="particle_manager.h" />
+    <ClInclude Include="particle.h" />
+    <ClInclude Include="particle_master.h" />
+    <ClInclude Include="particle_spawner.h" />
     <ClInclude Include="performance_counter.h" />
+    <ClInclude Include="random_ex.h" />
     <ClInclude Include="reader.h" />
     <ClInclude Include="registar.h" />
     <ClInclude Include="screen_space_consts.h" />
@@ -303,6 +308,7 @@
     <ClInclude Include="system_movement.h" />
     <ClInclude Include="system_multi_ent.h" />
     <ClInclude Include="system_music.h" />
+    <ClInclude Include="system_particle_master.h" />
     <ClInclude Include="system_player.h" />
     <ClInclude Include="shaders.h" />
     <ClInclude Include="str_kit.h" />
