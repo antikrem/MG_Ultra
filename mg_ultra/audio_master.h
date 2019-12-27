@@ -50,7 +50,8 @@ public:
 		context = alcCreateContext(device, NULL);
 		alcMakeContextCurrent(context);
 
-		err::logMessage("AUDIO, audio subsystems initialised utilising device: " + string(deviceName));
+		err::logMessage("AUDIO, audio subsystems initialised");
+		err::logMessage("AUDIO, Utilising device: " + string(deviceName));
 
 		alGetError();
 	}
