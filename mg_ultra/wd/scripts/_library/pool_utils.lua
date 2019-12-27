@@ -38,3 +38,8 @@ end
 function EntityPool.get_graveyard_passed() 
 	return pool:getGraveyardPassed()
 end
+
+--Attempts to get player, might get nil
+function EntityPool.get_player()
+	return EntityPool.get_cached_entity(EntityPlayer)
+end
