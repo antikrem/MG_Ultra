@@ -13,6 +13,8 @@
 #include "camera.h"
 #include "graphics_state.h"
 
+#include "particle_master.h"
+
 class SystemGraphics : public System {
 	//Pointer to camera
 	Camera* camera = nullptr;
@@ -26,6 +28,9 @@ class SystemGraphics : public System {
 	int uiBoxCount = 0;
 	BoxData* uiBuffer = nullptr;
 	int uiBufferSize = 0;
+
+	//pointer to particle master
+	atomic<ParticleMaster*> particleMaster = nullptr;
 
 public:
 	SystemGraphics() {
@@ -43,6 +48,10 @@ public:
 
 	void setCamera(Camera* camera) {
 		this->camera = camera;
+	}
+
+	void setParticleMaster(ParticleMaster* particleMaster) {
+		this->particleMaster = particleMaster;
 	}
 
 	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, shared_ptr<Entity> ent, int id) override {
@@ -101,6 +110,7 @@ public:
 				}
 			}
 		}
+
 	}
 
 	void precycle(EntityPool* pool) override {
@@ -125,6 +135,11 @@ public:
 				cCamera->getViewTarget(),
 				cCamera->getFOV()
 			);
+		}
+
+		//transfer particles
+		if (particleMaster.load()) {
+			boxCount = particleMaster.load()->copyOutBoxes(buffer, boxCount, bufferSize);
 		}
 
 		graphicsState->commitBoxDataBuffer(boxCount);

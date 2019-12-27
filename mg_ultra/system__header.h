@@ -36,5 +36,8 @@
 #include "system_audio.h"
 #include "system_music.h"
 
+//ring 6 - particles
+#include "system_particle_spawner.h"
+#include "system_particle_boxes.h"
 
 #endif

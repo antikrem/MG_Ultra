@@ -14,6 +14,7 @@ class GraphicsLink {
 private:
 	SystemsMaster* internalSystem = nullptr;
 	EntityPool* pool = nullptr;
+	SystemGraphics* sGraphics = nullptr;
 
 public:
 	GraphicsLink(EntityPool* pool) {
@@ -23,7 +24,7 @@ public:
 
 	//initialises the systems
 	void startGLinking(GraphicsState* gState, Registar* registar) {
-		auto sGraphics = createSystem<SystemGraphics>(registar);
+		sGraphics = createSystem<SystemGraphics>(registar);
 		sGraphics->setGraphicsState(gState);
 		sGraphics->setCamera(gState->getCamera());
 		auto sDirectionalLights = createSystem<SystemDirectionalLight>(registar);
@@ -45,6 +46,11 @@ public:
 		SuccessCallback sc;
 		internalSystem->executeSystemMaster(&sc);
 		sc.waitForCompletion();
+	}
+
+	//sets particle master for sGrtaphics
+	void setParticleMaster(ParticleMaster* particleMaster) {
+		sGraphics->setParticleMaster(particleMaster);
 	}
 };
 

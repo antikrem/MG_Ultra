@@ -18,8 +18,6 @@ class GraphicsMaster {
 	GraphicsState graphicsState;
 	GraphicsLink graphicsLink;
 
-
-
 	//the process of rendering a single frame
 	void renderCycle() {
 		graphicsLink.linkGraphics();
@@ -72,6 +70,10 @@ public:
 	//returns graphics state
 	GraphicsState* getGraphicsState() {
 		return &graphicsState;
+	}
+
+	void setParticleMaster(ParticleMaster* particleMaster) {
+		graphicsLink.setParticleMaster(particleMaster);
 	}
 
 };

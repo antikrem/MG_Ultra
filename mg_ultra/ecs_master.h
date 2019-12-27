@@ -8,6 +8,7 @@
 #include "timer.h"
 #include "graphics_state.h"
 #include "graphics_master.h"
+#include "particle_master.h"
 #include "audio_master.h"
 #include "input.h"
 #include "script_master.h"
@@ -26,6 +27,9 @@ class ECSMaster {
 
 	//global graphics state
 	GraphicsMaster* gMaster = nullptr;
+
+	//global master of particles
+	ParticleMaster* pMaster = nullptr;
 
 	//global audio master
 	AudioMaster* aMaster = nullptr;
@@ -128,6 +132,14 @@ class ECSMaster {
 		auto audioSystem = master->createSystem<SystemAudio>(registar);
 		audioSystem->setAudioMaster(aMaster);
 		master->createSystem<SystemMusic>(registar);
+
+		//ring 6
+		master = newSystemsMaster("m_particles");
+		master->setTimer(100);
+		auto particleSpawnerSystem = master->createSystem<SystemParticleSpawner>(registar);
+		particleSpawnerSystem->setParticleMaster(pMaster);
+		auto particleBoxesSystem = master->createSystem<SystemParticleBoxes>(registar);
+		particleBoxesSystem->setParticleMaster(pMaster);
 	}
 
 	//starts all of the masters
@@ -146,6 +158,9 @@ public:
 		registar = new Registar();
 		g_registar::setGlobalRegistar(registar);
 		gMaster = new GraphicsMaster(entityPool, registar);
+		pMaster = new ParticleMaster(gMaster->getGraphicsState()->getAnimationsMaster());
+		pMaster->registerNewParticleType("gold", "particle_gold", 1);
+		gMaster->setParticleMaster(pMaster);
 		aMaster = new AudioMaster();
 		g_audio::setAudioMaster(aMaster);
 		
@@ -178,6 +193,7 @@ public:
 		}
 
 		delete gMaster;
+		delete pMaster;
 		delete aMaster;
 		delete entityPool;
 		delete inputMaster;

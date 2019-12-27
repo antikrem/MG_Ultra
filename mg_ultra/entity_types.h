@@ -19,7 +19,8 @@ enum EntityTypes {
 	ETAnonymousSpawner,
 	ETDirectionalLight,
 	ETEnemy,
-	ETMusic
+	ETMusic,
+	ETParticle
 };
 
 //String to Entity type
