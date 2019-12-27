@@ -252,7 +252,7 @@
     <ClInclude Include="component_listener.h" />
     <ClInclude Include="component_multi_entity.h" />
     <ClInclude Include="component_no_bounds_control.h" />
-    <ClInclude Include="component_particle_spawner.h" />
+    <ClInclude Include="component_particle.h" />
     <ClInclude Include="component_spawner.h" />
     <ClInclude Include="component_text.h" />
     <ClInclude Include="component_timer.h" />
@@ -280,6 +280,7 @@
     <ClInclude Include="particle.h" />
     <ClInclude Include="particle_master.h" />
     <ClInclude Include="particle_spawner.h" />
+    <ClInclude Include="particle_type.h" />
     <ClInclude Include="performance_counter.h" />
     <ClInclude Include="random_ex.h" />
     <ClInclude Include="reader.h" />
@@ -308,7 +309,8 @@
     <ClInclude Include="system_movement.h" />
     <ClInclude Include="system_multi_ent.h" />
     <ClInclude Include="system_music.h" />
-    <ClInclude Include="system_particle_master.h" />
+    <ClInclude Include="system_particle_boxes.h" />
+    <ClInclude Include="system_particle_spawner.h" />
     <ClInclude Include="system_player.h" />
     <ClInclude Include="shaders.h" />
     <ClInclude Include="str_kit.h" />
