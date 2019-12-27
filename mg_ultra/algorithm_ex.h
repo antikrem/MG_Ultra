@@ -43,6 +43,12 @@ void erase_associative_if(Container& container, const function<bool(typename Con
 	}
 }
 
+//extends a sequential container with another
+template<class Container>
+void extend(Container& container, Container& extension) {
+	container.insert(container.end(), extension.begin(), extension.end());
+}
+
 //Checks if container contains element
 template <class Container>
 bool contains(const Container& container, const typename Container::value_type& element) {
