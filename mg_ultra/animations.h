@@ -191,7 +191,7 @@ public:
 
 	//get the animation template specified, no error checking
 	AnimationTemplate* getAnimationTemplate(unsigned int animationType) {
-		return animationTemplates[animationType];
+		return animationTemplates.count(animationType) ? animationTemplates[animationType] : nullptr;
 	}
 
 	//Will attempt to find a height value for any animation in this set
