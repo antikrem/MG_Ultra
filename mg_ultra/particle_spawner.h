@@ -24,7 +24,11 @@ class ParticleSpawner {
 
 	//some parameters for spawning particles
 	atomic<Point3> position = Point3(0.0f);
-	float twoDeviations = 1.0f;
+	float positionDoubleDeviation = 1.0f;
+
+
+	atomic<Point3> startingVelocity = Point3(0.0f);
+	atomic<float> velocityDoubleDeviation = 0.0f;
 
 
 public:
@@ -43,22 +47,40 @@ public:
 		this->particleKey = key;
 	}
 
-	//spawns one particle within bounds
+	//spawns count particle within bounds
 	void spawnParticles(int count) {
 		unique_lock<mutex> lck(lock);
 
 		for (int i = 0; i < count; i++) {
 			particles.push_back(
+
 				Particle(
 					particleKey,
 					Point3(
-						rand_ex::next_norm(position.load().x, twoDeviations / 2),
-						rand_ex::next_norm(position.load().y, twoDeviations / 2),
-						rand_ex::next_norm(position.load().z, twoDeviations / 2)
+						rand_ex::next_norm(position.load().x, positionDoubleDeviation / 2),
+						rand_ex::next_norm(position.load().y, positionDoubleDeviation / 2),
+						rand_ex::next_norm(position.load().z, positionDoubleDeviation / 2)
+					),
+					Point3(
+						rand_ex::next_norm(startingVelocity.load().x, velocityDoubleDeviation / 2),
+						rand_ex::next_norm(startingVelocity.load().y, velocityDoubleDeviation / 2),
+						rand_ex::next_norm(startingVelocity.load().z, velocityDoubleDeviation / 2)
 					)
 				)
+
 			);
 		}
+
+	}
+
+	//sets the base velocity of particles
+	void setStartingVelocity(const Point3& startingVelocity) {
+		this->startingVelocity = startingVelocity;
+	}
+
+	//set the double deviation of position
+	void setPositionDoubleDeviation(float doubleDeviation) {
+		this->positionDoubleDeviation = doubleDeviation;
 	}
 
 	//updates this particle spawner

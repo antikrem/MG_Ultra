@@ -5,16 +5,19 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <shared_mutex>
+
 #include "algorithm_ex.h"
 
 #include "particle.h"
 #include "particle_type.h"
+#include "force_applier.h"
 
 
 class ParticleMaster {
 	AnimationsMaster* animationMaster = nullptr;
 
-	mutex particleTypeLock;
+	shared_mutex particleTypeLock;
 	int particleTypeAllocator = 0;
 	map<int, ParticleType> particleTypes;
 	map<string, int> particleKeys;
@@ -22,20 +25,19 @@ class ParticleMaster {
 	mutex particlesLock;
 	vector<Particle> particles;
 
-	//clears all dead particles in particles
-	void clearDeadParticles() {
-		unique_lock<mutex> lck(particlesLock);
-		erase_sequential_if(
-			particles,
-			[](Particle& particle) {
-				return !particle.active;
-			}
-		);
-	}
-
 	//most recent list of availible boxes for particles
 	mutex boxesLock;
 	vector<BoxData> boxes;
+
+	//list of force appliers
+	mutex forceSpecificationLock;
+	vector<ForceSpecification> forceSpecifications;
+
+	//returns a point3 of momentum from a given force specification
+	Point3 computeMommentum(const ForceSpecification& forceSpec, Point3 particlePos) { 
+		return particlePos.directionTo(forceSpec.pos)
+			* (1.0f / (forceSpec.f * pow((particlePos - forceSpec.pos).magnitude(), 2) + forceSpec.p));
+	}
 
 public:
 
@@ -46,14 +48,14 @@ public:
 	//returns a key for a given particle name
 	//-1 if not found
 	int getKeyFromName(string name) {
-		unique_lock<mutex> lck(particleTypeLock);
+		shared_lock<shared_mutex> lck(particleTypeLock);
 		return particleKeys.count(name) ? particleKeys[name] : -1;
 	}
 
 	//Registers a particle type for use
 	//returning an int of key for access, -1 on error
 	int registerNewParticleType(string particleName, string animationSetName, int animation = 1) {
-		unique_lock<mutex> lck(particleTypeLock);
+		unique_lock<shared_mutex> lck(particleTypeLock);
 		particleTypes[particleTypeAllocator] = ParticleType(animationSetName, animationMaster, animation);
 		particleKeys[particleName] = particleTypeAllocator;
 
@@ -72,6 +74,17 @@ public:
 		return particles.size();
 	}
 
+	//clears all dead particles in particles
+	void clearDeadParticles() {
+		unique_lock<mutex> lck(particlesLock);
+		erase_sequential_if(
+			particles,
+			[](Particle& particle) {
+				return !particle.active;
+			}
+		);
+	}
+
 	//copies particles for rendering
 	void copyParticles(vector<ParticleSpecification>& copy) {
 		unique_lock<mutex> lck(particlesLock);
@@ -82,7 +95,7 @@ public:
 
 	//evaluates a vector of particles into a vector of boxes
 	void evaluateParticleList(vector<ParticleSpecification>& particles, vector<BoxData>& boxes) {
-		unique_lock<mutex> lck(particleTypeLock);
+		unique_lock<shared_mutex> lck(particleTypeLock);
 		for (auto& i : particles) {
 			//check valid key
 			if (!particleTypes.count(i.particleKey)) continue;
@@ -101,6 +114,12 @@ public:
 		this->boxes = boxes;
 	}
 
+	//copies into particle master new force specification
+	void setForceSpecifications(vector<ForceSpecification>& forceSpecifications) {
+		unique_lock<mutex> lck(forceSpecificationLock);
+		this->forceSpecifications = forceSpecifications;
+	}
+
 	//copies out box data, returns new box bount
 	int copyOutBoxes(BoxData* boxes, int start, int size) {
 		unique_lock<mutex> lck(boxesLock);
@@ -112,7 +131,24 @@ public:
 		);
 		return start + boxCount;
 	}
-
+	
+	//updates particles, uses factoring to split up updating
+	void updateParticles(int offset, int factor) {
+		unique_lock<mutex> lck(particlesLock);
+		int size = particles.size();
+		for (int i = offset; i < size; i += factor) {
+			Point3 mommentum(0.0f);
+			{
+				unique_lock<mutex> lck(forceSpecificationLock);
+				Point3 pos = particles[i].position;
+				for (auto& i : forceSpecifications) {
+					mommentum += computeMommentum(i, pos);
+				}
+			}
+			
+			particles[i].update(mommentum, (float)factor);
+		}
+	}
 };
 
 #endif

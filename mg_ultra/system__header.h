@@ -39,5 +39,7 @@
 //ring 6 - particles
 #include "system_particle_spawner.h"
 #include "system_particle_boxes.h"
+#include "system_force_applier.h"
+#include "system_particle_update.h"
 
 #endif

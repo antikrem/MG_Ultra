@@ -140,6 +140,10 @@ class ECSMaster {
 		particleSpawnerSystem->setParticleMaster(pMaster);
 		auto particleBoxesSystem = master->createSystem<SystemParticleBoxes>(registar);
 		particleBoxesSystem->setParticleMaster(pMaster);
+		auto particleBoxeseUpdateSystem = master->createSystem<SystemParticleUpdate>(registar);
+		particleBoxeseUpdateSystem->setParticleMaster(pMaster);
+		auto forceApplierSystem = master->createSystem<SystemForceApplier>(registar);
+		forceApplierSystem->setParticleMaster(pMaster);
 	}
 
 	//starts all of the masters
@@ -152,7 +156,6 @@ class ECSMaster {
 public:
 
 	ECSMaster() {
-
 		entityPool = new EntityPool();
 		setGlobalPool(entityPool);
 		registar = new Registar();

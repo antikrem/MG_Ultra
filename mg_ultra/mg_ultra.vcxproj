@@ -247,6 +247,7 @@
     <ClInclude Include="component_directional_light.h" />
     <ClInclude Include="component_driftable.h" />
     <ClInclude Include="component_extended_scripting.h" />
+    <ClInclude Include="component_force_applier.h" />
     <ClInclude Include="component_graphics.h" />
     <ClInclude Include="component_input.h" />
     <ClInclude Include="component_listener.h" />
@@ -264,6 +265,7 @@
     <ClInclude Include="ecs_master.h" />
     <ClInclude Include="error.h" />
     <ClInclude Include="events.h" />
+    <ClInclude Include="force_applier.h" />
     <ClInclude Include="frame_buffer.h" />
     <ClInclude Include="global_funcs.h" />
     <ClInclude Include="gl_handler.h" />
@@ -310,7 +312,9 @@
     <ClInclude Include="system_multi_ent.h" />
     <ClInclude Include="system_music.h" />
     <ClInclude Include="system_particle_boxes.h" />
+    <ClInclude Include="system_force_applier.h" />
     <ClInclude Include="system_particle_spawner.h" />
+    <ClInclude Include="system_particle_update.h" />
     <ClInclude Include="system_player.h" />
     <ClInclude Include="shaders.h" />
     <ClInclude Include="str_kit.h" />
