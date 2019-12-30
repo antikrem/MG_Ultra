@@ -21,6 +21,7 @@
 #include "component_listener.h"
 #include "component_transparency.h"
 #include "component_particle.h"
+#include "component_force_applier.h"
 
 #include "registar.h"
 #include "pool.h"
@@ -98,6 +99,7 @@ ScriptMaster::ScriptMaster()
 	forceLuaRegistration<ComponentListener>(kaguya);
 	forceLuaRegistration<ComponentTransparency>(kaguya);
 	forceLuaRegistration<ComponentParticle>(kaguya);
+	forceLuaRegistration<ComponentForceApplier>(kaguya);
 
 	//set contextual script functions
 	kaguya["getEntityPool"] = getGlobalPool;
