@@ -131,6 +131,10 @@ public:
 		this->z = val;
 	}
 
+	float magnitude() {
+		return sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2));
+	}
+
 	Point3 operator+(const Point3& b) {
 		return Point3(this->x + b.x, this->y + b.y, this->z + b.z);
 	}
@@ -157,6 +161,12 @@ public:
 	//calculate distance from one vector to another
 	float distanceTo(Point3& b) {
 		return sqrt(pow((x - b.x), 2) + pow((y - b.y), 2) + pow((z - b.z), 2));
+	}
+
+	//returns a normalised vector of direction to another point
+	Point3 directionTo(const Point3& b) {
+		Point3 temp = *this - b;
+		return temp * (1.0f / temp.magnitude());
 	}
 
 #ifdef GLM_ADDED
