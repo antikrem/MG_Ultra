@@ -29,46 +29,29 @@ struct ParticleSpecification {
 struct Particle {
 	bool active = true;
 
-	atomic<float> lifetime = 0.0f;
+	float lifetime = 0.0f;
+
+	float featherness = 0.1f;
 
 	Point3 position;
 	Point3 velocity;
-	Point3 acceleration;
+
+	Point3 momentum;
 
 	int particleKey;
 
-	Particle(int key, const Point3& position, const Point3& velocity = Point3(0.0f), const Point3& acceleration = Point3(0.0f) ) 
-	: position(position), velocity(velocity), acceleration(acceleration) {
+	Particle(int key, const Point3& position, const Point3& startingVelocity = Point3(0.0f) ) 
+	: position(position), velocity(startingVelocity), momentum(startingVelocity) {
 		this->particleKey = key;
-	}
-
-	Particle(const Particle& particle)
-	: position(particle.position), velocity(particle.velocity), acceleration(particle.acceleration) {
-		this->active = particle.active;
-		
-		this->lifetime = particle.lifetime.load();
-
-		this->particleKey = particle.particleKey;
-	}
-
-	Particle& operator=(const Particle& particle) {
-		this->active = particle.active;
-
-		this->lifetime = particle.lifetime.load();
-
-		position = particle.position;
-		velocity = particle.velocity;
-		acceleration = particle.acceleration;
-
-		this->particleKey = particle.particleKey;
-
-		return *this;
 	}
 
 	//updates a particle
 	//time factor refers to how many cycles worth of updates are required
-	void update(float scalarFactor = 1.0f) {
-		velocity = velocity + acceleration * scalarFactor;
+	void update(const Point3 mommentum, float scalarFactor = 1.0f) {
+		this->momentum = mommentum;
+
+		float amendedScalarFactor = min(1.0f, scalarFactor * featherness);
+		velocity = velocity * (1.0f - amendedScalarFactor) + momentum * amendedScalarFactor;
 		position = position + velocity * scalarFactor;
 
 		lifetime = lifetime + scalarFactor;
