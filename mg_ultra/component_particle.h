@@ -54,10 +54,26 @@ public:
 		particleSpawner.spawnParticles(count);
 	}
 
+	//set starting velocity
+	void setStartingVelocity(const Point3& startingVelocity) {
+		particleSpawner.setStartingVelocity(startingVelocity);
+	}
+
+	void l_setStartingVelocity(float x, float y, float z) {
+		particleSpawner.setStartingVelocity(Point3(x, y, z));
+	}
+
+	//sets the double deviation more accuratly
+	void setPositionDeviation(float doubleDeviation) {
+		particleSpawner.setPositionDoubleDeviation(doubleDeviation);
+	}
+
 	void registerToLua(kaguya::State& state) override {
 		state["ComponentParticle"].setClass(kaguya::UserdataMetatable<ComponentParticle, Component>()
 			.setConstructors<ComponentParticle()>()
 			.addFunction("spawn", &ComponentParticle::spawnParticles)
+			.addFunction("set_velocity", &ComponentParticle::l_setStartingVelocity)
+			.addFunction("set_position_deviation", &ComponentParticle::setPositionDeviation)
 			.addOverloadedFunctions(
 				"create",
 				ScriptableClass::create<ComponentParticle, string>
