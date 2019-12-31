@@ -114,6 +114,7 @@ ScriptMaster::ScriptMaster()
 	quickLoadAndExecute("scripts/_initialise/audio.lua");
 	quickLoadAndExecute("scripts/_initialise/animations.lua");
 	quickLoadAndExecute("scripts/_initialise/unified_lighting.lua");
+	quickLoadAndExecute("scripts/_initialise/particles.lua");
 
 
 	globalScriptMasterPtr = this;

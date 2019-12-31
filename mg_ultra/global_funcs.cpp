@@ -13,6 +13,7 @@
 #include "gl_handler.h"
 #include "ambient_illumination.h"
 #include "audio_master.h"
+#include "particle_master.h"
 
 ///print
 //For use with print function, holds a buffer sting to print
@@ -94,8 +95,6 @@ void setProfileInfoMap(ProfileMap& profileMap) {
 	profileInfo = profileMap;
 }
 
-///animation master
-
 
 void registerGlobalFunctions(kaguya::State &kaguya) {
 	//printing
@@ -128,4 +127,7 @@ void registerGlobalFunctions(kaguya::State &kaguya) {
 	kaguya["addAudioFile"] = g_audio::addAudioFile;
 	kaguya["printAudioReport"] = g_audio::print;
 
+	//particle master
+	kaguya["addNewParticleType"] = g_particles::addNewParticleType;
+	kaguya["getParticleType"] = g_particles::getParticleType;
 }

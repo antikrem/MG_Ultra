@@ -162,7 +162,6 @@ public:
 		g_registar::setGlobalRegistar(registar);
 		gMaster = new GraphicsMaster(entityPool, registar);
 		pMaster = new ParticleMaster(gMaster->getGraphicsState()->getAnimationsMaster());
-		pMaster->registerNewParticleType("gold", "particle_gold", 1);
 		gMaster->setParticleMaster(pMaster);
 		aMaster = new AudioMaster();
 		g_audio::setAudioMaster(aMaster);
