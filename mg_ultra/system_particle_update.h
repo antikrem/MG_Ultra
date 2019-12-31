@@ -29,7 +29,15 @@ public:
 
 	void precycle(EntityPool* entityPool) {
 		trackingOffset = (trackingOffset + 1) % factor;
-		particleMaster->updateParticles(trackingOffset, factor);
+
+		Point3 wind(0.0f);
+
+		registar->get("drift_windspeed_x", &wind.x);
+		registar->get("drift_windspeed_y", &wind.y);
+		registar->get("drift_windspeed_z", &wind.z);
+
+		particleMaster->updateParticles(trackingOffset, factor, wind);
+		
 		particleMaster->clearDeadParticles();
 	}
 };
