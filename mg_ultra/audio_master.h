@@ -6,6 +6,7 @@
 #include <map>
 #include <vector>
 #include <tuple>
+#include <condition_variable>
 
 #include "error.h"
 
@@ -23,6 +24,11 @@ class AudioMaster {
 
 	mutex assetsLock;
 	vector<tuple<string, string, AudioFileLifecycle>> requestedLoads;
+	condition_variable assetsQueueCondition;
+
+	int queuedAssetsCounts() {
+		return (int)requestedLoads.size();
+	}
 
 public:
 	//creates a new audio file from given source
@@ -79,6 +85,17 @@ public:
 		requestedLoads.push_back(make_tuple(audioName, audioLocation, lifeCycle));
 	}
 
+	//flushes all queued assets
+	void flushAssetLoadRequests() {
+		unique_lock<mutex> lck(assetsLock);
+		assetsQueueCondition.wait(
+			lck,
+			[this]() {
+				return !this->queuedAssetsCounts();
+			}
+		);
+	}
+
 	void updateMaster() {
 		{
 			unique_lock<mutex> lck(dispositionLock);
@@ -97,6 +114,7 @@ public:
 				}
 			}
 			requestedLoads.clear();
+			assetsQueueCondition.notify_all();
 		}
 	}
 
@@ -128,6 +146,9 @@ namespace g_audio {
 
 	//adds an audio to the audio master when AL is next updated
 	void addAudioFile(const string& fileName, const string& fileLocation);
+
+	//flushes all audio load requests
+	void flushAudioLoadRequests();
 
 	//prints a small audio report
 	void print();

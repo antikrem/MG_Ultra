@@ -126,8 +126,10 @@ void registerGlobalFunctions(kaguya::State &kaguya) {
 	//audio
 	kaguya["addAudioFile"] = g_audio::addAudioFile;
 	kaguya["printAudioReport"] = g_audio::print;
+	kaguya["flushAudioLoadRequests"] = g_audio::flushAudioLoadRequests;
 
 	//particle master
 	kaguya["addNewParticleType"] = g_particles::addNewParticleType;
 	kaguya["getParticleType"] = g_particles::getParticleType;
+
 }

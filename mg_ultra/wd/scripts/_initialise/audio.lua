@@ -1,11 +1,21 @@
---_initialise/audio.lua
+--\scripts\_initialise\audio.lua
+
 --Sets up Audio interface, which allows loading of audio files
 --and some general interactions
-
 Audio = {}
 
 --loads an audio file for usage
-Audio.load_file = addAudioFile
+--does not load instantly
+Audio.request_load_file = addAudioFile
+
+--flushses the load request queue
+Audio.flush_queue = flushAudioLoadRequests
+
+--adds a file and waits for it to have been processed
+Audio.load_file = function(audioName, fileLocation)
+	Audio.request_load_file(audioName, fileLocation)
+	Audio.flush_queue()
+end
 
 --plays a music track, replacing last track
 Audio.play_track = function(track) 

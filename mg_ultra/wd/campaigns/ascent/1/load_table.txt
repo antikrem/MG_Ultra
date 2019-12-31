@@ -1,12 +1,14 @@
 //Testing
 @immediate
 <<Drift.set_scroll_speed(0, -10, 0)
-<<Drift.set_wind_speed(10, 0, 0)
+<<Drift.set_wind_speed(0, -10, 0)
 
 <<BackgroundMaster.add_new_layer("default", 1, 1000)
+
 <<AmbientLight.set_strength(0.1)
-<<Audio.load_file("rain", "rain.wav")
-<<Audio.load_file("click", "click.wav")
+<<Audio.request_load_file("rain", "rain.wav")
+<<Audio.request_load_file("click", "click.wav")
+<<Audio.flush_queue()
 
 @cycle 50
 <<Audio.play_track("rain")
