@@ -1,7 +1,22 @@
 //Testing
+@immediate
+<<Drift.set_scroll_speed(0, -10, 0)
+<<Drift.set_wind_speed(10, 0, 0)
+
+<<BackgroundMaster.add_new_layer("default", 1, 1000)
+<<AmbientLight.set_strength(0.1)
+<<Audio.load_file("rain", "rain.wav")
+<<Audio.load_file("click", "click.wav")
+
+@cycle 50
+<<Audio.play_track("rain")
+
 @cycle 500
-ent 1
-+position 0 0 0
-->set_position(500, 500)
+ent 12
++position 0 100 0
 +graphics default
++transparency 1 0.02
++collision 100
++health 10
 +timer
+

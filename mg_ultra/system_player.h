@@ -13,6 +13,9 @@
 #include "component_multi_entity.h"
 #include "component_collision.h"
 #include "component_audio.h"
+#include "component_listener.h"
+#include "component_particle.h"
+#include "component_force_applier.h"
 
 #include "functional_callback_system.h"
 
@@ -43,12 +46,12 @@ public:
 		auto newEnt = shared_ptr<Entity>(new Entity(ETPlayer));
 		auto newComponent = new ComponentPosition(0, 0, -10.0);
 		newEnt->addComponent(newComponent->pullForEntity());
-		auto newComponent1 = new ComponentGraphics("default");
+		auto newComponent1 = new ComponentGraphics("player");
 		newComponent1->setScale(0.3f);
-		newComponent1->setAnimationType(2);
+		newComponent1->setAnimationType(1);
 		newEnt->addComponent(newComponent1->pullForEntity());
 		auto newComponent2 = new ComponentAnimation();
-		newComponent2->changeDefaultAnimation(2);
+		newComponent2->changeDefaultAnimation(1);
 		newEnt->addComponent(newComponent2->pullForEntity());
 		auto newComponent3 = new ComponentInput();
 		newEnt->addComponent(newComponent3->pullForEntity());
@@ -64,8 +67,15 @@ public:
 		newEnt->addComponent(newComponent8->pullForEntity());
 		auto newComponent9 = new ComponentCollision(10.0f);
 		newEnt->addComponent(newComponent9->pullForEntity());
-		auto newComponent10 = new ComponentAudio();
-		newEnt->addComponent(newComponent10->pullForEntity());
+		//auto newComponent10 = new ComponentAudio();
+		//newEnt->addComponent(newComponent10->pullForEntity());
+		auto newComponent11 = new ComponentListener();
+		newEnt->addComponent(newComponent11->pullForEntity());
+		auto newComponent12 = new ComponentParticle("gold");
+		newEnt->addComponent(newComponent12->pullForEntity());
+		auto newComponent13 = new ComponentForceApplier(300.0f, 10.0f);
+		newComponent13->setCutThreashold(0.5f);
+		newEnt->addComponent(newComponent13->pullForEntity());
 
 		//execute a script to initialise the player
 		executeAnyScript(debugName, 

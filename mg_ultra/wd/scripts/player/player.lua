@@ -77,9 +77,11 @@ if cInput:query_down("shoot") == 1 and
 		cSpawner:create_entity(EntityPlayerBullets)
 	
 		cSpawner:add_component(ComponentPosition.create(x, y))
+		cSpawner:add_component(ComponentCollision.create(100))
+		cSpawner:add_component(ComponentDamage.create(10))
 
-		local bulletGComponents = ComponentGraphics.create("default")
-		bulletGComponents:set_animation(2)
+		local bulletGComponents = ComponentGraphics.create("player")
+		bulletGComponents:set_animation(1)
 		bulletGComponents:set_scale(0.1)
 		cSpawner:add_component(bulletGComponents)
 
@@ -88,6 +90,7 @@ if cInput:query_down("shoot") == 1 and
 		bulletMComponent:set_angle(bAngle)
 		bulletMComponent:set_rotation_speed(5)
 		cSpawner:add_component(bulletMComponent)
+
 	
 		cSpawner:push_entity()
 	end
