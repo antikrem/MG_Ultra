@@ -91,6 +91,9 @@
     <Filter Include="Header Files\ECS\Systems\Particle System">
       <UniqueIdentifier>{b9e807ad-b3c8-4a55-9ac8-945bb14d5db4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Particles">
+      <UniqueIdentifier>{9736bfdb-a301-452c-bee9-1b0fdf9ac2ab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -167,6 +170,9 @@
     </ClCompile>
     <ClCompile Include="random_ex.cpp">
       <Filter>Source Files\Support</Filter>
+    </ClCompile>
+    <ClCompile Include="particle_master.cpp">
+      <Filter>Source Files\Particles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -615,6 +621,9 @@
     </None>
     <None Include="wd\shaders\front_depth_buffer.frag">
       <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="wd\scripts\_initialise\particles.lua">
+      <Filter>Resource Files\scripts\_initialise</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

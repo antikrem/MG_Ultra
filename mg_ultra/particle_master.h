@@ -13,7 +13,6 @@
 #include "particle_type.h"
 #include "force_applier.h"
 
-
 class ParticleMaster {
 	AnimationsMaster* animationMaster = nullptr;
 
@@ -41,9 +40,7 @@ class ParticleMaster {
 
 public:
 
-	ParticleMaster(AnimationsMaster* animationMaster) {
-		this->animationMaster = animationMaster;
-	}
+	ParticleMaster(AnimationsMaster* animationMaster);
 
 	//returns a key for a given particle name
 	//-1 if not found
@@ -133,11 +130,11 @@ public:
 	}
 	
 	//updates particles, uses factoring to split up updating
-	void updateParticles(int offset, int factor) {
+	void updateParticles(int offset, int factor, const Point3& wind) {
 		unique_lock<mutex> lck(particlesLock);
 		int size = particles.size();
 		for (int i = offset; i < size; i += factor) {
-			Point3 mommentum(0.0f);
+			Point3 mommentum(wind);
 			{
 				unique_lock<mutex> lck(forceSpecificationLock);
 				Point3 pos = particles[i].position;
@@ -150,5 +147,20 @@ public:
 		}
 	}
 };
+
+namespace g_particles {
+	//set particle master
+	void setParticleMaster(ParticleMaster* particleMaster);
+
+	//adds a new particle type
+	//returns new key
+	int addNewParticleType(string particleName, string animationSetName, int animation);
+
+	//returns the key for a given type
+	//returns -1 on invalid key
+	int getParticleType(string particleTypeName);
+}
+
+
 
 #endif

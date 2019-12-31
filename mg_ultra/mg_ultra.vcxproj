@@ -214,6 +214,7 @@
     <ClCompile Include="input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="os_kit.cpp" />
+    <ClCompile Include="particle_master.cpp" />
     <ClCompile Include="pool.cpp" />
     <ClCompile Include="random_ex.cpp" />
     <ClCompile Include="registar.cpp" />
@@ -356,6 +357,7 @@
     <None Include="wd\scripts\_initialise\anonymous_spawner.lua" />
     <None Include="wd\scripts\_initialise\audio.lua" />
     <None Include="wd\scripts\_initialise\drift.lua" />
+    <None Include="wd\scripts\_initialise\particles.lua" />
     <None Include="wd\scripts\_initialise\profiler.lua" />
     <None Include="wd\scripts\_initialise\profiling_init.lua" />
     <None Include="wd\scripts\_initialise\registar.lua" />
