@@ -11,9 +11,12 @@ using namespace std;
 
 #define pass true
 
-#define PI (float)3.14159265359
+#define PI (float)3.14159265358979323846
 
 #define E (float)2.71828182845
+
+#define INVERSE(value) (1.0f / value)
+#define SQUARE(value) ((float)pow(value, 2))
 
 #define not(a) (!(a))
 
