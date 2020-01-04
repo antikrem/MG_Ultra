@@ -27,7 +27,3 @@ DirectionalLight.add_new = function(x, y, z, r, g, b)
 	AnonymousSpawner.add_component(cDirectionalLight)
 	AnonymousSpawner.push_entity()
 end
-
-function a() 
-	DirectionalLight.add_new(1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
-end
