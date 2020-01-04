@@ -10,8 +10,8 @@ namespace rand_ex {
 	//fills an array with results of a normal distribution
 	//centered on 0
 	//index refers to offset, e.g. values 0-n
-	//uniformly increased such that all values add to 1;
-	void populate_half_norm(int n, float sigma, float* fill);
+	//uniformly increased such that all values add to 1, if offset is true
+	void populate_half_norm(int n, float sigma, float* fill, bool applyOffset = true);
 }
 
 #endif 

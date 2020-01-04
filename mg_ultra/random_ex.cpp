@@ -17,7 +17,7 @@ float rand_ex::next_norm(float mu, float sigma) {
 	return nDist(rGen) * sigma + mu;
 }
 
-void rand_ex::populate_half_norm(int n, float sigma, float* fill) {
+void rand_ex::populate_half_norm(int n, float sigma, float* fill, bool applyOffset) {
 	float sum = 0.0f;
 	
 	for (int i = 0; i < n; i++) {
@@ -26,8 +26,11 @@ void rand_ex::populate_half_norm(int n, float sigma, float* fill) {
 	}
 
 	//ensure all values add to 1 when added as a centered curve
-	float offset = (1.0f -  2 * sum + fill[0]) / (float)(2 * n - 1);
-	for (int i = 0; i < n; i++) {
-		fill[i] += offset;
+	if (applyOffset) {
+		float offset = (1.0f - 2 * sum + fill[0]) / (float)(2 * n - 1);
+		for (int i = 0; i < n; i++) {  
+			fill[i] += offset;
+		}
 	}
+	
 }
