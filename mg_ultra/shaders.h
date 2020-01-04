@@ -276,9 +276,19 @@ public:
 		glUniform1f(getUniformLocation(programName, uniformName), value);
 	}
 
+	//sets a uniform vec2
+	void setUniform2F(string programName, string uniformName, const glm::vec2& value) {
+		glUniform2f(getUniformLocation(programName, uniformName), value[0], value[1]);
+	}
+
 	//sets a uniform vec3
 	void setUniform3F(string programName, string uniformName, const glm::vec3& value) {
 		glUniform3f(getUniformLocation(programName, uniformName), value[0], value[1], value[2]);
+	}
+
+	//sets a uniform float array
+	void setUniform1FV(string programName, string uniformName, int length, float* values) {
+		glUniform1fv(getUniformLocation(programName, uniformName), length, values);
 	}
 
 	//sets a uniform bool
@@ -318,7 +328,9 @@ public:
 		loadProgramFromFile("ui");
 		loadProgramFromFile("directional_lighting");
 		loadProgramFromFile("unified_lighting");
-		loadProgramFromFile("finalise");
+		loadProgramFromFile("bloom");
+		loadProgramFromFile("gauss");
+		loadProgramFromFile("colour_correction");
 	}
 
 	~ShaderMaster() {
