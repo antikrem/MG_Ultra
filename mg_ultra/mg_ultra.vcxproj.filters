@@ -568,12 +568,6 @@
     <None Include="wd\scripts\_library\string_ex.lua">
       <Filter>Resource Files\scripts\_library</Filter>
     </None>
-    <None Include="wd\shaders\finalise.vert">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="wd\shaders\finalise.frag">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
     <None Include="wd\scripts\_initialise\animations.lua">
       <Filter>Resource Files\scripts\_initialise</Filter>
     </None>
@@ -624,6 +618,24 @@
     </None>
     <None Include="wd\scripts\_initialise\particles.lua">
       <Filter>Resource Files\scripts\_initialise</Filter>
+    </None>
+    <None Include="wd\shaders\gauss.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="wd\shaders\gauss.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="wd\shaders\colour_correction.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="wd\shaders\colour_correction.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="wd\shaders\bloom.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="wd\shaders\bloom.vert">
+      <Filter>Resource Files\shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -14,6 +14,13 @@ struct GraphicsSettings {
 	atomic<int> screenWidth = 1366, screenHeight = 768;
 	//number of passes for depth peeling
 	atomic<int> depthPeelingPasses = 4;
+
+	//exposure for the scene
+	atomic<float> exposure = 0.3f;
+	//bloom threshold
+	atomic<float> bloomThreshold = 1.0f;
+	//bloom deviation
+	atomic<float> bloomDeviation = 5.0f;
 };
 
 #endif

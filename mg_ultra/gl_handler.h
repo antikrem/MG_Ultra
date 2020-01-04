@@ -7,6 +7,7 @@
 #include "texture.h"
 #include "n_buffer.h"
 #include "error.h"
+#include "random_ex.h"
 
 #include "frame_buffer.h"
 #include "timed_block.h"
@@ -17,6 +18,11 @@
 #include "vao_screenbuffer.h"
 
 #include "ambient_illumination.h"
+
+//max size for guassian blur values
+//Also update gauss.frag
+#define GAUSSIAN_CONSTANT_MAX_LENGTH 20
+#define GAUSSIAN_SAMPLE_CUTOFF 0.0001f
 
 /*Handles openGL handling
 Only one thread calls openGL at a time
@@ -57,11 +63,29 @@ private:
 	//post effects frame buffer
 	FrameBuffer postEffects;
 
+	//bloom ping pong frame buffer
+	FrameBuffer bloom;
+
 	//buffer for all boxes in the render view
 	VAOBoxData boxVAOBuffer;
 	VAOBoxData boxUIVAOBuffer;
 	VAODirectionalLight directionalLightVAOBuffer;
 	VAOScreenBuffer screenVAO;
+
+	//number of factors to utilise
+	int gaussianSamples = 0;
+	//memory space for setting gaussian blur factors
+	float gaussianBlurFactors[GAUSSIAN_CONSTANT_MAX_LENGTH];
+
+	//computes new gaussianSamples
+	void updateGaussianSamples() {
+		rand_ex::populate_half_norm(GAUSSIAN_CONSTANT_MAX_LENGTH, gSettings->bloomDeviation, gaussianBlurFactors);
+		for (
+			int i = 0; 
+			i < GAUSSIAN_CONSTANT_MAX_LENGTH && gaussianBlurFactors[i] > GAUSSIAN_SAMPLE_CUTOFF; 
+			gaussianSamples = ++i
+		);
+	}
 
 	//Called before a render
 	void prerender() {
@@ -133,10 +157,21 @@ public:
 			},
 			DepthAttachmentOptions::ATTACH_NONE
 		);
+		
 		postEffects.initialiseFrameBuffer(
 			gSettings, 
-			{ 
-				{"scene", GL_RGBA} 
+			{	
+				{"scene", GL_RGBA16F},
+				{"brights", GL_RGBA16F}
+			},
+			DepthAttachmentOptions::ATTACH_NONE
+		);
+
+		bloom.initialiseFrameBuffer(
+			gSettings,
+			{
+				{"scene", GL_RGBA16F},
+				{"brights", GL_RGBA16F}
 			},
 			DepthAttachmentOptions::ATTACH_NONE
 		);
@@ -200,6 +235,7 @@ public:
 			shaderMaster->useShader("unified_lighting");
 			shaderMaster->setUniformF("unified_lighting", "ambientStrength", g_ambient::getStrength());
 			shaderMaster->setUniform3F("unified_lighting", "ambientColor", g_ambient::getColour().getVec3());
+			
 			postEffects.bindNoClearBuffer();
 			glEnable(GL_BLEND);
 			postEffects.setBlendFunction("scene", GL_FUNC_ADD, GL_ONE_MINUS_DST_ALPHA, GL_ONE);
@@ -208,13 +244,41 @@ public:
 			screenVAO.processGLSide();
 			glDisable(GL_BLEND);
 			postEffects.unbindBuffer();
-			glFlush();
 		}
 
-		//FOURTH PASS - render buffer to screenspace
+		//FOURTH PASS - split brights from lows for bloom
+		bloom.bindBuffer();
+		shaderMaster->useShader("bloom");
+		shaderMaster->attachFrameBufferAsSource("bloom", &postEffects);
+		shaderMaster->setUniformF("bloom", "bloomThreshold", gSettings->bloomThreshold);
+		screenVAO.processGLSide();
+		bloom.unbindBuffer();
+
+		//calculate bloom ping pong buffer
+		updateGaussianSamples();
+		postEffects.bindBuffer();
+		shaderMaster->useShader("gauss");
+		shaderMaster->attachFrameBufferAsSource("gauss", &bloom);
+		shaderMaster->setUniformI("gauss", "gaussianFactorslength", gaussianSamples);
+		shaderMaster->setUniform1FV("gauss", "gaussianFactors", GAUSSIAN_CONSTANT_MAX_LENGTH, gaussianBlurFactors);
+		shaderMaster->setUniform2F("gauss", "offsetDirection", glm::vec2(1.0f, 0.0f));
+		screenVAO.processGLSide();
+		postEffects.unbindBuffer();
+
+		//ping pong back to other buffer
+		bloom.bindBuffer();
+		shaderMaster->attachFrameBufferAsSource("gauss", &postEffects);
+		shaderMaster->setUniform2F("gauss", "offsetDirection", glm::vec2(0.0f, 1.0f));
+		screenVAO.processGLSide();
+		bloom.unbindBuffer();
+
+		glFlush();
+
+		//FIFTH PASS - render buffer to screenspace
 		//set the geometry frame buffer as the source
-		shaderMaster->useShader("finalise");
-		shaderMaster->attachFrameBufferAsSource("finalise", &postEffects);
+		shaderMaster->useShader("colour_correction");
+		shaderMaster->setUniformF("colour_correction", "exposure", gSettings->exposure);
+		shaderMaster->attachFrameBufferAsSource("colour_correction", &bloom);
 		screenVAO.processGLSide();
 
 		//draw UI

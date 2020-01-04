@@ -1,5 +1,7 @@
 /*Some helper glsl functions*/
 
+#define COLOUR_PERCEPTION vec3(0.2126, 0.7152, 0.0722)
+
 /*takes vec3 and returns addition of components*/ 
 float sum_up(vec3 x) {
 	return dot(x, vec3(1.0));
