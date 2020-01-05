@@ -26,6 +26,21 @@ string os_kit::getFileAsString(const std::string& filePath) {
 	return contents;
 }
 
+void os_kit::getFileAsString(const std::string& filePath, vector<string>& results) {
+	ifstream in;
+	in.open(filePath);
+	if (!in) {
+		return;
+	}
+
+	string contents;
+	string line;
+	while (getline(in, line)) {
+		results.push_back(line);
+	}
+	in.close();
+}
+
 int os_kit::countNewLinesInFile(const std::string& filePath) {
 	int count = 0;
 	string line;

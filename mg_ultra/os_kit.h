@@ -17,6 +17,10 @@ namespace os_kit {
 	//empty string on faliure
 	string getFileAsString(const std::string& filePath);
 
+	//similar to getFileAsString, but sets each line
+	//as a new element in string
+	void getFileAsString(const std::string& filePath, vector<string>& results);
+
 	//counts number of new lines within a file
 	//returns -1 if file does not exist
 	int countNewLinesInFile(const std::string& filePath);
