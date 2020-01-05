@@ -18,10 +18,12 @@ using namespace std;
 class Entity {
 private:
 	map<type_index, shared_ptr<Component>> components;
-	//when false the enemy will be cleared
+	//when false the enemy will be removed from pool
 	bool flag = true;
 	//All entities have a type
 	int entityType = ETNoType;
+	//set to true when entity is ready to be deleted and memory returned
+	bool gcReady = false;
 
 public:
 	Entity(int type) {
@@ -83,11 +85,20 @@ public:
 		return flag;
 	}
 
+	//sets the entity to be ready for garbage collection
+	void markGCReady() {
+		gcReady = true;
+	}
+
+	//gets if this entity is ready for reclamation
+	bool getGCReady() {
+		return gcReady;
+	}
+
 	//exposes internal component map for evaluation
 	map<type_index, shared_ptr<Component>>& getMapComponent() {
 		return components;
 	}
-
 };
 
 #endif

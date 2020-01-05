@@ -144,8 +144,15 @@ public:
 	//that have no other references
 	void clearGraveyard() {
 		unique_lock<mutex> glck(graveyardLock);
+
+		for (int i = 0; i < (int)graveyard.size(); i++) {
+			if (graveyard[i].use_count() == 1) {
+				graveyard[i]->markGCReady();
+			}
+		}
+
 		int oldSize = graveyard.size();
-		erase_sequential_if(graveyard, [](shared_ptr<Entity> &ent) { return ent.use_count() == 1; });
+		erase_sequential_if(graveyard, [](shared_ptr<Entity> &ent) { return ent->getGCReady(); });
 		passed += (oldSize - graveyard.size());
 	}
 
