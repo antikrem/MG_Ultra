@@ -115,6 +115,7 @@ ScriptMaster::ScriptMaster()
 	quickLoadAndExecute("scripts/_initialise/animations.lua");
 	quickLoadAndExecute("scripts/_initialise/unified_lighting.lua");
 	quickLoadAndExecute("scripts/_initialise/particles.lua");
+	quickLoadAndExecute("scripts/_initialise/post_effects.lua");
 
 
 	globalScriptMasterPtr = this;

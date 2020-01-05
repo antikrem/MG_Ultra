@@ -14,6 +14,7 @@
 #include "ambient_illumination.h"
 #include "audio_master.h"
 #include "particle_master.h"
+#include "graphics_settings.h"
 
 ///print
 //For use with print function, holds a buffer sting to print
@@ -131,5 +132,10 @@ void registerGlobalFunctions(kaguya::State &kaguya) {
 	//particle master
 	kaguya["addNewParticleType"] = g_particles::addNewParticleType;
 	kaguya["getParticleType"] = g_particles::getParticleType;
+
+	//graphics settings
+	kaguya["setExposureTarget"] = g_graphicsSettings::setExposureTarget;
+	kaguya["setExposureRate"] = g_graphicsSettings::setExposureRate;
+	kaguya["setExposure"] = g_graphicsSettings::setExposure;
 
 }
