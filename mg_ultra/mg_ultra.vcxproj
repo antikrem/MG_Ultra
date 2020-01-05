@@ -211,6 +211,7 @@
     <ClCompile Include="functional_callback_system.cpp" />
     <ClCompile Include="global_funcs.cpp" />
     <ClCompile Include="gl_handler.cpp" />
+    <ClCompile Include="graphics_settings.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="os_kit.cpp" />
@@ -358,6 +359,7 @@
     <None Include="wd\scripts\_initialise\audio.lua" />
     <None Include="wd\scripts\_initialise\drift.lua" />
     <None Include="wd\scripts\_initialise\particles.lua" />
+    <None Include="wd\scripts\_initialise\post_effects.lua" />
     <None Include="wd\scripts\_initialise\profiler.lua" />
     <None Include="wd\scripts\_initialise\profiling_init.lua" />
     <None Include="wd\scripts\_initialise\registar.lua" />

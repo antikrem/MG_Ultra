@@ -21,6 +21,25 @@ struct GraphicsSettings {
 	atomic<float> bloomThreshold = 1.0f;
 	//bloom deviation
 	atomic<float> bloomDeviation = 5.0f;
+
+	GraphicsSettings();
 };
+
+namespace g_graphicsSettings {
+	void setGlobalGraphicsSettings(GraphicsSettings* globalGraphicsSettings);
+
+	//updates some parameters of graphics settings
+	void update();
+
+	//sets target
+	void setExposureTarget(float target);
+
+	//sets rate
+	void setExposureRate(float rate);
+
+	//allows exposure to be directly set
+	void setExposure(float exposure);
+	
+}
 
 #endif
