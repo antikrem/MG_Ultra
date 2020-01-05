@@ -23,6 +23,11 @@ public:
 		setInternalScript(debugName, os_kit::getFileAsString("scripts//camera//camera.lua"));
 	}
 
+	//quickly update some settings
+	void precycle(EntityPool* entityPool) override {
+		g_graphicsSettings::update();
+	}
+
 	void cacheHandle(shared_ptr<Entity> ent) override {
 		//check if camera script is used
 		bool value;
