@@ -40,6 +40,11 @@ namespace g_graphicsSettings {
 	//allows exposure to be directly set
 	void setExposure(float exposure);
 	
+	//sets threshold for bloom
+	void setBloomThreshold(float threshold);
+
+	//sets deviation for bloom
+	void setBloomDeviation(float deviation);
 }
 
 #endif

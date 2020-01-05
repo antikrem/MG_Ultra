@@ -33,6 +33,16 @@ void g_graphicsSettings::setExposure(float exposure) {
 	globalGSettings->exposure = exposure;
 }
 
+void g_graphicsSettings::setBloomThreshold(float threshold) {
+	shared_lock<shared_mutex> lck(globalGSettingsPtrLock);
+	globalGSettings->bloomThreshold = threshold;
+}
+
+void g_graphicsSettings::setBloomDeviation(float deviation) {
+	shared_lock<shared_mutex> lck(globalGSettingsPtrLock);
+	globalGSettings->bloomDeviation = deviation;
+}
+
 GraphicsSettings::GraphicsSettings() {
 	g_graphicsSettings::setGlobalGraphicsSettings(this);
 }

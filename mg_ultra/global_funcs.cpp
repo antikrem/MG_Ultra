@@ -137,5 +137,7 @@ void registerGlobalFunctions(kaguya::State &kaguya) {
 	kaguya["setExposureTarget"] = g_graphicsSettings::setExposureTarget;
 	kaguya["setExposureRate"] = g_graphicsSettings::setExposureRate;
 	kaguya["setExposure"] = g_graphicsSettings::setExposure;
+	kaguya["setBloomThreshold"] = g_graphicsSettings::setBloomThreshold;
+	kaguya["setBloomDeviation"] = g_graphicsSettings::setBloomDeviation;
 
 }

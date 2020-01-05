@@ -23,6 +23,13 @@ end
 
 --Interface for setting bloom values
 PostEffects.Bloom = {}
- 
 
- print("post_effects loaded")
+--sets the luminance threshold for bloom to be
+PostEffects.Bloom.set_threshold = function(current)
+	setBloomThreshold(current)
+end
+
+--Specifies far bloom's blur will effect, larger is wider
+PostEffects.Bloom.set_deviation = function(current)
+	setBloomDeviation(current)
+end
