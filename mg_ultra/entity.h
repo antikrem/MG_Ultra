@@ -5,6 +5,7 @@
 #include <map>
 #include <typeindex>
 #include <memory>
+#include <atomic>
 #include <mutex>
 #include <shared_mutex>
 
@@ -19,7 +20,7 @@ class Entity {
 private:
 	map<type_index, shared_ptr<Component>> components;
 	//when false the enemy will be removed from pool
-	bool flag = true;
+	atomic<bool> flag = true;
 	//All entities have a type
 	int entityType = ETNoType;
 	//set to true when entity is ready to be deleted and memory returned
@@ -65,7 +66,7 @@ public:
 	//A general update to set entity flag
 	void entityUpdate() {
 		for (auto i : components) {
-			flag &= i.second->getFlag();
+			flag = flag && i.second->getFlag();
 		}
 	}
 
@@ -75,7 +76,6 @@ public:
 	}
 
 	//kills entity directly
-	//TODO: make thread safe
 	void killEntity() {
 		flag = false;
 	}
