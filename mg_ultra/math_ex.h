@@ -2,6 +2,8 @@
 #ifndef __MATH_EX__
 #define __MATH_EX__
 
+#include <algorithm>
+
 namespace math_ex {
 	//templated clamp
 	template <typename T>
@@ -15,7 +17,7 @@ namespace math_ex {
 	//rate must be non-negative
 	template<typename T>
 	T tend_to(const T& current, const T& rate, const T& target) {
-		T difference = min(abs(target - current), rate);
+		T difference = std::min(abs(target - current), rate);
 		return current > target ? current - difference : current + difference;
 	}
 }
