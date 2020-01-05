@@ -42,7 +42,7 @@ void main() {
 
 	//mix the lows and the highs
 	vec3 sceneTexel 
-		= bright.rgb * bright.a + lows.rgb * (1.0 - bright.a);
+		= bright.rgb * max(bright.a, 1.0 - lows.a)  + lows.rgb * (1.0 - bright.a);
 
     colour = vec4(
 		exposureMapping(sceneTexel.rgb), 
