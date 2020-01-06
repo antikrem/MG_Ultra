@@ -101,6 +101,7 @@ InputMaster::InputMaster(GLFWwindow* window) {
 
 	addDefaultBind(ini, "builtin_gameplay", "shoot", GLFW_KEY_Z);
 	addDefaultBind(ini, "builtin_gameplay", "bomb", GLFW_KEY_X);
+	addDefaultBind(ini, "builtin_gameplay", "dash", GLFW_KEY_LEFT_SHIFT);
 
 	addDefaultBind(ini, "builtin_console", "console_open", GLFW_KEY_GRAVE_ACCENT);
 	addDefaultBind(ini, "builtin_console", "console_enter", GLFW_KEY_ENTER);

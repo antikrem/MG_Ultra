@@ -30,7 +30,43 @@ if cInput:query_down("down") == 1 then
 	iy = iy - 1;
 end
 
+--Added dash variables
+if g_dashCooldown > 0 then
+	g_dashCooldown = g_dashCooldown - 1
+end
+if g_dashDuration > 0 then
+	g_dashDuration = g_dashDuration - 1
+end
+
+--if currently dashing
+if g_inDash then	
+	--check for dash conditions to fail
+	if ix ~= lx or iy ~= ly or g_dashDuration <= 0 then
+		g_dashDuration = 0
+		g_inDash = false
+		g_dashCooldown = PLAYER_DASH_COOLDOWN
+	end
+end
+
+--check if key input will allow for dash
+if cInput:query_down("dash") == 1 then
+	--handle case where dash input recieved out of dash 
+	if not g_inDash and g_dashReleased and g_dashCooldown <= 0 then
+		g_inDash = true
+		lx = ix
+		ly = iy
+
+		g_dashDuration = PLAYER_DASH_LENGTH
+		g_dashReleased = false;
+	end
+else
+	g_dashReleased = true
+end
+
 --calculate updated movement
+local maxAcceleration = g_inDash and PLAYER_DASH_ACCELERATION or PLAYER_ACCELERATION
+local maxVelocity = g_inDash and PLAYER_MAX_DASH_VELOCITY or PLAYER_MAX_VELOCITY
+
 
 --current speedVelocity and speedAngle
 local smag, cang = cMovement:get_speed(), cMovement:get_angle()
@@ -52,6 +88,8 @@ else
 	cMovement:set_angle_change(0)
 end
 
+this:get_component(ComponentMovement):set_speed_cap(maxVelocity)
+
 --calculate acceleration
 --consider no input case
 if tmag < 0.1 then
@@ -65,7 +103,7 @@ if tmag < 0.1 then
 	end
 --otherwise set acceleration as expected
 else
-	cMovement:set_speed_change(PLAYER_ACCELERATION)
+	cMovement:set_speed_change(maxAcceleration)
 end
 
 --create a bullet entity
