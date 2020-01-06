@@ -3,14 +3,16 @@ Use input class to pull inputs*/
 #ifndef __INPUT__
 #define __INPUT__
 
-#include "constants.h"
-
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include <map>
 #include <atomic>
 #include <iostream>
+
+#include "constants.h"
+
+#include "ini_parser.h"
 
 //Allows the querying of an input
 //A press means that since the previous update, the button has been pressed
@@ -38,6 +40,9 @@ class InputMaster {
 	//stores the number of key events
 	//this is when the previous key update was zero, and the current is one
 	map<string, atomic<unsigned long long int>> keyPressEventCount;
+
+	//helper function when adding default binds
+	void addDefaultBind(INIParser& ini, string section, string keyName, int keycode);
 
 public:
 	//Return 1 if key already exists,

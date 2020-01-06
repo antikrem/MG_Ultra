@@ -2,6 +2,8 @@
 #include <string>
 #include <mutex>
 
+#define KEYBINDS_FILE_LOCATION "settings/key_binds.ini"
+
 string textBuffer;
 mutex textBufferLock;
 
@@ -11,6 +13,10 @@ InputMaster* currentPointer = nullptr;
 void textModeCallBack(GLFWwindow* window, unsigned int codepoint) {
 	lock_guard<mutex> lock(textBufferLock);
 	textBuffer.push_back((char)codepoint);
+}
+
+void InputMaster::addDefaultBind(INIParser& ini, string section, string keyName, int keycode) {
+	addToKeyMap(keyName, ini.get(section, keyName, keycode));
 }
 
 int InputMaster::addToKeyMap(string inputType, int keyCode) {
@@ -84,24 +90,27 @@ void InputMaster::updateState(InputState* state) {
 }
 
 InputMaster::InputMaster(GLFWwindow* window) {
-	addToKeyMap("ESC", GLFW_KEY_ESCAPE);
-	addToKeyMap("left", GLFW_KEY_LEFT);
-	addToKeyMap("right", GLFW_KEY_RIGHT);
-	addToKeyMap("up", GLFW_KEY_UP);
-	addToKeyMap("down", GLFW_KEY_DOWN);
+	INIParser ini(KEYBINDS_FILE_LOCATION);
 
-	addToKeyMap("shoot", GLFW_KEY_Z);
-	addToKeyMap("bomb", GLFW_KEY_X);
+	addDefaultBind(ini, "builtin", "esc", GLFW_KEY_ESCAPE);
 
-	addToKeyMap("console_open", GLFW_KEY_GRAVE_ACCENT);
-	addToKeyMap("console_enter", GLFW_KEY_ENTER);
-	addToKeyMap("console_newline", GLFW_KEY_LEFT_SHIFT);
-	addToKeyMap("console_backspace", GLFW_KEY_BACKSPACE);
-	addToKeyMap("console_tab", GLFW_KEY_TAB);
-	addToKeyMap("console_previousline", GLFW_KEY_UP);
-	addToKeyMap("console_nextline", GLFW_KEY_DOWN);
-	addToKeyMap("console_ctrl", GLFW_KEY_LEFT_CONTROL);
-	addToKeyMap("console_paste", GLFW_KEY_V);
+	addDefaultBind(ini, "builtin_movement", "left", GLFW_KEY_LEFT);
+	addDefaultBind(ini, "builtin_movement", "right", GLFW_KEY_RIGHT);
+	addDefaultBind(ini, "builtin_movement", "up", GLFW_KEY_UP);
+	addDefaultBind(ini, "builtin_movement", "down", GLFW_KEY_DOWN);
+
+	addDefaultBind(ini, "builtin_gameplay", "shoot", GLFW_KEY_Z);
+	addDefaultBind(ini, "builtin_gameplay", "bomb", GLFW_KEY_X);
+
+	addDefaultBind(ini, "builtin_console", "console_open", GLFW_KEY_GRAVE_ACCENT);
+	addDefaultBind(ini, "builtin_console", "console_enter", GLFW_KEY_ENTER);
+	addDefaultBind(ini, "builtin_console", "console_newline", GLFW_KEY_LEFT_SHIFT);
+	addDefaultBind(ini, "builtin_console", "console_backspace", GLFW_KEY_BACKSPACE);
+	addDefaultBind(ini, "builtin_console", "console_tab", GLFW_KEY_TAB);
+	addDefaultBind(ini, "builtin_console", "console_previousline", GLFW_KEY_UP);
+	addDefaultBind(ini, "builtin_console", "console_nextline", GLFW_KEY_DOWN);
+	addDefaultBind(ini, "builtin_console", "console_ctrl", GLFW_KEY_LEFT_CONTROL);
+	addDefaultBind(ini, "builtin_console", "console_paste", GLFW_KEY_V);
 
 	glfwSetCharCallback(window, &textModeCallBack);
 }
