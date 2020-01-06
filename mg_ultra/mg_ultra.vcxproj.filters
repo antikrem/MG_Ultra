@@ -527,6 +527,9 @@
     <ClInclude Include="system_player.h">
       <Filter>Header Files\ECS\Systems</Filter>
     </ClInclude>
+    <ClInclude Include="ini_parser.h">
+      <Filter>Header Files\Support</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="wd\shaders\base.vert">
