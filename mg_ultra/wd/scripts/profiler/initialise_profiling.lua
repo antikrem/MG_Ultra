@@ -1,4 +1,4 @@
-print("Profiler")
+--\scripts\profiler\pinitialise_profiling.lua
 
 ----Some registar values for profiling
 --Set to true when profiling is active

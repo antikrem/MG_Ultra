@@ -24,8 +24,8 @@ public:
 			ETProfile
 		);
 
-		//load camera script
-		setInternalScript(debugName, os_kit::getFileAsString("scripts//_initialise//profiler.lua"));
+		//load profiler script
+		setInternalScript(debugName, os_kit::getFileAsString("scripts//profiler//profiler.lua"));
 	}
 
 	void cacheHandle(shared_ptr<Entity> ent) override {
@@ -49,7 +49,7 @@ public:
 			sc.reset();
 			executeAnyScript(
 				"system_profiler", 
-				os_kit::getFileAsString("scripts//_initialise//profiling_init.lua"), 
+				os_kit::getFileAsString("scripts//profiler//initialise_profiling.lua"), 
 				nullptr, 
 				&sc
 			);

@@ -94,6 +94,9 @@
     <Filter Include="Source Files\Particles">
       <UniqueIdentifier>{9736bfdb-a301-452c-bee9-1b0fdf9ac2ab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\scripts\profiler">
+      <UniqueIdentifier>{84169089-c15e-48d7-b68b-ab4a1fe755dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -565,12 +568,6 @@
     <None Include="wd\scripts\player\initialise_player.lua">
       <Filter>Resource Files\scripts\player</Filter>
     </None>
-    <None Include="wd\scripts\_initialise\profiler.lua">
-      <Filter>Resource Files\scripts\_initialise</Filter>
-    </None>
-    <None Include="wd\scripts\_initialise\profiling_init.lua">
-      <Filter>Resource Files\scripts\_initialise</Filter>
-    </None>
     <None Include="wd\scripts\_library\string_ex.lua">
       <Filter>Resource Files\scripts\_library</Filter>
     </None>
@@ -645,6 +642,12 @@
     </None>
     <None Include="wd\scripts\_initialise\post_effects.lua">
       <Filter>Resource Files\scripts\_initialise</Filter>
+    </None>
+    <None Include="wd\scripts\profiler\initialise_profiling.lua">
+      <Filter>Resource Files\scripts\profiler</Filter>
+    </None>
+    <None Include="wd\scripts\profiler\profiler.lua">
+      <Filter>Resource Files\scripts\profiler</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

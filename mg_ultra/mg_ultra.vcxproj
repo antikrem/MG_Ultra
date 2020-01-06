@@ -355,14 +355,14 @@
     <None Include="wd\scripts\camera\initialise_camera.lua" />
     <None Include="wd\scripts\player\initialise_player.lua" />
     <None Include="wd\scripts\player\player.lua" />
+    <None Include="wd\scripts\profiler\initialise_profiling.lua" />
+    <None Include="wd\scripts\profiler\profiler.lua" />
     <None Include="wd\scripts\_initialise\animations.lua" />
     <None Include="wd\scripts\_initialise\anonymous_spawner.lua" />
     <None Include="wd\scripts\_initialise\audio.lua" />
     <None Include="wd\scripts\_initialise\drift.lua" />
     <None Include="wd\scripts\_initialise\particles.lua" />
     <None Include="wd\scripts\_initialise\post_effects.lua" />
-    <None Include="wd\scripts\_initialise\profiler.lua" />
-    <None Include="wd\scripts\_initialise\profiling_init.lua" />
     <None Include="wd\scripts\_initialise\registar.lua" />
     <None Include="wd\scripts\_initialise\unified_lighting.lua" />
     <None Include="wd\scripts\_library\library.lua" />

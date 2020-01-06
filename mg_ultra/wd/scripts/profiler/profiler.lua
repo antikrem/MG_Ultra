@@ -1,3 +1,5 @@
+--\scripts\profiler\profiling.lua
+
 local cText = this:get_component(ComponentText)
 
 local profileInfo = getProfileInfo()
