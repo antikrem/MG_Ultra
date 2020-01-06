@@ -16,6 +16,7 @@ function string.sub_string(str, length)
 end
 
 --combined substring and pad 
+--i.e. will pad if substring is too short
 function string.pad_sub(str, length, token)
 	return string.sub_string(string.pad_string(str, length, token), length)
 end
