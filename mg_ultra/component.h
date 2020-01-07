@@ -16,6 +16,8 @@ private:
 	//Each component has its own flag
 	atomic<bool> flag = true;
 public:
+	virtual ~Component() {
+	}
 
 	//use to kill a entity
 	void killEntity() {
