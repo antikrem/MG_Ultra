@@ -254,9 +254,9 @@ class SystemLoader : public System {
 		//need to find first space
 		auto it = line.find(' ');
 
-		//if invalid, return
+		//if reached the end use string end
 		if (it == std::string::npos) {
-			return "";
+			it = line.size();
 		}
 
 		//compute script name of component
@@ -279,7 +279,7 @@ class SystemLoader : public System {
 			int length = end - scanLocation;
 
 			string sub = scriptCall.substr(scanLocation, length);
-			if (!str_kit::isInt(sub) && !str_kit::isFloat(sub)) {
+			if (!str_kit::isInt(sub) && !str_kit::isFloat(sub) && str_kit::trimString(sub).size()) {
 				scriptCall.insert(scanLocation, "\"");
 				length ++;
 				scriptCall.insert(scanLocation + length, "\"");
