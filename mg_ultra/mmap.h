@@ -95,6 +95,11 @@ public:
 		internalMap.erase(key);
 	}
 
+	//erases by iterator
+	iterator erase(const iterator& it) {
+		return internalMap.erase(it);
+	}
+
 	//executes a function against all elements in MMap
 	void execute(function<void(Value&)> func) {
 		for (auto& i : internalMap) {
