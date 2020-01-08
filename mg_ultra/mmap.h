@@ -94,6 +94,15 @@ public:
 	void erase(const Key& key) {
 		internalMap.erase(key);
 	}
+
+	//executes a function against all elements in MMap
+	void execute(function<void(Value&)> func) {
+		for (auto& i : internalMap) {
+			for (auto& j : i.second) {
+				func(j);
+			}
+		}
+	}
 };
 
 #endif
