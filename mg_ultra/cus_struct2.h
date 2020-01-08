@@ -164,8 +164,8 @@ public:
 	}
 
 	//returns a normalised vector of direction to another point
-	Point3 directionTo(const Point3& b) {
-		Point3 temp = *this - b;
+	Point3 directionTo(Point3& b) {
+		Point3 temp = b - *this;
 		return temp * (1.0f / temp.magnitude());
 	}
 

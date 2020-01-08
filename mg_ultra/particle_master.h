@@ -33,8 +33,8 @@ class ParticleMaster {
 	vector<ForceSpecification> forceSpecifications;
 
 	//returns a point3 of momentum from a given force specification
-	Point3 computeMommentum(const ForceSpecification& forceSpec, Point3 particlePos) { 
-		return particlePos.directionTo(forceSpec.pos)
+	Point3 computeMommentum(ForceSpecification& forceSpec, Point3 particlePos) { 
+		return forceSpec.pos.directionTo(particlePos)
 			* (1.0f / (forceSpec.f * pow((particlePos - forceSpec.pos).magnitude(), 2) + forceSpec.p));
 	}
 
