@@ -66,7 +66,7 @@ public:
 	}
 
 	//generates a point2 from mag angle
-	static Point2 generateFromMagAng(float mag, float ang) {
+	static Point2 generateFromPolar(float mag, float ang) {
 		Point2 a(0, 0);
 		a.setMag(mag);
 		a.setAng(ang);
