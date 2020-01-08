@@ -97,6 +97,9 @@
     <Filter Include="Resource Files\scripts\profiler">
       <UniqueIdentifier>{84169089-c15e-48d7-b68b-ab4a1fe755dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Static Movement">
+      <UniqueIdentifier>{387b8395-6d35-48eb-b558-33ef6e75c892}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -179,6 +182,9 @@
     </ClCompile>
     <ClCompile Include="graphics_settings.cpp">
       <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="math_ex.cpp">
+      <Filter>Source Files\Support</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -532,6 +538,24 @@
     </ClInclude>
     <ClInclude Include="ini_parser.h">
       <Filter>Header Files\Support</Filter>
+    </ClInclude>
+    <ClInclude Include="component_static_movement.h">
+      <Filter>Header Files\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="movement_command.h">
+      <Filter>Header Files\Static Movement</Filter>
+    </ClInclude>
+    <ClInclude Include="movement_commander.h">
+      <Filter>Header Files\Static Movement</Filter>
+    </ClInclude>
+    <ClInclude Include="movement_quanta.h">
+      <Filter>Header Files\Static Movement</Filter>
+    </ClInclude>
+    <ClInclude Include="movement_fixed_point.h">
+      <Filter>Header Files\Static Movement</Filter>
+    </ClInclude>
+    <ClInclude Include="movement_fixed_move.h">
+      <Filter>Header Files\Static Movement</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

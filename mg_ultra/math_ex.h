@@ -20,6 +20,12 @@ namespace math_ex {
 		T difference = std::min(abs(target - current), rate);
 		return current > target ? current - difference : current + difference;
 	}
+
+	//converts to principle range
+	float to_principle(float angle);
+
+	//computes shortest turn to target from current
+	float compute_smallest_turn(float target, float current);
 }
 
 #endif
