@@ -4,34 +4,45 @@
 
 shared_mutex audioPtrLock;
 AudioMaster* globalAudioMaster = nullptr;
+bool activePipeline = false;
 
 void g_audio::setAudioMaster(AudioMaster* audioMaster) {
 	unique_lock<shared_mutex> lck(audioPtrLock);
 	globalAudioMaster = audioMaster;
+	activePipeline = true;
 }
 
 void g_audio::closeAudioPipeLine() {
 	unique_lock<shared_mutex> lck(audioPtrLock);
+	activePipeline = false;
 	globalAudioMaster = nullptr;
 }
 
 void g_audio::disposeBuffer(ALint buffer) {
 	shared_lock<shared_mutex> lck(audioPtrLock);
-	globalAudioMaster->disposeBuffer(buffer);
+	if (activePipeline) {
+		globalAudioMaster->disposeBuffer(buffer);
+	}
+	
 }
 
 void g_audio::addAudioFile(const string& fileName, const string& fileLocation) {
 	shared_lock<shared_mutex> lck(audioPtrLock);
-	globalAudioMaster->queueAssetLoad(fileName, fileLocation, AuFiLi_Global);
+	if (activePipeline) {
+		globalAudioMaster->queueAssetLoad(fileName, fileLocation, AuFiLi_Global);
+	}
 }
 
 void g_audio::flushAudioLoadRequests() {
 	shared_lock<shared_mutex> lck(audioPtrLock);
-	globalAudioMaster->flushAssetLoadRequests();
+	if (activePipeline) {
+		globalAudioMaster->flushAssetLoadRequests();
+	}
 }
-
 
 void g_audio::print() {
 	shared_lock<shared_mutex> lck(audioPtrLock);
-	globalAudioMaster->printReport();
+	if (activePipeline) {
+		globalAudioMaster->printReport();
+	}
 }
