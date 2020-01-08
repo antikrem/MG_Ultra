@@ -18,8 +18,8 @@ class Point2 {
 	float angle;
 
 	void setRectComponent() {
-		x = magnitude * sin(angle * PI / 180.0f);
-		y = magnitude * cos(angle * PI / 180.0f);
+		x = magnitude * cos(angle * PI / 180.0f);
+		y = magnitude * sin(angle * PI / 180.0f);
 	}
 
 	void setMagComponent() {
