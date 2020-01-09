@@ -16,7 +16,8 @@ using namespace std;
 #define E (float)2.71828182845
 
 #define INVERSE(value) (1.0f / value)
-#define SQUARE(value) ((float)pow(value, 2))
+#define SQUARE(value) ((float) pow(value, 2))
+#define CUBE(value) ((float) pow(value, 3))
 
 #define not(a) (!(a))
 
