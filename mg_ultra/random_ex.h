@@ -7,6 +7,9 @@ namespace rand_ex {
 	//gets next normal value
 	float next_norm(float mu, float sigma);
 
+	//gets next uniform value
+	float next_unif(float a, float b);
+
 	//fills an array with results of a normal distribution
 	//centered on 0
 	//index refers to offset, e.g. values 0-n
