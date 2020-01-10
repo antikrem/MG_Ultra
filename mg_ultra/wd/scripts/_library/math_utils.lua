@@ -36,7 +36,7 @@ end
 
 --takes a cartesian point, and returns a polar vector (mag, ang)
 function math.to_polar(x, y)
-	return math.to_magnitude(x,y), -1*(math.to_degrees(math.atan2(y,x)) - 90)
+	return math.to_magnitude(x,y), math.to_degrees(math.atan2(y,x))
 end
 
 --takes a polar vector, and returns cartesian
