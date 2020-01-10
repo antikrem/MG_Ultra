@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <windows.h>
+#include "psapi.h"
 
 bool os_kit::fileExists(const std::string& name) {
 	ifstream file(name.c_str());
@@ -120,4 +121,15 @@ string os_kit::getClipboard() {
 	GlobalUnlock(hClipBoard);
 
 	return clipboardText;
+}
+
+int os_kit::getVMemUsed() {
+	MEMORYSTATUSEX memInfo;
+	memInfo.dwLength = sizeof(MEMORYSTATUSEX);
+	GlobalMemoryStatusEx(&memInfo);
+	DWORDLONG totalVirtualMem = memInfo.ullTotalPageFile;
+
+	PROCESS_MEMORY_COUNTERS_EX pmc;
+	GetProcessMemoryInfo(GetCurrentProcess(), reinterpret_cast<PPROCESS_MEMORY_COUNTERS>(&pmc), sizeof(pmc));
+	return pmc.PrivateUsage;
 }

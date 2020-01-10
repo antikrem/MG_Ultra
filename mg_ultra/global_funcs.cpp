@@ -6,6 +6,7 @@
 
 #include <typeindex>
 
+#include "os_kit.h"
 #include "events.h"
 #include "pool.h"
 #include "texture.h"
@@ -114,6 +115,7 @@ void registerGlobalFunctions(kaguya::State &kaguya) {
 	kaguya["getScriptMasterLastFPS"] = g_script::FPS;
 	kaguya["getGLHandlerLastCalls"] = gl_query::getLastCalls;
 	kaguya["getGLHandlerLastFPS"] = gl_query::getFPS;
+	kaguya["getVMemUsed"] = os_kit::getVMemUsed;
 
 	//animation master
 	kaguya["queryAnimation"] = g_aniquery::getAnimationSize;

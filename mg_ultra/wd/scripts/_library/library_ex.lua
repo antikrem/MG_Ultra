@@ -70,7 +70,7 @@ function get_dump_report()
 	dumpReport = dumpReport 
 		.. string.format("Graveyard, size: %03d passed: %05d \n", EntityPool.get_graveyard_size(), EntityPool.get_graveyard_passed())
 	dumpReport = dumpReport 
-		.. string.format("Memory Usage: %f ", collectgarbage("count"))
+		.. string.format("Memory Usage: Engine: %02f Mb, ScriptENV: %02f Mb", getVMemUsed() / 1000000, collectgarbage("count") / 1000)
 	return dumpReport
 end
 

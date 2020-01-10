@@ -31,6 +31,9 @@ namespace os_kit {
 	//returns what evers currently in the clipboard
 	//returns empty string on error
 	string getClipboard();
+
+	//returns size of memory use
+	int getVMemUsed();
 }
 
 #endif
