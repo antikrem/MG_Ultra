@@ -21,7 +21,6 @@ class ComponentMovement : public Component, public ScriptableClass {
 	atomic<float> speed;
 
 	atomic<float> angleChange;
-
 	atomic<float> speedChange;
 
 	atomic<float> speedCap = INFINITY;
@@ -51,7 +50,7 @@ public:
 		
 		return position 
 			+ velocity 
-			+ Point3(Point2::generateFromMagAng(speed, angle), 0);
+			+ Point3(Point2::generateFromPolar(speed, angle), 0);
 	}
 
 	//updates current rotation
@@ -169,6 +168,21 @@ public:
 
 	bool getUpdateInSystem() {
 		return updateInSystem;
+	}
+
+	//stops all acceleration and speed changes 
+	void pinVelocity() {
+		acceleration = Point3(0,0,0);
+		angleChange = 0;
+		speedChange = 0;
+	}
+
+	//converts all velocity into polar part
+	void pushVelocityToPolar() {
+		Point3 temp = velocity.load() + Point3(Point2::generateFromPolar(speed, angle), 0);
+		speed = temp.magnitude();
+		angle = temp.getXY().getAng();
+		velocity = Point3(0, 0, 0);
 	}
 
 	void updateManually(bool value) {
