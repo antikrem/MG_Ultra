@@ -287,6 +287,7 @@
     <ClInclude Include="movement_quanta.h" />
     <ClInclude Include="movement_command.h" />
     <ClInclude Include="movement_fixed_move.h" />
+    <ClInclude Include="movement_smooth_points.h" />
     <ClInclude Include="os_kit.h" />
     <ClInclude Include="particle.h" />
     <ClInclude Include="particle_master.h" />

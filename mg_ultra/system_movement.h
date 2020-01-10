@@ -10,6 +10,7 @@ component position*/
 
 #include "component_position.h"
 #include "component_movement.h"
+#include "component_static_movement.h"
 
 class SystemMovement : public System {
 
@@ -24,9 +25,16 @@ public:
 	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, shared_ptr<Entity> ent, int id) override {
 		auto pos = getComponent<ComponentPosition>(components);
 		auto mov = getComponent<ComponentMovement>(components);
+		auto sta = getComponent<ComponentStaticMovement>(components);
 
 		if (mov->getUpdateInSystem()) {
-			pos->setPosition(mov->getUpdatedPosition(pos->getPosition3()));
+			Point3 currentPos = pos->getPosition3();
+			if (sta) {
+				currentPos = sta->getUpdatedPosition(mov, currentPos);
+			}
+			
+			pos->setPosition(mov->getUpdatedPosition(currentPos));
+			
 		}
 		
 	}
