@@ -17,6 +17,7 @@ in vec2 uv;
 in vec2 wl;
 in vec2 texSize;
 in float transparency;
+in vec3 inputLightSensitivity;
 
 layout(location = 0) out vec4 color;
 layout(location = 1) out vec3 position;
@@ -49,7 +50,9 @@ void main() {
 
 	//normal for sprites always face towards the camera
 	normals = vec3(0.0, 0.0, 1.0);
-	lightingSensitivity = vec3(1.0f);
+
+
+	lightingSensitivity = inputLightSensitivity;
 
 	//position for front depth
 	nextFrontDepthBuffer = z;

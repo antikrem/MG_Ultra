@@ -44,6 +44,8 @@ struct BoxData {
 	float wh[2];
 	//4 texture coordinates (u,v) is center, (w,l) is width and length
 	float uvwh[4];
+	//Light sensitivty
+	float lightSensitivity[3] = { 1.0f, 1.0f, 1.0f };
 	//rotation amount in radians
 	float rotation = 0;
 	//Used to overshoot wrapping
@@ -273,6 +275,10 @@ public:
 		memcpy(boxData.uvwh, &ani->getUVWH(state.currentFrame), 4 * sizeof(float));
 		boxData.wrapFactor = state.wrapFactor;
 		boxData.transparency = state.transparency;
+
+		boxData.lightSensitivity[0] = state.lightSensitivity.x;
+		boxData.lightSensitivity[1] = state.lightSensitivity.y;
+		boxData.lightSensitivity[2] = state.lightSensitivity.z;
 		
 		return boxData;
 	}

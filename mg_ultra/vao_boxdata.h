@@ -114,6 +114,18 @@ public:
 			(void*)(offsetof(BoxData, BoxData::transparency)) //transparency
 		);
 
+		//Set up light sensitivity
+		glEnableVertexAttribArray(7);
+		glBindBuffer(GL_ARRAY_BUFFER, vboID);
+		glVertexAttribPointer(
+			7, //layout = 7
+			3, //single float
+			GL_FLOAT,
+			GL_FALSE,
+			sizeof(BoxData), //stride the length of boxdata
+			(void*)(offsetof(BoxData, BoxData::lightSensitivity)) //lightSensitivity
+		);
+
 		//set up striding
 		glVertexAttribDivisor(0, 0); //base quad
 		glVertexAttribDivisor(1, 1); //position
@@ -122,6 +134,7 @@ public:
 		glVertexAttribDivisor(4, 1); //texture access
 		glVertexAttribDivisor(5, 1); //wrapfactor
 		glVertexAttribDivisor(6, 1); //transparency
+		glVertexAttribDivisor(7, 1); //light sensitivity
 	}
 
 	//render what there, the correct vao has been bound
