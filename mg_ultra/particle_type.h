@@ -33,8 +33,6 @@ struct ParticleType {
 		this->weightMean = p.weightMean;
 		this->weightDeviation = p.weightDeviation;
 
-		this->bloomFactor = bloomFactor;
-
 		this->boxes = p.boxes;
 	}
 
