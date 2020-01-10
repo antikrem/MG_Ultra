@@ -6,6 +6,7 @@ uniform sampler2D spriteColour;
 uniform sampler2D worldPosition;
 uniform sampler2D normals;
 uniform sampler2D lightingSensitivity;
+uniform sampler2D minimumAmbient;
 uniform sampler2D frontDepthBuffer;
 
 in vec2 uv;

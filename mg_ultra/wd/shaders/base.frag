@@ -17,13 +17,15 @@ in vec2 uv;
 in vec2 wl;
 in vec2 texSize;
 in float transparency;
-in vec3 inputLightSensitivity;
+in float inputLightSensitivity;
+in float inputAmbientMinimum;
 
 layout(location = 0) out vec4 color;
 layout(location = 1) out vec3 position;
 layout(location = 2) out vec3 normals;
-layout(location = 3) out vec3 lightingSensitivity;
-layout(location = 4) out float nextFrontDepthBuffer;
+layout(location = 3) out float lightingSensitivity;
+layout(location = 4) out float minimumAmbient;
+layout(location = 5) out float nextFrontDepthBuffer;
 
 void main() {
 	//check if this fragment is infront of the current closest fragment 
@@ -53,6 +55,7 @@ void main() {
 
 
 	lightingSensitivity = inputLightSensitivity;
+	minimumAmbient = inputAmbientMinimum;
 
 	//position for front depth
 	nextFrontDepthBuffer = z;

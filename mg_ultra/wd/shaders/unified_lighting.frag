@@ -6,6 +6,7 @@ uniform sampler2D spriteColour;
 uniform sampler2D spriteWorldPosition;
 uniform sampler2D normals;
 uniform sampler2D lightingSensitivity;
+uniform sampler2D minimumAmbient;
 uniform sampler2D directionalLightScene;
 
 uniform float ambientStrength;
@@ -17,12 +18,12 @@ layout(location = 0) out vec4 color;
 
 void main() {
 	vec4 texelColor = texture(spriteColour, uv).rgba;
-	vec3 ls = texture(lightingSensitivity, uv).rgb;
-	vec3 ambient = ambientStrength * texelColor.xyz * ambientColor;
-	vec3 directional = texture(directionalLightScene, uv).rgb;
+	float ls = texture(lightingSensitivity, uv).r;
+	vec3 ambient = max(ls * ambientStrength, texture(minimumAmbient, uv).r) * texelColor.xyz * ambientColor;
+	vec3 directional = ls * texture(directionalLightScene, uv).rgb;
 
 	//combine individual components
-	vec3 sceneColour = mix3(ls, ambient, directional, vec3(0));
+	vec3 sceneColour = ambient + directional + vec3(0);
 
 	color = vec4(sceneColour, texelColor.a);
 }

@@ -27,7 +27,8 @@ struct AnimationState {
 	unsigned int frameskipCounter; //recurring frameskip counter
 	bool inSingleAnimation = false; //in a single animation
 
-	Point3 lightSensitivity = Point3(1.0f);
+	float lightSensitivity = 1.0f;
+	float minimumAmbient = 0.0f;
 
 	//two floats that are used as additional offset
 	//Used by system graphics when creating positioned state
@@ -59,7 +60,9 @@ struct AnimationState {
 		this->currentFrame = state.currentFrame;
 		this->frameskipCounter = state.frameskipCounter;
 		this->inSingleAnimation = state.inSingleAnimation;
+
 		this->lightSensitivity = state.lightSensitivity;
+		this->minimumAmbient = state.minimumAmbient;
 	}
 
 	//simple function to reset to the start of an animation

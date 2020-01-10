@@ -44,8 +44,13 @@ struct BoxData {
 	float wh[2];
 	//4 texture coordinates (u,v) is center, (w,l) is width and length
 	float uvwh[4];
-	//Light sensitivty
-	float lightSensitivity[3] = { 1.0f, 1.0f, 1.0f };
+
+	//light sensitivty
+	float lightSensitivity;
+	//minimum of ambient
+	float ambientMin;
+
+
 	//rotation amount in radians
 	float rotation = 0;
 	//Used to overshoot wrapping
@@ -276,10 +281,9 @@ public:
 		boxData.wrapFactor = state.wrapFactor;
 		boxData.transparency = state.transparency;
 
-		boxData.lightSensitivity[0] = state.lightSensitivity.x;
-		boxData.lightSensitivity[1] = state.lightSensitivity.y;
-		boxData.lightSensitivity[2] = state.lightSensitivity.z;
-		
+		boxData.lightSensitivity = state.lightSensitivity;
+		boxData.ambientMin = state.minimumAmbient;
+
 		return boxData;
 	}
 

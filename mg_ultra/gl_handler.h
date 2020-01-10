@@ -145,7 +145,8 @@ public:
 				{"spriteColour", GL_RGBA}, 
 				{"spriteWorldPosition", GL_RGB16F}, 
 				{"normals", GL_RGB16_SNORM}, 
-				{"lightingSensitivity", GL_RGB16F},
+				{"lightingSensitivity", GL_R16F},
+				{"minimumAmbient", GL_R16F},
 				{"frontDepthBuffer", GL_R32F}
 			},
 			DepthAttachmentOptions::DEPTH_32

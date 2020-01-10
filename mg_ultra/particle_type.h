@@ -22,7 +22,7 @@ struct ParticleType {
 	//Will randomly add a factor between [1, lengthdeviation] to particle life
 	float maxLifeDeviation = 1.0f;
 
-	float bloomFactor = 1.0f; 
+	float bloomFactor = 0.0f; 
 
 	//animation information is cached within the particle type
 	//each box is a template for creating a box for a particle
@@ -49,6 +49,8 @@ struct ParticleType {
 		if (!animationPtr) {
 			return;
 		}
+
+		baseState.minimumAmbient = bloomFactor;
 
 		frameCount = animationPtr->getNumberOfFrames();
 
@@ -82,9 +84,7 @@ struct ParticleType {
 		this->bloomFactor = bloomFactor;
 
 		for (auto& i : boxes) {
-			i.lightSensitivity[0] = bloomFactor;
-			i.lightSensitivity[1] = bloomFactor;
-			i.lightSensitivity[2] = bloomFactor;
+			i.ambientMin = bloomFactor;
 		}
 	}
 };
