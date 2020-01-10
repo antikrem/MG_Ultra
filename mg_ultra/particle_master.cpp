@@ -15,6 +15,10 @@ int g_particles::addNewParticleType(string particleName, string animationSetName
 	return gParticleMaster->registerNewParticleType(particleName, animationSetName, animation);
 }
 
+void g_particles::updateBloomFactor(string particleName, float strength) {
+	gParticleMaster->setParticleTypeLightSensitivity(particleName, strength);
+}
+
 int g_particles::getParticleType(string particleTypeName) {
 	return gParticleMaster->getKeyFromName(particleTypeName);
 }

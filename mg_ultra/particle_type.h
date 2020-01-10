@@ -18,6 +18,8 @@ struct ParticleType {
 	int frameSkip;
 	int frameCount;
 
+	float bloomFactor = 1.0f; 
+
 	//animation information is cached within the particle type
 	//each box is a template for creating a box for a particle
 	vector<BoxData> boxes;
@@ -30,6 +32,8 @@ struct ParticleType {
 		this->animation = p.animation;
 		this->weightMean = p.weightMean;
 		this->weightDeviation = p.weightDeviation;
+
+		this->bloomFactor = bloomFactor;
 
 		this->boxes = p.boxes;
 	}
@@ -69,6 +73,17 @@ struct ParticleType {
 		box.xyz[1] = particle.y;
 		box.xyz[2] = particle.z;
 		return true;
+	}
+
+	//sets the bloom factor for this particle
+	void setBloomFactor(float bloomFactor) {
+		this->bloomFactor = bloomFactor;
+
+		for (auto& i : boxes) {
+			i.lightSensitivity[0] = bloomFactor;
+			i.lightSensitivity[1] = bloomFactor;
+			i.lightSensitivity[2] = bloomFactor;
+		}
 	}
 };
 

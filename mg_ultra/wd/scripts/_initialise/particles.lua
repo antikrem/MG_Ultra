@@ -16,9 +16,13 @@ Particles.add_new_type = function(particleTypeName, animationSetName, animation)
 	addNewParticleType(particleTypeName, animationSetName, animation)
 end
 
+--Modifies the bloom factor of a particle
+Particles.set_bloom_factor = setParticleTypeBloomFactor
+
 --Gets the particle key for a specific particle name
 Particles.get_type = getParticleType
 
 
 --Some default particle types
 Particles.add_new_type("gold", "particle_gold")
+Particles.set_bloom_factor("gold", 4.0)

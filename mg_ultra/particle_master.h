@@ -59,6 +59,16 @@ public:
 		return particleTypeAllocator++;
 	}
 
+	//modifies named particle type's light sensitivity
+	void setParticleTypeLightSensitivity(string particleName, float lightSensitivity) {
+		if (particleKeys.count(particleName)) {
+			particleTypes[particleKeys[particleName]].setBloomFactor(lightSensitivity);
+		}
+		else {
+			err::logMessage("PARTICLE: Was not able to find named particle " + particleName);
+		}
+	}
+
 	//adds a vector of particles
 	void addParticles(vector<Particle>& particles) {
 		unique_lock<mutex> lck(particlesLock);
@@ -155,6 +165,9 @@ namespace g_particles {
 	//adds a new particle type
 	//returns new key
 	int addNewParticleType(string particleName, string animationSetName, int animation);
+
+	//updates bloomfactor of named particle
+	void updateBloomFactor(string particleName, float strength);
 
 	//returns the key for a given type
 	//returns -1 on invalid key

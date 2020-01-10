@@ -132,6 +132,7 @@ void registerGlobalFunctions(kaguya::State &kaguya) {
 	//particle master
 	kaguya["addNewParticleType"] = g_particles::addNewParticleType;
 	kaguya["getParticleType"] = g_particles::getParticleType;
+	kaguya["setParticleTypeBloomFactor"] = g_particles::updateBloomFactor;
 
 	//graphics settings
 	kaguya["setExposureTarget"] = g_graphicsSettings::setExposureTarget;
