@@ -10,13 +10,15 @@
 //Minimal specification required for a particle
 struct ParticleSpecification {
 	float lifetime;
+	float lifetimeFactor;
 	float x;
 	float y;
 	float z;
 	int particleKey;
 
-	ParticleSpecification(float lifetime, float x, float y, float z, int particleKey) {
+	ParticleSpecification(float lifetime, float lifetimeFactor, float x, float y, float z, int particleKey) {
 		this->lifetime = lifetime;
+		this->lifetimeFactor = lifetimeFactor;
 
 		this->x = x;
 		this->y = y;
@@ -30,6 +32,7 @@ struct Particle {
 	bool active = true;
 
 	float lifetime = 0.0f;
+	float lifetimeFactor = 1.0f;
 
 	float featherness = 0.1f;
 
@@ -40,9 +43,10 @@ struct Particle {
 
 	int particleKey;
 
-	Particle(int key, const Point3& position, const Point3& startingVelocity = Point3(0.0f) ) 
+	Particle(int key, float lifetimeFactor, const Point3& position, const Point3& startingVelocity = Point3(0.0f))
 	: position(position), velocity(startingVelocity), momentum(startingVelocity) {
 		this->particleKey = key;
+		this->lifetimeFactor = lifetimeFactor;
 	}
 
 	//updates a particle
@@ -59,7 +63,7 @@ struct Particle {
 
 	//returns a specification for this particle
 	ParticleSpecification getSpecification() {
-		return ParticleSpecification(lifetime, position.x, position.y, position.z, particleKey);
+		return ParticleSpecification(lifetime, lifetimeFactor, position.x, position.y, position.z, particleKey);
 	}
 };
 

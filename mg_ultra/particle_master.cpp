@@ -19,6 +19,10 @@ void g_particles::updateBloomFactor(string particleName, float strength) {
 	gParticleMaster->setParticleTypeLightSensitivity(particleName, strength);
 }
 
+void g_particles::updateMaxLife(string particleName, float lifeDeviation) {
+	gParticleMaster->setParticleMaxLifeDeviation(particleName, lifeDeviation);
+}
+
 int g_particles::getParticleType(string particleTypeName) {
 	return gParticleMaster->getKeyFromName(particleTypeName);
 }

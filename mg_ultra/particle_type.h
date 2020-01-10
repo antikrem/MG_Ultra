@@ -2,6 +2,7 @@
 #ifndef __PARTICLE_TYPE__
 #define __PARTICLE_TYPE__
 
+#include <atomic>
 #include <vector>
 
 #include "texture.h"
@@ -17,6 +18,9 @@ struct ParticleType {
 
 	int frameSkip;
 	int frameCount;
+
+	//Will randomly add a factor between [1, lengthdeviation] to particle life
+	float maxLifeDeviation = 1.0f;
 
 	float bloomFactor = 1.0f; 
 
@@ -61,7 +65,7 @@ struct ParticleType {
 	//takes a reference to a particle and returns the associated box
 	//returns true if valid and ready to spawn
 	bool evaluateBox(ParticleSpecification& particle, BoxData& box) {
-		int frame = (int)particle.lifetime / frameSkip;
+		int frame = (int)(particle.lifetime / particle.lifetimeFactor) / frameSkip;
 		if (frame >= frameCount) {
 			return false;
 		}

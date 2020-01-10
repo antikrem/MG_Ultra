@@ -135,6 +135,7 @@ void registerGlobalFunctions(kaguya::State &kaguya) {
 	kaguya["addNewParticleType"] = g_particles::addNewParticleType;
 	kaguya["getParticleType"] = g_particles::getParticleType;
 	kaguya["setParticleTypeBloomFactor"] = g_particles::updateBloomFactor;
+	kaguya["setParticleTypeMaxLife"] = g_particles::updateMaxLife;
 
 	//graphics settings
 	kaguya["setExposureTarget"] = g_graphicsSettings::setExposureTarget;

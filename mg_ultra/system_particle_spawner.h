@@ -38,6 +38,8 @@ public:
 		//check if comPar is initialised
 		if (comPar->getKey() < 0) {
 			int key = particleMaster->getKeyFromName(comPar->getKeyName());
+			comPar->setMaxLifeDeviation(particleMaster->getMaxLifeDeviation(key));
+
 			if (key < 0) {
 				err::logMessage("invalid particle key thing");
 			}

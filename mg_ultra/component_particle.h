@@ -67,6 +67,11 @@ public:
 	void setPositionDeviation(float doubleDeviation) {
 		particleSpawner.setPositionDoubleDeviation(doubleDeviation);
 	}
+	
+	//sets life deviation
+	void setMaxLifeDeviation(float maxLifeDeviation) {
+		particleSpawner.setMaxLifeDeviation(maxLifeDeviation);
+	}
 
 	void registerToLua(kaguya::State& state) override {
 		state["ComponentParticle"].setClass(kaguya::UserdataMetatable<ComponentParticle, Component>()

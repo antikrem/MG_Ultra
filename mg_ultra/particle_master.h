@@ -69,6 +69,16 @@ public:
 		}
 	}
 
+	//modifies named particle type's max life deviation
+	void setParticleMaxLifeDeviation(string particleName, float maxLifeDeviation) {
+		if (particleKeys.count(particleName)) {
+			particleTypes[particleKeys[particleName]].maxLifeDeviation = maxLifeDeviation;
+		}
+		else {
+			err::logMessage("PARTICLE: Was not able to find named particle " + particleName);
+		}
+	}
+
 	//adds a vector of particles
 	void addParticles(vector<Particle>& particles) {
 		unique_lock<mutex> lck(particlesLock);
@@ -156,6 +166,16 @@ public:
 			particles[i].update(mommentum, (float)factor);
 		}
 	}
+
+	//gets max life deviation from a particle type
+	float getMaxLifeDeviation(int key) {
+		if (particleTypes.count(key)) {
+			return particleTypes[key].maxLifeDeviation;
+		}
+		else {
+			return 1.0f;
+		}
+	}
 };
 
 namespace g_particles {
@@ -168,6 +188,9 @@ namespace g_particles {
 
 	//updates bloomfactor of named particle
 	void updateBloomFactor(string particleName, float strength);
+
+	//update maxLifeDeviation of named particle
+	void updateMaxLife(string particleName, float lifeDeviation);
 
 	//returns the key for a given type
 	//returns -1 on invalid key

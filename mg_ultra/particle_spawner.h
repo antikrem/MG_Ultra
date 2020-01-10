@@ -30,6 +30,7 @@ class ParticleSpawner {
 	atomic<Point3> startingVelocity = Point3(0.0f);
 	atomic<float> velocityDoubleDeviation = 0.0f;
 
+	atomic<float> maxLifeDeviation = 1.0f;
 
 public:
 	//null particle spawner, will return -1 for key
@@ -53,9 +54,9 @@ public:
 
 		for (int i = 0; i < count; i++) {
 			particles.push_back(
-
 				Particle(
 					particleKey,
+					rand_ex::next_unif(1.0f, maxLifeDeviation),
 					Point3(
 						rand_ex::next_norm(position.load().x, positionDoubleDeviation / 2),
 						rand_ex::next_norm(position.load().y, positionDoubleDeviation / 2),
@@ -81,6 +82,11 @@ public:
 	//set the double deviation of position
 	void setPositionDoubleDeviation(float doubleDeviation) {
 		this->positionDoubleDeviation = doubleDeviation;
+	}
+
+	//sets maxlife deviation
+	void setMaxLifeDeviation(float maxLifeDeviation) {
+		this->maxLifeDeviation = maxLifeDeviation;
 	}
 
 	//updates this particle spawner
