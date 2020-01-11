@@ -61,6 +61,7 @@ public:
 
 	//modifies named particle type's light sensitivity
 	void setParticleTypeLightSensitivity(string particleName, float lightSensitivity) {
+		unique_lock<shared_mutex> lck(particleTypeLock);
 		if (particleKeys.count(particleName)) {
 			particleTypes[particleKeys[particleName]].setBloomFactor(lightSensitivity);
 		}
@@ -71,8 +72,42 @@ public:
 
 	//modifies named particle type's max life deviation
 	void setParticleMaxLifeDeviation(string particleName, float maxLifeDeviation) {
+		unique_lock<shared_mutex> lck(particleTypeLock);
 		if (particleKeys.count(particleName)) {
 			particleTypes[particleKeys[particleName]].maxLifeDeviation = maxLifeDeviation;
+		}
+		else {
+			err::logMessage("PARTICLE: Was not able to find named particle " + particleName);
+		}
+	}
+
+	//modifies named particle type's bounding box response
+	void setParticleTypeResponse(string particleName, ParticleBoxResponse response) {
+		unique_lock<shared_mutex> lck(particleTypeLock);
+		if (particleKeys.count(particleName)) {
+			particleTypes[particleKeys[particleName]].boxResponse = response;
+		}
+		else {
+			err::logMessage("PARTICLE: Was not able to find named particle " + particleName);
+		}
+	}
+
+	//modifies named particle type's bounding box half dimension
+	void setParticleTypeBoxDimension(string particleName, const Point3& dimension) {
+		unique_lock<shared_mutex> lck(particleTypeLock);
+		if (particleKeys.count(particleName)) {
+			particleTypes[particleKeys[particleName]].boundingBoxDimension = dimension;
+		}
+		else {
+			err::logMessage("PARTICLE: Was not able to find named particle " + particleName);
+		}
+	}
+
+	//modifies named particle type's bounding box half dimension
+	void setParticleTypeBoxCenter(string particleName, const Point3& center) {
+		unique_lock<shared_mutex> lck(particleTypeLock);
+		if (particleKeys.count(particleName)) {
+			particleTypes[particleKeys[particleName]].boundingBoxPosition = center;
 		}
 		else {
 			err::logMessage("PARTICLE: Was not able to find named particle " + particleName);
@@ -97,8 +132,8 @@ public:
 		erase_sequential_if(
 			particles,
 			[](Particle& particle) {
-				return !particle.active;
-			}
+			return !particle.active;
+		}
 		);
 	}
 
@@ -142,33 +177,61 @@ public:
 		unique_lock<mutex> lck(boxesLock);
 		int boxCount = min(size - start, (int)this->boxes.size());
 		memcpy(
-			boxes + start, 
-			this->boxes.data(), 
+			boxes + start,
+			this->boxes.data(),
 			sizeof(BoxData) * max(boxCount, 0)
 		);
 		return start + boxCount;
 	}
-	
+
 	//updates particles, uses factoring to split up updating
 	void updateParticles(int offset, int factor, const Point3& wind) {
 		unique_lock<mutex> lck(particlesLock);
 		int size = particles.size();
 		for (int i = offset; i < size; i += factor) {
+			auto& particle = particles[i];
+
 			Point3 mommentum(wind);
 			{
 				unique_lock<mutex> lck(forceSpecificationLock);
-				Point3 pos = particles[i].position;
+				Point3 pos = particle.position;
 				for (auto& i : forceSpecifications) {
 					mommentum += computeMommentum(i, pos);
 				}
 			}
-			
-			particles[i].update(mommentum, (float)factor);
+
+			particle.update(mommentum, (float)factor);
+
+			//do particle type checking
+			{
+				unique_lock<shared_mutex> lck(particleTypeLock);
+				//check for a box response
+				auto& type = particleTypes[particle.particleKey];
+
+				switch (type.boxResponse) {
+				//do nothing of break
+				case ParticleBoxResponse::Nothing:
+					break;
+
+				//delete on delete
+				case ParticleBoxResponse::Delete:
+					if (!type.checkBoundingBox(particle.position)) {
+						particle.active = false;
+					}
+					break;
+
+				//wrap on particle into box
+				case ParticleBoxResponse::Wrap:
+					type.wrapPosition(particle);
+					break;
+				}
+			}
 		}
 	}
 
 	//gets max life deviation from a particle type
 	float getMaxLifeDeviation(int key) {
+		unique_lock<shared_mutex> lck(particleTypeLock);
 		if (particleTypes.count(key)) {
 			return particleTypes[key].maxLifeDeviation;
 		}
@@ -191,6 +254,14 @@ namespace g_particles {
 
 	//update maxLifeDeviation of named particle
 	void updateMaxLife(string particleName, float lifeDeviation);
+
+	void updateTypeResponse(string particleName, int response);
+
+	//modifies named particle type's bounding box half dimension
+	void updateBoxDimension(string particleName, float x, float y, float z);
+
+	//modifies named particle type's bounding box half dimension
+	void updateBoxCenter(string particleName, float x, float y, float z);
 
 	//returns the key for a given type
 	//returns -1 on invalid key

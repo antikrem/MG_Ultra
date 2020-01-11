@@ -6,15 +6,30 @@
 --This interface can be used for managing particle types
 Particles = {}
 
+--Different engine responses to a particle moving out of type box
+ParticleBoxResponse = {}
+ParticleBoxResponse.Nothing = 0
+ParticleBoxResponse.Delete = 1
+ParticleBoxResponse.Wrap = 2
+
 --Add a new particle type
 --Two possible signatures:
 --Particles.add_new_type(string particleTypeName, string animationSetName) -> uses default animation (1)
 --Particles.add_new_type(string particleTypeName, string animationSetName, int animation)
 --returns key for further modification
 Particles.add_new_type = function(particleTypeName, animationSetName, animation)
-	animation = is_nil(animation) and 1 or animation
+	animation = animation or 1
 	addNewParticleType(particleTypeName, animationSetName, animation)
 end
+
+--Specifies the response for a given particle type
+Particles.set_type_response = setParticleTypeResponse
+
+--Specifies the box dimension (half dimension) for a given particle type
+Particles.set_box_dimension = setParticleTypeBoxDimension
+
+--Specifies the response for a given particle type
+Particles.set_box_center = setParticleTypeBoxCenter
 
 --Modifies the bloom factor of a particle type
 Particles.set_bloom_factor = setParticleTypeBloomFactor

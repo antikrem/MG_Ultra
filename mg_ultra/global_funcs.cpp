@@ -63,7 +63,6 @@ void setEvent(int type) {
 	
 }
 
-
 void addEventData(string data) {
 	if (eventConstruction) {
 		eventConstruction->data.push_back(data);
@@ -136,6 +135,9 @@ void registerGlobalFunctions(kaguya::State &kaguya) {
 	kaguya["getParticleType"] = g_particles::getParticleType;
 	kaguya["setParticleTypeBloomFactor"] = g_particles::updateBloomFactor;
 	kaguya["setParticleTypeMaxLife"] = g_particles::updateMaxLife;
+	kaguya["setParticleTypeResponse"] = g_particles::updateTypeResponse;
+	kaguya["setParticleTypeBoxDimension"] = g_particles::updateBoxDimension;
+	kaguya["setParticleTypeBoxCenter"] = g_particles::updateBoxCenter;
 
 	//graphics settings
 	kaguya["setExposureTarget"] = g_graphicsSettings::setExposureTarget;
