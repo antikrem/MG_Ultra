@@ -33,7 +33,7 @@ class ParticleMaster {
 	vector<ForceSpecification> forceSpecifications;
 
 	//returns a point3 of momentum from a given force specification
-	Point3 computeMommentum(ForceSpecification& forceSpec, Point3 particlePos) { 
+	Point3 computeMommentum(ForceSpecification& forceSpec, Point3 particlePos) {
 		return forceSpec.pos.directionTo(particlePos)
 			* (1.0f / (forceSpec.f * pow((particlePos - forceSpec.pos).magnitude(), 2) + forceSpec.p));
 	}
@@ -209,18 +209,18 @@ public:
 				auto& type = particleTypes[particle.particleKey];
 
 				switch (type.boxResponse) {
-				//do nothing of break
+					//do nothing of break
 				case ParticleBoxResponse::Nothing:
 					break;
 
-				//delete on delete
+					//delete on delete
 				case ParticleBoxResponse::Delete:
 					if (!type.checkBoundingBox(particle.position)) {
 						particle.active = false;
 					}
 					break;
 
-				//wrap on particle into box
+					//wrap on particle into box
 				case ParticleBoxResponse::Wrap:
 					type.wrapPosition(particle);
 					break;
@@ -238,6 +238,14 @@ public:
 		else {
 			return 1.0f;
 		}
+	}
+
+	//clears all particle 
+	int clearParticles() {
+		unique_lock<mutex> lck(particlesLock);
+		int particleSize = (int)particles.size();
+		particles.clear();
+		return particleSize;
 	}
 };
 
@@ -266,6 +274,10 @@ namespace g_particles {
 	//returns the key for a given type
 	//returns -1 on invalid key
 	int getParticleType(string particleTypeName);
+
+	//clears all particles in the engine
+	//returns how many particles were deleted
+	int clearParticles();
 }
 
 

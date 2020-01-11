@@ -40,3 +40,7 @@ void  g_particles::updateBoxCenter(string particleName, float x, float y, float 
 int g_particles::getParticleType(string particleTypeName) {
 	return gParticleMaster->getKeyFromName(particleTypeName);
 }
+
+int g_particles::clearParticles() {
+	return gParticleMaster->clearParticles();
+}

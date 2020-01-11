@@ -138,6 +138,7 @@ void registerGlobalFunctions(kaguya::State &kaguya) {
 	kaguya["setParticleTypeResponse"] = g_particles::updateTypeResponse;
 	kaguya["setParticleTypeBoxDimension"] = g_particles::updateBoxDimension;
 	kaguya["setParticleTypeBoxCenter"] = g_particles::updateBoxCenter;
+	kaguya["clearAllParticles"] = g_particles::clearParticles;
 
 	//graphics settings
 	kaguya["setExposureTarget"] = g_graphicsSettings::setExposureTarget;
