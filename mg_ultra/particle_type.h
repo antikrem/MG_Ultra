@@ -46,14 +46,6 @@ struct ParticleType {
 
 	}
 
-	ParticleType(const ParticleType& p) {
-		this->animation = p.animation;
-		this->weightMean = p.weightMean;
-		this->weightDeviation = p.weightDeviation;
-
-		this->boxes = p.boxes;
-	}
-
 	ParticleType(string animationSet, AnimationsMaster* animationMaster, int animation) {
 		this->animation = animationSet;
 		AnimationState baseState(animationSet, animation, 0, 0);
