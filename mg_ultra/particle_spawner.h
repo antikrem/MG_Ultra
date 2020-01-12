@@ -22,6 +22,10 @@ class ParticleSpawner {
 	//particles to create
 	vector<Particle> particles;
 
+	//values for featherness
+	atomic<float> feathernessMean = 0.1f;
+	atomic<float> feathernessDeviation = 0.025f;
+
 	//some parameters for spawning particles
 	atomic<Point3> position = Point3(0.0f);
 	float positionDoubleDeviation = 1.0f;
@@ -47,6 +51,12 @@ public:
 		this->particleKey = key;
 	}
 
+	//sets featherness constants
+	void setFeathernessParameters(float feathernessMean, float feathernessDeviation) {
+		this->feathernessMean = feathernessMean;
+		this->feathernessDeviation = feathernessDeviation;
+	}
+
 	//spawns count particle within bounds
 	void spawnParticles(int count) {
 		unique_lock<mutex> lck(lock);
@@ -65,7 +75,8 @@ public:
 						rand_ex::next_norm(startingVelocity.load().x, velocityDoubleDeviation / 2),
 						rand_ex::next_norm(startingVelocity.load().y, velocityDoubleDeviation / 2),
 						rand_ex::next_norm(startingVelocity.load().z, velocityDoubleDeviation / 2)
-					)
+					),
+					rand_ex::next_norm(feathernessMean, feathernessDeviation)
 				)
 
 			);

@@ -37,6 +37,10 @@ void  g_particles::updateBoxCenter(string particleName, float x, float y, float 
 	gParticleMaster->setParticleTypeBoxCenter(particleName, position);
 }
 
+void g_particles::updateFeatherness(string particleName, float featherMean, float featherDeviation) {
+	gParticleMaster->setParticleTypeFeatherness(particleName, featherMean, featherDeviation);
+}
+
 int g_particles::getParticleType(string particleTypeName) {
 	return gParticleMaster->getKeyFromName(particleTypeName);
 }

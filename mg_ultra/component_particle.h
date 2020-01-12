@@ -49,6 +49,11 @@ public:
 		particleSpawner.setKey(key);
 	}
 
+	//sets featherness values
+	void setFeathernessParameters(float feathernessMean, float feathernessDeviation) {
+		particleSpawner.setFeathernessParameters(feathernessMean, feathernessDeviation);
+	}
+
 	//spawn particles relative to entity
 	void spawnParticles(int count) {
 		particleSpawner.spawnParticles(count);

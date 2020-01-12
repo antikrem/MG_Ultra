@@ -45,6 +45,9 @@ public:
 			}
 			else {
 				comPar->setKey(key);
+				auto featherParameters = particleMaster->getFeathernessParameters(key);
+				comPar->setFeathernessParameters(get<0>(featherParameters), get<1>(featherParameters));
+
 				if (comGra) {
 					string setName = comGra->getAnimationState().animationSetName;
 					int x, y;

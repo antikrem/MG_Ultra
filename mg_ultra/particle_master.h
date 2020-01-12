@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <tuple>
 #include <shared_mutex>
 
 #include "algorithm_ex.h"
@@ -47,6 +48,14 @@ public:
 	int getKeyFromName(string name) {
 		shared_lock<shared_mutex> lck(particleTypeLock);
 		return particleKeys.count(name) ? particleKeys[name] : -1;
+	}
+
+	//returns a tuple of featherness parameters
+	tuple<float, float> getFeathernessParameters(int key) {
+		shared_lock<shared_mutex> lck(particleTypeLock);
+		return particleTypes.count(key) 
+			? make_tuple(particleTypes[key].feathernessMean, particleTypes[key].feathernessDeviation) 
+			: make_tuple(0.1f, 0.01f);
 	}
 
 	//Registers a particle type for use
@@ -108,6 +117,18 @@ public:
 		unique_lock<shared_mutex> lck(particleTypeLock);
 		if (particleKeys.count(particleName)) {
 			particleTypes[particleKeys[particleName]].boundingBoxPosition = center;
+		}
+		else {
+			err::logMessage("PARTICLE: Was not able to find named particle " + particleName);
+		}
+	}
+
+	//modifies named particle type's feather parameters
+	void setParticleTypeFeatherness(string particleName, float featherMean, float featherDeviation) {
+		unique_lock<shared_mutex> lck(particleTypeLock);
+		if (particleKeys.count(particleName)) {
+			particleTypes[particleKeys[particleName]].feathernessMean = featherMean;
+			particleTypes[particleKeys[particleName]].feathernessDeviation = featherDeviation;
 		}
 		else {
 			err::logMessage("PARTICLE: Was not able to find named particle " + particleName);
@@ -215,7 +236,7 @@ public:
 		for (int i = offset; i < size; i += factor) {
 			auto& particle = particles[i];
 
-			Point3 mommentum(wind);
+			Point3 mommentum(0);
 			{
 				unique_lock<mutex> lck(forceSpecificationLock);
 				Point3 pos = particle.position;
@@ -224,7 +245,7 @@ public:
 				}
 			}
 
-			particle.update(mommentum, (float)factor);
+			particle.update(wind, mommentum, (float)factor);
 
 			//do particle type checking
 			{
@@ -294,6 +315,9 @@ namespace g_particles {
 
 	//modifies named particle type's bounding box half dimension
 	void updateBoxCenter(string particleName, float x, float y, float z);
+
+	//updates featherness of a particle type
+	void updateFeatherness(string particleName, float featherMean, float featherDeviation);
 
 	//returns the key for a given type
 	//returns -1 on invalid key
