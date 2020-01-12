@@ -45,6 +45,7 @@ struct Particle {
 	float lifetimeFactor = 1.0f;
 
 	float featherness;
+	float weight;
 
 	Point3 position;
 	Point3 velocity;
@@ -53,11 +54,14 @@ struct Particle {
 
 	int particleKey;
 
-	Particle(int key, float lifetimeFactor, const Point3& position, const Point3& startingVelocity = Point3(0.0f), float featherness = 0.1f)
+	Particle(int key, float lifetimeFactor, 
+		const Point3& position, const Point3& startingVelocity = Point3(0.0f), 
+		float featherness = 0.1f, float weight = 1.0f)
 	: position(position), velocity(startingVelocity), momentum(startingVelocity) {
 		this->particleKey = key;
 		this->lifetimeFactor = lifetimeFactor;
 		this->featherness = featherness;
+		this->weight = weight;
 	}
 
 	//updates a particle
@@ -66,7 +70,7 @@ struct Particle {
 		this->momentum = mommentum;
 
 		float amendedScalarFactor = abs(scalarFactor * featherness);
-		velocity = velocity * (1.0f - amendedScalarFactor) + (momentum + wind)* amendedScalarFactor;
+		velocity = velocity * (1.0f - amendedScalarFactor) + (momentum * weight + wind) * amendedScalarFactor;
 		position = position + velocity * scalarFactor;
 
 		lifetime = lifetime + scalarFactor;

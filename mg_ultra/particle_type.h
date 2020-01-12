@@ -19,8 +19,12 @@ struct ParticleType {
 	bool wellformed = false;
 
 	string animation;
+
 	float feathernessMean = 0.1f;
 	float feathernessDeviation = 0.025f;
+
+	float weightMean = 1.0f;
+	float weightDeviation = 0.1f;
 
 	int frameSkip;
 	int frameCount;

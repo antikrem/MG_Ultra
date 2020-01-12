@@ -41,6 +41,11 @@ void g_particles::updateFeatherness(string particleName, float featherMean, floa
 	gParticleMaster->setParticleTypeFeatherness(particleName, featherMean, featherDeviation);
 }
 
+void g_particles::updateWeight(string particleName, float weightMean, float weightDeviation) {
+	gParticleMaster->setParticleTypeWeight(particleName, weightMean, weightDeviation);
+}
+
+
 int g_particles::getParticleType(string particleTypeName) {
 	return gParticleMaster->getKeyFromName(particleTypeName);
 }

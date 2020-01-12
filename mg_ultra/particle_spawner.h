@@ -26,6 +26,10 @@ class ParticleSpawner {
 	atomic<float> feathernessMean = 0.1f;
 	atomic<float> feathernessDeviation = 0.025f;
 
+	//values for weight
+	atomic<float> weightMean = 1.0f;
+	atomic<float> weightDeviation = 0.1f;
+
 	//some parameters for spawning particles
 	atomic<Point3> position = Point3(0.0f);
 	float positionDoubleDeviation = 1.0f;
@@ -57,6 +61,12 @@ public:
 		this->feathernessDeviation = feathernessDeviation;
 	}
 
+	//sets weight constants
+	void setWeightParameters(float weightMean, float weightDeviation) {
+		this->weightMean = weightMean;
+		this->weightDeviation = weightDeviation;
+	}
+
 	//spawns count particle within bounds
 	void spawnParticles(int count) {
 		unique_lock<mutex> lck(lock);
@@ -76,7 +86,8 @@ public:
 						rand_ex::next_norm(startingVelocity.load().y, velocityDoubleDeviation / 2),
 						rand_ex::next_norm(startingVelocity.load().z, velocityDoubleDeviation / 2)
 					),
-					rand_ex::next_norm(feathernessMean, feathernessDeviation)
+					rand_ex::next_norm(feathernessMean, feathernessDeviation),
+					rand_ex::next_norm(weightMean, weightDeviation)
 				)
 
 			);
@@ -91,7 +102,6 @@ public:
 		Point3 boxPos = g_particles::getBoundingBoxCenter(particleKey);
 
 		int count = (int)(boxDim.x * boxDim.y *boxDim.z * 8 * density);
-
 		unique_lock<mutex> lck(lock);
 		for (int i = 0; i < count; i++) {
 			particles.push_back(
@@ -103,7 +113,9 @@ public:
 						rand_ex::next_unif(boxPos.y - boxDim.y, boxPos.y + boxDim.y),
 						rand_ex::next_unif(boxPos.z - boxDim.z, boxPos.z + boxDim.z)
 					),
-					Point3(0, 0, 0)
+					Point3(0, 0, 0),
+					rand_ex::next_norm(feathernessMean, feathernessDeviation),
+					rand_ex::next_norm(weightMean, weightDeviation)
 				)
 
 			);

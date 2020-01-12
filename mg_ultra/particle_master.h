@@ -58,6 +58,14 @@ public:
 			: make_tuple(0.1f, 0.01f);
 	}
 
+	//returns a tuple of weight parameters
+	tuple<float, float> getWeightParameters(int key) {
+		shared_lock<shared_mutex> lck(particleTypeLock);
+		return particleTypes.count(key)
+			? make_tuple(particleTypes[key].weightMean, particleTypes[key].weightDeviation)
+			: make_tuple(0.1f, 0.01f);
+	}
+
 	//Registers a particle type for use
 	//returning an int of key for access, -1 on error
 	int registerNewParticleType(string particleName, string animationSetName, int animation = 1) {
@@ -129,6 +137,18 @@ public:
 		if (particleKeys.count(particleName)) {
 			particleTypes[particleKeys[particleName]].feathernessMean = featherMean;
 			particleTypes[particleKeys[particleName]].feathernessDeviation = featherDeviation;
+		}
+		else {
+			err::logMessage("PARTICLE: Was not able to find named particle " + particleName);
+		}
+	}
+
+	//modifies named particle type's weight parameters
+	void setParticleTypeWeight(string particleName, float weightMean, float weightDeviation) {
+		unique_lock<shared_mutex> lck(particleTypeLock);
+		if (particleKeys.count(particleName)) {
+			particleTypes[particleKeys[particleName]].weightMean = weightMean;
+			particleTypes[particleKeys[particleName]].weightDeviation = weightDeviation;
 		}
 		else {
 			err::logMessage("PARTICLE: Was not able to find named particle " + particleName);
@@ -318,6 +338,9 @@ namespace g_particles {
 
 	//updates featherness of a particle type
 	void updateFeatherness(string particleName, float featherMean, float featherDeviation);
+
+	//updates weight of a particle type
+	void updateWeight(string particleName, float weightMean, float weightDeviation);
 
 	//returns the key for a given type
 	//returns -1 on invalid key

@@ -54,6 +54,11 @@ public:
 		particleSpawner.setFeathernessParameters(feathernessMean, feathernessDeviation);
 	}
 
+	//sets weight values
+	void setWeightParameters(float weightMean, float weightDeviation) {
+		particleSpawner.setWeightParameters(weightMean, weightDeviation);
+	}
+
 	//spawn particles relative to entity
 	void spawnParticles(int count) {
 		particleSpawner.spawnParticles(count);

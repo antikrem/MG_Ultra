@@ -34,11 +34,14 @@ Particles.set_box_center = setParticleTypeBoxCenter
 --Modifies the bloom factor of a particle type
 Particles.set_bloom_factor = setParticleTypeBloomFactor
 
---Modifies the max life deviation of a particle
+--Modifies the max life deviation of a particle type
 Particles.set_max_life_deviation = setParticleTypeMaxLife
 
---Modifies the featherness mean and featherness deviation of a particle
+--Modifies the featherness mean and featherness deviation of a particle type
 Particles.set_featherness = setParticleTypeFeatherness
+
+--Modifies the weight mean and weight deviation of a particle type
+Particles.set_weight = setParticleTypeWeight
 
 --Gets the particle key for a specific particle name
 Particles.get_type = getParticleType
@@ -51,4 +54,4 @@ Particles.clear_all = clearAllParticles;
 Particles.add_new_type("gold", "particle_gold")
 Particles.set_bloom_factor("gold", 4.0)
 Particles.set_max_life_deviation("gold", 4.0)
-Particles.set_featherness("gold", 0.05, 0.2)
+Particles.set_featherness("gold", 0.1, 0.01)

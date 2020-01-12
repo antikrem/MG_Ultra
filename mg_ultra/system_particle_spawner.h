@@ -46,7 +46,9 @@ public:
 			else {
 				comPar->setKey(key);
 				auto featherParameters = particleMaster->getFeathernessParameters(key);
+				auto weightParameters = particleMaster->getWeightParameters(key);
 				comPar->setFeathernessParameters(get<0>(featherParameters), get<1>(featherParameters));
+				comPar->setWeightParameters(get<0>(weightParameters), get<1>(weightParameters));
 
 				if (comGra) {
 					string setName = comGra->getAnimationState().animationSetName;
