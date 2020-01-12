@@ -26,7 +26,6 @@ class ParticleSpawner {
 	atomic<Point3> position = Point3(0.0f);
 	float positionDoubleDeviation = 1.0f;
 
-
 	atomic<Point3> startingVelocity = Point3(0.0f);
 	atomic<float> velocityDoubleDeviation = 0.0f;
 
@@ -71,6 +70,34 @@ public:
 
 			);
 		}
+
+	}
+
+	//spawn particles uniformly within its box
+	//at a given density
+	void spawnParticlesUniformly(float density) {
+		Point3 boxDim = g_particles::getBoundingBoxSize(particleKey);
+		Point3 boxPos = g_particles::getBoundingBoxCenter(particleKey);
+
+		int count = (int)(boxDim.x * boxDim.y *boxDim.z * 8 * density);
+
+		unique_lock<mutex> lck(lock);
+		for (int i = 0; i < count; i++) {
+			particles.push_back(
+				Particle(
+					particleKey,
+					1.0f,
+					Point3(
+						rand_ex::next_unif(boxPos.x - boxDim.x, boxPos.x + boxDim.x),
+						rand_ex::next_unif(boxPos.y - boxDim.y, boxPos.y + boxDim.y),
+						rand_ex::next_unif(boxPos.z - boxDim.z, boxPos.z + boxDim.z)
+					),
+					Point3(0, 0, 0)
+				)
+
+			);
+		}
+		
 
 	}
 

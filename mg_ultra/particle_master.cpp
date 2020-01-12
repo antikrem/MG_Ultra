@@ -44,3 +44,12 @@ int g_particles::getParticleType(string particleTypeName) {
 int g_particles::clearParticles() {
 	return gParticleMaster->clearParticles();
 }
+
+Point3 g_particles::getBoundingBoxSize(int key) {
+	return gParticleMaster->getBoundingBoxSize(key);
+}
+
+Point3 g_particles::getBoundingBoxCenter(int key) {
+	return gParticleMaster->getBoundingBoxCenter(key);
+
+}

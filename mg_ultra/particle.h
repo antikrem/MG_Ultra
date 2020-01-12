@@ -7,6 +7,16 @@
 
 #include "cus_struct2.h"
 
+//implementation found in particle_master.cpp
+namespace g_particles {
+	//returns bounding box size for a particle
+	Point3 getBoundingBoxSize(int key);
+
+	//returns bounding box center for a particle
+	Point3 getBoundingBoxCenter(int key);
+}
+
+
 //Minimal specification required for a particle
 struct ParticleSpecification {
 	float lifetime;

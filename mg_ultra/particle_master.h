@@ -114,6 +114,30 @@ public:
 		}
 	}
 
+	//gets half particle box size
+	Point3 getBoundingBoxSize(int key) {
+		unique_lock<shared_mutex> lck(particleTypeLock);
+		if (particleTypes.count(key)) {
+			return particleTypes[key].boundingBoxDimension;
+		}
+		else {
+			err::logMessage("PARTICLE: Was not able to find particle key " + key);
+			return Point3(0);
+		}
+	}
+
+	//gets particle box center
+	Point3 getBoundingBoxCenter(int key) {
+		unique_lock<shared_mutex> lck(particleTypeLock);
+		if (particleTypes.count(key)) {
+			return particleTypes[key].boundingBoxPosition;
+		}
+		else {
+			err::logMessage("PARTICLE: Was not able to find particle key " + key);
+			return Point3(0);
+		}
+	}
+
 	//adds a vector of particles
 	void addParticles(vector<Particle>& particles) {
 		unique_lock<mutex> lck(particlesLock);

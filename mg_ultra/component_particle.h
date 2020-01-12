@@ -49,9 +49,14 @@ public:
 		particleSpawner.setKey(key);
 	}
 
-	//spawn one particle
+	//spawn particles relative to entity
 	void spawnParticles(int count) {
 		particleSpawner.spawnParticles(count);
+	}
+
+	//spawn particles relative to entity
+	void spawnParticlesUniformly(float density) {
+		particleSpawner.spawnParticlesUniformly(density);
 	}
 
 	//set starting velocity
@@ -77,6 +82,7 @@ public:
 		state["ComponentParticle"].setClass(kaguya::UserdataMetatable<ComponentParticle, Component>()
 			.setConstructors<ComponentParticle()>()
 			.addFunction("spawn", &ComponentParticle::spawnParticles)
+			.addFunction("spawn_uniformly", &ComponentParticle::spawnParticlesUniformly)
 			.addFunction("set_velocity", &ComponentParticle::l_setStartingVelocity)
 			.addFunction("set_position_deviation", &ComponentParticle::setPositionDeviation)
 			.addOverloadedFunctions(

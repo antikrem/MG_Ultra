@@ -40,6 +40,9 @@ Particles.set_max_life_deviation = setParticleTypeMaxLife
 --Gets the particle key for a specific particle name
 Particles.get_type = getParticleType
 
+--Clears all particles
+Particles.clear_all = clearAllParticles;
+
 
 --Some default particle types
 Particles.add_new_type("gold", "particle_gold")
