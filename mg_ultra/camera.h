@@ -63,6 +63,7 @@ public:
 	}
 
 	void updateCamera(glm::vec3 eyePos, glm::vec3 lookAt, float fov) {
+		eyePos.z = -1 * eyePos.z;
 		inWorldProjection = glm::perspective(
 			glm::radians(fov), 
 			(float)gSettings->screenWidth / (float)gSettings->screenHeight, 

@@ -31,7 +31,7 @@ function BackgroundMaster.add_new_layer(animationSet, horizontalCount, depth)
 
 	--Use the depth to create a translation factor
 	local _, _, camDepth = camera:get_component(ComponentPosition):get_position()
-	local translationFactor = (camDepth + depth) / camDepth
+	local translationFactor = (-1 * camDepth + depth) / (-1 * camDepth)
 
 	--get the width and height of the plane
 	local pWidth, pHeight = registar:get("play_space_x"), registar:get("play_space_y")

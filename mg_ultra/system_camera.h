@@ -44,7 +44,7 @@ public:
 	void cacheFail(EntityPool* pool) override {
 		//create the camera entity
 		auto newEnt = shared_ptr<Entity>(new Entity(ETCamera));
-		auto newComponent = new ComponentPosition(0, 0, 2000.0);
+		auto newComponent = new ComponentPosition(0, 0, -2000.0);
 		newEnt->addComponent(newComponent->pullForEntity());
 		auto newComponent1 = new ComponentCamera();
 		newEnt->addComponent(newComponent1->pullForEntity());

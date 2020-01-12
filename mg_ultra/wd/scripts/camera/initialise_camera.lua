@@ -14,6 +14,6 @@ if not is_nil(viewSpaceY) then
 	local cCamera = this:get_component(ComponentCamera)
 	local cPosition = this:get_component(ComponentPosition)
 	local _, _, height = cPosition:get_position()
-	cCamera:set_fov( 2 *  math.deg(math.atan((viewSpaceY / 2) / height)) )
+	cCamera:set_fov( 2 *  math.deg(math.atan((viewSpaceY / 2) / (-1 * height))) )
 
 end
