@@ -43,6 +43,9 @@ void main() {
 
 	worldPosition = (rotation * basePos) * vec3(size,1) + centerPos;
 
+	//Z coordinate has to be flipped
+	worldPosition.z = -worldPosition.z;
+
 	transparency = spriteTransparency;
 
 	inputLightSensitivity = lightingSensitivity;
