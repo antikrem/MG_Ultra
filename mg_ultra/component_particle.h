@@ -65,8 +65,8 @@ public:
 	}
 
 	//spawn particles relative to entity
-	void spawnParticlesUniformly(float density) {
-		particleSpawner.spawnParticlesUniformly(density);
+	void spawnParticlesUniformly(int count) {
+		particleSpawner.spawnParticlesUniformly(count);
 	}
 
 	//set starting velocity

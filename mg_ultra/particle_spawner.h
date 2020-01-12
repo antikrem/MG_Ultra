@@ -97,13 +97,12 @@ public:
 
 	//spawn particles uniformly within its box
 	//at a given density
-	void spawnParticlesUniformly(float density) {
+	void spawnParticlesUniformly(int total) {
 		Point3 boxDim = g_particles::getBoundingBoxSize(particleKey);
 		Point3 boxPos = g_particles::getBoundingBoxCenter(particleKey);
 
-		int count = (int)(boxDim.x * boxDim.y *boxDim.z * 8 * density);
 		unique_lock<mutex> lck(lock);
-		for (int i = 0; i < count; i++) {
+		for (int i = 0; i < total; i++) {
 			particles.push_back(
 				Particle(
 					particleKey,
