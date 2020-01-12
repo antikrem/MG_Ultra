@@ -335,6 +335,7 @@
     <ClInclude Include="system_text.h" />
     <ClInclude Include="system_timer.h" />
     <ClInclude Include="system_transparency.h" />
+    <ClInclude Include="system_weather.h" />
     <ClInclude Include="system__header.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="component.h" />
@@ -373,6 +374,7 @@
     <None Include="wd\scripts\_initialise\post_effects.lua" />
     <None Include="wd\scripts\_initialise\registar.lua" />
     <None Include="wd\scripts\_initialise\unified_lighting.lua" />
+    <None Include="wd\scripts\_initialise\weather.lua" />
     <None Include="wd\scripts\_library\library.lua" />
     <None Include="wd\scripts\_library\library_ex.lua" />
     <None Include="wd\scripts\_library\math_utils.lua" />

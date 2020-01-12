@@ -20,7 +20,8 @@ enum EntityTypes {
 	ETDirectionalLight,
 	ETEnemy,
 	ETMusic,
-	ETParticle
+	ETWeather,
+
 };
 
 //String to Entity type

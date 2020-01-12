@@ -18,6 +18,7 @@ EntityAnonymousSpawner = 10
 EntityDirectionalLight = 11
 EntityEnemy = 12
 EntityMusic = 13
+EntityWeather = 14
 
 --returns the entity cached with this types
 --or nil on failure due to invalid type or no respective cached ent

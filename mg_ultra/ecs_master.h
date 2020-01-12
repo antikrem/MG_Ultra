@@ -62,7 +62,10 @@ class ECSMaster {
 		-system_text
 		-system_console
 		-system_spawner
-		-system_backgroun
+		-system_background
+		-system_health
+		-system_transparency
+		-system_weather
 
 	master2: main gameloop
 	    -system_timer
@@ -105,6 +108,7 @@ class ECSMaster {
 		master->createSystem<SystemDriftable>(registar);
 		master->createSystem<SystemHealth>(registar);
 		master->createSystem<SystemTransparency>(registar);
+		master->createSystem<SystemWeather>(registar);
 
 		//ring 2
 		master = newSystemsMaster("m_gameplay");

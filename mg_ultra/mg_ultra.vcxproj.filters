@@ -512,9 +512,6 @@
     <ClInclude Include="particle_type.h">
       <Filter>Header Files\Particles</Filter>
     </ClInclude>
-    <ClInclude Include="system_particle_boxes.h">
-      <Filter>Header Files\ECS\Systems</Filter>
-    </ClInclude>
     <ClInclude Include="component_particle.h">
       <Filter>Header Files\ECS\Components</Filter>
     </ClInclude>
@@ -559,6 +556,12 @@
     </ClInclude>
     <ClInclude Include="movement_smooth_points.h">
       <Filter>Header Files\Static Movement</Filter>
+    </ClInclude>
+    <ClInclude Include="system_weather.h">
+      <Filter>Header Files\ECS\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="system_particle_boxes.h">
+      <Filter>Header Files\ECS\Systems\Graphics System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -675,6 +678,9 @@
     </None>
     <None Include="wd\scripts\profiler\profiler.lua">
       <Filter>Resource Files\scripts\profiler</Filter>
+    </None>
+    <None Include="wd\scripts\_initialise\weather.lua">
+      <Filter>Resource Files\scripts\_initialise</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
