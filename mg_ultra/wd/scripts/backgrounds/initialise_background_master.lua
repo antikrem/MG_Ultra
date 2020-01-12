@@ -56,7 +56,7 @@ function BackgroundMaster.add_new_layer(animationSet, horizontalCount, depth)
 
 	cSpawner:create_entity(EntityBackgroundLayer)
 
-	cSpawner:add_component(ComponentPosition.create(0, 0, -depth))
+	cSpawner:add_component(ComponentPosition.create(0, 0, depth))
 
 	local backgroundLayerGraphics = ComponentGraphics.create("default")
 	backgroundLayerGraphics:set_animation(1)

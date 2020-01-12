@@ -1,21 +1,33 @@
 //Testing
 @immediate
 <<Drift.set_scroll_speed(0, -10, 0)
-<<Drift.set_wind_speed(0, -10, 0)
 
 <<BackgroundMaster.add_new_layer("default", 1, 1000)
 
 <<AmbientLight.set_strength(0.1)
-<<Audio.request_load_file("rain", "rain.wav")
+
 <<Audio.request_load_file("click", "click.wav")
 <<Audio.flush_queue()
+<<Weather.start_heavy_rain()
 
-@cycle 50
-<<Audio.play_track("rain")
+@cycle 20
+<<DirectionalLight.add_new(0, 0, 1, 1, 1, 1)
 
 @cycle 500
 ent 12
-+position 0 100 0
++position -500 0 0
++movement
+//->set_acceleration(0.1, 0.1)
+//->set_velocity(5, 4)
++staticMovement
+//->add_fixed_point(100, 500, 500)
+//->add_fixed_point(200, -500, -500)
+//->add_fixed_point(300, 00, 00)
+//->chain_fixed_move(300, 0, 500)
+//->chain_fixed_move(600, -500, 500)
+//->chain_fixed_move(1000, 500, 500)
+//->chain_fixed_move(2000, 501, 501)
+->chain_smooth_points({100, 000, 0, 0, 200, 500, 0, 0})
 +graphics default
 +transparency 1 0.02
 +collision 100

@@ -1,3 +1,5 @@
+--\scripts\_initialise\drift.lua
+
 --Sets up some variables used for 
 --controlling drift from wind/level scroll
 
