@@ -22,6 +22,9 @@ class ParticleSpawner {
 	//particles to create
 	vector<Particle> particles;
 
+	//if true rotate to face
+	atomic<bool> rotateToFace = false;
+
 	//values for featherness
 	atomic<float> feathernessMean = 0.1f;
 	atomic<float> feathernessDeviation = 0.025f;
@@ -67,6 +70,11 @@ public:
 		this->weightDeviation = weightDeviation;
 	}
 
+	//sets rotation target
+	void setRotateToFace(bool rotateToFace) {
+		this->rotateToFace = rotateToFace;
+	}
+
 	//spawns count particle within bounds
 	void spawnParticles(int count) {
 		unique_lock<mutex> lck(lock);
@@ -87,7 +95,8 @@ public:
 						rand_ex::next_norm(startingVelocity.load().z, velocityDoubleDeviation / 2)
 					),
 					rand_ex::next_norm(feathernessMean, feathernessDeviation),
-					rand_ex::next_norm(weightMean, weightDeviation)
+					rand_ex::next_norm(weightMean, weightDeviation),
+					rotateToFace
 				)
 
 			);
@@ -114,7 +123,8 @@ public:
 					),
 					Point3(0, 0, 0),
 					rand_ex::next_norm(feathernessMean, feathernessDeviation),
-					rand_ex::next_norm(weightMean, weightDeviation)
+					rand_ex::next_norm(weightMean, weightDeviation),
+					rotateToFace
 				)
 
 			);

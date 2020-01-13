@@ -50,6 +50,14 @@ public:
 		return particleKeys.count(name) ? particleKeys[name] : -1;
 	}
 
+	//returns rotate to face
+	bool getRotateToFace(int key) {
+		shared_lock<shared_mutex> lck(particleTypeLock);
+		return particleTypes.count(key)
+			? particleTypes[key].rotateToFace
+			: false;
+	}
+
 	//returns a tuple of featherness parameters
 	tuple<float, float> getFeathernessParameters(int key) {
 		shared_lock<shared_mutex> lck(particleTypeLock);
@@ -125,6 +133,18 @@ public:
 		unique_lock<shared_mutex> lck(particleTypeLock);
 		if (particleKeys.count(particleName)) {
 			particleTypes[particleKeys[particleName]].boundingBoxPosition = center;
+		}
+		else {
+			err::logMessage("PARTICLE: Was not able to find named particle " + particleName);
+		}
+	}
+
+	//modifies named particle type's rotateToFace
+	void setParticleTypeRotateToFace(string particleName, bool rotateToFace) {
+		unique_lock<shared_mutex> lck(particleTypeLock);
+		if (particleKeys.count(particleName)) {
+			particleTypes[particleKeys[particleName]].rotateToFace = rotateToFace;
+
 		}
 		else {
 			err::logMessage("PARTICLE: Was not able to find named particle " + particleName);
@@ -328,6 +348,7 @@ namespace g_particles {
 	//update maxLifeDeviation of named particle
 	void updateMaxLife(string particleName, float lifeDeviation);
 
+	//Type of response to a particle falling out of range
 	void updateTypeResponse(string particleName, int response);
 
 	//modifies named particle type's bounding box half dimension
@@ -335,6 +356,9 @@ namespace g_particles {
 
 	//modifies named particle type's bounding box half dimension
 	void updateBoxCenter(string particleName, float x, float y, float z);
+
+	//updates rotate parameter
+	void updateRotateToFace(string particleName, bool rotateToFace);
 
 	//updates featherness of a particle type
 	void updateFeatherness(string particleName, float featherMean, float featherDeviation);

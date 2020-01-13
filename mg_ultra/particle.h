@@ -21,12 +21,13 @@ namespace g_particles {
 struct ParticleSpecification {
 	float lifetime;
 	float lifetimeFactor;
+	float rotation;
 	float x;
 	float y;
 	float z;
 	int particleKey;
 
-	ParticleSpecification(float lifetime, float lifetimeFactor, float x, float y, float z, int particleKey) {
+	ParticleSpecification(float lifetime, float lifetimeFactor, float x, float y, float z, float rotation, int particleKey) {
 		this->lifetime = lifetime;
 		this->lifetimeFactor = lifetimeFactor;
 
@@ -35,6 +36,8 @@ struct ParticleSpecification {
 		this->z = z;
 
 		this->particleKey = particleKey;
+
+		this->rotation = rotation;
 	}
 };
 
@@ -43,6 +46,9 @@ struct Particle {
 
 	float lifetime = 0.0f;
 	float lifetimeFactor = 1.0f;
+
+	bool rotateToFace;
+	float rotation = 0;
 
 	float featherness;
 	float weight;
@@ -56,12 +62,13 @@ struct Particle {
 
 	Particle(int key, float lifetimeFactor, 
 		const Point3& position, const Point3& startingVelocity = Point3(0.0f), 
-		float featherness = 0.1f, float weight = 1.0f)
+		float featherness = 0.1f, float weight = 1.0f, bool rotateToFace = false)
 	: position(position), velocity(startingVelocity), momentum(startingVelocity) {
 		this->particleKey = key;
 		this->lifetimeFactor = lifetimeFactor;
 		this->featherness = featherness;
 		this->weight = weight;
+		this->rotateToFace = rotateToFace;
 	}
 
 	//updates a particle
@@ -73,12 +80,16 @@ struct Particle {
 		velocity = velocity * (1.0f - amendedScalarFactor) + (momentum * weight + wind) * amendedScalarFactor;
 		position = position + velocity * scalarFactor;
 
+		if (rotateToFace) {
+			rotation = RAD2DEG(atan2(velocity.y, velocity.x));
+		}
+
 		lifetime = lifetime + scalarFactor;
 	}
 
 	//returns a specification for this particle
 	ParticleSpecification getSpecification() {
-		return ParticleSpecification(lifetime, lifetimeFactor, position.x, position.y, position.z, particleKey);
+		return ParticleSpecification(lifetime, lifetimeFactor, position.x, position.y, position.z, rotation, particleKey);
 	}
 };
 

@@ -23,18 +23,22 @@ void g_particles::updateMaxLife(string particleName, float lifeDeviation) {
 	gParticleMaster->setParticleMaxLifeDeviation(particleName, lifeDeviation);
 }
 
-void  g_particles::updateTypeResponse(string particleName, int response) {
+void g_particles::updateTypeResponse(string particleName, int response) {
 	gParticleMaster->setParticleTypeResponse(particleName, (ParticleBoxResponse)response);
 }
 
-void  g_particles::updateBoxDimension(string particleName, float x, float y, float z) {
+void g_particles::updateBoxDimension(string particleName, float x, float y, float z) {
 	Point3 widths(x, y, z);
 	gParticleMaster->setParticleTypeBoxDimension(particleName, widths);
 }
 
-void  g_particles::updateBoxCenter(string particleName, float x, float y, float z) {
+void g_particles::updateBoxCenter(string particleName, float x, float y, float z) {
 	Point3 position(x, y, z);
 	gParticleMaster->setParticleTypeBoxCenter(particleName, position);
+}
+
+void g_particles::updateRotateToFace(string particleName, bool rotateToFace) {
+	gParticleMaster->setParticleTypeRotateToFace(particleName, rotateToFace);
 }
 
 void g_particles::updateFeatherness(string particleName, float featherMean, float featherDeviation) {

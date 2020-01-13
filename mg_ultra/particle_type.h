@@ -20,6 +20,9 @@ struct ParticleType {
 
 	string animation;
 
+	//specifies if this particle looks towards target
+	bool rotateToFace = false;
+
 	float feathernessMean = 0.1f;
 	float feathernessDeviation = 0.025f;
 
@@ -86,6 +89,7 @@ struct ParticleType {
 		box.xyz[0] = particle.x;
 		box.xyz[1] = particle.y;
 		box.xyz[2] = particle.z;
+		box.rotation = particle.rotation;
 		return true;
 	}
 
@@ -106,6 +110,11 @@ struct ParticleType {
 	//sets response box center position
 	void setResponseBoxCenter(const Point3& box) {
 		boundingBoxPosition = box;
+	}
+
+	//sets is this type rotates to face
+	void setRotateToBox(bool rotateToFace) {
+		this->rotateToFace = rotateToFace;
 	}
 
 	//returns true if position is within bounding box

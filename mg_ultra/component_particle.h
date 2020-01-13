@@ -88,6 +88,11 @@ public:
 		particleSpawner.setMaxLifeDeviation(maxLifeDeviation);
 	}
 
+	//set rotate to face
+	void setRotateToFace(bool rotateToFace) {
+		particleSpawner.setRotateToFace(rotateToFace);
+	}
+
 	void registerToLua(kaguya::State& state) override {
 		state["ComponentParticle"].setClass(kaguya::UserdataMetatable<ComponentParticle, Component>()
 			.setConstructors<ComponentParticle()>()

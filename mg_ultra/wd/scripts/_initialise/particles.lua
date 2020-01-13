@@ -37,6 +37,10 @@ Particles.set_bloom_factor = setParticleTypeBloomFactor
 --Modifies the max life deviation of a particle type
 Particles.set_max_life_deviation = setParticleTypeMaxLife
 
+--Modifies the rotateToFace parameter, where a true value rotates particle to face 
+--towards movement
+Particles.set_rotate_to_face = setParticleTypeRotateToFace
+
 --Modifies the featherness mean and featherness deviation of a particle type
 Particles.set_featherness = setParticleTypeFeatherness
 
