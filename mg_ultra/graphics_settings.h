@@ -22,6 +22,14 @@ struct GraphicsSettings {
 	//bloom deviation
 	atomic<float> bloomDeviation = 5.0f;
 
+	//rendering constants
+	atomic<int> countMaxSpriteBox = 1000;
+	atomic<int> countMaxUIBox = 1000;
+	atomic<int> countMaxDirectionalLights = 10;
+
+	//target fps
+	atomic<int> targetFPS = 0;
+
 	GraphicsSettings();
 };
 

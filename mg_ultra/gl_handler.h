@@ -15,6 +15,7 @@
 
 #include "vao_boxdata.h"
 #include "vao_directional_light.h"
+//#include "vao_point_light.h"
 #include "vao_screenbuffer.h"
 
 #include "ambient_illumination.h"
@@ -70,6 +71,7 @@ private:
 	VAOBoxData boxVAOBuffer;
 	VAOBoxData boxUIVAOBuffer;
 	VAODirectionalLight directionalLightVAOBuffer;
+//	VAOPointLight pointLightVAOBuffer;
 	VAOScreenBuffer screenVAO;
 
 	//number of factors to utilise
@@ -101,7 +103,10 @@ public:
 	//GL calls are done in a seperate thread
 	//Requests made to gl thread will be handled async
 	GLHandler(GLFWwindow *window, GraphicsSettings* gSettings, AnimationsMaster* textureMaster, Camera* camera) 
-	: boxVAOBuffer(1000), boxUIVAOBuffer(1000), directionalLightVAOBuffer(10), periodBlock(0) {
+	: boxVAOBuffer(gSettings->countMaxSpriteBox), 
+	boxUIVAOBuffer(gSettings->countMaxUIBox),
+	directionalLightVAOBuffer(gSettings->countMaxDirectionalLights),
+	periodBlock(gSettings->targetFPS) {
 		this->window = window;
 		this->gSettings = gSettings;
 		this->camera = camera;
@@ -313,6 +318,9 @@ public:
 	VAODirectionalLight& getDirectionalLightBuffer() {
 		return directionalLightVAOBuffer;
 	}
+
+	//returns reference for pointLightVAOBuffer
+
 };
 
 namespace gl_query {

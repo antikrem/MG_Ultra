@@ -16,7 +16,13 @@ GraphicsSettings::GraphicsSettings() {
 	//load settings from file
 	INIParser gfxSettings(GFX_FILE_LOCATION);
 
-	depthPeelingPasses = gfxSettings.get("renderer", "transparency_levels", 4);
+	targetFPS = gfxSettings.get("general", "target_fps", 0);
+
+	countMaxSpriteBox = gfxSettings.get("max_renderable", "sprites", 1000);
+	countMaxUIBox = gfxSettings.get("max_renderable", "ui", 1000);
+	countMaxDirectionalLights = gfxSettings.get("max_renderable", "directional_lights", 10);
+
+	depthPeelingPasses = gfxSettings.get("renderer", "transparency_levels", 3);
 
 	g_graphicsSettings::setGlobalGraphicsSettings(this);
 }
