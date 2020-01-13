@@ -27,7 +27,7 @@ out float inputAmbientMinimum;
 uniform mat4 MVP;
 
 void main() {
-	float rTheta = radians(theta);
+	float rTheta = radians(-theta);
 
     mat3 rotation = mat3(
 		cos(rTheta), -sin(rTheta), 0,
