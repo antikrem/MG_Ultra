@@ -27,9 +27,11 @@ out float inputAmbientMinimum;
 uniform mat4 MVP;
 
 void main() {
+	float rTheta = radians(theta);
+
     mat3 rotation = mat3(
-		cos(theta), -sin(theta), 0,
-		sin(theta), cos(theta), 0,
+		cos(rTheta), -sin(rTheta), 0,
+		sin(rTheta), cos(rTheta), 0,
 		0, 0, 1
 	);
 
@@ -41,7 +43,7 @@ void main() {
 	wl = wrapFactor * vec2((basePos.x + 0.5f) * textureCoordinate.z, (0.5f - basePos.y) * textureCoordinate.w)
 		- texSize * ((wrapFactor - 1.0f) / 2.0f);
 
-	worldPosition = (rotation * basePos) * vec3(size,1) + centerPos;
+	worldPosition = rotation * (basePos * vec3(size,1)) + centerPos;
 
 	//Z coordinate has to be flipped
 	worldPosition.z = -worldPosition.z;
@@ -52,5 +54,5 @@ void main() {
 	inputAmbientMinimum = ambientMinimum;
 
 	gl_Position 
-		= transparency * MVP * vec4(worldPosition, 1);
+		= MVP * vec4(worldPosition, 1);
 }
