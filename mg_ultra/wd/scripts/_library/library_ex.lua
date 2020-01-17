@@ -7,7 +7,7 @@ registar = getGlobalRegistar()
 --Add a function within Entity class to allow components to be retrived 
 --by component name, returns nil if the entity does not have the specified component
 function Entity.get_component(self, component)
-	ptr = self:getComponent(component.type())
+	local ptr = self:getComponent(component.type())
 	if ptr == nil then
 		return nil
 	else
