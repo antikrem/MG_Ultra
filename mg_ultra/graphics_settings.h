@@ -26,6 +26,7 @@ struct GraphicsSettings {
 	atomic<int> countMaxSpriteBox = 1000;
 	atomic<int> countMaxUIBox = 1000;
 	atomic<int> countMaxDirectionalLights = 10;
+	atomic<int> countMaxPointLights = 100;
 
 	//target fps
 	atomic<int> targetFPS = 0;

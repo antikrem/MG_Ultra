@@ -21,6 +21,7 @@ GraphicsSettings::GraphicsSettings() {
 	countMaxSpriteBox = gfxSettings.get("max_renderable", "sprites", 1000);
 	countMaxUIBox = gfxSettings.get("max_renderable", "ui", 1000);
 	countMaxDirectionalLights = gfxSettings.get("max_renderable", "directional_lights", 10);
+	countMaxPointLights = gfxSettings.get("max_renderable", "point_lights", 100);
 
 	depthPeelingPasses = gfxSettings.get("renderer", "transparency_levels", 3);
 
