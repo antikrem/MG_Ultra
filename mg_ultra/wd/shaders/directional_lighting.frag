@@ -1,7 +1,7 @@
 #version 330 core
 #include "helper.glsl"
 
-//Combines geometry data and light values into scene for post processing
+//calculates light from directional lights
 uniform sampler2D spriteColour;
 uniform sampler2D spriteWorldPosition;
 uniform sampler2D normals;
