@@ -25,6 +25,8 @@ PLAYER_SHOOT_TIMING = 8
 this:get_component(ComponentMovement):set_speed_cap(PLAYER_MAX_VELOCITY)
 this:get_component(ComponentMovement):set_angle_cap(PLAYER_MAX_TURN_VELOCITY)
 
+this:get_component(ComponentPointLight):set_colour(0.9647, 0.8039, 0.3751)
+
 --values that represent the last dash direction
 g_lx, g_ly = 0,0
 --set to true when a dash is occuring

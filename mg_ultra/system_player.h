@@ -17,6 +17,8 @@
 #include "component_particle.h"
 #include "component_force_applier.h"
 
+#include "component_point_light.h"
+
 #include "functional_callback_system.h"
 
 class SystemPlayer : public System, public FunctionalCallbackSystem  {
@@ -76,6 +78,8 @@ public:
 		auto newComponent13 = new ComponentForceApplier(300.0f, 10.0f);
 		newComponent13->setCutThreashold(0.5f);
 		newEnt->addComponent(newComponent13->pullForEntity());
+		auto newComponent14 = new ComponentPointLight(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
+		newEnt->addComponent(newComponent14->pullForEntity());
 
 		//execute a script to initialise the player
 		executeAnyScript(debugName, 

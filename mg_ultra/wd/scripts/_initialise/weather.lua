@@ -26,4 +26,5 @@ Weather.start_heavy_rain = function()
 	EntityPool.get_cached_entity(EntityWeather):get_component(ComponentParticle):spawn_uniformly(1000)
 	Drift.set_wind_speed(14, -28, 0)
 	Audio.play_track("rain")
+	AmbientLight.set_strength(0.01)
 end
