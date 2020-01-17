@@ -9,6 +9,7 @@
 
 #include "system_graphics.h"
 #include "system_directional_lighting.h"
+#include "system_point_lighting.h"
 
 class GraphicsLink {
 private:
@@ -29,6 +30,8 @@ public:
 		sGraphics->setCamera(gState->getCamera());
 		auto sDirectionalLights = createSystem<SystemDirectionalLight>(registar);
 		sDirectionalLights->setGraphicsState(gState);
+		auto sPointLights = createSystem<SystemPointLight>(registar);
+		sPointLights->setGraphicsState(gState);
 	}
 	
 	//creates a system and return a pointer

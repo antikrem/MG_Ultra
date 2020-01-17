@@ -127,7 +127,7 @@ public:
 		// Read the Vertex Shader code from the file
 		std::string vertexShaderCode = os_kit::getFileAsString(vertPath);
 		if not(vertexShaderCode.size()) {
-			err::logMessage("GRAPHICS: Failed to load vertex shader at " + vertPath);
+			err::logMessage("GRAPHICS: ERROR, Failed to load vertex shader at " + vertPath);
 			return EXIT_FAILURE;
 		}
 
@@ -138,7 +138,7 @@ public:
 		// Read the Fragment Shader code from the file
 		std::string fragmentShaderCode = os_kit::getFileAsString(fragPath);
 		if not(fragmentShaderCode.size()) {
-			err::logMessage("GRAPHICS: Failed to load fragment shader at " + fragPath);
+			err::logMessage("GRAPHICS: ERROR, Failed to load fragment shader at " + fragPath);
 			return EXIT_FAILURE;
 		}
 
@@ -163,7 +163,7 @@ public:
 		if (!result) {
 			std::vector<char> vertexShaderErrorMessage(infoLogLength + 1);
 			glGetShaderInfoLog(vertexShaderID, infoLogLength, NULL, &vertexShaderErrorMessage[0]);
-			err::logMessage("GRAPHICS: Fatal Error, Failed to compile vertex shader: " + vertPath);
+			err::logMessage("GRAPHICS: ERROR, Failed to compile vertex shader: " + vertPath);
 			err::logMessage("Compilation log: " + string(vertexShaderErrorMessage.begin(), vertexShaderErrorMessage.end()));
 			return EXIT_FAILURE;
 		}
@@ -172,7 +172,7 @@ public:
 		if (!result) {
 			std::vector<char> fragmentShaderErrorMessage(infoLogLength + 1);
 			glGetShaderInfoLog(fragmentShaderID, infoLogLength, NULL, &fragmentShaderErrorMessage[0]);
-			err::logMessage("GRAPHICS: Fatal Error, Failed to compile fragment shader: " + fragPath);
+			err::logMessage("GRAPHICS: ERROR, Failed to compile fragment shader: " + fragPath);
 			err::logMessage("Compilation log: " + string(fragmentShaderErrorMessage.begin(), fragmentShaderErrorMessage.end()));
 			return EXIT_FAILURE;
 		}
@@ -189,7 +189,7 @@ public:
 		if (!result) {
 			std::vector<char> ProgramErrorMessage(infoLogLength + 1);
 			glGetProgramInfoLog(programID, infoLogLength, NULL, &ProgramErrorMessage[0]);
-			err::logMessage("GRAPHICS: Fatal Error, Failed to link program: " + fragPath);
+			err::logMessage("GRAPHICS: ERROR, Failed to link program: " + fragPath);
 			err::logMessage("Compilation log: " + string(ProgramErrorMessage.begin(), ProgramErrorMessage.end()));
 			return EXIT_FAILURE;
 		}
@@ -327,6 +327,7 @@ public:
 		loadProgramFromFile("front_depth_buffer");
 		loadProgramFromFile("ui");
 		loadProgramFromFile("directional_lighting");
+		loadProgramFromFile("point_lighting");
 		loadProgramFromFile("unified_lighting");
 		loadProgramFromFile("bloom");
 		loadProgramFromFile("gauss");

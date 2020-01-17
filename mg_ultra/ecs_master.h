@@ -109,6 +109,7 @@ class ECSMaster {
 		master->createSystem<SystemHealth>(registar);
 		master->createSystem<SystemTransparency>(registar);
 		master->createSystem<SystemWeather>(registar);
+		master->createSystem<SystemPointLightUpdate>(registar);
 
 		//ring 2
 		master = newSystemsMaster("m_gameplay");

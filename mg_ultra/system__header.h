@@ -18,6 +18,7 @@
 #include "system_health.h"
 #include "system_transparency.h"
 #include "system_weather.h"
+#include "system_point_lighting_update.h"
 
 //ring 2 - main game loop - most important main gameplay loop
 #include "system_timer.h"

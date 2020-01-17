@@ -186,6 +186,9 @@
     <ClCompile Include="math_ex.cpp">
       <Filter>Source Files\Support</Filter>
     </ClCompile>
+    <ClCompile Include="geometry_kit.cpp">
+      <Filter>Source Files\Support</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="graphics_state.h">
@@ -563,6 +566,24 @@
     <ClInclude Include="system_particle_boxes.h">
       <Filter>Header Files\ECS\Systems\Graphics System</Filter>
     </ClInclude>
+    <ClInclude Include="point_light.h">
+      <Filter>Header Files\Graphics\Unified Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="component_point_light.h">
+      <Filter>Header Files\ECS\Components\Graphics Component</Filter>
+    </ClInclude>
+    <ClInclude Include="system_point_lighting.h">
+      <Filter>Header Files\ECS\Systems\Graphics System</Filter>
+    </ClInclude>
+    <ClInclude Include="vao_point_light.h">
+      <Filter>Header Files\Graphics\VAO</Filter>
+    </ClInclude>
+    <ClInclude Include="geometry_kit.h">
+      <Filter>Header Files\Support</Filter>
+    </ClInclude>
+    <ClInclude Include="system_point_lighting_update.h">
+      <Filter>Header Files\ECS\Systems</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="wd\shaders\base.vert">
@@ -681,6 +702,12 @@
     </None>
     <None Include="wd\scripts\_initialise\weather.lua">
       <Filter>Resource Files\scripts\_initialise</Filter>
+    </None>
+    <None Include="wd\shaders\point_lighting.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="wd\shaders\point_lighting.vert">
+      <Filter>Resource Files\shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

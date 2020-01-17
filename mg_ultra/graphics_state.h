@@ -154,6 +154,22 @@ public:
 	int getDirectionalDataBufferSize() {
 		return glHandler->getDirectionalLightBuffer().getMaxSize();
 	}
+
+	///PointLightDataBuffer
+	//gets a pointer to a buffered map
+	PointLightData* getPointLightDataBuffer() {
+		return glHandler->getPointLightBuffer().getWriteBuffer();
+	}
+
+	//commit the directionalLightVAOBuffer buffer
+	void commitPointLightDataBuffer(int directionCount) {
+		glHandler->getPointLightBuffer().commitBuffer(directionCount);
+	}
+
+	//returns the size of the GLHandler's directionalLightVAOBuffer size
+	int getPointLightDataBufferSize() {
+		return glHandler->getPointLightBuffer().getMaxSize();
+	}
 };
 
 

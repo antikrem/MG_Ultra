@@ -209,6 +209,7 @@
     <ClCompile Include="events.cpp" />
     <ClCompile Include="frame_buffer.cpp" />
     <ClCompile Include="functional_callback_system.cpp" />
+    <ClCompile Include="geometry_kit.cpp" />
     <ClCompile Include="global_funcs.cpp" />
     <ClCompile Include="gl_handler.cpp" />
     <ClCompile Include="graphics_settings.cpp" />
@@ -249,6 +250,7 @@
     <ClInclude Include="component_damage.h" />
     <ClInclude Include="component_directional_light.h" />
     <ClInclude Include="component_driftable.h" />
+    <ClInclude Include="component_point_light.h" />
     <ClInclude Include="component_static_movement.h" />
     <ClInclude Include="component_extended_scripting.h" />
     <ClInclude Include="component_force_applier.h" />
@@ -265,6 +267,7 @@
     <ClInclude Include="component_transparency.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="cus_struct2.h" />
+    <ClInclude Include="geometry_kit.h" />
     <ClInclude Include="ini_parser.h" />
     <ClInclude Include="directional_light.h" />
     <ClInclude Include="ecs_master.h" />
@@ -294,6 +297,7 @@
     <ClInclude Include="particle_spawner.h" />
     <ClInclude Include="particle_type.h" />
     <ClInclude Include="performance_counter.h" />
+    <ClInclude Include="point_light.h" />
     <ClInclude Include="random_ex.h" />
     <ClInclude Include="reader.h" />
     <ClInclude Include="registar.h" />
@@ -329,6 +333,8 @@
     <ClInclude Include="system_player.h" />
     <ClInclude Include="shaders.h" />
     <ClInclude Include="str_kit.h" />
+    <ClInclude Include="system_point_lighting.h" />
+    <ClInclude Include="system_point_lighting_update.h" />
     <ClInclude Include="system_profiler.h" />
     <ClInclude Include="system_rotation.h" />
     <ClInclude Include="system_spawner.h" />
@@ -353,6 +359,7 @@
     <ClInclude Include="vao_boxdata.h" />
     <ClInclude Include="vao_buffer.h" />
     <ClInclude Include="vao_directional_light.h" />
+    <ClInclude Include="vao_point_light.h" />
     <ClInclude Include="vao_screenbuffer.h" />
     <ClInclude Include="vec_kit.h" />
     <ClInclude Include="_graphics_headers.h" />
@@ -393,6 +400,8 @@
     <None Include="wd\shaders\gauss.frag" />
     <None Include="wd\shaders\gauss.vert" />
     <None Include="wd\shaders\helper.glsl" />
+    <None Include="wd\shaders\point_lighting.frag" />
+    <None Include="wd\shaders\point_lighting.vert" />
     <None Include="wd\shaders\ui.frag" />
     <None Include="wd\shaders\ui.vert" />
     <None Include="wd\shaders\unified_lighting.frag" />

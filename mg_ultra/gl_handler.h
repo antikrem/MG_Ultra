@@ -15,7 +15,7 @@
 
 #include "vao_boxdata.h"
 #include "vao_directional_light.h"
-//#include "vao_point_light.h"
+#include "vao_point_light.h"
 #include "vao_screenbuffer.h"
 
 #include "ambient_illumination.h"
@@ -71,7 +71,7 @@ private:
 	VAOBoxData boxVAOBuffer;
 	VAOBoxData boxUIVAOBuffer;
 	VAODirectionalLight directionalLightVAOBuffer;
-//	VAOPointLight pointLightVAOBuffer;
+	VAOPointLight pointLightVAOBuffer;
 	VAOScreenBuffer screenVAO;
 
 	//number of factors to utilise
@@ -106,6 +106,7 @@ public:
 	: boxVAOBuffer(gSettings->countMaxSpriteBox), 
 	boxUIVAOBuffer(gSettings->countMaxUIBox),
 	directionalLightVAOBuffer(gSettings->countMaxDirectionalLights),
+	pointLightVAOBuffer(gSettings->countMaxPointLights),
 	periodBlock(gSettings->targetFPS) {
 		this->window = window;
 		this->gSettings = gSettings;
@@ -159,7 +160,7 @@ public:
 		lightingFrameBuffer.initialiseFrameBuffer(
 			gSettings, 
 			{ 
-				{"directionalLightScene", GL_RGBA16F} 
+				{"lightScene", GL_RGBA16F} 
 			},
 			DepthAttachmentOptions::ATTACH_NONE
 		);
@@ -228,12 +229,23 @@ public:
 
 
 			//SECOND PASS - calculate individual lighting components
-			shaderMaster->useShader("directional_lighting");
 			lightingFrameBuffer.bindBuffer();
 			glEnable(GL_BLEND);
-			lightingFrameBuffer.setBlendFunction("directionalLightScene", GL_FUNC_ADD, GL_ONE, GL_ONE);
+
+			lightingFrameBuffer.setBlendFunction("lightScene", GL_FUNC_ADD, GL_ONE, GL_ONE);
+			shaderMaster->useShader("directional_lighting");
 			shaderMaster->attachFrameBufferAsSource("directional_lighting", &geometryFrameBuffer);
 			directionalLightVAOBuffer.processGLSide();
+
+			glDepthMask(GL_FALSE);
+			shaderMaster->useShader("point_lighting");
+			shaderMaster->setUniformMatrix4F("point_lighting", "MVP", camera->getVPMatrix());
+			shaderMaster->attachFrameBufferAsSource("point_lighting", &geometryFrameBuffer);
+			shaderMaster->setUniformF("point_lighting", "viewport_w", (float)gSettings->screenWidth);
+			shaderMaster->setUniformF("point_lighting", "viewport_h", (float)gSettings->screenHeight);
+			pointLightVAOBuffer.processGLSide();
+			glDepthMask(GL_TRUE);
+
 			glDisable(GL_BLEND);
 			lightingFrameBuffer.unbindBuffer();
 
@@ -260,7 +272,7 @@ public:
 		screenVAO.processGLSide();
 		bloom.unbindBuffer();
 
-		//calculate bloom ping pong buffer
+		//calculate bloom ping pong buffer 
 		updateGaussianSamples();
 		postEffects.bindBuffer();
 		shaderMaster->useShader("gauss");
@@ -276,9 +288,7 @@ public:
 		shaderMaster->attachFrameBufferAsSource("gauss", &postEffects);
 		shaderMaster->setUniform2F("gauss", "offsetDirection", glm::vec2(0.0f, 1.0f));
 		screenVAO.processGLSide();
-		bloom.unbindBuffer();
-
-		glFlush();
+		bloom.unbindBuffer();  
 
 		//FIFTH PASS - render buffer to screenspace
 		//set the geometry frame buffer as the source
@@ -286,6 +296,10 @@ public:
 		shaderMaster->setUniformF("colour_correction", "exposure", gSettings->exposure);
 		shaderMaster->attachFrameBufferAsSource("colour_correction", &bloom);
 		screenVAO.processGLSide();
+
+		
+
+		glFlush();
 
 		//draw UI
 		shaderMaster->useShader("ui");
@@ -320,6 +334,9 @@ public:
 	}
 
 	//returns reference for pointLightVAOBuffer
+	VAOPointLight& getPointLightBuffer() {
+		return pointLightVAOBuffer;
+	}
 
 };
 
