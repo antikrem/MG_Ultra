@@ -59,6 +59,8 @@ class SystemLoader : public System {
 	map<int, string> cycleStrings;
 	string immediateScript = "";
 
+	map<string, string> templates;
+
 	//error stuff
 	int lineNumber;
 	string file;
@@ -111,18 +113,13 @@ class SystemLoader : public System {
 		cycleStrings.clear();
 	}
 
-	//converts registar values to next file path, returns empty string on error
-	string generateLoadTable() {
+	//creates a string to the folder of target to load
+	string getLoadFolderPath() {
 		string state;
 		registar->get("next_state", &state);
 
 		if (state == "title") {
-			//check load sequence is valid
-			if not(os_kit::fileExists("sequences\\title\\load_table.txt")) {
-				err::logMessage("LOAD: error, failed to load title sequence as the load_table is not found at: sequences\\title\\load_table.txt");
-				return "";
-			}
-			return "sequences\\title\\load_table.txt";
+			return "sequences\\title\\";
 		}
 		else if (state == "level") {
 			string campaign;
@@ -130,19 +127,26 @@ class SystemLoader : public System {
 			registar->get("next_campaign", &campaign);
 			registar->get("next_level", &level);
 
-			string path = "campaigns\\" + campaign + "\\" + to_string(level) + "\\load_table.txt";
-
-			if not(os_kit::fileExists(path)) {
-				err::logMessage("LOAD: error, failed to load requested parameters for last load state event, expected " + path);
-				return "";
-			}
-			else {
-				return path;
-			}
+			string path = "campaigns\\" + campaign + "\\" + to_string(level) + "\\";
+			return path;
 		}
 
 		err::logMessage("LOAD: error, failed to load, requested state parameter invalid: " + state);
 		return "";
+	}
+
+	//converts registar values to next file path, returns empty string on error
+	string generateLoadTable(const string& loadFolder) {
+		
+		if not(os_kit::fileExists(loadFolder + "load_table.txt")) {
+			err::logMessage(
+				"LOAD: error, failed to load requested parameters for last load state event, expected " + loadFolder + "load_table.txt"
+			);
+			return "";
+		}
+		else {
+			return loadFolder + "load_table.txt";
+		}
 	}
 
 	//error stuff
@@ -426,8 +430,10 @@ public:
 		//delete future ents
 		deleteAllFutureEnts();
 
+		string loadFolder = getLoadFolderPath();
+
 		//generate path to load table based on registar
-		string path = generateLoadTable();
+		string path = generateLoadTable(loadFolder);
 		//empty path is an error
 		if (path == "") {
 			return;
