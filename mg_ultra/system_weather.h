@@ -4,6 +4,7 @@
 #define __SYSTEM_WEATHER__
 
 #include "component_particle.h"
+#include "component_audio.h"
 
 #include "system.h"
 
@@ -26,6 +27,8 @@ public:
 		auto newEnt = shared_ptr<Entity>(new Entity(ETWeather));
 		auto newComponent = new ComponentParticle("weather_heavyrain");
 		newEnt->addComponent(newComponent->pullForEntity());
+		auto newComponent1 = new ComponentAudio();
+		newEnt->addComponent(newComponent1->pullForEntity());
 
 		pool->addEnt(newEnt, true);
 		err::logMessage("WEATHER: weather manager generated");
