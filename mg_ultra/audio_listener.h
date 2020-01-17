@@ -43,7 +43,7 @@ public:
 	void updateListener() {
 		unique_lock<mutex> lck(lock);
 		if (!updated) {
-			updated = false;
+			updated = true;
 			float orentation[6] = {
 				listenTarget.x, listenTarget.y, listenTarget.z,
 				upTarget.x, upTarget.y, upTarget.z
