@@ -81,8 +81,7 @@ public:
 		state["ComponentPointLight"].setClass(kaguya::UserdataMetatable<ComponentPointLight, Component>()
 			.setConstructors<ComponentPointLight()>()
 			.addFunction("set_colour", &ComponentPointLight::l_setColour)
-			.addFunction("set_constants", &ComponentPointLight::l_setColour)
-			.addFunction("set_constants", &ComponentPointLight::setParameters)
+			.addFunction("set_parameters", &ComponentPointLight::setParameters)
 			.addFunction("set_by_points", &ComponentPointLight::setByPoints)
 			.addOverloadedFunctions(
 				"create",
