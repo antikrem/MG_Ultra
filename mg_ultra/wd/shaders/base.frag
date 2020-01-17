@@ -29,7 +29,7 @@ layout(location = 5) out float nextFrontDepthBuffer;
 
 void main() {
 	//check if this fragment is infront of the current closest fragment 
-	float z = gl_FragCoord.z;
+	float z = gl_FragCoord.z / gl_FragCoord.w;
 
 	vec2 depthSampleTex = gl_FragCoord.xy / vec2(viewport_w, viewport_h);
 

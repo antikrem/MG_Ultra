@@ -1,5 +1,4 @@
-/*First shader that projects sprites unto 3d worldspace
-*/
+//First shader that projects sprites unto 3d worldspace
 #version 330 core
 
 //in
