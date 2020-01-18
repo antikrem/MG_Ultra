@@ -12,11 +12,11 @@
 #include "component.h"
 #include "entity_types.h"
 
-using namespace std;
+#include "scriptable_class.h"
 
 /*A colection of components, each entity represents everything discrete in the game
 */
-class Entity {
+class Entity : public ScriptableClass {
 private:
 	map<type_index, shared_ptr<Component>> components;
 	//when false the enemy will be removed from pool
@@ -27,9 +27,14 @@ private:
 	bool gcReady = false;
 
 public:
+	Entity() {
+		entityType = 0;
+	}
+
 	Entity(int type) {
 		entityType = type;
 	}
+	
 	//for scrpting purposes
 	shared_ptr<Component> l_getComponent(type_index type) {
 		return components.count(type) ? components[type] : nullptr;
@@ -98,6 +103,16 @@ public:
 	//exposes internal component map for evaluation
 	map<type_index, shared_ptr<Component>>& getMapComponent() {
 		return components;
+	}
+
+
+	void registerToLua(kaguya::State& state) override {
+		state["Entity"].setClass(
+			kaguya::UserdataMetatable<Entity>()
+			.setConstructors<Entity(int)>()
+			.addFunction("getComponent", &Entity::l_getComponent)
+			.addFunction("addComponent", &Entity::l_addComponent)
+		);
 	}
 };
 

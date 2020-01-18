@@ -13,8 +13,6 @@ Can be iterated over safely*/
 #include "entity.h"
 #include "subpooling.h"
 
-#include "scriptable_class.h"
-
 #include "algorithm_ex.h"
 
 /*This can be asyncly iterated over,

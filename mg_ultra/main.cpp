@@ -1,6 +1,3 @@
-// Include standard headers
-
-
 #include <stdio.h>
 #include <stdlib.h>
 

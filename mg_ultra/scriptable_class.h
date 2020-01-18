@@ -2,7 +2,6 @@
 #ifndef __SCRIPTABLE_CLASS__
 #define __SCRIPTABLE_CLASS__
 
-#include "script_unit.h"
 #include "global_funcs.h"
 #include "error.h"
 

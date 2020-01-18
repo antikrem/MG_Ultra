@@ -7,10 +7,11 @@
 #include <thread>
 #include <queue>
 
-#include "scriptable_class.h"
 #include "performance_counter.h"
 #include "events.h"
 #include "str_kit.h"
+
+#include "script_unit.h"
 
 vector<string> pullScriptErrors();
 

@@ -28,6 +28,8 @@
 #include "registar.h"
 #include "pool.h"
 
+#include "scriptable_class.h"
+
 //lua error reporting catch, no error when empty
 vector<string> luaErrorMessage;
 
@@ -68,12 +70,7 @@ ScriptMaster::ScriptMaster()
 	);
 
 	//register base entity
-	kaguya["Entity"].setClass(
-		kaguya::UserdataMetatable<Entity>()
-		.setConstructors<Entity(int)>()
-		.addFunction("getComponent", &Entity::l_getComponent)
-		.addFunction("addComponent", &Entity::l_addComponent)
-	);
+	forceLuaRegistration<Entity>(kaguya);
 
 	//register entity pool
 	forceLuaRegistration<EntityPool>(kaguya);
