@@ -4,14 +4,9 @@
 
 <<BackgroundMaster.add_new_layer("default", 1, 1000)
 
-<<AmbientLight.set_strength(0.1)
-
 <<Audio.request_load_file("click", "click.wav")
 <<Audio.flush_queue()
 <<Weather.start_heavy_rain()
-
-@cycle 20
-<<DirectionalLight.add_new(0, 0, 1, 1, 1, 1)
 
 @cycle 500
 ent 12
@@ -34,3 +29,5 @@ ent 12
 +health 10
 +timer
 
+@cycle 1000
+#basic_enemy 10 10

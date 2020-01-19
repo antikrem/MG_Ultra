@@ -1,0 +1,6 @@
+[basic_enemy]
+ent 12
++position %1 %2 0
++movement
+->set_velocity(5, 4)
++graphics default

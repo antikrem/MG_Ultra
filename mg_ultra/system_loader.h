@@ -35,10 +35,13 @@ ent [string] - ent table look up
 #include "os_kit.h"
 #include "script_master.h"
 #include "mmap.h"
+#include "algorithm_ex.h"
 
 #include "component_timer.h"
 #include "component_graphics.h"
 #include "component_position.h"
+
+#define REPLACEMENT_TOKEN "%"
 
 enum TargetSpecification {
 	TaSp_noTarget,
@@ -96,7 +99,9 @@ class SystemLoader : public System {
 
 	//execute cycle scipts to game
 	void executeBufferedCycleScripts(int cycle) {
-		for (auto it = cycleStrings.begin(); it != cycleStrings.end() && it->first < cycle; it = cycleStrings.begin()) {
+		for (auto it = cycleStrings.begin(); 
+				it != cycleStrings.end() && it->first < cycle; 
+				it = cycleStrings.begin()) {
 			auto& cycleScript = it->second;
 			executeScript(cycleScript);
 			cycleStrings.erase(it);
@@ -135,9 +140,8 @@ class SystemLoader : public System {
 		return "";
 	}
 
-	//converts registar values to next file path, returns empty string on error
-	string generateLoadTable(const string& loadFolder) {
-		
+	//returns a string to load table in given load folder, empty on error
+	string getLoadTablePath(const string& loadFolder) {
 		if not(os_kit::fileExists(loadFolder + "load_table.txt")) {
 			err::logMessage(
 				"LOAD: error, failed to load requested parameters for last load state event, expected " + loadFolder + "load_table.txt"
@@ -147,6 +151,17 @@ class SystemLoader : public System {
 		else {
 			return loadFolder + "load_table.txt";
 		}
+	}
+
+	//returns a string to template table, empty on error
+	string getTemplateTablePath(const string& loadFolder) {
+		if not(os_kit::fileExists(loadFolder + "template_table.txt")) {
+			return "";
+		}
+		else {
+			return loadFolder + "template_table.txt";
+		}
+
 	}
 
 	//error stuff
@@ -352,6 +367,57 @@ class SystemLoader : public System {
 		return true;
 	}
 
+	//evaluates a template
+	bool evaluateTemplate(string line, vector<string>& buffer) {
+		line = str_kit::trimString(line.substr(1));
+		vector<string> templateTokens = str_kit::splitOnToken(line, ' ');
+
+		if (!templates.count(templateTokens[0])) {
+			err::logMessage("LOAD: Error evaluating template at" + to_string(lineNumber) + " in file " + file +
+				+"\n --> Template name of " + templateTokens[0] + " was not found");
+			return false;
+		}
+		else {
+			string templateContents = templates[templateTokens[0]];
+
+			for (int i = 1; i < (int)templateTokens.size(); i++) {
+				templateContents = str_kit::replaceToken(
+					templateContents, 
+					REPLACEMENT_TOKEN + to_string(i),
+					templateTokens[i]
+				);
+			}
+
+			vector<string> temporary = str_kit::splitOnToken(templateContents, '\n');
+
+			extend(buffer, temporary);
+
+			return true;
+		}
+	}
+
+	//gets the current buffer and load file
+	//returns true if theres stuff to process
+	bool nextLine(ifstream& table, vector<string>& buffer, string& line) {
+		string currentLine;
+
+		if (buffer.size()) {
+			//move first member
+
+			currentLine = buffer[0];
+			buffer.erase(buffer.begin());
+
+			line.assign(currentLine);
+			return true;
+		}
+		else if (getline(table, currentLine)) {
+			line.assign(currentLine);
+			return true;
+		}
+
+		return false;
+	}
+
 	bool parseLoadTable(string filepath) {
 		file = filepath;
 		lineNumber = -1;
@@ -363,9 +429,10 @@ class SystemLoader : public System {
 		string componentName = "";
 
 		string line;
+		vector<string> buffer;
 		ifstream table(filepath);
 		bool valid = true;
-		while (getline(table, line) && valid) {
+		while (nextLine(table, buffer, line) && valid) {
 			lineNumber++;
 			line = str_kit::trimString(line);
 			if (str_kit::isTrivialString(line)) {
@@ -388,7 +455,7 @@ class SystemLoader : public System {
 			else if (line[0] == '+') {
 				valid = addComponent(line, ent, componentName);
 			}
-			//else check if a inline component script ahs been requested
+			//else check if a inline component script has been requested
 			else if (line.size() > 1 && line[0] == '-' && line[1] == '>') {
 				valid = inlineExecuteOnComponent(ent, componentName, line);
 			}
@@ -396,9 +463,51 @@ class SystemLoader : public System {
 			else if (line.size() > 1 && line[0] == '<' && line[1] == '<') {
 				valid = loadScriptLevel(line, currentTarget);
 			}
+			//else check for templtes
+			else if (line[0] == '#') {
+				valid = evaluateTemplate(line, buffer);
+			}
 		}
 
 		return valid;
+	}
+
+	//pushes a template to the current list
+	void addTemplate(const string& templateName, const string& templateBody) {
+		if (templateName.size()) {
+			templates[templateName] = templateBody;
+		}
+	}
+
+	//for use in parsing template files
+	void parseTemplateFile(string filepath) {
+		lineNumber = -1;
+
+		string line;
+		ifstream table(filepath);
+
+		string lastTemplateName = "";
+		string templateText = "";
+
+		while (getline(table, line)) {
+			lineNumber++;
+			line = str_kit::trimString(line);
+
+			//check for new template
+			if (str_kit::isTrivialString(line)) {
+				continue;
+			}
+			else if (line[0] == '[' && line[line.size() - 1] == ']') {
+				addTemplate(lastTemplateName, templateText);
+				lastTemplateName = line.substr(1, line.size() - 2);
+				templateText = "";
+			}
+			else {
+				templateText.append(line + "\n");
+			}
+		}
+
+		addTemplate(lastTemplateName, templateText);
 	}
 
 public:
@@ -426,18 +535,24 @@ public:
 			return;
 		}
 
-		/*a load request has been evaluated by system_gamestate_controller, and has to be completed*/
-		//delete future ents
-		deleteAllFutureEnts();
-
 		string loadFolder = getLoadFolderPath();
 
+		//check for templates
+		string templatePath = getTemplateTablePath(loadFolder);
+		if (templatePath.size()) {
+			parseTemplateFile(templatePath);
+		}
+
 		//generate path to load table based on registar
-		string path = generateLoadTable(loadFolder);
+		string path = getLoadTablePath(loadFolder);
 		//empty path is an error
 		if (path == "") {
 			return;
 		}
+
+		/*a load request has been evaluated by system_gamestate_controller, and has to be completed*/
+		//delete future ents
+		deleteAllFutureEnts();
 
 		if (!parseLoadTable(path)) {
 			err::logMessage("LOAD: Fatal Error, load aborted");
