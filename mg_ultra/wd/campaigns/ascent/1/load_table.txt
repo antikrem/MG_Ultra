@@ -30,4 +30,4 @@ ent 12
 +timer
 
 @cycle 1000
-#basic_enemy 10 10
+#basic_enemy 10 10 0 1

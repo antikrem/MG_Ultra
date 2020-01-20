@@ -2,5 +2,7 @@
 ent 12
 +position %1 %2 0
 +movement
-->set_velocity(5, 4)
+->set_velocity(%3, %4)
 +graphics default
++collision 200
++health 10

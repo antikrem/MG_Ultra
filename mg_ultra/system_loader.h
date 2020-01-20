@@ -403,7 +403,6 @@ class SystemLoader : public System {
 
 		if (buffer.size()) {
 			//move first member
-
 			currentLine = buffer[0];
 			buffer.erase(buffer.begin());
 
@@ -411,6 +410,7 @@ class SystemLoader : public System {
 			return true;
 		}
 		else if (getline(table, currentLine)) {
+			lineNumber++;
 			line.assign(currentLine);
 			return true;
 		}
@@ -433,7 +433,7 @@ class SystemLoader : public System {
 		ifstream table(filepath);
 		bool valid = true;
 		while (nextLine(table, buffer, line) && valid) {
-			lineNumber++;
+
 			line = str_kit::trimString(line);
 			if (str_kit::isTrivialString(line)) {
 				continue;
