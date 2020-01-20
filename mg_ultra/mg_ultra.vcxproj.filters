@@ -100,6 +100,9 @@
     <Filter Include="Header Files\Static Movement">
       <UniqueIdentifier>{387b8395-6d35-48eb-b558-33ef6e75c892}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\scripts\bullet_system">
+      <UniqueIdentifier>{7f3715d1-c41b-49e7-9989-f2afe73cf3b6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -590,6 +593,9 @@
     <ClInclude Include="fog.h">
       <Filter>Header Files\Graphics\Unified Lighting</Filter>
     </ClInclude>
+    <ClInclude Include="component_offset_master.h">
+      <Filter>Header Files\ECS\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="wd\shaders\base.vert">
@@ -714,6 +720,9 @@
     </None>
     <None Include="wd\shaders\point_lighting.vert">
       <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="wd\scripts\bullet_system\bullet_spawners.lua">
+      <Filter>Resource Files\scripts\bullet_system</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

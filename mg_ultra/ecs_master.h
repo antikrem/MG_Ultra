@@ -55,9 +55,12 @@ class ECSMaster {
 	master0: ECS_meta_master :
 		-system_garbage_collector
 		-system_bounds_control
+		-system_profiler
+	
+	master1: ECS_higher_meta_master :
 		-system_multi_ent
 
-	master1: non-essential gameplay
+	master2: non-essential gameplay
 	    -system_animation
 		-system_text
 		-system_console
@@ -67,7 +70,7 @@ class ECSMaster {
 		-system_transparency
 		-system_weather
 
-	master2: main gameloop
+	master3: main gameloop
 	    -system_timer
 		-system_player
 		-system_camera
@@ -75,13 +78,13 @@ class ECSMaster {
 		-system_rotation
 	    -system_game_state_control
 
-	master3: loading
+	master4: loading
 		-system_loader
 
-	master4: collision
+	master5: collision
 		-system_collision
 
-	master5: audio 
+	master6: audio 
 		-system_audio
 		-system_music
 	*/
@@ -92,10 +95,14 @@ class ECSMaster {
 		master->setTimer(10);
 		master->createSystem<SystemGarbageCollector>(registar);
 		master->createSystem<SystemBoundsControl>(registar);
-		master->createSystem<SystemMultiEnt>(registar);
 		master->createSystem<SystemProfiler>(registar);
 
 		//ring 1
+		master = newSystemsMaster("m_h_meta");
+		master->setTimer(100);
+		master->createSystem<SystemMultiEnt>(registar);
+
+		//ring 2
 		master = newSystemsMaster("m_graphics2");
 		master->setTimer(100);
 		auto animationSystem = master->createSystem<SystemAnimation>(registar);
@@ -111,7 +118,7 @@ class ECSMaster {
 		master->createSystem<SystemWeather>(registar);
 		master->createSystem<SystemPointLightUpdate>(registar);
 
-		//ring 2
+		//ring 3
 		master = newSystemsMaster("m_gameplay");
 		master->setTimer(100);
 		master->createSystem<SystemTimer>(registar);
@@ -121,24 +128,24 @@ class ECSMaster {
 		master->createSystem<SystemRotation>(registar);
 		master->createSystem<SystemGameStateControl>(registar);
 
-		//ring 3
+		//ring 4
 		master = newSystemsMaster("m_loader");
 		master->setTimer(10);
 		master->createSystem<SystemLoader>(registar);
 
-		//ring 4
+		//ring 5
 		master = newSystemsMaster("m_collision");
 		master->setTimer(50);
 		master->createSystem<SystemCollision>(registar);
 
-		//ring 5
+		//ring 6
 		master = newSystemsMaster("m_audio");
 		master->setTimer(50);
 		auto audioSystem = master->createSystem<SystemAudio>(registar);
 		audioSystem->setAudioMaster(aMaster);
 		master->createSystem<SystemMusic>(registar);
 
-		//ring 6
+		//ring 7
 		master = newSystemsMaster("m_particles");
 		master->setTimer(100);
 		auto particleSpawnerSystem = master->createSystem<SystemParticleSpawner>(registar);

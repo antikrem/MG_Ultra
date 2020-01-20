@@ -251,6 +251,7 @@
     <ClInclude Include="component_damage.h" />
     <ClInclude Include="component_directional_light.h" />
     <ClInclude Include="component_driftable.h" />
+    <ClInclude Include="component_offset_master.h" />
     <ClInclude Include="component_point_light.h" />
     <ClInclude Include="component_static_movement.h" />
     <ClInclude Include="component_extended_scripting.h" />
@@ -369,6 +370,7 @@
   <ItemGroup>
     <None Include="wd\scripts\backgrounds\background_master.lua" />
     <None Include="wd\scripts\backgrounds\initialise_background_master.lua" />
+    <None Include="wd\scripts\bullet_system\bullet_spawners.lua" />
     <None Include="wd\scripts\camera\camera.lua" />
     <None Include="wd\scripts\camera\initialise_camera.lua" />
     <None Include="wd\scripts\player\initialise_player.lua" />

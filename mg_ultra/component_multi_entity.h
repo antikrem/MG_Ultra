@@ -10,6 +10,9 @@ Works in conjunction with component_spawner*/
 #include "constants.h"
 #include "algorithm_ex.h"
 
+#include "component_position.h"
+#include "component_offset_master.h"
+
 #include "scriptable_class.h"
 
 //forward declaraction that entities exist
@@ -33,6 +36,20 @@ public:
 		unique_lock<shared_mutex> lck(lock);
 		//erase dead entities
 		erase_sequential_if(internalEntities, [](shared_ptr<Entity> &ent) { return !ent->getFlag(); });
+	}
+
+	//updates any sub entities with ComponentOffsetMaster
+	void updateOffsetSubs(Point3 masterPosition) {
+		unique_lock<shared_mutex> lck(lock);
+		for (auto i : internalEntities) {
+			auto subPos = i->getComponent<ComponentPosition>();
+			auto subOff = i->getComponent<ComponentOffsetMaster>();
+			if (subPos && subOff) {
+				subPos->setPosition(
+					subPos->getPosition3() + subOff->updatePositionalOffset(masterPosition)
+				);
+			}
+		}
 	}
 
 	//resets access iterator

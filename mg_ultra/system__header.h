@@ -5,10 +5,12 @@
 //ring 0 - meta ECS management systems
 #include "system_garbage_collector.h"
 #include "system_bounds_control.h"
-#include "system_multi_ent.h"
 #include "system_profiler.h"
 
-//ring 1 - non-gameplay essential systems
+//ring 0 - higher meta ECS management systems
+#include "system_multi_ent.h"
+
+//ring 2 - non-gameplay essential systems
 #include "system_animation.h"
 #include "system_text.h"
 #include "system_background.h"
@@ -20,7 +22,7 @@
 #include "system_weather.h"
 #include "system_point_lighting_update.h"
 
-//ring 2 - main game loop - most important main gameplay loop
+//ring 3 - main game loop - most important main gameplay loop
 #include "system_timer.h"
 #include "system_player.h"
 #include "system_camera.h"
@@ -28,17 +30,17 @@
 #include "system_rotation.h"
 #include "system_game_state_control.h"
 
-//ring 3 - loading
+//ring 4 - loading
 #include "system_loader.h"
 
-//ring 4 - collision
+//ring 5 - collision
 #include "system_collision.h"
 
-//ring 5 - audio
+//ring 6 - audio
 #include "system_audio.h"
 #include "system_music.h"
 
-//ring 6 - particles
+//ring 7 - particles
 #include "system_particle_spawner.h"
 #include "system_particle_boxes.h"
 #include "system_force_applier.h"
