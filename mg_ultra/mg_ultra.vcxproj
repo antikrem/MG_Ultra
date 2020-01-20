@@ -207,6 +207,7 @@
     <ClCompile Include="entity_types.cpp" />
     <ClCompile Include="error.cpp" />
     <ClCompile Include="events.cpp" />
+    <ClCompile Include="fog.cpp" />
     <ClCompile Include="frame_buffer.cpp" />
     <ClCompile Include="functional_callback_system.cpp" />
     <ClCompile Include="geometry_kit.cpp" />
@@ -267,6 +268,7 @@
     <ClInclude Include="component_transparency.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="cus_struct2.h" />
+    <ClInclude Include="fog.h" />
     <ClInclude Include="geometry_kit.h" />
     <ClInclude Include="ini_parser.h" />
     <ClInclude Include="directional_light.h" />

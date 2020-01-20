@@ -12,6 +12,7 @@
 #include "texture.h"
 #include "script_master.h"
 #include "gl_handler.h"
+#include "fog.h"
 #include "ambient_illumination.h"
 #include "audio_master.h"
 #include "particle_master.h"
@@ -118,6 +119,16 @@ void registerGlobalFunctions(kaguya::State &kaguya) {
 
 	//animation master
 	kaguya["queryAnimation"] = g_aniquery::getAnimationSize;
+	
+	//fog
+	kaguya["setFogColour"] = g_fog::l_setFogColour;
+	kaguya["getFogColour"] = g_fog::l_getFogColour;
+	kaguya["setFogStrength"] = g_fog::setFogStrength;
+	kaguya["getFogStrength"] = g_fog::getFogStrength;
+	kaguya["setFogStart"] = g_fog::setFogStart;
+	kaguya["getFogStart"] = g_fog::getFogStart;
+	kaguya["setFogMax"] = g_fog::setFogMax;
+	kaguya["getFogMax"] = g_fog::getFogMax;
 
 	//ambient lighting
 	kaguya["setAmbientLightStrength"] = g_ambient::setStrength;

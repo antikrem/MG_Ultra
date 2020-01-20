@@ -18,6 +18,7 @@
 #include "vao_point_light.h"
 #include "vao_screenbuffer.h"
 
+#include "fog.h"
 #include "ambient_illumination.h"
 
 //max size for guassian blur values
@@ -202,7 +203,7 @@ public:
 		int chain;
 
 		for (int i = 0; i < gSettings->depthPeelingPasses; i++) {
-			//FIRST PASS - render basic stuff
+			//FIRST STAGE - Render peeled geometry
 			shaderMaster->useShader("base");
 			shaderMaster->setUniformF("base", "viewport_w", (float)gSettings->screenWidth);
 			shaderMaster->setUniformF("base", "viewport_h", (float)gSettings->screenHeight);
@@ -228,7 +229,7 @@ public:
 			frontDepthFrameBuffer.unbindBuffer();
 
 
-			//SECOND PASS - calculate individual lighting components
+			//SECOND STAGE - Calculate derived light
 			lightingFrameBuffer.bindBuffer();
 			glEnable(GL_BLEND);
 
@@ -249,11 +250,15 @@ public:
 			glDisable(GL_BLEND);
 			lightingFrameBuffer.unbindBuffer();
 
-			//THIRD PASS - combine all light values into post processing buffer
+			//THIRD STAGE - combine all light values into post processing buffer
 			shaderMaster->useShader("unified_lighting");
 			shaderMaster->setUniformF("unified_lighting", "ambientStrength", g_ambient::getStrength());
 			shaderMaster->setUniform3F("unified_lighting", "ambientColor", g_ambient::getColour().getVec3());
-			
+			shaderMaster->setUniformF("unified_lighting", "fogStrength", g_fog::getFogStrength());
+			shaderMaster->setUniformF("unified_lighting", "fogClip", g_fog::getFogStart());
+			shaderMaster->setUniformF("unified_lighting", "fogMax", g_fog::getFogMax());
+			shaderMaster->setUniform3F("unified_lighting", "fogColour", g_fog::getFogColour().getVec3());
+
 			postEffects.bindNoClearBuffer();
 			glEnable(GL_BLEND);
 			postEffects.setBlendFunction("scene", GL_FUNC_ADD, GL_ONE_MINUS_DST_ALPHA, GL_ONE);
@@ -262,9 +267,11 @@ public:
 			screenVAO.processGLSide();
 			glDisable(GL_BLEND);
 			postEffects.unbindBuffer();
+
+			glFlush();
 		}
 
-		//FOURTH PASS - split brights from lows for bloom
+		//FOURTH PASS - Apply post effects, starting with bloom
 		bloom.bindBuffer();
 		shaderMaster->useShader("bloom");
 		shaderMaster->attachFrameBufferAsSource("bloom", &postEffects);
@@ -296,10 +303,6 @@ public:
 		shaderMaster->setUniformF("colour_correction", "exposure", gSettings->exposure);
 		shaderMaster->attachFrameBufferAsSource("colour_correction", &bloom);
 		screenVAO.processGLSide();
-
-		
-
-		glFlush();
 
 		//draw UI
 		shaderMaster->useShader("ui");

@@ -189,6 +189,9 @@
     <ClCompile Include="geometry_kit.cpp">
       <Filter>Source Files\Support</Filter>
     </ClCompile>
+    <ClCompile Include="fog.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="graphics_state.h">
@@ -583,6 +586,9 @@
     </ClInclude>
     <ClInclude Include="system_point_lighting_update.h">
       <Filter>Header Files\ECS\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="fog.h">
+      <Filter>Header Files\Graphics\Unified Lighting</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
