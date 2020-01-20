@@ -22,9 +22,17 @@ Weather = {}
 
 --starts heavy rain
 Weather.start_heavy_rain = function()
+	--Set weather flag 
 	registar:update("weather_type", WeatherTypes.HeavyRain)
+
+	--Start rain
 	EntityPool.get_cached_entity(EntityWeather):get_component(ComponentParticle):spawn_uniformly(1000)
 	EntityPool.get_cached_entity(EntityWeather):get_component(ComponentAudio):play("rain")
 	Drift.set_wind_speed(14, -28, 0)
+
+	--Moody lights and fog
 	AmbientLight.set_strength(0.01)
+	Fog.set_colour(0.4, 0.4, 0.4)
+	Fog.set_strength(0.0017)
+	Fog.set_starting_depth(650)
 end
