@@ -127,6 +127,13 @@ public:
 
 		err::logMessage("GRAPHICS: Initialising graphics subsystems...");
 
+		const GLubyte* versionName = glGetString(GL_VERSION);
+		const GLubyte* rendererName = glGetString(GL_RENDERER);
+
+		err::logMessage(
+			"GRAPHICS: Running " + string((const char*)versionName) + " on " + string((const char*)rendererName)
+		);
+
 		glewExperimental = true;
 		if (glewInit() != GLEW_OK) {
 			return EXIT_FAILURE;
