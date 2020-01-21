@@ -112,6 +112,7 @@ public:
 			.setConstructors<Entity(int)>()
 			.addFunction("getComponent", &Entity::l_getComponent)
 			.addFunction("addComponent", &Entity::l_addComponent)
+			.addFunction("kill", &Entity::killEntity)
 		);
 	}
 };
