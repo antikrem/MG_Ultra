@@ -29,21 +29,24 @@ void main() {
 	//derive texel strength, considering fog
 	vec4 texelColor = texture(spriteColour, uv);
 
+	float minAmb =  texture(minimumAmbient, uv).r;
+
+	//ambient light is affected by fog
+	//however, attaching a minimum ambient component
+	//will reduce fog
 	texelColor.rgb = mix(
 		fogColour, 
 		texelColor.rgb,
-		clamp(1.0 / exp((depth - fogClip) * fogStrength), 1 - fogMax,1)
+		clamp(1.0 / exp((depth - fogClip) * fogStrength), clamp(1 - fogMax, minAmb, 1), 1)
 	);
 	
 	float ls = texture(lightingSensitivity, uv).r;
-	vec3 ambient = max(ls * ambientStrength, texture(minimumAmbient, uv).r) * texelColor.xyz * ambientColor;
+	vec3 ambient = max(ls * ambientStrength, minAmb) * texelColor.xyz * ambientColor;
 	vec3 light = ls * texture(lightScene, uv).rgb;
 
-	
 	//combine individual components
 	vec3 sceneColour = 
-		ambient + light + vec3(0);
-		
-
+		ambient + light;
+	
 	color = vec4(sceneColour, texelColor.a);
 }
