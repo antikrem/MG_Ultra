@@ -246,6 +246,8 @@ public:
 			directionalLightVAOBuffer.processGLSide();
 
 			glDepthMask(GL_FALSE);
+			glEnable(GL_CULL_FACE);
+			glCullFace(GL_FRONT);
 			shaderMaster->useShader("point_lighting");
 			shaderMaster->setUniformMatrix4F("point_lighting", "MVP", camera->getVPMatrix());
 			shaderMaster->attachFrameBufferAsSource("point_lighting", &geometryFrameBuffer);
@@ -253,6 +255,7 @@ public:
 			shaderMaster->setUniformF("point_lighting", "viewport_h", (float)gSettings->screenHeight);
 			pointLightVAOBuffer.processGLSide();
 			glDepthMask(GL_TRUE);
+			glDisable(GL_CULL_FACE);
 
 			glDisable(GL_BLEND);
 			lightingFrameBuffer.unbindBuffer();
