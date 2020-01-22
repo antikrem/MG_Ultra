@@ -25,6 +25,7 @@
 #include "component_static_movement.h"
 #include "component_point_light.h"
 #include "component_offset_master.h"
+#include "component_min_ambient.h"
 
 #include "registar.h"
 #include "pool.h"
@@ -103,6 +104,7 @@ ScriptMaster::ScriptMaster()
 	forceLuaRegistration<ComponentStaticMovement>(kaguya);
 	forceLuaRegistration<ComponentPointLight>(kaguya);
 	forceLuaRegistration<ComponentOffsetMaster>(kaguya);
+	forceLuaRegistration<ComponentMinAmbient>(kaguya);
 
 	//set contextual script functions
 	kaguya["getEntityPool"] = getGlobalPool;

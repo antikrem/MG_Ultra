@@ -9,6 +9,7 @@
 #include "component_text.h"
 #include "component_camera.h"
 #include "component_transparency.h"
+#include "component_min_ambient.h"
 
 #include "camera.h"
 #include "graphics_state.h"
@@ -60,11 +61,17 @@ public:
 			auto pos = getComponent<ComponentPosition>(components);
 			auto gra = getComponent<ComponentGraphics>(components);
 			auto tra = getComponent<ComponentTransparency>(components);
+			auto amb = getComponent<ComponentMinAmbient>(components);
 
 			bool toDraw;
 			AnimationState state = gra->getAnimationState(&toDraw, pos->getPosition3());
+			
 			if (tra) {
 				state.transparency = tra->getCurrent();
+			}
+
+			if (amb) {
+				state.minimumAmbient = amb->getValue();
 			}
 
 			if (toDraw && boxCount < bufferSize) {
