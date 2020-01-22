@@ -104,6 +104,7 @@ public:
 		this->a = a;
 		this->b = b;
 		this->c = c;
+		updateExtinctionRange();
 	}
 
 	void setColour(const Point3& colour) {
