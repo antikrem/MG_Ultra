@@ -26,13 +26,18 @@ Weather.start_heavy_rain = function()
 	registar:update("weather_type", WeatherTypes.HeavyRain)
 
 	--Start rain
-	EntityPool.get_cached_entity(EntityWeather):get_component(ComponentParticle):spawn_uniformly(1000)
+	EntityPool.get_cached_entity(EntityWeather):get_component(ComponentParticle):spawn_uniformly(750)
 	EntityPool.get_cached_entity(EntityWeather):get_component(ComponentAudio):play("rain")
-	Drift.set_wind_speed(14, -28, 0)
+	Drift.set_wind_speed(10, -24, 0)
 
 	--Moody lights and fog
 	AmbientLight.set_strength(0.01)
 	Fog.set_colour(0.4, 0.4, 0.4)
-	Fog.set_strength(0.0017)
-	Fog.set_starting_depth(650)
+	Fog.set_strength(0.00165)
+	Fog.set_starting_depth(400)
+
+	local p = EntityPool.get_player()
+	if p then p:get_component(ComponentPointLight):set_parameters(0.00078, 0, 2) end
+
+	PostEffects.Bloom.set_threshold(0.2)
 end

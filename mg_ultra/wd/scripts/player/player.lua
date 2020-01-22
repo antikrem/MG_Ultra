@@ -117,6 +117,8 @@ if cInput:query_down("shoot") == 1 and
 		cSpawner:add_component(ComponentPosition.create(x, y))
 		cSpawner:add_component(ComponentCollision.create(100))
 		cSpawner:add_component(ComponentDamage.create(10))
+		cSpawner:add_component(ComponentOffsetMaster.create())
+		cSpawner:add_component(ComponentMinAmbient.create(1.0))
 
 		local bulletGComponents = ComponentGraphics.create("player")
 		bulletGComponents:set_animation(1)
