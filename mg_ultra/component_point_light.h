@@ -30,6 +30,11 @@ public:
 		: pointLight(Point3(x, y, z), Point3(r, g, b)) {
 	}
 
+	ComponentPointLight(float x, float y, float z, float r, float g, float b, float aP, float bP, float cP)
+		: pointLight(Point3(x, y, z), Point3(r, g, b)) {
+		setParameters(aP, bP, cP);
+	}
+
 	PointLightData getPointData() {
 		return pointLight.getData();
 	}
@@ -86,7 +91,8 @@ public:
 			.addOverloadedFunctions(
 				"create",
 				ScriptableClass::create<ComponentPointLight, float, float, float>,
-				ScriptableClass::create<ComponentPointLight, float, float, float, float, float, float>
+				ScriptableClass::create<ComponentPointLight, float, float, float, float, float, float>,
+				ScriptableClass::create<ComponentPointLight, float, float, float, float, float, float, float, float, float>
 			)
 			.addStaticFunction("type", &getType<ComponentPointLight>)
 			.addStaticFunction("cast", &Component::castDown<ComponentPointLight>)
