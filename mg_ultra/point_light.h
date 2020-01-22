@@ -57,9 +57,9 @@ private:
 	atomic<Point3> colour;
 
 	//values for generating 
-	atomic<float> a = 0.0022f;
-	atomic<float> b = 0.01f;
-	atomic<float> c = 4.0f;
+	atomic<float> a = 0.0f;
+	atomic<float> b = 0.0f;
+	atomic<float> c = (2.0f / POINT_LIGHT_EXTINCTION_LEVEL); //Choose c s.t. its always less than extinction 
 
 	atomic<float> extinctionRange;
 
