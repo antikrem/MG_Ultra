@@ -24,10 +24,22 @@ private:
 	shared_mutex lock;
 	vector<shared_ptr<Entity>> internalEntities;
 
+	Point3 lastMasterPosition = Point3(0.0f);
+
 public:
 	//adds a shared_ptr to this MultiEntities' internal store
 	void addEntity(shared_ptr<Entity> newEnt) {
 		unique_lock<shared_mutex> lck(lock);
+
+		auto subPos = newEnt->getComponent<ComponentPosition>();
+		auto subOff = newEnt->getComponent<ComponentOffsetMaster>();
+
+		if (subPos && subOff) {
+			subPos->setPosition(
+				subPos->getPosition3() + subOff->updatePositionalOffset(lastMasterPosition)
+			);
+		}
+
 		internalEntities.push_back(newEnt);
 	}
 
@@ -41,6 +53,7 @@ public:
 	//updates any sub entities with ComponentOffsetMaster
 	void updateOffsetSubs(Point3 masterPosition) {
 		unique_lock<shared_mutex> lck(lock);
+		lastMasterPosition = masterPosition;
 		for (auto i : internalEntities) {
 			auto subPos = i->getComponent<ComponentPosition>();
 			auto subOff = i->getComponent<ComponentOffsetMaster>();

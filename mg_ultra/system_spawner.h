@@ -39,7 +39,8 @@ public:
 
 		else {
 			for (auto i : ents) {
-				multient->addEntity(entityPool->addEnt(i, false));
+				shared_ptr<Entity> ent = entityPool->addEnt(i, false);
+				multient->addEntity(ent);
 			}
 		}
 
