@@ -247,6 +247,7 @@
     <ClInclude Include="component_audio.h" />
     <ClInclude Include="component_bullet_master.h" />
     <ClInclude Include="component_camera.h" />
+    <ClInclude Include="component_clamp_position.h" />
     <ClInclude Include="component_collision.h" />
     <ClInclude Include="component_console.h" />
     <ClInclude Include="component_damage.h" />

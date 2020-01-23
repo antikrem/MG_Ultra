@@ -11,6 +11,7 @@ component position*/
 #include "component_position.h"
 #include "component_movement.h"
 #include "component_static_movement.h"
+#include "component_clamp_position.h"
 
 class SystemMovement : public System {
 
@@ -26,14 +27,21 @@ public:
 		auto pos = getComponent<ComponentPosition>(components);
 		auto mov = getComponent<ComponentMovement>(components);
 		auto sta = getComponent<ComponentStaticMovement>(components);
+		auto cla = getComponent<ComponentClampPosition>(components);
 
 		if (mov->getUpdateInSystem()) {
 			Point3 currentPos = pos->getPosition3();
 			if (sta) {
 				currentPos = sta->getUpdatedPosition(mov, currentPos);
 			}
+
+			currentPos = mov->getUpdatedPosition(currentPos);
+
+			if (cla) {
+				currentPos = cla->applyClamp(currentPos);
+			}
 			
-			pos->setPosition(mov->getUpdatedPosition(currentPos));
+			pos->setPosition(currentPos);
 			
 		}
 		
