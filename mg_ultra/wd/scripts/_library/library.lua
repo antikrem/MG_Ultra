@@ -33,7 +33,8 @@ function print(...)
 
 	--handle single input of type table, for doing things like printing classes
 	if size == 1 and type(select(1, ...)) == "table" then
-		print_table(select(1, ...))
+		printAdd(select(1, ...).__name)
+		printPush()
 		return
 	end
 	
