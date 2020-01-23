@@ -12,6 +12,7 @@ Works in conjunction with component_spawner*/
 
 #include "component_position.h"
 #include "component_offset_master.h"
+#include "component_offset_once.h"
 
 #include "scriptable_class.h"
 
@@ -33,10 +34,16 @@ public:
 
 		auto subPos = newEnt->getComponent<ComponentPosition>();
 		auto subOff = newEnt->getComponent<ComponentOffsetMaster>();
+		auto subOffOnce = newEnt->getComponent<ComponentOffsetOnce>();
 
 		if (subPos && subOff) {
 			subPos->setPosition(
 				subPos->getPosition3() + subOff->updatePositionalOffset(lastMasterPosition)
+			);
+		}
+		else if (subPos && subOffOnce) {
+			subPos->setPosition(
+				subPos->getPosition3() + lastMasterPosition
 			);
 		}
 

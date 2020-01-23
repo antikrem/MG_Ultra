@@ -25,7 +25,9 @@
 #include "component_static_movement.h"
 #include "component_point_light.h"
 #include "component_offset_master.h"
+#include "component_offset_once.h"
 #include "component_min_ambient.h"
+#include "component_bullet_master.h"
 
 #include "registar.h"
 #include "pool.h"
@@ -104,7 +106,9 @@ ScriptMaster::ScriptMaster()
 	forceLuaRegistration<ComponentStaticMovement>(kaguya);
 	forceLuaRegistration<ComponentPointLight>(kaguya);
 	forceLuaRegistration<ComponentOffsetMaster>(kaguya);
+	forceLuaRegistration<ComponentOffsetOnce>(kaguya);
 	forceLuaRegistration<ComponentMinAmbient>(kaguya);
+	forceLuaRegistration<ComponentBulletMaster>(kaguya);
 
 	//set contextual script functions
 	kaguya["getEntityPool"] = getGlobalPool;
@@ -123,6 +127,7 @@ ScriptMaster::ScriptMaster()
 	quickLoadAndExecute("scripts/_initialise/post_effects.lua");
 	quickLoadAndExecute("scripts/_initialise/weather.lua");
 
+	quickLoadAndExecute("scripts/bullet_system/bullet_spawners.lua");
 
 	globalScriptMasterPtr = this;
 }

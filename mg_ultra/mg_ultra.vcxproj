@@ -245,6 +245,7 @@
     <ClInclude Include="collision.h" />
     <ClInclude Include="component_animation.h" />
     <ClInclude Include="component_audio.h" />
+    <ClInclude Include="component_bullet_master.h" />
     <ClInclude Include="component_camera.h" />
     <ClInclude Include="component_collision.h" />
     <ClInclude Include="component_console.h" />
@@ -253,6 +254,7 @@
     <ClInclude Include="component_driftable.h" />
     <ClInclude Include="component_min_ambient.h" />
     <ClInclude Include="component_offset_master.h" />
+    <ClInclude Include="component_offset_once.h" />
     <ClInclude Include="component_point_light.h" />
     <ClInclude Include="component_static_movement.h" />
     <ClInclude Include="component_extended_scripting.h" />
@@ -317,6 +319,7 @@
     <ClInclude Include="system_audio.h" />
     <ClInclude Include="system_background.h" />
     <ClInclude Include="system_bounds_control.h" />
+    <ClInclude Include="system_bullet_master.h" />
     <ClInclude Include="system_camera.h" />
     <ClInclude Include="system_collision.h" />
     <ClInclude Include="system_console.h" />
