@@ -43,6 +43,9 @@ ent [string] - ent table look up
 
 #define REPLACEMENT_TOKEN "%"
 
+//token for prelevel script
+#define PRELEVL_SCRIPT "prelevel.lua" 
+
 enum TargetSpecification {
 	TaSp_noTarget,
 	TaSp_cycle,
@@ -88,9 +91,15 @@ class SystemLoader : public System {
 
 	//executes a script
 	//returns sucess
-	bool executeScript(const string& script) {
+	bool executeScript(const string& script, bool isPreLevel = false) {
 		ScriptUnit su(SS_inlineLoader, script);
-		su.addDebugData(" in " + file + " at line " + to_string(lineNumber) + " ");
+		if (!isPreLevel) {
+			su.addDebugData(" in " + file + " at line " + to_string(lineNumber) + " ");
+		}
+		else {
+			su.addDebugData(" in level preload");
+		}
+		
 		sc.reset();
 		su.attachSuccessCallback(&sc);
 		g_script::executeScriptUnit(su);
@@ -162,6 +171,16 @@ class SystemLoader : public System {
 			return loadFolder + "template_table.txt";
 		}
 
+	}
+
+	//returns a string to pre level script
+	string getPrelevelScript(const string& loadFolder) {
+		if not(os_kit::fileExists(loadFolder + PRELEVL_SCRIPT)) {
+			return "";
+		}
+		else {
+			return loadFolder + PRELEVL_SCRIPT;
+		}
 	}
 
 	//error stuff
@@ -510,6 +529,8 @@ class SystemLoader : public System {
 		addTemplate(lastTemplateName, templateText);
 	}
 
+
+
 public:
 	SystemLoader() {
 		debugName = "s_loader";
@@ -536,6 +557,12 @@ public:
 		}
 
 		string loadFolder = getLoadFolderPath();
+
+		//check for prelevel tables
+		string preLevelPath = getPrelevelScript(loadFolder);
+		if (preLevelPath.size()) {
+			executeScript(os_kit::getFileAsString(preLevelPath));
+		}
 
 		//check for templates
 		string templatePath = getTemplateTablePath(loadFolder);
