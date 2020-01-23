@@ -35,7 +35,7 @@ void main() {
 	//however, attaching a minimum ambient component
 	//will reduce fog
 	texelColor.rgb = mix(
-		fogColour, 
+		fogColour * texelColor.a, 
 		texelColor.rgb,
 		clamp(1.0 / exp((depth - fogClip) * fogStrength), clamp(1 - fogMax, minAmb, 1), 1)
 	);
