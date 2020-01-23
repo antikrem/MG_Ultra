@@ -101,6 +101,7 @@ class ECSMaster {
 		master = newSystemsMaster("m_h_meta");
 		master->setTimer(100);
 		master->createSystem<SystemMultiEnt>(registar);
+		master->createSystem<SystemBulletMaster>(registar);
 
 		//ring 2
 		master = newSystemsMaster("m_graphics2");
