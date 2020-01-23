@@ -16,6 +16,7 @@
 #include "component_listener.h"
 #include "component_particle.h"
 #include "component_force_applier.h"
+#include "component_clamp_position.h"
 
 #include "component_point_light.h"
 
@@ -80,6 +81,8 @@ public:
 		newEnt->addComponent(newComponent13->pullForEntity());
 		auto newComponent14 = new ComponentPointLight(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
 		newEnt->addComponent(newComponent14->pullForEntity());
+		auto newComponent15 = new ComponentClampPosition(960.0f, 540.0f);
+		newEnt->addComponent(newComponent15->pullForEntity());
 
 		//execute a script to initialise the player
 		executeAnyScript(debugName, 

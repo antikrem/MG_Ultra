@@ -109,15 +109,14 @@ end
 --create a bullet entity
 if cInput:query_down("shoot") == 1 and 
 		(cTiming:get_cycle() % PLAYER_SHOOT_TIMING) == 0 then
-    local x, y = cPosition:get_position()
 	for bAngle in range(45, 136, 15) do
 		cSpawner = this:get_component(ComponentSpawner)
 		cSpawner:create_entity(EntityPlayerBullets)
 	
-		cSpawner:add_component(ComponentPosition.create(x, y))
+		cSpawner:add_component(ComponentPosition.create(0, 40))
 		cSpawner:add_component(ComponentCollision.create(100))
 		cSpawner:add_component(ComponentDamage.create(10))
-		cSpawner:add_component(ComponentOffsetMaster.create())
+		cSpawner:add_component(ComponentOffsetOnce.create())
 		cSpawner:add_component(ComponentMinAmbient.create(1.0))
 
 		local bulletGComponents = ComponentGraphics.create("player")
