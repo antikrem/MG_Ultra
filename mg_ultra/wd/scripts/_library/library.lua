@@ -105,6 +105,11 @@ function unpack(a, i)
 	end
 end
 
+--inverse operation of unpack
+function pack(...)
+	return {...}
+end
+
 --takes a function f and multiple arguments
 --f will be applied with each of the arguments
 --f should be in the form f : x -> f(x)
