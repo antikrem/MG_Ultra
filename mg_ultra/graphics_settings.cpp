@@ -18,10 +18,12 @@ GraphicsSettings::GraphicsSettings() {
 
 	targetFPS = gfxSettings.get("general", "target_fps", 0);
 
-	countMaxSpriteBox = gfxSettings.get("max_renderable", "sprites", 1000);
-	countMaxUIBox = gfxSettings.get("max_renderable", "ui", 1000);
+	countMaxSpriteBox = gfxSettings.get("max_renderable", "sprites", 5000);
+	countMaxUIBox = gfxSettings.get("max_renderable", "ui", 1500);
 	countMaxDirectionalLights = gfxSettings.get("max_renderable", "directional_lights", 10);
 	countMaxPointLights = gfxSettings.get("max_renderable", "point_lights", 100);
+
+	pointLightPeels = gfxSettings.get("lighting", "pointlight_peeldepth", 2);
 
 	depthPeelingPasses = gfxSettings.get("renderer", "transparency_levels", 3);
 

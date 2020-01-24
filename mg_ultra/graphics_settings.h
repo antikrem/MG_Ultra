@@ -28,6 +28,9 @@ struct GraphicsSettings {
 	atomic<int> countMaxDirectionalLights = 10;
 	atomic<int> countMaxPointLights = 100;
 
+	//lighting constants
+	atomic<int> pointLightPeels = 2;
+
 	//target fps
 	atomic<int> targetFPS = 0;
 

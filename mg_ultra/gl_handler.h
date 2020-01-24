@@ -240,22 +240,27 @@ public:
 			lightingFrameBuffer.bindBuffer();
 			glEnable(GL_BLEND);
 
+			//directional lights
 			lightingFrameBuffer.setBlendFunction("lightScene", GL_FUNC_ADD, GL_ONE, GL_ONE);
 			shaderMaster->useShader("directional_lighting");
 			shaderMaster->attachFrameBufferAsSource("directional_lighting", &geometryFrameBuffer);
 			directionalLightVAOBuffer.processGLSide();
 
-			glDepthMask(GL_FALSE);
-			glEnable(GL_CULL_FACE);
-			glCullFace(GL_FRONT);
-			shaderMaster->useShader("point_lighting");
-			shaderMaster->setUniformMatrix4F("point_lighting", "MVP", camera->getVPMatrix());
-			shaderMaster->attachFrameBufferAsSource("point_lighting", &geometryFrameBuffer);
-			shaderMaster->setUniformF("point_lighting", "viewport_w", (float)gSettings->screenWidth);
-			shaderMaster->setUniformF("point_lighting", "viewport_h", (float)gSettings->screenHeight);
-			pointLightVAOBuffer.processGLSide();
-			glDepthMask(GL_TRUE);
-			glDisable(GL_CULL_FACE);
+			//point lights
+			if (i < gSettings->pointLightPeels) {
+				glDepthMask(GL_FALSE);
+				glEnable(GL_CULL_FACE);
+				glCullFace(GL_FRONT);
+				shaderMaster->useShader("point_lighting");
+				shaderMaster->setUniformMatrix4F("point_lighting", "MVP", camera->getVPMatrix());
+				shaderMaster->attachFrameBufferAsSource("point_lighting", &geometryFrameBuffer);
+				shaderMaster->setUniformF("point_lighting", "viewport_w", (float)gSettings->screenWidth);
+				shaderMaster->setUniformF("point_lighting", "viewport_h", (float)gSettings->screenHeight);
+				pointLightVAOBuffer.processGLSide();
+				glDepthMask(GL_TRUE);
+				glDisable(GL_CULL_FACE);
+			}
+			
 
 			glDisable(GL_BLEND);
 			lightingFrameBuffer.unbindBuffer();
