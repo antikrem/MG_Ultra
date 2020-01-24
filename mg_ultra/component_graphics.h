@@ -153,8 +153,6 @@ public:
 			.addFunction("set_animation_set", &ComponentGraphics::l_setAniamtionSet)
 			.addFunction("set_animation", &ComponentGraphics::setAnimationType)
 			.addFunction("set_visible", &ComponentGraphics::setVisible)
-			.addFunction("set_rotation", &ComponentGraphics::setRotation)
-			.addFunction("get_rotation", &ComponentGraphics::getRotation)
 			.addFunction("set_scale", &ComponentGraphics::setScale)
 			.addFunction("get_scale", &ComponentGraphics::getScale)
 			.addFunction("set_render_in_3D", &ComponentGraphics::setRenderIn3D)

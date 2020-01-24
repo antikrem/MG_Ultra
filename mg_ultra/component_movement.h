@@ -26,8 +26,6 @@ class ComponentMovement : public Component, public ScriptableClass {
 	atomic<float> speedCap = INFINITY;
 	atomic<float> angleCap = INFINITY;
 
-	atomic<float> rotationVelocity = 0;
-
 public:
 	
 	ComponentMovement() : velocity({ 0,0,0 }), acceleration({ 0,0,0 })  {
@@ -51,19 +49,6 @@ public:
 		return position 
 			+ velocity 
 			+ Point3(Point2::generateFromPolar(speed, angle), 0);
-	}
-
-	//updates current rotation
-	float getUpdatedRotation(float currentRotation) {
-		return currentRotation + rotationVelocity;
-	}
-
-	void setRotationVelocity(float rotation) {
-		rotationVelocity = rotation;
-	}
-
-	float getRotationVelocity() {
-		return rotationVelocity;
 	}
 
 	tuple<float, float, float> lll_getUpdatedPosition(float x, float y, float z) {
@@ -185,6 +170,11 @@ public:
 		velocity = Point3(0, 0, 0);
 	}
 
+	//gets angle of rotation
+	float getDirection() {
+		return (velocity.load() + Point3(Point2::generateFromPolar(speed, angle), 0)).getXY().getAng();
+	}
+
 	void updateManually(bool value) {
 		updateInSystem = !value;
 	}
@@ -211,8 +201,6 @@ public:
 			.addFunction("set_angle_cap", &ComponentMovement::setAngleCap)
 			.addFunction("get_angle_cap", &ComponentMovement::getAngleCap)
 
-			.addFunction("get_rotation_speed", &ComponentMovement::getRotationVelocity)
-			.addFunction("set_rotation_speed", &ComponentMovement::setRotationVelocity)
 			.addFunction("set_update_manually", &ComponentMovement::updateManually)
 			.addStaticFunction("create", ScriptableClass::create<ComponentMovement>)
 			.addStaticFunction("type", &getType<ComponentMovement>)

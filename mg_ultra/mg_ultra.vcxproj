@@ -257,6 +257,7 @@
     <ClInclude Include="component_offset_master.h" />
     <ClInclude Include="component_offset_once.h" />
     <ClInclude Include="component_point_light.h" />
+    <ClInclude Include="component_rotation.h" />
     <ClInclude Include="component_static_movement.h" />
     <ClInclude Include="component_extended_scripting.h" />
     <ClInclude Include="component_force_applier.h" />

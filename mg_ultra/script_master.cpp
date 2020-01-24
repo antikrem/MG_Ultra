@@ -29,6 +29,7 @@
 #include "component_min_ambient.h"
 #include "component_bullet_master.h"
 #include "component_clamp_position.h"
+#include "component_rotation.h"
 
 #include "registar.h"
 #include "pool.h"
@@ -111,6 +112,7 @@ ScriptMaster::ScriptMaster()
 	forceLuaRegistration<ComponentMinAmbient>(kaguya);
 	forceLuaRegistration<ComponentBulletMaster>(kaguya);
 	forceLuaRegistration<ComponentClampPosition>(kaguya);
+	forceLuaRegistration<ComponentRotation>(kaguya);
 
 	//set contextual script functions
 	kaguya["getEntityPool"] = getGlobalPool;
