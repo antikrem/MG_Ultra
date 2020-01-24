@@ -51,7 +51,7 @@ struct BoxData {
 	float ambientMin;
 
 
-	//rotation amount in radians
+	//rotation amount in degrees
 	float rotation = 0;
 	//Used to overshoot wrapping
 	float wrapFactor = 1.0f;
@@ -276,7 +276,7 @@ public:
 		memcpy(boxData.xyz, &state.centerPostion, 3 * sizeof(float));
 		boxData.wh[0] = scale * state.scale * (float)ani->getWidth();
 		boxData.wh[1] = scale * state.scale * (float)ani->getHeight();
-		boxData.rotation = DEG2RAD(state.rotation);
+		boxData.rotation = state.rotation;
 		memcpy(boxData.uvwh, &ani->getUVWH(state.currentFrame), 4 * sizeof(float));
 		boxData.wrapFactor = state.wrapFactor;
 		boxData.transparency = state.transparency;
