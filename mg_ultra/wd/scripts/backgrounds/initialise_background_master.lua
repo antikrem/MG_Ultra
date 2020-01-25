@@ -58,7 +58,7 @@ function BackgroundMaster.add_new_layer(animationSet, horizontalCount, depth)
 
 	cSpawner:add_component(ComponentPosition.create(0, 0, depth))
 
-	local backgroundLayerGraphics = ComponentGraphics.create("default")
+	local backgroundLayerGraphics = ComponentGraphics.create(animationSet)
 	backgroundLayerGraphics:set_animation(1)
 	backgroundLayerGraphics:set_scale(bWidth/aWidth)
 	backgroundLayerGraphics:set_wrap_factor(tileCount)
@@ -84,6 +84,6 @@ function update_background_layer(backgroundLayer)
 	local cEScript = backgroundLayer:get_component(ComponentExtendedScripting)
 	
 	local x, y = cPos:get_position()
-	
+
 	cPos:set_position(x % cEScript:get("tilesize_x"), y % cEScript:get("tilesize_y"))
 end
