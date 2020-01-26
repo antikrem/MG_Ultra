@@ -1,6 +1,5 @@
 /*Allows the attaching of bullet masters
 Which will be used */
-/*A Component that is simply a health value, that can be access in a safe way*/
 #ifndef __COMPONENT_BULLET_MASTER__
 #define __COMPONENT_BULLET_MASTER__
 
@@ -12,10 +11,7 @@ Which will be used */
 class ComponentBulletMaster : public Component, public ScriptableClass {
 private:
 	string bulletMasterName;
-
-	int cycle = -1;
-	int lastActiveScript = -1;
-
+	bool initialised = false;
 	bool valid = true;
 
 public:
@@ -28,11 +24,11 @@ public:
 	}
 
 	bool isInitialised() {
-		return cycle >= 0;
+		return initialised;
 	}
 
-	void incrementCycle() {
-		cycle++;
+	void setInitialised() {
+		initialised = true;
 	}
 
 	bool isValid() {

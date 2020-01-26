@@ -102,6 +102,7 @@ class ECSMaster {
 		master->setTimer(100);
 		master->createSystem<SystemMultiEnt>(registar);
 		master->createSystem<SystemBulletMaster>(registar);
+		master->createSystem<SystemBulletSpawner>(registar);
 
 		//ring 2
 		master = newSystemsMaster("m_graphics2");

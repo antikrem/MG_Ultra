@@ -5,6 +5,7 @@ reciving damage*/
 
 #include "component_bullet_master.h"
 #include "component_multi_entity.h"
+#include "component_bullet_spawner.h"
 
 #include "script_master.h"
 
@@ -46,14 +47,18 @@ public:
 
 			//Need to create the bullet spawner entity
 			//and pass to script environment to be set up
-			shared_ptr<Entity> ent = shared_ptr<Entity>(new Entity(ETBulletSpawner));
+			shared_ptr<Entity> subEnt = shared_ptr<Entity>(new Entity(ETBulletSpawner));
 
 			ScriptUnit su(
 				SS_inlineLoader,
 				"BulletSpawnerList._initialise(this, \"" + bm->getBulletMasterName() + "\")"
 			);
+			su.attachEntity(subEnt);
 			su.attachEntity(ent);
 			su.addDebugData("BulletSpawnerList initialisation for " + bm->getBulletMasterName());
+
+			auto cBulletSpawner = new ComponentBulletSpawner(bm->getBulletMasterName());
+			subEnt->addComponent(cBulletSpawner->pullForEntity());
 
 			sc.reset();
 			su.attachSuccessCallback(&sc);
@@ -65,12 +70,16 @@ public:
 			if (evaluationSuccess 
 				&& gRegistar->get("bullet_spawner_initialisation_success", &processSuccess) 
 				&& processSuccess) {
-				me->addEntity(ent);
-				entityPool->addEnt(ent);
+				me->addEntity(subEnt);
+				entityPool->addEnt(subEnt);
+				bm->setInitialised();
 			}
-		}
+			else {
+				bm->setValid(false);
+			}
 
-		bm->incrementCycle();
+			
+		}
 	}
 
 };
