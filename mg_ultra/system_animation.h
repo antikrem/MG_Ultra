@@ -35,8 +35,11 @@ public:
 			return;
 		}
 
+		//if animation has no frameskip, and is used in animation
+		//treat as if it was 1 frameskip
 		//iterate frameskip, and see if it doubles around
-		state.frameskipCounter = (state.frameskipCounter + 1) % animationTemplate.getFrameskip();
+		int frameSkip = animationTemplate.getFrameskip();
+		state.frameskipCounter = (state.frameskipCounter + 1) % (frameSkip ? frameSkip : 1);
 		
 		//handle switching animations
 		//first, see if theres a request to play a single animation
