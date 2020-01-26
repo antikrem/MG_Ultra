@@ -89,6 +89,22 @@ public:
 		}
 	}
 
+	//gets first sub entity by type, returns nullptr if not found
+	//can utilise skip to ignore a number of results
+	shared_ptr<Entity> getByType(EntityTypes entityType, int skip = 0) {
+		unique_lock<shared_mutex> lck(lock);
+		for (auto i : internalEntities) {
+			if (i->getType() == entityType) {
+				skip--;
+				if (skip < 0) {
+					return i;
+				}
+			}
+		}
+
+		return nullptr;
+	}
+
 	void registerToLua(kaguya::State& state) override {
 		state["ComponentMultiEntity"].setClass(kaguya::UserdataMetatable<ComponentMultiEntity, Component>()
 			.setConstructors<ComponentMultiEntity()>()
