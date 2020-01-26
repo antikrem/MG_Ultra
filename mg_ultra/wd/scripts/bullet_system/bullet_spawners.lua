@@ -37,6 +37,7 @@ BulletSpawner = {
 	--Allows a bullet spawner entity to be initialised from 
 	--this spawner template
 	initialise = function(self, entity)
+		entity:add_component(ComponentExtendedScripting.create())
 		for _, comps in ipairs(self.components) do
 			entity:add_component(comps[1].create(unpack(comps, 2)))
 		end
@@ -55,9 +56,32 @@ BulletSpawnerList = {
 		else 
 			registar:update("bullet_spawner_initialisation_success", 0)
 		end
+	end,
+
+	--Takes bullet spawner name, current cycle and last valid cycle
+	--will execute correct 
+	_spawnerUpdate = function(name, current, lastValid)
+		--if found then update last valid
+		if BulletSpawnerList[name].scriptLookUp[current] ~= nil then
+			--need to check if this look up is a function or false (end of last active)
+			if BulletSpawnerList[name].scriptLookUp[current] == false then
+				lastValid = -1
+				this:get_component(ComponentBulletSpawner):setLastActive(-1)
+			else
+				lastValid = current
+				this:get_component(ComponentBulletSpawner):setLastActive(current)
+			end
+			
+		end
+		
+		--If theres a postive last active, run script
+		if lastValid >= 0 then
+			BulletSpawnerList[name].scriptLookUp[lastValid]()
+		end
 	end
 
 }
 
 --Flag for last Bullet Spawner initialisation sucess
 registar:add("bullet_spawner_initialisation_success", 1)
+registar:add("bullet_spawner_last_valid", -1)

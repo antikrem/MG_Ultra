@@ -5,6 +5,7 @@
 #include <string>
 #include <memory>
 #include <vector>
+#include <tuple>
 
 #include "entity.h"
 #include "success_callback.h"
@@ -40,6 +41,9 @@ class ScriptUnit {
 	//can attach entities to this object
 	vector<shared_ptr<Entity>> attachedEnts;
 
+	//attached parameters
+	vector<tuple<string, string>> additionalParameters;
+
 	//can add a successCallback to check script outcome
 	SuccessCallback* callbackResult = nullptr;
 
@@ -56,6 +60,11 @@ public:
 
 	ScriptSources getSource() {
 		return scriptSource;
+	}
+
+	//attach a parameter
+	void attachParameter(string name, string parameter) {
+		additionalParameters.push_back(make_tuple(name, parameter));
 	}
 
 	//attach an ent
@@ -76,6 +85,16 @@ public:
 	//returns a copy of the shared pointer pointed by index
 	shared_ptr<Entity>& getAttachedEnt(int i) {
 		return attachedEnts[i];
+	}
+
+	//get number of parameters
+	int numberOfParameters() {
+		return additionalParameters.size();
+	}
+
+	//returns a copy of the shared pointer pointed by index
+	tuple<string, string>& getAdditionalParameter(int i) {
+		return additionalParameters[i];
 	}
 
 	//grabs a pointer to SuccessCallback, nullptr indicates no callback

@@ -10,6 +10,7 @@
 //ring 0 - higher meta ECS management systems
 #include "system_multi_ent.h"
 #include "system_bullet_master.h"
+#include "system_bullet_spawner.h"
 
 //ring 2 - non-gameplay essential systems
 #include "system_animation.h"

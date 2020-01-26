@@ -27,9 +27,10 @@
 #include "component_offset_master.h"
 #include "component_offset_once.h"
 #include "component_min_ambient.h"
-#include "component_bullet_master.h"
 #include "component_clamp_position.h"
 #include "component_rotation.h"
+#include "component_bullet_master.h"
+#include "component_bullet_spawner.h"
 
 #include "registar.h"
 #include "pool.h"
@@ -110,9 +111,10 @@ ScriptMaster::ScriptMaster()
 	forceLuaRegistration<ComponentOffsetMaster>(kaguya);
 	forceLuaRegistration<ComponentOffsetOnce>(kaguya);
 	forceLuaRegistration<ComponentMinAmbient>(kaguya);
-	forceLuaRegistration<ComponentBulletMaster>(kaguya);
 	forceLuaRegistration<ComponentClampPosition>(kaguya);
 	forceLuaRegistration<ComponentRotation>(kaguya);
+	forceLuaRegistration<ComponentBulletMaster>(kaguya);
+	forceLuaRegistration<ComponentBulletSpawner>(kaguya);
 
 	//set contextual script functions
 	kaguya["getEntityPool"] = getGlobalPool;
@@ -160,18 +162,32 @@ void ScriptMaster::finalExecuteScriptUnit(ScriptUnit scriptUnit) {
 	//set last fail to false
 	failedLastScript = false;
 
-	//explicit vector of shared pointers
-	vector<shared_ptr<Entity>> copies;
 
 	//create entity environment
 	int attachedEntCount = scriptUnit.numberOfAttachedEnts();
 	if (attachedEntCount) {
-		copies.push_back(scriptUnit.getAttachedEnt(0));
-		kaguya["this"] = copies[0].get();
+		kaguya["this"] = scriptUnit.getAttachedEnt(0);
 		for (int i = 1; i < attachedEntCount; i++) {
-			kaguya["target" + to_string(i)] = copies[i].get();
+			kaguya["target" + to_string(i)] = scriptUnit.getAttachedEnt(i);
 		}
 	}
+
+	//load additional parameters
+	for (int i = 0; i < scriptUnit.numberOfParameters(); i++) {
+		string name, value;
+		tie(name, value) = scriptUnit.getAdditionalParameter(i);
+		if (str_kit::isInt(value)) {
+			kaguya[name] = str_kit::stringToInt(value, nullptr);
+		}
+		else if (str_kit::isFloat(value)) {
+			kaguya[name] = str_kit::stringToFloat(value, nullptr);
+		}
+		else {
+			kaguya[name] = value;
+		}
+		
+	}
+
 
 	//each source has subtle differences in execution
 	vector<string> buffer;
@@ -239,6 +255,13 @@ void ScriptMaster::finalExecuteScriptUnit(ScriptUnit scriptUnit) {
 		for (int i = 1; i < attachedEntCount; i++) {
 			kaguya["target" + to_string(i)] = nullptr;
 		}
+	}
+
+	for (int i = 0; i < scriptUnit.numberOfParameters(); i++) {
+		string name;
+		tie(name, std::ignore) = scriptUnit.getAdditionalParameter(i);
+		kaguya[name] = nullptr;
+
 	}
 
 	//if script has an attached successfulCallback, set to true
