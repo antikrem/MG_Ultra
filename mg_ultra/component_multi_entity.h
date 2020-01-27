@@ -6,6 +6,8 @@ Works in conjunction with component_spawner*/
 
 #include <atomic>
 #include <shared_mutex>
+#include <functional>
+
 #include "component.h"
 #include "constants.h"
 #include "algorithm_ex.h"
@@ -103,6 +105,15 @@ public:
 		}
 
 		return nullptr;
+	}
+
+	//apply a lambda in the form f : shared_ptr<ent> -> void
+	//to all internal entities
+	void applyFunction(function<void(shared_ptr<Entity>)> lambda) {
+		unique_lock<shared_mutex> lck(lock);
+		for (auto i : internalEntities) {
+			lambda(i);
+		}
 	}
 
 	void registerToLua(kaguya::State& state) override {
