@@ -23,6 +23,12 @@ Audio.print_report = printAudioReport
 --Global music player
 Music = {}
 
+--Music global gain
+Music.globalGain = 1.0
+
+--Music last gain
+Music.lastGain = 1.0
+
 --plays a music track, replacing last track
 Music.play_track = function(track)
 	local musicPlayer = EntityPool.get_cached_entity(EntityMusic)
@@ -30,8 +36,31 @@ Music.play_track = function(track)
 	if not is_nil(musicPlayer) then
 		local cAudio = musicPlayer:get_component(ComponentAudio)
 		cAudio:play(track)
+		Music.lastGain = 1.0
+		Music.evaluateNewGain()
 	else
-		print("AUDIO, Error playing track " .. track .. ", music player was not found")
+		print("MUSIC, Error playing track " .. track .. ", music player was not found")
 	end
 	
+end
+
+Music.evaluateNewGain = function()
+	local musicPlayer = EntityPool.get_cached_entity(EntityMusic)
+	
+	if not is_nil(musicPlayer) then
+		local cAudio = musicPlayer:get_component(ComponentAudio)
+		cAudio:set_gain(Music.lastGain * Music.globalGain)
+	else
+		print("MUSIC, Error managing gain " .. track .. ", music player was not found")
+	end
+end
+
+Music.set_gain = function(strength)
+	Music.lastGain = strength
+	Music.evaluateNewGain()
+end
+
+Music.set_global_modifier = function(strength)
+	Music.globalGain = strength
+	Music.evaluateNewGain()
 end
