@@ -6,6 +6,8 @@
 #include <mutex>	
 #include <map>
 
+#include "error.h"
+
 #include "audio_file.h"
 #include "cus_struct2.h"
 
@@ -74,11 +76,19 @@ public:
 
 		//if a requested audio is in, siwtch to it
 		if (requestedAudio.size()) {
-			//get new bufferID to play
-			int bufferID = audioFiles[requestedAudio]->getBufferID();
-			alSourcei(sourceID, AL_BUFFER, bufferID);
-			alSourcePlay(sourceID);
-			currentAudio = requestedAudio;
+			//check if requested audio is availible
+			if (audioFiles.count(requestedAudio)) {
+				//get new bufferID to play
+				int bufferID = audioFiles[requestedAudio]->getBufferID();
+				alSourcei(sourceID, AL_BUFFER, bufferID);
+				alSourcePlay(sourceID);
+				currentAudio = requestedAudio;
+			}
+			else {
+				err::logMessage("AUDIO: Error, could not find requested audio: " + requestedAudio);
+			}
+
+			
 			requestedAudio = "";
 		}
 
