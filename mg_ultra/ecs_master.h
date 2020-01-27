@@ -59,6 +59,9 @@ class ECSMaster {
 	
 	master1: ECS_higher_meta_master :
 		-system_multi_ent
+		-system_bullet_master
+		-system_bullet_spawner
+		-system_die_with_master
 
 	master2: non-essential gameplay
 	    -system_animation
@@ -103,6 +106,7 @@ class ECSMaster {
 		master->createSystem<SystemMultiEnt>(registar);
 		master->createSystem<SystemBulletMaster>(registar);
 		master->createSystem<SystemBulletSpawner>(registar);
+		master->createSystem<SystemDieWithMaster>(registar);
 
 		//ring 2
 		master = newSystemsMaster("m_graphics2");

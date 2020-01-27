@@ -11,6 +11,7 @@
 #include "system_multi_ent.h"
 #include "system_bullet_master.h"
 #include "system_bullet_spawner.h"
+#include "system_die_with_master.h"
 
 //ring 2 - non-gameplay essential systems
 #include "system_animation.h"

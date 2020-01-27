@@ -252,6 +252,7 @@
     <ClInclude Include="component_collision.h" />
     <ClInclude Include="component_console.h" />
     <ClInclude Include="component_damage.h" />
+    <ClInclude Include="component_die_with_master.h" />
     <ClInclude Include="component_directional_light.h" />
     <ClInclude Include="component_driftable.h" />
     <ClInclude Include="component_min_ambient.h" />
@@ -327,6 +328,7 @@
     <ClInclude Include="system_camera.h" />
     <ClInclude Include="system_collision.h" />
     <ClInclude Include="system_console.h" />
+    <ClInclude Include="system_die_with_master.h" />
     <ClInclude Include="system_health.h" />
     <ClInclude Include="system_directional_lighting.h" />
     <ClInclude Include="system_driftable.h" />
