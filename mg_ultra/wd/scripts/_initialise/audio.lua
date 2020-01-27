@@ -17,18 +17,21 @@ Audio.load_file = function(audioName, fileLocation)
 	Audio.flush_queue()
 end
 
+--prints a small report on Audio state
+Audio.print_report = printAudioReport
+
+--Global music player
+Music = {}
+
 --plays a music track, replacing last track
-Audio.play_track = function(track) 
+Music.play_track = function(track)
 	local musicPlayer = EntityPool.get_cached_entity(EntityMusic)
 	
 	if not is_nil(musicPlayer) then
 		local cAudio = musicPlayer:get_component(ComponentAudio)
 		cAudio:play(track)
-	else 
+	else
 		print("AUDIO, Error playing track " .. track .. ", music player was not found")
 	end
 	
 end
-
---prints a small report on Audio state
-Audio.print_report = printAudioReport
