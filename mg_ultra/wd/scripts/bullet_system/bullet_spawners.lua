@@ -84,4 +84,3 @@ BulletSpawnerList = {
 
 --Flag for last Bullet Spawner initialisation sucess
 registar:add("bullet_spawner_initialisation_success", 1)
-registar:add("bullet_spawner_last_valid", -1)
