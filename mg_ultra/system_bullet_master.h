@@ -15,8 +15,6 @@ class SystemBulletMaster : public System {
 
 	EntityPool* entityPool = nullptr;
 
-	Registar* gRegistar = g_registar::getGlobalRegistar();
-
 public:
 	SystemBulletMaster() {
 		debugName = "s_bullet_master";
@@ -68,8 +66,8 @@ public:
 
 			//check the script went through and the entity was processed
 			if (evaluationSuccess 
-				&& gRegistar->get("bullet_spawner_initialisation_success", &processSuccess) 
-				&& processSuccess) {
+					&& registar->get("bullet_spawner_initialisation_success", &processSuccess) 
+					&& processSuccess) {
 				me->addEntity(subEnt);
 				entityPool->addEnt(subEnt);
 				bm->setInitialised();

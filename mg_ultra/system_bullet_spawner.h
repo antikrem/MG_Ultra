@@ -9,21 +9,12 @@
 #include "system.h"
 
 class SystemBulletSpawner : public System {
-
-	EntityPool* entityPool = nullptr;
-
-	Registar* gRegistar = g_registar::getGlobalRegistar();
-
 public:
 	SystemBulletSpawner() {
 		debugName = "s_bullet_spawner";
 		target = SubPoolTarget(
 			SubPoolComponents::ByComponents<ComponentBulletSpawner>()
 		);
-	}
-
-	void precycle(EntityPool* entityPool) override {
-		this->entityPool = entityPool;
 	}
 
 	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, shared_ptr<Entity> ent, int id) override {
