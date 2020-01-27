@@ -25,6 +25,11 @@ public:
 		source.setRepeat(repeat);
 	}
 
+	//sets the gain value
+	void setGain(float gain) {
+		source.setGain(gain);
+	}
+
 	//al processing of audio component
 	void alComponentHandle(map<string, AudioFile*>& audioFiles, const Point3& position) {
 		source.alSideUpdate(audioFiles, position);
@@ -35,6 +40,7 @@ public:
 			.setConstructors<ComponentAudio()>()
 			.addFunction("play", &ComponentAudio::playAudio)
 			.addFunction("set_repeat", &ComponentAudio::setRepeat)
+			.addFunction("set_gain", &ComponentAudio::setGain)
 			.addOverloadedFunctions(
 				"create",
 				&ScriptableClass::create<ComponentAudio>

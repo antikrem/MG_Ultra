@@ -28,8 +28,12 @@ private:
 
 	bool resetOnDoubleCall = false;
 
-	//when set to >= 0, indicates rquest for audio change
+	//when set to >= 0, indicates request for audio repeat change
 	int requestedRepeat = -1;
+
+	//when set to >= 0, indicates request for audio gain change
+	float requestedGain = -1.0f;
+
 
 	string currentAudio;
 	string requestedAudio;
@@ -58,6 +62,13 @@ public:
 		requestedRepeat = (int)repeat;
 	}
 
+	//sets this source to a certain gain
+	void setGain(float gain) {
+		unique_lock<mutex> lck(lock);
+		this->requestedGain = gain;
+	}
+
+
 	//AL side updating
 	void alSideUpdate(map<string, AudioFile*>& audioFiles, const Point3& position) {
 		unique_lock<mutex> lck(lock);
@@ -68,10 +79,16 @@ public:
 
 		alSource3f(sourceID, AL_POSITION, position.x, position.y, position.z);
 
-		//handle new repeat mode
+		//handle new repeat request
 		if (requestedRepeat >= 0) {
 			alSourcei(sourceID, AL_LOOPING, requestedRepeat);
 			requestedRepeat = -1;
+		}
+
+		//handle new repeat request
+		if (requestedGain >= 0) {
+			alSourcef(sourceID, AL_GAIN, requestedGain);
+			requestedGain = -1.0f;
 		}
 
 		//if a requested audio is in, siwtch to it
