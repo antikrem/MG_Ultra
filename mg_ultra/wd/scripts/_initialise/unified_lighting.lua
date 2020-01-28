@@ -3,7 +3,13 @@
 --Global accessor for controlling ambient light
 AmbientLight = {}
 
-AmbientLight.set_strength = setAmbientLightStrength;
+AmbientLight.set_strength = function(current, rate, target)
+	if is_nil(current) then target = AmbientLight.get_strength() end
+	rate = rate or 1.0
+	if is_nil(target) then target = current end
+
+	setAmbientLightStrengths(current, rate, target)
+end
 
 AmbientLight.get_strength = getAmbientLightStrength;
 
@@ -38,7 +44,13 @@ Fog.set_colour = setFogColour
 Fog.get_colour = getFogColour
 
 --set fog exponential growth factor
-Fog.set_strength = setFogStrength
+Fog.set_strength = function(current, rate, target)
+	if is_nil(current) then target = Fog.get_strength() end
+	rate = rate or 1.0
+	if is_nil(target) then target = current end
+
+	setFogStrength(current, rate, target)
+end
 
 --get fog exponential growth factor
 Fog.get_strength = getFogStrength
