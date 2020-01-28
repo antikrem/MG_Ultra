@@ -40,6 +40,12 @@ public:
 		return current;
 	}
 
+	void set(T current, T rate, T target) {
+		setCurrent(current);
+		setRate(rate);
+		setTarget(target);
+	}
+
 	void setCurrent(T current) {
 		this->current = current;
 	}
