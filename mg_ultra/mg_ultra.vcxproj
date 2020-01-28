@@ -204,6 +204,7 @@
     <ClCompile Include="ambient_illumination.cpp" />
     <ClCompile Include="audio_master.cpp" />
     <ClCompile Include="collision.cpp" />
+    <ClCompile Include="colour_modulation.cpp" />
     <ClCompile Include="entity_types.cpp" />
     <ClCompile Include="error.cpp" />
     <ClCompile Include="events.cpp" />
@@ -243,6 +244,7 @@
     <ClInclude Include="audio_source.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="collision.h" />
+    <ClInclude Include="colour_modulation.h" />
     <ClInclude Include="component_animation.h" />
     <ClInclude Include="component_audio.h" />
     <ClInclude Include="component_bullet_master.h" />
@@ -327,6 +329,7 @@
     <ClInclude Include="system_bullet_spawner.h" />
     <ClInclude Include="system_camera.h" />
     <ClInclude Include="system_collision.h" />
+    <ClInclude Include="system_colour_modulation.h" />
     <ClInclude Include="system_console.h" />
     <ClInclude Include="system_die_with_master.h" />
     <ClInclude Include="system_health.h" />
@@ -356,6 +359,7 @@
     <ClInclude Include="system_transparency.h" />
     <ClInclude Include="system_weather.h" />
     <ClInclude Include="system__header.h" />
+    <ClInclude Include="trending_value.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="component.h" />
     <ClInclude Include="entity.h" />
