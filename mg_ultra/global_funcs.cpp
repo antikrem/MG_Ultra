@@ -17,6 +17,7 @@
 #include "audio_master.h"
 #include "particle_master.h"
 #include "graphics_settings.h"
+#include "colour_modulation.h"
 
 ///print
 //For use with print function, holds a buffer sting to print
@@ -160,5 +161,14 @@ void registerGlobalFunctions(kaguya::State &kaguya) {
 	kaguya["setExposure"] = g_graphicsSettings::setExposure;
 	kaguya["setBloomThreshold"] = g_graphicsSettings::setBloomThreshold;
 	kaguya["setBloomDeviation"] = g_graphicsSettings::setBloomDeviation;
+
+	//colour modulation settings
+	kaguya["setColourModulationStrengths"] = g_colour_modulation::setStrengths;
+	kaguya["setColourModulationForegroundColour"] = g_colour_modulation::l_setForegroundColour;
+	kaguya["getColourModulationForegroundColour"] = g_colour_modulation::l_getForegroundColour;
+	kaguya["setColourModulationBackgroundColour"] = g_colour_modulation::l_setBackgroundColour;
+	kaguya["getColourModulationBackgroundColour"] = g_colour_modulation::l_getBackgroundColour;
+	kaguya["setColourModulationForegroundCutoff"] = g_colour_modulation::setForegroundCutoff;
+	kaguya["setColourModulationBackgroundCutoff"] = g_colour_modulation::setBackgroundCutoff;
 
 }

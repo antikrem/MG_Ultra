@@ -12,6 +12,14 @@ uniform float viewport_h;
 //forward depth buffer
 uniform sampler2D frontDepthBuffer;
 
+//uniforms for modulating colour
+uniform float foregroundCutoff;
+uniform float backgroundCutoff;
+uniform float foregroundStrength;
+uniform float backgroundStrength;
+uniform vec3 foregroundColour;
+uniform vec3 backgroundColour;
+
 in vec3 worldPosition;
 in vec2 uv;
 in vec2 wl;
@@ -45,6 +53,16 @@ void main() {
 	if (texel.a < 0.01) {
 		discard;
 	}
+
+	//compute foreground background mixing ratio
+	float fbMix = smoothstep(foregroundCutoff, backgroundCutoff, z);
+	float modStrength = mix(foregroundStrength, backgroundStrength, fbMix);
+	vec3 modColour = mix(foregroundColour,backgroundColour, fbMix);
+
+	texel = vec4(
+		mix(texel.rgb, modColour * texel.rgb, modStrength),
+		texel.a
+	);
 
 	//colours are pre multiplied by alpha
 	color =  transparency * texel.a * vec4(texel.rgb , 1.0);

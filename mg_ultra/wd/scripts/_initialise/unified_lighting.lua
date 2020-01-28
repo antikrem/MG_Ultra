@@ -54,3 +54,40 @@ Fog.set_max = setFogMax
 
 --get fog starting distance
 Fog.set_max = getFogMax
+
+--Colours modulation
+ColourModulation = {}
+
+--Sets strength of both frontground and background
+ColourModulation.set_strength = function(current, rate, target)
+	rate = rate or 1.0
+	if is_nil(target) then target = current end
+	
+	setColourModulationStrengths(current, rate, target)
+
+end
+
+--Sets colour of foreground modulation
+ColourModulation.set_foreground_colour = setColourModulationForegroundColour
+
+--gets colour of foreground modulation
+ColourModulation.get_foreground_colour = getColourModulationForegroundColour
+
+--Sets colour of background modulation
+ColourModulation.set_background_colour = setColourModulationBackgroundColour
+
+--gets colour of background modulation
+ColourModulation.get_background_colour = getColourModulationBackgroundColour
+
+--sets foreground cutoff
+ColourModulation.set_foreground_cutoff = setColourModulationForegroundCutoff
+
+--sets background cutoff
+ColourModulation.set_background_cutoff = setColourModulationBackgroundCutoff
+
+--sets cutoff to be right next to each other at distance
+ColourModulation.set_cutoff = function(distance)
+	ColourModulation.set_foreground_cutoff(distance)
+	ColourModulation.set_background_cutoff(distance + 0.01)
+
+end

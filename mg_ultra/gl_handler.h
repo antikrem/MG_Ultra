@@ -215,6 +215,14 @@ public:
 			shaderMaster->useShader("base");
 			shaderMaster->setUniformF("base", "viewport_w", (float)gSettings->screenWidth);
 			shaderMaster->setUniformF("base", "viewport_h", (float)gSettings->screenHeight);
+
+			shaderMaster->setUniformF("base", "foregroundCutoff", g_colour_modulation::getForegroundCutoff());
+			shaderMaster->setUniformF("base", "backgroundCutoff", g_colour_modulation::getBackgroundCutoff());
+			shaderMaster->setUniformF("base", "foregroundStrength", g_colour_modulation::getForegroundStrength());
+			shaderMaster->setUniformF("base", "backgroundStrength", g_colour_modulation::getBackgroundStrength());
+			shaderMaster->setUniform3F("base", "foregroundColour", g_colour_modulation::getForegroundColour().getVec3());
+			shaderMaster->setUniform3F("base", "backgroundColour", g_colour_modulation::getBackgroundColour().getVec3());
+
 			shaderMaster->setUniformMatrix4F("base", "MVP", camera->getVPMatrix());
 			geometryFrameBuffer.bindBuffer();
 			//process the box buffer, which renders the geometry
@@ -283,6 +291,8 @@ public:
 			screenVAO.processGLSide();
 			glDisable(GL_BLEND);
 			postEffects.unbindBuffer();
+
+			glFlush();
 		}
 
 		//FOURTH PASS - Apply post effects, starting with bloom
