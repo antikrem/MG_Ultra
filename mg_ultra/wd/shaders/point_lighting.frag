@@ -46,11 +46,6 @@ void main() {
 	);
 
 	//output 
-	if (lambertFactor > LAMBERT_CUTOFF) {
-		color =  lightStrength * vec4(outLightColour * texel, 1);
-	}
-	else {
-		color = vec4(0.0);
-	}
+	color =  lightStrength * vec4(outLightColour * texel, 1) * step(LAMBERT_CUTOFF, lambertFactor);
 	
 }
