@@ -26,6 +26,11 @@ private:
 	//set to true when entity is ready to be deleted and memory returned
 	bool gcReady = false;
 
+	//function to create an entity in the program stack
+	Entity* createEntity(int type) {
+		return new Entity(type);
+	}
+
 public:
 	Entity() {
 		entityType = 0;
@@ -113,6 +118,7 @@ public:
 			.addFunction("getComponent", &Entity::l_getComponent)
 			.addFunction("addComponent", &Entity::l_addComponent)
 			.addFunction("kill", &Entity::killEntity)
+			.addStaticFunction("create", &Entity::createEntity)
 		);
 	}
 };
