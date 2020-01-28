@@ -20,6 +20,7 @@
 
 #include "fog.h"
 #include "ambient_illumination.h"
+#include "colour_modulation.h"
 
 //max size for guassian blur values
 //Also update gauss.frag
@@ -35,7 +36,7 @@ private:
 	TimedBlock periodBlock;
 	//performance viewer
 	PerformanceCounter performanceCounter;
-
+	
 	//gl handle thread, it will do all gl calls, containing current context
 	thread* glThread = nullptr;
 
@@ -174,8 +175,8 @@ public:
 		);
 		
 		postEffects.initialiseFrameBuffer(
-			gSettings, 
-			{	
+			gSettings,
+			{
 				{"scene", GL_RGBA16F},
 				{"brights", GL_RGBA16F}
 			},
@@ -246,7 +247,7 @@ public:
 			shaderMaster->attachFrameBufferAsSource("directional_lighting", &geometryFrameBuffer);
 			directionalLightVAOBuffer.processGLSide();
 
-			//point lights
+			//point lights, only for valid light levels
 			if (i < gSettings->pointLightPeels) {
 				glDepthMask(GL_FALSE);
 				glEnable(GL_CULL_FACE);
@@ -282,8 +283,6 @@ public:
 			screenVAO.processGLSide();
 			glDisable(GL_BLEND);
 			postEffects.unbindBuffer();
-
-			glFlush();
 		}
 
 		//FOURTH PASS - Apply post effects, starting with bloom
@@ -293,25 +292,28 @@ public:
 		shaderMaster->setUniformF("bloom", "bloomThreshold", gSettings->bloomThreshold);
 		screenVAO.processGLSide();
 		bloom.unbindBuffer();
+		
+		for (int i = 0; i < gSettings->bloomPasses && gSettings->bloomEnabled; i++) {
+			//calculate bloom ping pong buffer 
+			updateGaussianSamples();
+			postEffects.bindBuffer();
+			shaderMaster->useShader("gauss");
+			shaderMaster->attachFrameBufferAsSource("gauss", &bloom);
+			shaderMaster->setUniformI("gauss", "gaussianFactorslength", gaussianSamples);
+			shaderMaster->setUniform1FV("gauss", "gaussianFactors", GAUSSIAN_CONSTANT_MAX_LENGTH, gaussianBlurFactors);
+			shaderMaster->setUniform2F("gauss", "offsetDirection", glm::vec2(1.0f, 0.0f));
+			screenVAO.processGLSide();
+			postEffects.unbindBuffer();
 
-		//calculate bloom ping pong buffer 
-		updateGaussianSamples();
-		postEffects.bindBuffer();
-		shaderMaster->useShader("gauss");
-		shaderMaster->attachFrameBufferAsSource("gauss", &bloom);
-		shaderMaster->setUniformI("gauss", "gaussianFactorslength", gaussianSamples);
-		shaderMaster->setUniform1FV("gauss", "gaussianFactors", GAUSSIAN_CONSTANT_MAX_LENGTH, gaussianBlurFactors);
-		shaderMaster->setUniform2F("gauss", "offsetDirection", glm::vec2(1.0f, 0.0f));
-		screenVAO.processGLSide();
-		postEffects.unbindBuffer();
-
-		//ping pong back to other buffer
-		bloom.bindBuffer();
-		shaderMaster->attachFrameBufferAsSource("gauss", &postEffects);
-		shaderMaster->setUniform2F("gauss", "offsetDirection", glm::vec2(0.0f, 1.0f));
-		screenVAO.processGLSide();
-		bloom.unbindBuffer();  
-
+			//ping pong back to other buffer
+			bloom.bindBuffer();
+			shaderMaster->attachFrameBufferAsSource("gauss", &postEffects);
+			shaderMaster->setUniform2F("gauss", "offsetDirection", glm::vec2(0.0f, 1.0f));
+			screenVAO.processGLSide();
+			bloom.unbindBuffer();
+		}
+		
+		
 		//FIFTH PASS - render buffer to screenspace
 		//set the geometry frame buffer as the source
 		shaderMaster->useShader("colour_correction");

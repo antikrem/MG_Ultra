@@ -31,6 +31,10 @@ struct GraphicsSettings {
 	//lighting constants
 	atomic<int> pointLightPeels = 2;
 
+	//post effects constants
+	atomic<int> bloomEnabled = true;
+	atomic<int> bloomPasses = 1;
+
 	//target fps
 	atomic<int> targetFPS = 0;
 

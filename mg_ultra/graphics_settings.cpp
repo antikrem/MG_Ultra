@@ -25,6 +25,9 @@ GraphicsSettings::GraphicsSettings() {
 
 	pointLightPeels = gfxSettings.get("lighting", "pointlight_peeldepth", 2);
 
+	bloomEnabled = gfxSettings.get("post_effects", "bloom_enabled", 1);
+	bloomPasses = gfxSettings.get("post_effects", "bloom_passes", 1);
+
 	depthPeelingPasses = gfxSettings.get("renderer", "transparency_levels", 3);
 
 	g_graphicsSettings::setGlobalGraphicsSettings(this);
