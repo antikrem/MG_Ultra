@@ -1,5 +1,7 @@
 #include "fog.h"
 
+#include "trending_value.h"
+
 #include <mutex>
 
 //access lock for fog values
@@ -8,11 +10,15 @@ mutex fogLock;
 //colour of fog
 Point3 fogColour(0.0f);
 
-float fogStrength = 0;
+TrendingValue<float> fogStrength(0.0f);
 
 float fogStart = 0;
 
 float fogMax = 1.0f;
+
+void g_fog::update() {
+	fogStrength.update();
+}
 
 void g_fog::setFogColour(const Point3& colour) {
 	unique_lock<mutex> lck(fogLock);
@@ -33,14 +39,14 @@ tuple<float, float, float> g_fog::l_getFogColour() {
 	return make_tuple(result.x, result.y, result.z);
 }
 
-void g_fog::setFogStrength(float strength) {
-	unique_lock<mutex> lck(fogLock);
-	fogStrength = strength;
+void g_fog::setFogStrength(float current, float rate, float target) {
+	fogStrength.setCurrent(current);
+	fogStrength.setRate(rate);
+	fogStrength.setTarget(target);
 }
 
 float g_fog::getFogStrength() {
-	unique_lock<mutex> lck(fogLock);
-	return fogStrength;
+	return fogStrength.get();
 }
 
 void g_fog::setFogStart(float distance) {

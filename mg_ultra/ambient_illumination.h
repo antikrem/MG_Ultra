@@ -8,6 +8,8 @@ Which affects all entities uniformly*/
 #include <tuple>
 #include "cus_struct2.h"
 
+#include "trending_value.h"
+
 /*Provides all information on global ambient illumination*/
 class AmbientIllumination {
 	//access lock for color
@@ -15,20 +17,26 @@ class AmbientIllumination {
 	//colour of ambient lighting
 	Point3 colour;
 	//portion of lighting produced by ambient
-	atomic<float> strength = 1.0f;
+	TrendingValue<float> strength;
 
 public:
 	AmbientIllumination()
-		: colour(1.0f, 1.0f, 1.0f) {
+	: colour(1.0f, 1.0f, 1.0f)
+	, strength(1.0f) {
 
 	}
 
-	void setStrength(float strength) {
-		this->strength = strength;
+	void update() {
+		strength.update();
+	}
+
+	//set all ambient light strength parameters
+	void setStrengths(float current, float rate, float target) {
+		strength.set(current, rate, target);
 	}
 
 	float getStrength() {
-		return strength;
+		return strength.get();
 	}
 
 	void setColour(const Point3& colour) {
@@ -44,8 +52,10 @@ public:
 
 /*global accessor for ambient values*/
 namespace g_ambient {
+	void update();
+
 	//negative values are undefined behaviour
-	void setStrength(float value);
+	void setStrengths(float current, float rate, float target);
 
 	float getStrength();
 

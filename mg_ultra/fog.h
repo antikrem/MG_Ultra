@@ -6,6 +6,9 @@
 #include <tuple>
 
 namespace g_fog {
+	//update fog values
+	void update();
+
 	//sets fog colour
 	void setFogColour(const Point3& colour);
 
@@ -19,7 +22,7 @@ namespace g_fog {
 	tuple<float, float, float> l_getFogColour();
 
 	//set atmosphere fog scattering
-	void setFogStrength(float fogStrength);
+	void setFogStrength(float current, float rate, float target);
 
 	//set atmosphere fog scattering
 	float getFogStrength();

@@ -3,9 +3,12 @@
 //global ambient illumination
 AmbientIllumination gAmbient;
 
+void g_ambient::update() {
+	gAmbient.update();
+}
 
-void g_ambient::setStrength(float value) {
-	gAmbient.setStrength(value);
+void g_ambient::setStrengths(float current, float rate, float target) {
+	gAmbient.setStrengths(current, rate, target);
 }
 
 float g_ambient::getStrength() {

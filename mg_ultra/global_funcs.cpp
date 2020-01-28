@@ -132,7 +132,7 @@ void registerGlobalFunctions(kaguya::State &kaguya) {
 	kaguya["getFogMax"] = g_fog::getFogMax;
 
 	//ambient lighting
-	kaguya["setAmbientLightStrength"] = g_ambient::setStrength;
+	kaguya["setAmbientLightStrengths"] = g_ambient::setStrengths;
 	kaguya["getAmbientLightStrength"] = g_ambient::getStrength;
 	kaguya["setAmbientLightColour"] = g_ambient::l_setColour;
 	kaguya["getAmbientLightColour"] = g_ambient::l_getColour;

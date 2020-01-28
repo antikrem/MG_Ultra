@@ -321,6 +321,7 @@
     <ClInclude Include="script_unit.h" />
     <ClInclude Include="subpooling.h" />
     <ClInclude Include="success_callback.h" />
+    <ClInclude Include="system_ambient_light.h" />
     <ClInclude Include="system_animation.h" />
     <ClInclude Include="system_audio.h" />
     <ClInclude Include="system_background.h" />
@@ -332,6 +333,7 @@
     <ClInclude Include="system_colour_modulation.h" />
     <ClInclude Include="system_console.h" />
     <ClInclude Include="system_die_with_master.h" />
+    <ClInclude Include="system_fog.h" />
     <ClInclude Include="system_health.h" />
     <ClInclude Include="system_directional_lighting.h" />
     <ClInclude Include="system_driftable.h" />
