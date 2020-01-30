@@ -69,6 +69,12 @@ private:
 	//bloom ping pong frame buffer
 	FrameBuffer bloom;
 
+	//first texture for bloom ping pong
+	FrameBuffer bloom1;
+
+	//first texture for bloom ping pong
+	FrameBuffer bloom2;
+
 	//buffer for all boxes in the render view
 	VAOBoxData boxVAOBuffer;
 	VAOBoxData boxUIVAOBuffer;
@@ -192,6 +198,24 @@ public:
 			DepthAttachmentOptions::ATTACH_NONE
 		);
 
+		bloom1.initialiseFrameBuffer(
+			gSettings,
+			{
+				{"bloom", GL_RGBA16F}
+			},
+			DepthAttachmentOptions::ATTACH_NONE,
+			0.5
+		);
+
+		bloom2.initialiseFrameBuffer(
+			gSettings,
+			{
+				{"bloom", GL_RGBA16F}
+			},
+			DepthAttachmentOptions::ATTACH_NONE,
+			0.5
+		);
+
 		shaderMaster = new ShaderMaster();
 
 		//Load most important global mgt
@@ -291,8 +315,6 @@ public:
 			screenVAO.processGLSide();
 			glDisable(GL_BLEND);
 			postEffects.unbindBuffer();
-
-			glFlush();
 		}
 
 		//FOURTH PASS - Apply post effects, starting with bloom
@@ -302,6 +324,8 @@ public:
 		shaderMaster->setUniformF("bloom", "bloomThreshold", gSettings->bloomThreshold);
 		screenVAO.processGLSide();
 		bloom.unbindBuffer();
+
+		bloom1.copyIn(bloom);
 		
 		for (int i = 0; i < gSettings->bloomPasses && gSettings->bloomEnabled; i++) {
 			//calculate bloom ping pong buffer 
@@ -322,7 +346,27 @@ public:
 			screenVAO.processGLSide();
 			bloom.unbindBuffer();
 		}
-		
+
+		//calculate bloom ping pong buffer 
+		updateGaussianSamples();
+		bloom2.bindBuffer();
+		shaderMaster->useShader("_gauss");
+		shaderMaster->attachFrameBufferAsSource("_gauss", &bloom1);
+		shaderMaster->setUniformI("_gauss", "gaussianFactorslength", gaussianSamples);
+		shaderMaster->setUniform1FV("_gauss", "gaussianFactors", GAUSSIAN_CONSTANT_MAX_LENGTH, gaussianBlurFactors);
+		shaderMaster->setUniform2F("_gauss", "offsetDirection", glm::vec2(1.0f, 0.0f));
+		shaderMaster->setUniformF("_gauss", "resolutionScale", 1.0f / bloom2.getResolutionFactor());
+		screenVAO.processGLSide();
+		bloom2.unbindBuffer();
+
+		//ping pong back to other buffer
+		bloom1.bindBuffer();
+		shaderMaster->attachFrameBufferAsSource("_gauss", &bloom2);
+		shaderMaster->setUniform2F("_gauss", "offsetDirection", glm::vec2(0.0f, 1.0f));
+		screenVAO.processGLSide();
+		bloom1.unbindBuffer();
+
+		glFlush();
 		
 		//FIFTH PASS - render buffer to screenspace
 		//set the geometry frame buffer as the source

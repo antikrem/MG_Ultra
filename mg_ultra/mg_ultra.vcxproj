@@ -426,6 +426,8 @@
     <None Include="wd\shaders\ui.vert" />
     <None Include="wd\shaders\unified_lighting.frag" />
     <None Include="wd\shaders\unified_lighting.vert" />
+    <None Include="wd\shaders\_gauss.frag" />
+    <None Include="wd\shaders\_gauss.vert" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="wd\log.txt" />

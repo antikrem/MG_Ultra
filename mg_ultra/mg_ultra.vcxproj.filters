@@ -772,6 +772,12 @@
     <None Include="wd\scripts\bullet_system\bullet_spawners.lua">
       <Filter>Resource Files\scripts\bullet_system</Filter>
     </None>
+    <None Include="wd\shaders\_gauss.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="wd\shaders\_gauss.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="wd\log.txt">
