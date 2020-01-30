@@ -34,6 +34,7 @@ struct GraphicsSettings {
 	//post effects constants
 	atomic<int> bloomEnabled = true;
 	atomic<int> bloomPasses = 1;
+	atomic<float> bloomResolution = 0.5f;
 
 	//target fps
 	atomic<int> targetFPS = 0;

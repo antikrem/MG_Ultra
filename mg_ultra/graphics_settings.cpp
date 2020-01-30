@@ -27,6 +27,7 @@ GraphicsSettings::GraphicsSettings() {
 
 	bloomEnabled = gfxSettings.get("post_effects", "bloom_enabled", 1);
 	bloomPasses = gfxSettings.get("post_effects", "bloom_passes", 1);
+	bloomResolution = gfxSettings.get("post_effects", "bloom_resolution_scale", 0.5f);
 
 	depthPeelingPasses = gfxSettings.get("renderer", "transparency_levels", 3);
 

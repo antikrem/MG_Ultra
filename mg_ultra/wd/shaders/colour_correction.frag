@@ -38,13 +38,13 @@ vec3 exposureMapping(vec3 colour) {
 
 void main() {
 	vec4 bright = texture(brights, uv);
-	vec4 lows = texture(scene, uv);
+	vec4 lows = texture(scene , uv);
 
 	//mix the lows and the highs
 	vec3 sceneTexel 
 		= bright.rgb * max(bright.a, 1.0 - lows.a)  + lows.rgb * (1.0 - bright.a);
 
-    colour = vec4(
+	colour = vec4(
 		exposureMapping(sceneTexel.rgb), 
 		1.0
 	);

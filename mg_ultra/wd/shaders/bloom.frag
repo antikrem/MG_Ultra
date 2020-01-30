@@ -8,8 +8,7 @@ uniform float bloomThreshold;
 
 in vec2 uv;
 
-layout(location = 0) out vec4 color;
-layout(location = 1) out vec4 bloom;
+layout(location = 0) out vec4 bloom;
 
 
 void main() { 
@@ -21,6 +20,4 @@ void main() {
 	else {
 		bloom = vec4(0);
 	}
-
-	color = vec4(sceneColour, 1.0);
 }
