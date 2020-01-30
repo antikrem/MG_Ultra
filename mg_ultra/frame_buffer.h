@@ -2,6 +2,7 @@
 #define __FRAME_BUFFER__
 
 #include <vector>
+#include <tuple>
 
 #include "_graphics_headers.h"
 #include "graphics_settings.h"
@@ -39,7 +40,13 @@ class FrameBuffer {
 
 	//depth buffer texture identifier, -1(wrapped) on no texture id
 	GLuint depthTexID = -1;
-
+	
+	//width and length of framebuffer in pixels
+	int width;
+	int height;
+	//resolution factor against the resolution find in gSettings
+	float resolution = 1.0f;
+	
 	//Creates an attaches a new colour buffer at the given level
 	void createAndAttachColourBuffer(GraphicsSettings* graphicsSettings, int i, BufferSpecification specification) {
 		//Create colour buffer
@@ -52,8 +59,8 @@ class FrameBuffer {
 			GL_TEXTURE_2D, 
 			0, 
 			specification.internalFormat,
-			graphicsSettings->screenWidth, 
-			graphicsSettings->screenHeight, 
+			width,
+			height,
 			0, 
 			lookUpFormat(specification.internalFormat),
 			GL_FLOAT,
@@ -73,8 +80,14 @@ class FrameBuffer {
 public:
 	//returns true if creation was succesful
 	//takes bit ored combination of DepthAttachmentOptions
-	void initialiseFrameBuffer(GraphicsSettings* graphicsSettings, vector<BufferSpecification> specifications, DepthAttachmentOptions attachDepthBuffer) {
+	void initialiseFrameBuffer(GraphicsSettings* graphicsSettings, vector<BufferSpecification> specifications, DepthAttachmentOptions attachDepthBuffer, float resolution = 1.0f) {
 		glGenFramebuffers(1, &fbo);
+		
+		this->resolution = resolution;
+		
+		this->width = (int)(graphicsSettings->screenWidth * resolution);
+		this->height = (int)(graphicsSettings->screenHeight * resolution);
+		
 		bindBuffer();
 
 		//create all of the colour buffers desired
@@ -92,8 +105,8 @@ public:
 				glRenderbufferStorage(
 					GL_RENDERBUFFER, 
 					GL_DEPTH_COMPONENT, 
-					graphicsSettings->screenWidth, 
-					graphicsSettings->screenHeight
+					width, 
+					height
 				);
 
 				glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthTexID);
@@ -106,8 +119,8 @@ public:
 					GL_TEXTURE_2D, 
 					0, 
 					attachDepthBuffer == DEPTH_32 ? GL_DEPTH_COMPONENT32 : GL_DEPTH_COMPONENT24,
-					graphicsSettings->screenWidth, 
-					graphicsSettings->screenHeight, 
+					width, 
+					height,
 					0, 
 					GL_DEPTH_COMPONENT, 
 					GL_UNSIGNED_INT, 
@@ -131,6 +144,21 @@ public:
 
 	~FrameBuffer() {
 		glDeleteFramebuffers(1, &fbo);
+	}
+	
+	//gets fbo id
+	unsigned int getID() {
+		return fbo;
+	}
+	
+	//gets resolution scale
+	float getResolutionFactor() {
+		return resolution;
+	}
+	
+	//get resolution
+	tuple<int, int> getResolution() {
+		return make_tuple(width, height);
 	}
 
 	//binds and clears depth buffer
@@ -191,7 +219,7 @@ public:
 	void setBlendFunctionSeperate(const string& buffer, GLenum mode, GLenum sRGBfactor, GLenum dRGBfactor, GLenum sAlphafactor, GLenum dAlphafactor) {
 		int location = index_of(targetNames, buffer);
 		if (location < 0) {
-			throw GraphicsException("Invalid buffer in in setBlendFunction");
+			throw GraphicsException("Invalid buffer in setBlendFunction");
 		}
 		else {
 			glBlendEquationi(location, mode);
@@ -207,6 +235,20 @@ public:
 	//disables all blending
 	void disableBlending() {
 		glDisable(GL_BLEND);
+	}
+	
+	//copies to this fbo from another
+	void copyIn(FrameBuffer& source, GLenum mask = GL_COLOR_BUFFER_BIT, GLenum filter = GL_LINEAR) {
+		int sWidth, sHeight;
+		tie(sWidth, sHeight) = source.getResolution();
+		
+		glBlitNamedFramebuffer(
+			source.getID(), fbo,
+			0, 0, sWidth, sHeight,
+  			0, 0, width, height,
+  			mask,
+  			filter
+  		);
 	}
 };
 
