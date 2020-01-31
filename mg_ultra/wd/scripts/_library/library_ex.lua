@@ -17,8 +17,9 @@ end
 
 --Adding a component to an entity after its been put in a pool
 --will not attach them for modification from associated systems
+--will return false if operation failed
 function Entity.add_component(self, component)
-	self:addComponent(component.type(), component)
+	return self:addComponent(component.type(), component)
 end
 
 --add a function to Registar to allow weak typed Registar return

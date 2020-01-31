@@ -4,7 +4,6 @@
 pool = getEntityPool()
 
 ---Enumeration of different types of entities
---
 EntityNoType = 0
 EntityGeneric = 1
 EntityGameControl = 2

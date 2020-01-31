@@ -49,9 +49,18 @@ public:
 
 	//adds an entity to the pool, will potentially cache
 	shared_ptr<Entity> addEnt(shared_ptr<Entity> ent, bool cacheEnt = false) {
+		if (ent->isInPool()) {
+			err::logMessage("POOL: Error, entity already in pool, operation aborted");
+			return nullptr;
+		}
+		else {
+			ent->markAddToPool();
+		}
+
 		if (cacheEnt) {
 			unique_lock<shared_mutex> lck(cacheLock);
 			if (cache.count(ent->getType())) {
+				err::logMessage("POOL: Error, entity of cache type: " + to_string(ent->getType()) + " in engine");
 				return nullptr;
 			}
 			cache[ent->getType()] = ent;
@@ -68,6 +77,10 @@ public:
 
 	shared_ptr<Entity> addEnt(Entity* ent, bool cacheEnt = false) {
 		return addEnt(shared_ptr<Entity>(ent), cacheEnt);
+	}
+
+	bool l_addEnt(Entity* ent) {
+		return (bool)addEnt(shared_ptr<Entity>(ent), false);
 	}
 
 	//returns a system from cache, returns null if the system is not cached
@@ -187,6 +200,7 @@ public:
 		state["EntityPool"].setClass(
 			kaguya::UserdataMetatable<EntityPool>()
 			.setConstructors<EntityPool()>()
+			.addFunction("add", &EntityPool::l_addEnt)
 			.addFunction("getEntFromCache", &EntityPool::getCachedEnt)
 			.addFunction("getGraveyardSize", &EntityPool::getGraveyardSize)
 			.addFunction("getGraveyardPassed", &EntityPool::getGraveyardPassed)

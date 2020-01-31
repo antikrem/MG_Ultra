@@ -18,16 +18,22 @@
 */
 class Entity : public ScriptableClass {
 private:
+	//lock applied when entity is added to pool
+	//blocking component additions
+	atomic<bool> inPool = false;
+	//map of components
 	map<type_index, shared_ptr<Component>> components;
+	
 	//when false the enemy will be removed from pool
 	atomic<bool> flag = true;
+
 	//All entities have a type
 	int entityType = ETNoType;
 	//set to true when entity is ready to be deleted and memory returned
 	bool gcReady = false;
 
 	//function to create an entity in the program stack
-	Entity* createEntity(int type) {
+	static Entity* createEntity(int type) {
 		return new Entity(type);
 	}
 
@@ -57,16 +63,23 @@ public:
 
 	//returns a valid shared pointer if successful, otherwise returns a nullptr
 	shared_ptr<Component> addComponent(pair<type_index, Component*> component) {
-		if (components.count(component.first)) {
+		if (components.count(component.first) || inPool) {
 			return nullptr;
 		}
+		
 		components[component.first] = shared_ptr<Component>(component.second);
 		return components[component.first];
 	}
 
 	//a lua bindable addComponent
 	bool l_addComponent(type_index index, Component* component) {
-		if (components.count(index)) {
+		if (components.count(index) || inPool) {
+			if (inPool) {
+				err::logMessage("ENTITY: Error, entity is already in pool (pooled ents cannot have comps added), operation aborted");
+			}
+			else {
+				err::logMessage("ENTITY: Error, entity already has this component, operation aborted");
+			}
 			return false;
 		}
 		components[index] = shared_ptr<Component>(component);
@@ -95,6 +108,16 @@ public:
 		return flag;
 	}
 
+	//gets inPool flag
+	bool isInPool() {
+		return inPool;
+	}
+
+	//sets this entity to be in the pool
+	void markAddToPool() {
+		inPool = true;
+	}
+
 	//sets the entity to be ready for garbage collection
 	void markGCReady() {
 		gcReady = true;
@@ -109,7 +132,6 @@ public:
 	map<type_index, shared_ptr<Component>>& getMapComponent() {
 		return components;
 	}
-
 
 	void registerToLua(kaguya::State& state) override {
 		state["Entity"].setClass(
