@@ -17,20 +17,25 @@ out float outA;
 out float outB;
 out float outC;
 
-out vec3 worldPosition;
+
+out vec3 lightVolumeWorldPosition;
+out vec4 screenSpaceCenter;
 
 //MVP for sprites in 3D
 uniform mat4 MVP;
 
 void main() {
-	outLightPosition = lightPosition;
+	vec3 adjustedLightPosition = vec3(lightPosition.xy, -lightPosition.z);
+	
+	outLightPosition = adjustedLightPosition;
 	outLightColour = lightColour;
 	outA = a;
 	outB = b;
 	outC = c;
 
-	worldPosition = range * vertexPosition + lightPosition;
+	lightVolumeWorldPosition = range * vertexPosition + adjustedLightPosition;
+	screenSpaceCenter = MVP * vec4(lightPosition, 1);
 
 	gl_Position 
-		= MVP * vec4(worldPosition, 1);
+		= MVP * vec4(lightVolumeWorldPosition, 1);
 }

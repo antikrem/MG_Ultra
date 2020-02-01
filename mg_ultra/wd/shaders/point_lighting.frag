@@ -3,7 +3,7 @@
 #include "helper.glsl"
 
 //need to use lambertian cutoff until normals are added
-#define LAMBERT_CUTOFF -0.1
+#define LAMBERT_CUTOFF -0.0
 
 uniform sampler2D spriteColour;
 uniform sampler2D spriteWorldPosition;
@@ -19,7 +19,8 @@ in float outA;
 in float outB;
 in float outC;
 
-in vec3 worldPosition; 
+in vec3 lightVolumeWorldPosition; 
+in vec4 screenSpaceCenter;
 
 layout(location = 0) out vec4 color;
 
@@ -29,6 +30,7 @@ void main() {
 	vec3 worldspace = texture(spriteWorldPosition, uv).rgb;
 	vec3 texel = texture(spriteColour, uv).rgb;
 	vec3 lightDirection = worldspace - outLightPosition;
+	lightDirection = reflect(lightDirection, vec3(0,0,1));
 	
 	vec3 temp = outLightColour + vec3(viewport_w) + vec3(viewport_h);
 
@@ -39,13 +41,18 @@ void main() {
 	);
 
 	//distance based light strength
-	float lightStrength 
-		= max( 
+	float lightStrength = max( 
 		1.0 / (outA * pow(length(lightDirection), 2) + outB * length(lightDirection) + outC) - 0.0045,
 		0
 	);
 
 	//output 
-	color =  lightStrength * vec4(outLightColour * texel, 1) * step(LAMBERT_CUTOFF, lambertFactor);
+	color 
+		//direct lighting upon fragment strength
+		= lightStrength * vec4(outLightColour * texel, 1) * step(LAMBERT_CUTOFF, lambertFactor)
+		//
+		;
+
+	//color = color - color + vec4(screenSpaceCenter.xyz, 1.0);
 	
 }
