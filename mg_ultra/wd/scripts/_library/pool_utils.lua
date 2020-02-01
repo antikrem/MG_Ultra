@@ -19,6 +19,11 @@ EntityEnemy = 12
 EntityMusic = 13
 EntityWeather = 14
 
+--Adds to pool, returns boolean success
+function EntityPool.add_entity(entity)
+	return pool:add(entity)
+end
+
 --returns the entity cached with this types
 --or nil on failure due to invalid type or no respective cached ent
 function EntityPool.get_cached_entity(entityType)
