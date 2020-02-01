@@ -26,11 +26,12 @@ Weather.start_heavy_rain = function()
 	registar:update("weather_type", WeatherTypes.HeavyRain)
 
 	--Start rain
-	EntityPool.get_cached_entity(EntityWeather):get_component(ComponentParticle):spawn_uniformly(750)
+	EntityPool.get_cached_entity(EntityWeather):get_component(ComponentParticle):spawn_uniformly(900)
 	EntityPool.get_cached_entity(EntityWeather):get_component(ComponentAudio):play("rain")
 	Drift.set_wind_speed(10, -24, 0)
 
 	--Moody lights and fog
+	PostEffects.Exposure.set(1.1)
 	AmbientLight.set_strength(0.01)
 	Fog.set_colour(0.4, 0.4, 0.4)
 	Fog.set_strength(0.00165)
@@ -40,4 +41,35 @@ Weather.start_heavy_rain = function()
 	if p then p:get_component(ComponentPointLight):set_parameters(0.00078, 0, 2) end
 
 	PostEffects.Bloom.set_threshold(0.2)
+end
+
+--Applies a blinding strike of lightning
+Weather.strike_blinding_lightning = function(delay, fadeout)
+	if is_nil(delay) then delay = 100 end
+	if is_nil(fadeout) then fadeout = 100 end
+
+	ColourModulation.set_cutoff(1070)
+	ColourModulation.set_background_colour(100000, 100000, 100000)
+	ColourModulation.set_foreground_colour(0,0,0)
+	ColourModulation.set_strength(1.2)
+
+	Fog.set_strength(0)
+	--AmbientLight.set_strength(1.2)
+
+	local e = Entity.create(EntityGeneric)
+	local c = ComponentTimer.create()
+	c:add_callback(
+		delay, 
+		"ColourModulation.set_strength(1.2," .. tostring(1.2/fadeout) .. ", 0.000) " ..
+		"Fog.set_strength(0, " .. tostring(0.00165/fadeout) .. ", 0.00165) " ..
+		"this:get_component(ComponentDirectionalLight):set_strength(1.0, " .. tostring(1.0 / fadeout) .. ", 0)" 
+	)
+	c:add_callback(
+		delay + fadeout, 
+		"this:kill()"
+	)
+	e:add_component(c)
+	local d = ComponentDirectionalLight.create(1.0, 0, -1.0, 1.0, 1.0, 1.0)
+	e:add_component(d)
+	pool:add(e)
 end
