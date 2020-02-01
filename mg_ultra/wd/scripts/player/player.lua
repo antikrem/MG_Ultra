@@ -118,16 +118,17 @@ if cInput:query_down("shoot") == 1 and
 		cSpawner:add_component(ComponentDamage.create(10))
 		cSpawner:add_component(ComponentOffsetOnce.create())
 		cSpawner:add_component(ComponentMinAmbient.create(1.0))
+		cSpawner:add_component(ComponentRotation.create(true))
+		cSpawner:add_component(ComponentPointLight.create(0, 0, 0, 0.9647, 0.8039, 0.3751, 0.004, 0.3, 4.85))
 
-		local bulletGComponents = ComponentGraphics.create("player")
+		local bulletGComponents = ComponentGraphics.create("bullet_cross")
 		bulletGComponents:set_animation(1)
-		bulletGComponents:set_scale(0.1)
+		bulletGComponents:set_scale(1.1)
 		cSpawner:add_component(bulletGComponents)
 
 		local bulletMComponent = ComponentMovement.create()
-		bulletMComponent:set_speed(15.0)
+		bulletMComponent:set_speed(16.5)
 		bulletMComponent:set_angle(bAngle)
-		bulletMComponent:set_rotation_speed(5)
 		cSpawner:add_component(bulletMComponent)
 
 	
