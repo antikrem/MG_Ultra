@@ -4,7 +4,7 @@
 AmbientLight = {}
 
 AmbientLight.set_strength = function(current, rate, target)
-	if is_nil(current) then target = AmbientLight.get_strength() end
+	if is_nil(current) then current = AmbientLight.get_strength() end
 	rate = rate or 1.0
 	if is_nil(target) then target = current end
 
@@ -34,6 +34,14 @@ DirectionalLight.add_new = function(x, y, z, r, g, b)
 	AnonymousSpawner.push_entity()
 end
 
+ComponentDirectionalLight.set_strength = function(self, current, rate, target)
+	if is_nil(current) then current = self:get_strength() end
+	rate = rate or 0.01
+	if is_nil(target) then target = current end
+
+	self:setStrength(current, rate, target)
+end
+
 --Interface for handling fog parameters
 Fog = {}
 
@@ -45,7 +53,7 @@ Fog.get_colour = getFogColour
 
 --set fog exponential growth factor
 Fog.set_strength = function(current, rate, target)
-	if is_nil(current) then target = Fog.get_strength() end
+	if is_nil(current) then current = Fog.get_strength() end
 	rate = rate or 1.0
 	if is_nil(target) then target = current end
 
