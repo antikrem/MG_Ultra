@@ -333,6 +333,7 @@
     <ClInclude Include="system_colour_modulation.h" />
     <ClInclude Include="system_console.h" />
     <ClInclude Include="system_die_with_master.h" />
+    <ClInclude Include="system_directional_lighting_update.h" />
     <ClInclude Include="system_fog.h" />
     <ClInclude Include="system_health.h" />
     <ClInclude Include="system_directional_lighting.h" />

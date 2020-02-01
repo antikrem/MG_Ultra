@@ -4,7 +4,10 @@ from a given direction*/
 #define __DIRECTIONAL_LIGHT__
 
 #include <mutex>
+#include <atomic>
+
 #include "cus_struct2.h"
+#include "trending_value.h"
 
 struct DirectionalData {
 	float direction[3];
@@ -13,22 +16,23 @@ struct DirectionalData {
 	DirectionalData() {
 	}
 
-	DirectionalData(const Point3& direction, const Point3& colour) {
+	DirectionalData(const Point3& direction, const Point3& colour, float strength) {
 		this->direction[0] = direction.x;
 		this->direction[1] = direction.y;
-		this->direction[2] = direction.z;
+		this->direction[2] = -1 * direction.z;
 
-		this->colour[0] = colour.x;
-		this->colour[1] = colour.y;
-		this->colour[2] = colour.z;
+		this->colour[0] = strength * colour.x;
+		this->colour[1] = strength * colour.y;
+		this->colour[2] = strength * colour.z;
 	}
 };
 
 class DirectionalLight {
-	mutex directionLock;
-	Point3 direction;
-	mutex colourLock;
-	Point3 colour;
+	TrendingValue<float> strength = 1.0f;
+
+	atomic<Point3> direction;
+
+	atomic<Point3> colour;
 
 public:
 	DirectionalLight(const Point3& direction, const Point3& colour)
@@ -36,29 +40,36 @@ public:
 
 	}
 
+	void update() {
+		strength.update();
+	}
+
+	void setStrength(float current, float rate, float target) {
+		strength.set(current, rate, target);
+	}
+
+	float getStrength() {
+		return strength.get();
+	}
+
 	void setDirection(const Point3& direction) {
-		unique_lock<mutex> lck(directionLock);
 		this->direction = direction;
 	}
 
 	Point3 getDirection() {
-		unique_lock<mutex> lck(directionLock);
 		return direction;
 	}
 
 	void setColour(const Point3& colour) {
-		unique_lock<mutex> lck(colourLock);
 		this->colour = colour;
 	}
 
 	Point3 getColour() {
-		unique_lock<mutex> lck(colourLock);
 		return colour;
 	}
 
 	DirectionalData getData() {
-		unique_lock<mutex> clck(directionLock);
-		return DirectionalData(direction, colour);
+		return DirectionalData(direction, colour, strength.get());
 	}
 };
 

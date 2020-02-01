@@ -7,7 +7,7 @@
 #include "system_bounds_control.h"
 #include "system_profiler.h"
 
-//ring 0 - higher meta ECS management systems
+//ring 1 - higher meta ECS management systems
 #include "system_multi_ent.h"
 #include "system_bullet_master.h"
 #include "system_bullet_spawner.h"
@@ -27,6 +27,7 @@
 #include "system_colour_modulation.h"
 #include "system_ambient_light.h"
 #include "system_fog.h"
+#include "system_directional_lighting_update.h"
 
 //ring 3 - main game loop - most important main gameplay loop
 #include "system_timer.h"

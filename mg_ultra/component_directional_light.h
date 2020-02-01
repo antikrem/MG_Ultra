@@ -28,6 +28,18 @@ public:
 		: directionLight(Point3(x, y, z), Point3(r, g, b)) {
 	}
 
+	void update() {
+		directionLight.update();
+	}
+
+	void setStrength(float current, float rate, float target) {
+		directionLight.setStrength(current, rate, target);
+	}
+
+	float getStrength() {
+		return directionLight.getStrength();
+	}
+
 	DirectionalData getDirectionData() {
 		return directionLight.getData();
 	}
@@ -35,7 +47,8 @@ public:
 	void registerToLua(kaguya::State& state) override {
 		state["ComponentDirectionalLight"].setClass(kaguya::UserdataMetatable<ComponentDirectionalLight, Component>()
 			.setConstructors<ComponentDirectionalLight()>()
-			//.addFunction("get_position", &ComponentPosition::getPosition)
+			.addFunction("setStrength", &ComponentDirectionalLight::setStrength)
+			.addFunction("get_strength", &ComponentDirectionalLight::getStrength)
 			.addOverloadedFunctions(
 				"create",
 				ScriptableClass::create<ComponentDirectionalLight, float, float, float>,
