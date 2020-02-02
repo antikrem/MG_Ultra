@@ -2,9 +2,10 @@
 @immediate
 <<Drift.set_scroll_speed(0, -10, 0)
 
-<<BackgroundMaster.add_new_layer("default", 1, 1000)
+<<BackgroundMaster.add_new_layer("background_dark_sky", 1, 1300)
 
 <<Audio.request_load_file("click", "click.wav")
+<<Audio.request_load_file("sr_1", "twin_stroke.wav")
 <<Audio.flush_queue()
 <<Weather.start_heavy_rain()
 
@@ -30,4 +31,6 @@ ent 12
 +timer
 
 @cycle 1000
-#basic_enemy 10 10 0 1
+#basic_enemy 200 200 0 1
++multiEntity
++bulletMaster default
