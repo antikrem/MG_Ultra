@@ -5,6 +5,7 @@ AnimationsMaster* g_animationMaster = nullptr;
 
 AnimationsMaster::AnimationsMaster() {
 	g_animationMaster = this;
+	memset(loadedTextures, 0, MAX_TEXTURE_COUNT * sizeof(int));
 }
 
 #define INVALID_POINT make_tuple(-1, -1);

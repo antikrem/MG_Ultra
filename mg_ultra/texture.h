@@ -67,9 +67,14 @@ class Texture {
 	//gl texture id
 	GLuint textureID;
 
+	//string location
+	string name;
+
 	int texWidth, texHeight;
 public:
-	Texture(Reader* file) {
+	Texture(Reader* file, string name) {
+		this->name = name;
+
 		//size of whole texture
 		unsigned int width, height, mipMapCount, linearSize;
 
@@ -141,10 +146,7 @@ public:
 class AnimationsMaster {
 private:
 	//Map of currently loaded textures, index to texture*
-	map<int, Texture*> loadedTextures;
-
-	//next texture index to be used
-	int nextTextureIndex = 0;
+	Texture* loadedTextures[MAX_TEXTURE_COUNT];
 
 	//read write lock, write lock when adding or removing mgt files, resulting in loadedTextures changing
 	shared_mutex mtx;
@@ -167,14 +169,14 @@ private:
 	//gets the lowest texture unit that isn't allocated
 	//returns -1 if 16 texture units have been allocated
 	int getFreeTextureIndex() {
-		if (loadedTextures.size() > 16) {
-			return -1;
+		for (int i = 0; i < MAX_TEXTURE_COUNT; i++) {
+			if (!loadedTextures[i]) {
+				return i;
+			}
 		}
-		else {
-			//return next t index then iterate tex index
-			return nextTextureIndex++;
-		}
+		return -1;
 	}
+
 
 public:
 	AnimationsMaster();
@@ -202,7 +204,7 @@ public:
 		//data section is handled by sending to a newly created TU
 		int fullWidth, fulllHeight;
 		int index = getFreeTextureIndex();
-		loadedTextures[index] = new Texture(&file);
+		loadedTextures[index] = new Texture(&file, location);
 		fullWidth = loadedTextures[index]->getWidth();
 		fulllHeight = loadedTextures[index]->getHeight();
 
@@ -348,20 +350,24 @@ public:
 
 	//attaches all current textures to the target shader
 	//returns next texture unit to chain
-	int attachTextures(ShaderMaster* shaderMaster, string programName, string textureVariableTargetName) {
+	int attachTextures(ShaderMaster* shaderMaster, string programName, string textureVariableTargetName, int chain = 0) {
 		//vector of texture units to use
 		vector<int> tuList;
 		//bind to texture units
-		int i = 0;
-		for (; i < (int)loadedTextures.size(); i++) {
-			loadedTextures[i]->bindTexture(i);
-			tuList.push_back(i);
+		int tu = chain;
+		for (int i = 0; i < MAX_TEXTURE_COUNT; i++) {
+			if (loadedTextures[i]) {
+				loadedTextures[i]->bindTexture(tu);
+				tuList.push_back(tu);
+				tu++;
+			}
+			
 		}
 		shaderMaster->setNUniformI(programName, textureVariableTargetName, (int)tuList.size(), tuList);
 
-		return i;
+		return tu;
 	}
-
+	
 };
 
 namespace g_aniquery {
