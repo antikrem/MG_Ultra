@@ -138,6 +138,10 @@ public:
 		glActiveTexture(GL_TEXTURE0 + TU);
 		glBindTexture(GL_TEXTURE_2D, textureID);
 	}
+
+	string getName() {
+		return name;
+	}
 };
 
 //Master that handles textures and animation
@@ -171,6 +175,16 @@ private:
 	int getFreeTextureIndex() {
 		for (int i = 0; i < MAX_TEXTURE_COUNT; i++) {
 			if (!loadedTextures[i]) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	//gets index of named texture, returns -1 if cannot find
+	int getNamedIndex(string name) {
+		for (int i = 0; i < MAX_TEXTURE_COUNT; i++) {
+			if (loadedTextures[i] && loadedTextures[i]->getName() == name) {
 				return i;
 			}
 		}
@@ -366,6 +380,18 @@ public:
 		shaderMaster->setNUniformI(programName, textureVariableTargetName, (int)tuList.size(), tuList);
 
 		return tu;
+	}
+	
+	//attaches a named texture to a target texture name
+	int attachNamedTextures(ShaderMaster* shaderMaster, string programName, string textureName, string textureVariableTargetName, int chain = 0) {
+		//vector of texture units to use
+		int target = getNamedIndex(textureName);
+		//bind to texture units
+		loadedTextures[target]->bindTexture(chain);
+
+		shaderMaster->setUniformI(programName, textureVariableTargetName, chain);
+
+		return chain + 1;
 	}
 	
 };
