@@ -103,6 +103,12 @@
     <Filter Include="Resource Files\scripts\bullet_system">
       <UniqueIdentifier>{7f3715d1-c41b-49e7-9989-f2afe73cf3b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\level">
+      <UniqueIdentifier>{80547aa8-3ae9-4142-9da0-446fd8172777}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\level\1">
+      <UniqueIdentifier>{35d539f2-c214-4e5a-b23c-eeef684b8d59}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -781,10 +787,19 @@
     <None Include="wd\shaders\_gauss.frag">
       <Filter>Resource Files\shaders</Filter>
     </None>
+    <None Include="wd\campaigns\ascent\1\prelevel.lua">
+      <Filter>Resource Files\level\1</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="wd\log.txt">
       <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="wd\campaigns\ascent\1\load_table.txt">
+      <Filter>Resource Files\level\1</Filter>
+    </Text>
+    <Text Include="wd\campaigns\ascent\1\template_table.txt">
+      <Filter>Resource Files\level\1</Filter>
     </Text>
   </ItemGroup>
 </Project>
