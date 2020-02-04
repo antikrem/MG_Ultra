@@ -114,6 +114,13 @@ public:
 	float distanceTo(const Point2& point) {
 		return sqrt(pow(point.x - this->x, 2) + pow(point.y - this->y, 2));
 	}
+
+#ifdef GLM_ADDED
+	//as glm is avalible use the following conversion
+	glm::vec2 getVec2() {
+		return glm::vec2(this->x, this->y);
+	}
+#endif
 };
 
 /*Use for rectangular points in 3d*/
