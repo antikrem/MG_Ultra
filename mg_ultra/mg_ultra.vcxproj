@@ -205,6 +205,7 @@
     <ClCompile Include="audio_master.cpp" />
     <ClCompile Include="collision.cpp" />
     <ClCompile Include="colour_modulation.cpp" />
+    <ClCompile Include="entity.cpp" />
     <ClCompile Include="entity_types.cpp" />
     <ClCompile Include="error.cpp" />
     <ClCompile Include="events.cpp" />

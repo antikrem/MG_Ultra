@@ -13,6 +13,7 @@ Works in conjunction with component_spawner*/
 #include "algorithm_ex.h"
 
 #include "component_position.h"
+#include "component_die_with_master.h"
 #include "component_offset_master.h"
 #include "component_offset_once.h"
 
@@ -28,6 +29,15 @@ private:
 	vector<shared_ptr<Entity>> internalEntities;
 
 	Point3 lastMasterPosition = Point3(0.0f);
+
+	//static function to use on subents of killed entities
+	static void killDieWithMaster(shared_ptr<Entity> subEnt) {
+		auto dwm = subEnt->getComponent<ComponentDieWithMaster>();
+
+		if (dwm) {
+			dwm->setMasterDead();
+		}
+	}
 
 public:
 	//adds a shared_ptr to this MultiEntities' internal store
@@ -114,6 +124,11 @@ public:
 		for (auto i : internalEntities) {
 			lambda(i);
 		}
+	}
+
+	//Kill all sub entities marked to die
+	void propogateDeathTag() {
+		applyFunction(&ComponentMultiEntity::killDieWithMaster);
 	}
 
 	void registerToLua(kaguya::State& state) override {

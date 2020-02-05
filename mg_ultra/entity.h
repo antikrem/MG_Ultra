@@ -28,6 +28,9 @@ private:
 	//when false the enemy will be removed from pool
 	atomic<bool> flag = true;
 
+	//set to false when internal cleanup has occured
+	atomic<bool> componentCleanUpRequired = true;
+
 	//All entities have a type
 	int entityType = ETNoType;
 	//set to true when entity is ready to be deleted and memory returned
@@ -93,6 +96,9 @@ public:
 		for (auto i : components) {
 			flag = flag && i.second->getFlag();
 		}
+		if (!flag) {
+			killEntity();
+		}
 	}
 
 	//Gets type
@@ -101,9 +107,7 @@ public:
 	}
 
 	//kills entity directly
-	void killEntity() {
-		flag = false;
-	}
+	void killEntity();
 
 	//returns flag, if false, delete this ent
 	bool getFlag() {

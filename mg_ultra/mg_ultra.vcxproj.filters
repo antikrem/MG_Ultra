@@ -207,6 +207,9 @@
     <ClCompile Include="point_light.cpp">
       <Filter>Source Files\Graphics\Unified Lighting</Filter>
     </ClCompile>
+    <ClCompile Include="entity.cpp">
+      <Filter>Source Files\ECS</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="graphics_state.h">
