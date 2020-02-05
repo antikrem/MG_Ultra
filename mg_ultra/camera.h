@@ -11,6 +11,8 @@
 #include <atomic>
 
 class Camera {
+	//worldspace eye position
+	atomic<glm::vec3> eyePos = glm::vec3(0);
 
 	//view 
 	atomic<glm::mat4> inWorldView = glm::mat4(1.0f);
@@ -64,6 +66,9 @@ public:
 
 	void updateCamera(glm::vec3 eyePos, glm::vec3 lookAt, float fov) {
 		eyePos.z = -1 * eyePos.z;
+
+		this->eyePos = eyePos;
+
 		inWorldProjection = glm::perspective(
 			glm::radians(fov), 
 			(float)gSettings->screenWidth / (float)gSettings->screenHeight, 
@@ -88,6 +93,10 @@ public:
 
 	glm::mat4 getUiVPMatrix() {
 		return uiProjection.load() * uiView.load();
+	}
+
+	glm::vec3 getEyePos() {
+		return eyePos;
 	}
 
 	//gets near clip distance
