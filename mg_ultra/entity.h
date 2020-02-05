@@ -4,6 +4,7 @@
 
 #include <map>
 #include <typeindex>
+#include <typeinfo>
 #include <memory>
 #include <atomic>
 #include <mutex>
@@ -78,7 +79,8 @@ public:
 				err::logMessage("ENTITY: Error, entity is already in pool (pooled ents cannot have comps added), operation aborted");
 			}
 			else {
-				err::logMessage("ENTITY: Error, entity already has this component, operation aborted");
+				string compName = (typeid(*component)).name();
+				err::logMessage("ENTITY: Error, entity already has this component: " + compName + ", operation aborted");
 			}
 			return false;
 		}
