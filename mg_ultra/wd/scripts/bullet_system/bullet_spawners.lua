@@ -36,9 +36,13 @@ BulletSpawner = {
 
 	--Allows a bullet spawner entity to be initialised from 
 	--this spawner template
-	initialise = function(self, entity)
+	initialise = function(self, entity, name)
 		entity:add_component(ComponentExtendedScripting.create())
 		for _, comps in ipairs(self.components) do
+			if is_nil(comps[1]) 
+				then print("BULLETSPAWNER, Error, nil component loading: " .. name .. " indexed at " .. _) return 
+			end
+
 			entity:add_component(comps[1].create(unpack(comps, 2)))
 		end
 	end
@@ -51,7 +55,7 @@ BulletSpawnerList = {
 	--will set the success value in Flag
 	_initialise = function(blankEntity, name)
 		if BulletSpawnerList[name] ~= nil then
-			BulletSpawnerList[name]:initialise(blankEntity)
+			BulletSpawnerList[name]:initialise(blankEntity,name)
 			registar:update("bullet_spawner_initialisation_success", 1)
 		else 
 			registar:update("bullet_spawner_initialisation_success", 0)
