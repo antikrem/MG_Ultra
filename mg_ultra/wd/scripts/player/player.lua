@@ -110,7 +110,7 @@ end
 if cInput:query_down("shoot") == 1 and 
 		(cTiming:get_cycle() % PLAYER_SHOOT_TIMING) == 0 then
 	for bAngle in range(45, 136, 15) do
-		cSpawner = this:get_component(ComponentSpawner)
+		local cSpawner = this:get_component(ComponentSpawner)
 		cSpawner:create_entity(EntityPlayerBullets)
 	
 		cSpawner:add_component(ComponentPosition.create(0, 40))
