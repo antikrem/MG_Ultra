@@ -79,7 +79,7 @@ public:
 	}
 
 	//set rotation value
-	void setRotation(float angle) {
+	void setSpriteRotation(float angle) {
 		this->rotation = angle;
 	}
 
