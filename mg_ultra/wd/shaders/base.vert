@@ -1,5 +1,6 @@
 //First shader that projects sprites unto 3d worldspace
 #version 330 core
+#include "helper.glsl"
 
 //in
 layout(location = 0) in vec3 basePos;
@@ -42,10 +43,8 @@ void main() {
 	wl = wrapFactor * vec2((basePos.x + 0.5f) * textureCoordinate.z, (0.5f - basePos.y) * textureCoordinate.w)
 		- texSize * ((wrapFactor - 1.0f) / 2.0f);
 
-	worldPosition = rotation * (basePos * vec3(size,1)) + centerPos;
-
 	//Z coordinate has to be flipped
-	worldPosition.z = -worldPosition.z;
+	worldPosition = flip_z(rotation * (basePos * vec3(size,1)) + centerPos);
 
 	transparency = spriteTransparency;
 

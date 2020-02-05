@@ -31,3 +31,13 @@ vec3 mix3(vec3 proportion, vec3 a, vec3 b, vec3 c) {
 vec3 mix3(vec3 proportion, vec3 a, vec3 b, vec3 c, vec3 base) {
 	return mix3(proportion, a, b, c) + clampPositive(1 - sum_up(proportion)) * base;
 }
+
+//Z zxis flip
+vec2 flip_z(vec2 p) {
+	return vec2(p.x, -p.y);
+}
+
+//Z zxis flip
+vec3 flip_z(vec3 p) {
+	return vec3(p.xy, -p.z);
+}
