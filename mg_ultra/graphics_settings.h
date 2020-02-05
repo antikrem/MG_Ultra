@@ -29,6 +29,7 @@ struct GraphicsSettings {
 	atomic<int> countMaxPointLights = 100;
 
 	//lighting constants
+	atomic<int> pointLightVolumetric = true;
 	atomic<int> pointLightPeels = 2;
 
 	//post effects constants

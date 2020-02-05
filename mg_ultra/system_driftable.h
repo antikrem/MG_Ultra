@@ -9,6 +9,8 @@
 
 #include "registar.h"
 
+#include "point_light.h"
+
 #include "component_position.h"
 #include "component_driftable.h"
 
@@ -47,6 +49,15 @@ public:
 			&& registar->get("drift_scrollspeed_z", &z)) {
 			scrollSpeed = Point3(x, y, z);
 		}
+
+		if (registar->get("drift_windspeed_x", &x)
+			&& registar->get("drift_windspeed_y", &y)
+			&& registar->get("drift_windspeed_z", &z)) {
+			windSpeed = Point3(x, y, z);
+		}
+
+		//update point lights drift for volumetric scattering
+		g_pointlights::updateDrift(scrollSpeed.load().getXY() + windSpeed.load().getXY());
 	}
 
 	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, shared_ptr<Entity> ent, int id) override {

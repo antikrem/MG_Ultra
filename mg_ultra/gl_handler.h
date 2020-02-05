@@ -164,7 +164,7 @@ public:
 			gSettings,
 			{ 
 				{"spriteColour", GL_RGBA}, 
-				{"spriteWorldPosition", GL_RGB16F}, 
+				{"spriteWorldPosition", GL_RGB16F},
 				{"normals", GL_RGB16_SNORM}, 
 				{"lightingSensitivity", GL_R16F},
 				{"minimumAmbient", GL_R16F},
@@ -217,7 +217,8 @@ public:
 		shaderMaster = new ShaderMaster();
 
 		//Load most important global mgt
-		textureMaster->loadMGT("output.mgt", TA_global);
+		textureMaster->loadMGT("assets/output.mgt", TA_global);
+		textureMaster->loadMGT("assets/gfx.mgt", TA_global);
 
 		err::logMessage("GRAPHICS: Subsystem initialised... Entering render loop");
 		return EXIT_SUCCESS;
@@ -284,9 +285,15 @@ public:
 				glCullFace(GL_FRONT);
 				shaderMaster->useShader("point_lighting");
 				shaderMaster->setUniformMatrix4F("point_lighting", "MVP", camera->getVPMatrix());
-				shaderMaster->attachFrameBufferAsSource("point_lighting", &geometryFrameBuffer);
+				chain = textureMaster->attachNamedTextures(shaderMaster, "point_lighting", "assets/gfx.mgt", "noise");
+				shaderMaster->attachFrameBufferAsSource("point_lighting", &geometryFrameBuffer, chain);
+				shaderMaster->setUniformI("point_lighting", "enableVolumetricScattering", gSettings->pointLightVolumetric);
 				shaderMaster->setUniformF("point_lighting", "viewport_w", (float)gSettings->screenWidth);
 				shaderMaster->setUniformF("point_lighting", "viewport_h", (float)gSettings->screenHeight);
+				shaderMaster->setUniform2F("point_lighting", "fogDrift", g_pointlights::getDrift().getVec2());
+				shaderMaster->setUniform3F("point_lighting", "cameraPosition", camera->getEyePos());
+				shaderMaster->setUniformF("point_lighting", "lightScatteringFactor", g_fog::getFogStrength());
+				shaderMaster->setUniform3F("point_lighting", "fogColour", g_fog::getFogColour().getVec3());
 				pointLightVAOBuffer.processGLSide();
 				glDepthMask(GL_TRUE);
 				glDisable(GL_CULL_FACE);
@@ -313,6 +320,8 @@ public:
 			screenVAO.processGLSide();
 			glDisable(GL_BLEND);
 			postEffects.unbindBuffer();
+
+			glFlush();
 		}
 
 		//FOURTH PASS - Apply post effects, starting with bloom
@@ -345,8 +354,6 @@ public:
 			screenVAO.processGLSide();
 			bloom1.unbindBuffer();
 		}
-
-		glFlush();
 		
 		//FIFTH PASS - render buffer to screenspace
 		//set the geometry frame buffer as the source

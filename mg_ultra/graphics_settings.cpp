@@ -24,6 +24,7 @@ GraphicsSettings::GraphicsSettings() {
 	countMaxPointLights = gfxSettings.get("max_renderable", "point_lights", 100);
 
 	pointLightPeels = gfxSettings.get("lighting", "pointlight_peeldepth", 2);
+	pointLightVolumetric = gfxSettings.get("lighting", "pointlight_volumetricScattering", 1);
 
 	bloomEnabled = gfxSettings.get("post_effects", "bloom_enabled", 1);
 	bloomPasses = gfxSettings.get("post_effects", "bloom_passes", 1);
