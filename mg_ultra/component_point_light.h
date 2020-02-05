@@ -57,6 +57,10 @@ public:
 		pointLight.setConstants(a, b, c);
 	}
 
+	void setStrength(float strength) {
+		pointLight.setStrength(strength);
+	}
+
 	void setByPoints(const Point2& p1, const Point2& p2, const Point2& p3) {
 		glm::vec3 Y = glm::vec3(1.0f / p1.y, 1.0f / p2.y, 1.0f / p3.y);
 		glm::mat4 A = glm::mat3(
@@ -88,6 +92,7 @@ public:
 			.addFunction("set_colour", &ComponentPointLight::l_setColour)
 			.addFunction("set_parameters", &ComponentPointLight::setParameters)
 			.addFunction("set_by_points", &ComponentPointLight::setByPoints)
+			.addFunction("set_strength", &ComponentPointLight::setStrength)
 			.addOverloadedFunctions(
 				"create",
 				ScriptableClass::create<ComponentPointLight, float, float, float>,
