@@ -15,6 +15,15 @@ from a given direction*/
 
 #define POINT_LIGHT_EXTINCTION_LEVEL 0.0045f
 
+//global point light fog drift variable
+namespace g_pointlights {
+	//updates drift against noise width
+	void updateDrift(const Point2& shift);
+
+	//gets the drift
+	Point2 getDrift();
+}
+
 //Minimal specification required for a point light
 struct PointLightData {
 	float position[3];
@@ -28,13 +37,15 @@ struct PointLightData {
 	//light extinction distance
 	float extinctionRange;
 
+	float strength;
+
 	//default constructor has uninitialised values
 	PointLightData() {
 
 	}
 
 
-	PointLightData(const Point3& position, const Point3& colour, float a, float b, float c, float extinctionRange) {
+	PointLightData(const Point3& position, const Point3& colour, float a, float b, float c, float extinctionRange, float strength) {
 		this->position[0] = position.x;
 		this->position[1] = position.y;
 		this->position[2] = position.z;
@@ -48,6 +59,8 @@ struct PointLightData {
 		this->c = c;
 
 		this->extinctionRange = extinctionRange;
+
+		this->strength = strength;
 	}
 };
 
@@ -63,14 +76,14 @@ private:
 
 	atomic<float> extinctionRange;
 
-	atomic<float> intensity = 1.0f;
+	atomic<float> strength = 1.0f;
 
 	void updateExtinctionRange() {
 		auto solutions = math_ex::solve_quadratic(
 			POINT_LIGHT_EXTINCTION_LEVEL * a.load(), 
 			POINT_LIGHT_EXTINCTION_LEVEL * b.load(),
 			POINT_LIGHT_EXTINCTION_LEVEL * c.load(),
-			1.0f
+			strength.load()
 		);
 		extinctionRange = max(get<0>(solutions), get<1>(solutions));
 	}
@@ -96,7 +109,8 @@ public:
 			a,
 			b,
 			c,
-			extinctionRange
+			extinctionRange,
+			strength
 		);
 	}
 
@@ -113,6 +127,11 @@ public:
 
 	void setPosition(Point3 position) {
 		this->position = position;
+	}
+
+	void setStrength(float strength) {
+		this->strength = strength;
+		updateExtinctionRange();
 	}
 };
 

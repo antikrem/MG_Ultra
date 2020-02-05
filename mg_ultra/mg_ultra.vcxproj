@@ -220,6 +220,7 @@
     <ClCompile Include="math_ex.cpp" />
     <ClCompile Include="os_kit.cpp" />
     <ClCompile Include="particle_master.cpp" />
+    <ClCompile Include="point_light.cpp" />
     <ClCompile Include="pool.cpp" />
     <ClCompile Include="random_ex.cpp" />
     <ClCompile Include="registar.cpp" />

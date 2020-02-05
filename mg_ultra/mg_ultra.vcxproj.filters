@@ -204,6 +204,9 @@
     <ClCompile Include="colour_modulation.cpp">
       <Filter>Source Files\Graphics\Unified Lighting</Filter>
     </ClCompile>
+    <ClCompile Include="point_light.cpp">
+      <Filter>Source Files\Graphics\Unified Lighting</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="graphics_state.h">
