@@ -142,6 +142,18 @@ public:
 			(void*)(offsetof(PointLightData, PointLightData::extinctionRange)) //range
 		);
 
+		//strength
+		glEnableVertexAttribArray(7);
+		glBindBuffer(GL_ARRAY_BUFFER, vboID);
+		glVertexAttribPointer(
+			7, //layout = 7
+			1, //float
+			GL_FLOAT,
+			GL_FALSE,
+			sizeof(PointLightData), //stride the length of boxdata
+			(void*)(offsetof(PointLightData, PointLightData::strength)) //strength
+		);
+
 		//set up striding
 		glVertexAttribDivisor(0, 0); //base sphere vertexes
 		glVertexAttribDivisor(1, 1); //position
@@ -150,6 +162,7 @@ public:
 		glVertexAttribDivisor(4, 1); //b
 		glVertexAttribDivisor(5, 1); //c
 		glVertexAttribDivisor(6, 1); //range
+		glVertexAttribDivisor(7, 1); //range
 	}
 
 	void render(int count) {
