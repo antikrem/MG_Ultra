@@ -13,13 +13,25 @@ class ComponentRotation : public Component, public ScriptableClass {
 
 	atomic<float> rotation = 0.0f;
 
+	atomic<float> speed = 0.0f;
+
 public:
 
 	ComponentRotation() {
+		faceMovement = true;
 	}
 
 	ComponentRotation(bool faceMovement) {
 		this->faceMovement = faceMovement;
+	}
+
+	ComponentRotation(float rotation) {
+		this->rotation = rotation;
+	}
+
+	ComponentRotation(float rotation, float speed) {
+		this->rotation = rotation;
+		this->speed = speed;
 	}
 
 	void setFaceMovement(bool faceMovement) {
@@ -35,18 +47,33 @@ public:
 		this->rotation = rotation;
 	}
 
+	float getRotation() {
+		return rotation;
+	}
+
 	void updateRotation(float rotation) {
 		this->rotation = rotation;
+	}
+
+	void setSpeed(float speed) {
+		this->speed = speed;
+	}
+
+	float getSpeed() {
+		return speed;
 	}
 
 	void registerToLua(kaguya::State& state) override {
 		state["ComponentRotation"].setClass(kaguya::UserdataMetatable<ComponentRotation, Component>()
 			.setConstructors<ComponentRotation()>()
 			.addFunction("set_angle", &ComponentRotation::setRotation)
+			.addFunction("set_speed", &ComponentRotation::setSpeed)
+			.addFunction("get_speed", &ComponentRotation::getSpeed)
 			.addOverloadedFunctions(
 				"create",
 				&ScriptableClass::create<ComponentRotation>,
-				&ScriptableClass::create<ComponentRotation, bool>
+				&ScriptableClass::create<ComponentRotation, float>,
+				&ScriptableClass::create<ComponentRotation, float, float>
 			)
 			.addStaticFunction("type", &getType<ComponentRotation>)
 			.addStaticFunction("cast", &Component::castDown<ComponentRotation>)
