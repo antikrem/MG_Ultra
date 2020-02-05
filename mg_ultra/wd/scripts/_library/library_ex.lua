@@ -1,9 +1,6 @@
 ---Extended library
 --Classes and mg functionality have been bounded
 
---global registar, keeps states
-registar = getGlobalRegistar()
-
 --Add a function within Entity class to allow components to be retrived 
 --by component name, returns nil if the entity does not have the specified component
 function Entity.get_component(self, component)
@@ -49,6 +46,21 @@ function Registar.get(self, name)
 
 	return nil
 end
+
+--Function to get angle from a position to player
+--Otherwise just angles down
+function get_angle_to_player(x, y)
+	
+	local p = EntityPool.get_cached_entity(EntityPlayer)
+	if is_nil(p) then return -90 end
+
+	local p_x, p_y, angle
+	p_x, p_y = p:get_component(ComponentPosition):get_position()
+
+	_, angle = math.to_polar(p_x - x, p_y - y)
+	return angle
+end
+
 
 --general function to load a level by setting the correct values in the Registar
 --first parameter is state: title, level
