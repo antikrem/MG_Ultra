@@ -26,13 +26,17 @@ public:
 		auto rot = getComponent<ComponentRotation>(components);
 		auto mov = getComponent<ComponentMovement>(components);
 
-		float rotation = 0;
+		float rotation = rot->getRotation();
 
 		if (mov && rot->isFaceMovement()) {
 			rotation = mov->getDirection();
 		}
+		else {
+			rotation = rotation + rot->getSpeed();
+		}
 
-		gra->setRotation(rotation);
+		rot->setRotation(rotation);
+		gra->setSpriteRotation(rotation);
 
 	}
 
