@@ -62,6 +62,11 @@ public:
 
 	}
 
+	void addEntity(Entity* entity) {
+		unique_lock<mutex>(entitiesLock);
+		entities.push_back(entity);
+	}
+
 	void pullEnts(vector<Entity*>& ents) {
 		unique_lock<mutex>(entitiesLock);
 		unique_lock<mutex>(factoryLock);
@@ -75,6 +80,7 @@ public:
 			.addFunction("create_entity", &ComponentSpawner::createFactoryEntity)
 			.addFunction("add_component", &ComponentSpawner::addComponentToEntity)
 			.addFunction("push_entity", &ComponentSpawner::pushFactoryEntity)
+			.addFunction("add_entity", &ComponentSpawner::addEntity)
 			.addStaticFunction("create", ScriptableClass::create<ComponentSpawner>)
 			.addStaticFunction("type", &getType<ComponentSpawner>)
 			.addStaticFunction("cast", &Component::castDown<ComponentSpawner>)
