@@ -37,7 +37,7 @@ public:
 
 			currentPos = mov->getUpdatedPosition(currentPos);
 
-			if (cla) {
+			if (cla && cla->getActive()) {
 				currentPos = cla->applyClamp(currentPos);
 			}
 			

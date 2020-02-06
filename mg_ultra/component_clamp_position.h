@@ -14,6 +14,7 @@
 
 class ComponentClampPosition : public Component, public ScriptableClass {
 private:
+	atomic<bool> active = true;
 	Point3 center;
 	Point3 dimensions;
 
@@ -32,6 +33,14 @@ public:
 
 	ComponentClampPosition(float w, float h, float d, float x, float y, float z)
 		: center(x, y, z), dimensions(w, h, d) {
+	}
+
+	void setActive(bool active) {
+		this->active = active;
+	}
+
+	bool getActive() {
+		return active;
 	}
 
 	Point3 getCenter() {
@@ -54,6 +63,7 @@ public:
 	void registerToLua(kaguya::State& state) override {
 		state["ComponentClampPosition"].setClass(kaguya::UserdataMetatable<ComponentClampPosition, Component>()
 			.setConstructors<ComponentClampPosition()>()
+			.addFunction("set_active", &ComponentClampPosition::setActive)
 			.addOverloadedFunctions(
 				"create",
 				ScriptableClass::create<ComponentClampPosition, float, float>,
