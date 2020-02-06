@@ -61,6 +61,21 @@ function get_angle_to_player(x, y)
 	return angle
 end
 
+--Creates a sprite and attaches it to calling entities multi ent
+--Requires this to have a ComponentSpawner and ComponentMultiEnt
+function attach_visual_sprite(aniSetName, zOffset, rotationSpeed, minAmbient) 
+	local e = Entity.create(EntityGeneric)
+
+	local _, _, offset = this:get_component(ComponentPosition):get_position() 
+	e:add_component(ComponentPosition.create(0, 0, offset + zOffset))
+	e:add_component(ComponentGraphics.create(aniSetName))
+	e:add_component(ComponentRotation.create(0, rotationSpeed))
+	if minAmbient > 0 then e:add_component(ComponentMinAmbient.create(minAmbient)) end
+	e:add_component(ComponentOffsetMaster.create(true))
+	e:add_component(ComponentDieWithMaster.create())
+
+	this:get_component(ComponentSpawner):add_entity(e)
+end
 
 --general function to load a level by setting the correct values in the Registar
 --first parameter is state: title, level
