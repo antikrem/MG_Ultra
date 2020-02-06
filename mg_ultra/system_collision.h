@@ -48,11 +48,7 @@ class SystemCollision : public System {
 
 
 	//handles the collision between two collisions
-	void handleCollision(shared_ptr<Entity> source, shared_ptr<Entity> target, const CollisionEvent& collisionEvent) {
-		standardCombatHandle(source, target);
-		standardCombatHandle(target, source);
-		
-	}
+	void handleCollision(shared_ptr<Entity> source, shared_ptr<Entity> target, const CollisionEvent& collisionEvent);
 
 	//conducts collision comparison between two entity types
 	void compareCollisionLists(const CollisionEvent& collisionEvent) {
@@ -75,8 +71,12 @@ public:
 		target = SubPoolTarget(
 			SubPoolComponents::ByComponents<ComponentPosition, ComponentCollision>()
 		);
-		collisionEvents.push_back(CollisionEvent(ETPlayerBullets, ETEnemy));
-		collisionEvents.push_back(CollisionEvent(ETPlayer, ETEnemyBullet));
+		collisionEvents.push_back(
+			CollisionEvent(ETPlayerBullets, ETEnemy)
+		);
+		collisionEvents.push_back(
+			CollisionEvent(ETPlayer, ETEnemyBullet, "g_bulletPlayerCollision()")
+		);
 	}
 
 	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, shared_ptr<Entity> ent, int id) override {
