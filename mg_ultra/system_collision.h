@@ -42,6 +42,7 @@ class SystemCollision : public System {
 		if (sourceDamage && targetHealth) {
 			targetHealth->damageHealth(sourceDamage->getDamage());
 			sourceDamage->setDamage(0);
+			sourceDamage->killEntity();
 		}
 	}
 
@@ -75,6 +76,7 @@ public:
 			SubPoolComponents::ByComponents<ComponentPosition, ComponentCollision>()
 		);
 		collisionEvents.push_back(CollisionEvent(ETPlayerBullets, ETEnemy));
+		collisionEvents.push_back(CollisionEvent(ETPlayer, ETEnemyBullet));
 	}
 
 	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, shared_ptr<Entity> ent, int id) override {
@@ -83,9 +85,9 @@ public:
 
 		col->update(pos->getPosition3());
 
-		if (!col->getAddedToSystem()) {
+		if (!col->isAddedToSystem()) {
 			internalEntityLists.add(ent->getType(), ent);
-			col->setAddedToSystem();
+			col->markAddedToSystem();
 		}
 	}
 

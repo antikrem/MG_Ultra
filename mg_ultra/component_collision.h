@@ -42,12 +42,12 @@ public:
 
 	//returns if the entity this component is added to is in system
 	//collision
-	bool getAddedToSystem() {
+	bool isAddedToSystem() {
 		return addedToSystem;
 	}
 
 	//sets addedToSystem to true
-	void setAddedToSystem() {
+	void markAddedToSystem() {
 		addedToSystem = true;
 	}
 
