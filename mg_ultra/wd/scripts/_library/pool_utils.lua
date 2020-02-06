@@ -18,6 +18,8 @@ EntityDirectionalLight = 11
 EntityEnemy = 12
 EntityMusic = 13
 EntityWeather = 14
+EntityBulletSpawner = 15
+EntityEnemyBullet = 16
 
 --Adds to pool, returns boolean success
 function EntityPool.add_entity(entity)
