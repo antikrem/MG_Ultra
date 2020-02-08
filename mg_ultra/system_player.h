@@ -79,7 +79,7 @@ public:
 		auto newComponent13 = new ComponentForceApplier(300.0f, 10.0f);
 		newComponent13->setCutThreashold(0.5f);
 		newEnt->addComponent(newComponent13->pullForEntity());
-		auto newComponent14 = new ComponentPointLight(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
+		auto newComponent14 = new ComponentPointLight(1.0f, 1.0f, 1.0f);
 		newEnt->addComponent(newComponent14->pullForEntity());
 		auto newComponent15 = new ComponentClampPosition(960.0f, 540.0f);
 		newEnt->addComponent(newComponent15->pullForEntity());
