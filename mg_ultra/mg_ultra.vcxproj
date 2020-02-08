@@ -265,6 +265,7 @@
     <ClInclude Include="component_offset_once.h" />
     <ClInclude Include="component_point_light.h" />
     <ClInclude Include="component_rotation.h" />
+    <ClInclude Include="component_spawn_protection.h" />
     <ClInclude Include="component_static_movement.h" />
     <ClInclude Include="component_extended_scripting.h" />
     <ClInclude Include="component_force_applier.h" />
@@ -360,6 +361,7 @@
     <ClInclude Include="system_profiler.h" />
     <ClInclude Include="system_rotation.h" />
     <ClInclude Include="system_spawner.h" />
+    <ClInclude Include="system_spawn_protection.h" />
     <ClInclude Include="system_text.h" />
     <ClInclude Include="system_timer.h" />
     <ClInclude Include="system_transparency.h" />
