@@ -7,16 +7,16 @@ GlobalRegistar.add("player_alive", true)
 
 --Table used for gettings certain velocity values
 PLAYER_MAX_VELOCITY_TABLE = {
-	DEFAULT = 12.65,
+	DEFAULT = 13,
 	DASH = 36,
 	FOCUS = 5.8
 }
 
 --Similar table for acceleration
 PLAYER_MAX_ACCELERATION_TABLE = {
-	DEFAULT = 5.25,
-	DASH = 34.5,
-	FOCUS = 2.0
+	DEFAULT = 1.5,
+	DASH = 36,
+	FOCUS = 0.5
 }
 
 -- Additional soft position clamping
@@ -43,7 +43,7 @@ PLAYER_QUICK_SHIFT_THRESHOLD = 70
 PLAYER_SHOOT_TIMING = 11
 
 -- Variables used to control player movement
-this:get_component(ComponentMovement):set_speed_cap(PLAYER_MAX_VELOCITY)
+this:get_component(ComponentMovement):set_speed_cap(PLAYER_MAX_VELOCITY_TABLE["DEFAULT"])
 this:get_component(ComponentMovement):set_angle_cap(PLAYER_MAX_TURN_VELOCITY)
 
 -- Colour of player light
@@ -149,12 +149,13 @@ g_playerMovementUpdate = function()
 	--consider no input case
 	if tmag < 0.1 then
 		--if speed is slow, set speed and acceleration to zero
-		if math.clamp(cMovement:get_speed(), 0, cMovement:get_speed()) <= PLAYER_ACCELERATION then
+		if math.clamp(cMovement:get_speed(), 0, cMovement:get_speed()) 
+				<= PLAYER_MAX_ACCELERATION_TABLE[movementMode] then
 			cMovement:set_speed(0.001)
 			cMovement:set_speed_change(0)
 		--otherwise, slow down the player
 		else 
-			cMovement:set_speed_change(-PLAYER_ACCELERATION)
+			cMovement:set_speed_change(-PLAYER_MAX_ACCELERATION_TABLE[movementMode])
 		end
 	--otherwise set acceleration as expected
 	else
