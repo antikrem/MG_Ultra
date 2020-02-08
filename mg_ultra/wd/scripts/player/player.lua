@@ -11,8 +11,6 @@ if GlobalRegistar.get("player_alive") then
 
 -- Dead player handle
 else
-	this:get_component(ComponentClampPosition):set_active(false)
-
 	g_sequentialDeadFrames = g_sequentialDeadFrames + 1
 
 	local y 

@@ -31,7 +31,7 @@ PLAYER_MAX_TURN_VELOCITY = 7;
 PLAYER_QUICK_SHIFT_THRESHOLD = 70
 
 -- shooting timer
-PLAYER_SHOOT_TIMING = 7
+PLAYER_SHOOT_TIMING = 11
 
 -- Variables used to control player movement
 this:get_component(ComponentMovement):set_speed_cap(PLAYER_MAX_VELOCITY)
@@ -162,7 +162,7 @@ g_playerSpawnBullets = function()
 	--create bullet entities
 	if cInput:query_down("shoot") == 1 and 
 			(cTiming:get_cycle() % PLAYER_SHOOT_TIMING) == 0 then
-		for bAngle in range(45, 136, 15) do
+		for bAngle in range(55, 126, 10) do
 			local cSpawner = this:get_component(ComponentSpawner)
 			cSpawner:create_entity(EntityPlayerBullets)
 	
@@ -172,7 +172,7 @@ g_playerSpawnBullets = function()
 			cSpawner:add_component(ComponentOffsetOnce.create())
 			cSpawner:add_component(ComponentMinAmbient.create(1.0))
 			cSpawner:add_component(ComponentRotation.create())
-			cSpawner:add_component(ComponentPointLight.create(0, 0, 0, 0.9647, 0.8039, 0.3751, 0.004, 0.3, 4.85))
+			cSpawner:add_component(ComponentPointLight.create(0.9647, 0.8039, 0.3751, 0.0015, 0.07, 3.2))
 
 			local bulletGComponents = ComponentGraphics.create("bullet_cross")
 			bulletGComponents:set_animation(1)
@@ -180,12 +180,21 @@ g_playerSpawnBullets = function()
 			cSpawner:add_component(bulletGComponents)
 
 			local bulletMComponent = ComponentMovement.create()
-			bulletMComponent:set_speed(16.5)
+			bulletMComponent:set_speed(24)
 			bulletMComponent:set_angle(bAngle)
 			cSpawner:add_component(bulletMComponent)
 
 	
 			cSpawner:push_entity()
 		end
+	end
+end
+
+--Handler function when player is hit
+g_bulletPlayerCollision = function() 
+	if GlobalRegistar.get("player_alive") then
+		this:get_component(ComponentClampPosition):set_active(false)
+		g_sequentialDeadFrames = 0
+		GlobalRegistar.update("player_alive", false)
 	end
 end
