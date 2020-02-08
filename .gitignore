@@ -269,3 +269,6 @@ api/
 #ignore log files
 log.txt
 *.old
+
+#ignore settings
+*.ini
