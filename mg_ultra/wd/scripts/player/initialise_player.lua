@@ -4,11 +4,20 @@
 GlobalRegistar.add("player_alive", true)
 
 -- Player movement
-PLAYER_ACCELERATION = 0.97
-PLAYER_DASH_ACCELERATION = 5.3
-PLAYER_MAX_VELOCITY = 12.65
-PLAYER_MAX_FOCUS_VELOCITY = 2.0
-PLAYER_MAX_DASH_VELOCITY = 33.0
+
+--Table used for gettings certain velocity values
+PLAYER_MAX_VELOCITY_TABLE = {
+	DEFAULT = 12.65,
+	DASH = 36,
+	FOCUS = 5.8
+}
+
+--Similar table for acceleration
+PLAYER_MAX_ACCELERATION_TABLE = {
+	DEFAULT = 5.25,
+	DASH = 34.5,
+	FOCUS = 2.0
+}
 
 -- Additional soft position clamping
 PLAYER_X_CLAMP = 960
@@ -44,7 +53,8 @@ this:get_component(ComponentPointLight):set_colour(0.9647, 0.8039, 0.3751)
 -- Counter for number of dead frames
 g_sequentialDeadFrames = 0
 
-
+--Flip for player
+g_playerBulletOscillator = -1
 
 -- Values that represent the last dash direction
 g_lx, g_ly = 0,0
@@ -74,6 +84,8 @@ g_playerMovementUpdate = function()
 	if cInput:query_down("up")    == 1 then iy = iy + 1 end
 	if cInput:query_down("down")  == 1 then iy = iy - 1 end
 
+	local isDashInput = cInput:query_down("dash") == 1 
+
 	--Update dash variables
 	if g_dashCooldown > 0 then g_dashCooldown = g_dashCooldown - 1 end
 	if g_dashDuration > 0 then g_dashDuration = g_dashDuration - 1 end
@@ -89,7 +101,7 @@ g_playerMovementUpdate = function()
 	end
 
 	--check if key input will allow for dash
-	if cInput:query_down("dash") == 1 then
+	if isDashInput then
 		--handle case where dash input recieved out of dash 
 		if not g_inDash and g_dashReleased and g_dashCooldown <= 0 then
 			g_inDash = true
@@ -103,10 +115,13 @@ g_playerMovementUpdate = function()
 		g_dashReleased = true
 	end
 
-	--calculate updated movement
-	local maxAcceleration = g_inDash and PLAYER_DASH_ACCELERATION or PLAYER_ACCELERATION
-	local maxVelocity = g_inDash and PLAYER_MAX_DASH_VELOCITY or PLAYER_MAX_VELOCITY
+	local isFocusInput = cInput:query_down("focus") == 1 and not g_inDash
 
+	local movementMode = g_inDash and "DASH" or (isFocusInput and "FOCUS" or "DEFAULT")
+
+	--calculate updated movement
+	local maxAcceleration = PLAYER_MAX_ACCELERATION_TABLE[movementMode]
+	local maxVelocity = PLAYER_MAX_VELOCITY_TABLE[movementMode]
 
 	--current speedVelocity and speedAngle
 	local smag, cang = cMovement:get_speed(), cMovement:get_angle()
@@ -159,6 +174,8 @@ g_playerSpawnBullets = function()
 	--Timing component
 	local cTiming = this:get_component(ComponentTimer)
 
+	g_playerBulletOscillator = g_playerBulletOscillator * -1
+
 	--create bullet entities
 	if cInput:query_down("shoot") == 1 and 
 			(cTiming:get_cycle() % PLAYER_SHOOT_TIMING) == 0 then
@@ -170,18 +187,18 @@ g_playerSpawnBullets = function()
 			cSpawner:add_component(ComponentCollision.create(100))
 			cSpawner:add_component(ComponentDamage.create(10))
 			cSpawner:add_component(ComponentOffsetOnce.create())
-			cSpawner:add_component(ComponentMinAmbient.create(1.0))
+			cSpawner:add_component(ComponentMinAmbient.create(0.55))
 			cSpawner:add_component(ComponentRotation.create())
 			cSpawner:add_component(ComponentPointLight.create(0.9647, 0.8039, 0.3751, 0.0015, 0.07, 3.2))
 
 			local bulletGComponents = ComponentGraphics.create("bullet_cross")
 			bulletGComponents:set_animation(1)
-			bulletGComponents:set_scale(1.1)
+			--bulletGComponents:set_scale(0.95)
 			cSpawner:add_component(bulletGComponents)
 
 			local bulletMComponent = ComponentMovement.create()
-			bulletMComponent:set_speed(24)
-			bulletMComponent:set_angle(bAngle)
+			bulletMComponent:set_speed(27)
+			bulletMComponent:set_angle(bAngle + 2.5 * g_playerBulletOscillator)
 			cSpawner:add_component(bulletMComponent)
 
 	
