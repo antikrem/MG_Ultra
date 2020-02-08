@@ -32,6 +32,7 @@
 #include "component_bullet_master.h"
 #include "component_bullet_spawner.h"
 #include "component_die_with_master.h"
+#include "component_spawn_protection.h"
 
 #include "registar.h"
 #include "pool.h"
@@ -117,6 +118,7 @@ ScriptMaster::ScriptMaster()
 	forceLuaRegistration<ComponentBulletMaster>(kaguya);
 	forceLuaRegistration<ComponentBulletSpawner>(kaguya);
 	forceLuaRegistration<ComponentDieWithMaster>(kaguya);
+	forceLuaRegistration<ComponentSpawnProtection>(kaguya);
 
 	//set contextual script functions
 	kaguya["getEntityPool"] = getGlobalPool;

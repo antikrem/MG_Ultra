@@ -12,6 +12,7 @@
 #include "system_bullet_master.h"
 #include "system_bullet_spawner.h"
 #include "system_die_with_master.h"
+#include "system_spawn_protection.h"
 
 //ring 2 - non-gameplay essential systems
 #include "system_animation.h"

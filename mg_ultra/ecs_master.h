@@ -62,6 +62,7 @@ class ECSMaster {
 		-system_bullet_master
 		-system_bullet_spawner
 		-system_die_with_master
+		-system_spawn_protection
 
 	master2: non-essential gameplay
 	    -system_animation
@@ -112,6 +113,7 @@ class ECSMaster {
 		master->createSystem<SystemBulletMaster>(registar);
 		master->createSystem<SystemBulletSpawner>(registar);
 		master->createSystem<SystemDieWithMaster>(registar);
+		master->createSystem<SystemSpawnProtection>(registar);
 
 		//ring 2
 		master = newSystemsMaster("m_graphics2");
@@ -150,7 +152,7 @@ class ECSMaster {
 
 		//ring 5
 		master = newSystemsMaster("m_collision");
-		master->setTimer(50);
+		master->setTimer(100);
 		master->createSystem<SystemCollision>(registar);
 
 		//ring 6
