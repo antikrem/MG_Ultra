@@ -22,16 +22,12 @@ public:
 		: pointLight(position, colour) {
 	}
 
-	ComponentPointLight(float x, float y, float z)
-		: pointLight(Point3(x, y, z), Point3(1.0f)) {
+	ComponentPointLight(float r, float g, float b)
+		: pointLight(Point3(0, 0, 0), Point3(r, g, b)) {
 	}
 
-	ComponentPointLight(float x, float y, float z, float r, float g, float b)
-		: pointLight(Point3(x, y, z), Point3(r, g, b)) {
-	}
-
-	ComponentPointLight(float x, float y, float z, float r, float g, float b, float aP, float bP, float cP)
-		: pointLight(Point3(x, y, z), Point3(r, g, b)) {
+	ComponentPointLight(float r, float g, float b, float aP, float bP, float cP)
+		: pointLight(Point3(0, 0, 0), Point3(r, g, b)) {
 		setParameters(aP, bP, cP);
 	}
 
@@ -95,9 +91,9 @@ public:
 			.addFunction("set_strength", &ComponentPointLight::setStrength)
 			.addOverloadedFunctions(
 				"create",
+				ScriptableClass::create<ComponentPointLight>,
 				ScriptableClass::create<ComponentPointLight, float, float, float>,
-				ScriptableClass::create<ComponentPointLight, float, float, float, float, float, float>,
-				ScriptableClass::create<ComponentPointLight, float, float, float, float, float, float, float, float, float>
+				ScriptableClass::create<ComponentPointLight, float, float, float, float, float, float>
 			)
 			.addStaticFunction("type", &getType<ComponentPointLight>)
 			.addStaticFunction("cast", &Component::castDown<ComponentPointLight>)
