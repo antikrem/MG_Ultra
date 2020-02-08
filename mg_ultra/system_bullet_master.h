@@ -47,6 +47,9 @@ public:
 			//and pass to script environment to be set up
 			shared_ptr<Entity> subEnt = shared_ptr<Entity>(new Entity(ETBulletSpawner));
 
+			auto cBulletSpawner = new ComponentBulletSpawner(bm->getBulletMasterName());
+			subEnt->addComponent(cBulletSpawner->pullForEntity());
+
 			ScriptUnit su(
 				SS_inlineLoader,
 				"BulletSpawnerList._initialise(this, \"" + bm->getBulletMasterName() + "\")"
@@ -54,9 +57,6 @@ public:
 			su.attachEntity(subEnt);
 			su.attachEntity(ent);
 			su.addDebugData("BulletSpawnerList initialisation for " + bm->getBulletMasterName());
-
-			auto cBulletSpawner = new ComponentBulletSpawner(bm->getBulletMasterName());
-			subEnt->addComponent(cBulletSpawner->pullForEntity());
 
 			sc.reset();
 			su.attachSuccessCallback(&sc);
@@ -71,6 +71,11 @@ public:
 				me->addEntity(subEnt);
 				entityPool->addEnt(subEnt);
 				bm->setInitialised();
+
+				//check if entity has died
+				if (!ent->getFlag()) {
+					subEnt->killEntity();
+				}
 			}
 			else {
 				bm->setValid(false);
