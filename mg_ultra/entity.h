@@ -93,10 +93,11 @@ public:
 
 	//A general update to set entity flag
 	void entityUpdate() {
+		bool tempFlag = true;
 		for (auto i : components) {
-			flag = flag && i.second->getFlag();
+			tempFlag = tempFlag && i.second->getFlag();
 		}
-		if (!flag) {
+		if (!tempFlag) {
 			killEntity();
 		}
 	}
@@ -146,6 +147,7 @@ public:
 			.addFunction("getComponent", &Entity::l_getComponent)
 			.addFunction("addComponent", &Entity::l_addComponent)
 			.addFunction("kill", &Entity::killEntity)
+			.addFunction("is_alive", &Entity::getFlag)
 			.addStaticFunction("create", &Entity::createEntity)
 		);
 	}
