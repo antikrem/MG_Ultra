@@ -36,7 +36,8 @@ public:
 			return;
 		}
 
-		if (!bm->isInitialised()) {
+		if (!bm->isInitialised() 
+				&& (bm->incrementAndGetCurrentTick() >= bm->getStartingTick())) {
 			//need to check this entity has a component_multi_ent
 			if (!me) {
 				bm->setValid(false);

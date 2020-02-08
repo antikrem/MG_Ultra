@@ -14,6 +14,9 @@ private:
 	bool initialised = false;
 	bool valid = true;
 
+	int startingTick = 0;
+	int currentTick = -1;
+
 public:
 	ComponentBulletMaster() {
 
@@ -21,6 +24,11 @@ public:
 
 	ComponentBulletMaster(string bulletMasterName) {
 		this->bulletMasterName = bulletMasterName;
+	}
+
+	ComponentBulletMaster(string bulletMasterName, int startingTick) {
+		this->bulletMasterName = bulletMasterName;
+		this->startingTick = startingTick;
 	}
 
 	bool isInitialised() {
@@ -43,12 +51,21 @@ public:
 		return bulletMasterName;
 	}
 
+	int incrementAndGetCurrentTick() {
+		return ++currentTick;
+	}
+
+	int getStartingTick() {
+		return startingTick;
+	}
+
 	void registerToLua(kaguya::State& state) override {
 		state["ComponentBulletMaster"].setClass(kaguya::UserdataMetatable<ComponentBulletMaster, Component>()
 			.setConstructors<ComponentBulletMaster()>()
 			.addOverloadedFunctions(
 				"create",
-				ScriptableClass::create<ComponentBulletMaster, string>
+				ScriptableClass::create<ComponentBulletMaster, string>,
+				ScriptableClass::create<ComponentBulletMaster, string, int>
 			)
 			.addStaticFunction("type", &getType<ComponentBulletMaster>)
 			.addStaticFunction("cast", &Component::castDown<ComponentBulletMaster>)
