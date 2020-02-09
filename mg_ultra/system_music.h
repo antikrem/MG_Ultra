@@ -24,8 +24,7 @@ public:
 	void cacheFail(EntityPool* pool) override {
 		//create the camera entity
 		auto newEnt = shared_ptr<Entity>(new Entity(ETMusic));
-		auto newComponent = new ComponentAudio();
-		newEnt->addComponent(newComponent->pullForEntity());
+		newEnt->addComponent(new ComponentAudio());
 
 		pool->addEnt(newEnt, true);
 		err::logMessage("MUSIC: music player not found, new music player created");

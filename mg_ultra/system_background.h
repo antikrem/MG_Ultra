@@ -33,9 +33,9 @@ public:
 		//create the camera entity
 		auto newEnt = shared_ptr<Entity>(new Entity(ETBackgroundMaster));
 		auto newComponent = new ComponentMultiEntity();
-		newEnt->addComponent(newComponent->pullForEntity());
+		newEnt->addComponent(newComponent);
 		auto newComponent1 = new ComponentSpawner();
-		newEnt->addComponent(newComponent1->pullForEntity());
+		newEnt->addComponent(newComponent1);
 		
 		//execute a script to initialise the player
 		executeAnyScript(debugName,

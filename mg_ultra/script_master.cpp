@@ -287,7 +287,7 @@ void ScriptMaster::createAnonymousEntityHandling() {
 	//create an entity for anonymous spawning
 	Entity* anonymousSpawner = new Entity(ETAnonymousSpawner);
 	auto cSpawner = new ComponentSpawner();
-	anonymousSpawner->addComponent(cSpawner->pullForEntity());
+	anonymousSpawner->addComponent(cSpawner);
 	getGlobalPool()->addEnt(anonymousSpawner, true);
 	quickLoadAndExecute("scripts/_initialise/anonymous_spawner.lua");
 }

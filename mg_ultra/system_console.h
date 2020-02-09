@@ -91,19 +91,19 @@ public:
 	void cacheFail(EntityPool* pool) override {
 		//create a console entity
 		auto newEnt = new Entity(ETConsole);
-		auto newComponent = new ComponentPosition(-960, 540, 2);
+
+		newEnt->addComponent(new ComponentPosition(-960, 540, 2));
+		newEnt->addComponent(new ComponentConsole());
+
+		auto newComponent = new ComponentText();
+		newComponent->setText("Console");
+		newComponent->setFont("text_consolas58");
+		newComponent->setVisible(false);
+		newComponent->setRenderIn3D(false);
+		newComponent->setScale(0.75f);
 		newEnt->addComponent(newComponent->pullForEntity());
-		auto newComponent1 = new ComponentConsole();
-		newEnt->addComponent(newComponent1->pullForEntity());
-		auto newComponent2 = new ComponentText();
-		newComponent2->setText("Console");
-		newComponent2->setFont("text_consolas58");
-		newComponent2->setVisible(false);
-		newComponent2->setRenderIn3D(false);
-		newComponent2->setScale(0.75f);
-		newEnt->addComponent(newComponent2->pullForEntity());
-		auto newComponent3 = new ComponentNoBoundsControl();
-		newEnt->addComponent(newComponent3->pullForEntity());
+		newEnt->addComponent(new ComponentNoBoundsControl());
+
 		pool->addEnt(newEnt, true);
 	}
 

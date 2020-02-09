@@ -47,42 +47,36 @@ public:
 	void cacheFail(EntityPool* pool) override {
 		//create the camera entity
 		auto newEnt = shared_ptr<Entity>(new Entity(ETPlayer));
-		auto newComponent = new ComponentPosition(0, 0, 1.0f);
-		newEnt->addComponent(newComponent->pullForEntity());
+		newEnt->addComponent(new ComponentPosition(0, 0, 1.0f));
+
 		auto newComponent1 = new ComponentGraphics("player");
 		newComponent1->setScale(0.3f);
 		newComponent1->setAnimationType(1);
 		newEnt->addComponent(newComponent1->pullForEntity());
+
 		auto newComponent2 = new ComponentAnimation();
 		newComponent2->changeDefaultAnimation(1);
 		newEnt->addComponent(newComponent2->pullForEntity());
-		auto newComponent3 = new ComponentInput();
-		newEnt->addComponent(newComponent3->pullForEntity());
-		auto newComponent4 = new ComponentMovement();
-		newEnt->addComponent(newComponent4->pullForEntity());
-		auto newComponent5 = new ComponentExtendedScripting();
-		newEnt->addComponent(newComponent5->pullForEntity());
-		auto newComponent6 = new ComponentSpawner();
-		newEnt->addComponent(newComponent6->pullForEntity());
-		auto newComponent7 = new ComponentMultiEntity();
-		newEnt->addComponent(newComponent7->pullForEntity());
-		auto newComponent8 = new ComponentTimer();
-		newEnt->addComponent(newComponent8->pullForEntity());
-		auto newComponent9 = new ComponentCollision(10.0f);
-		newEnt->addComponent(newComponent9->pullForEntity());
+
+		newEnt->addComponent(new ComponentInput());
+		newEnt->addComponent(new ComponentMovement());
+		newEnt->addComponent(new ComponentExtendedScripting());
+		newEnt->addComponent(new ComponentSpawner());
+		newEnt->addComponent(new ComponentMultiEntity());
+		newEnt->addComponent(new ComponentTimer());
+		newEnt->addComponent(new ComponentCollision(10.0f));
 		//auto newComponent10 = new ComponentAudio();
 		//newEnt->addComponent(newComponent10->pullForEntity());
-		auto newComponent11 = new ComponentListener();
-		newEnt->addComponent(newComponent11->pullForEntity());
-		auto newComponent12 = new ComponentParticle("gold");
-		newEnt->addComponent(newComponent12->pullForEntity());
+
+		newEnt->addComponent(new ComponentListener());
+		newEnt->addComponent(new ComponentParticle("gold"));
+
 		auto newComponent13 = new ComponentForceApplier(300.0f, 10.0f);
 		newComponent13->setCutThreashold(0.5f);
 		newEnt->addComponent(newComponent13->pullForEntity());
-		auto newComponent14 = new ComponentPointLight(1.0f, 0.75f, 0.05f);
-		newEnt->addComponent(newComponent14->pullForEntity());
-		auto newComponent15 = new ComponentClampPosition(960.0f, 540.0f);
-		newEnt->addComponent(newComponent15->pullForEntity());
+
+		newEnt->addComponent(new ComponentPointLight(1.0f, 0.75f, 0.05f));
+		newEnt->addComponent(new ComponentClampPosition(960.0f, 540.0f));
 
 		//execute a script to initialise the player
 		executeAnyScript(debugName, 

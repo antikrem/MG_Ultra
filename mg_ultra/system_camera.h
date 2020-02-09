@@ -44,12 +44,11 @@ public:
 	void cacheFail(EntityPool* pool) override {
 		//create the camera entity
 		auto newEnt = shared_ptr<Entity>(new Entity(ETCamera));
-		auto newComponent = new ComponentPosition(0, 0, -1200.0);
-		newEnt->addComponent(newComponent->pullForEntity());
-		auto newComponent1 = new ComponentCamera();
-		newEnt->addComponent(newComponent1->pullForEntity());
-		auto newComponent2 = new ComponentNoBoundsControl();
-		newEnt->addComponent(newComponent2->pullForEntity());
+
+		newEnt->addComponent(new ComponentPosition(0, 0, -1200.0));
+		newEnt->addComponent(new ComponentCamera());
+		newEnt->addComponent(new ComponentNoBoundsControl());
+
 		pool->addEnt(newEnt, true);
 		err::logMessage("CAMERA: camera not found, camera created");
 		executeAnyScript(debugName,

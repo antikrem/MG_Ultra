@@ -49,7 +49,7 @@ public:
 			shared_ptr<Entity> subEnt = shared_ptr<Entity>(new Entity(ETBulletSpawner));
 
 			auto cBulletSpawner = new ComponentBulletSpawner(bm->getBulletMasterName());
-			subEnt->addComponent(cBulletSpawner->pullForEntity());
+			subEnt->addComponent(cBulletSpawner);
 
 			ScriptUnit su(
 				SS_inlineLoader,

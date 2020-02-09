@@ -75,6 +75,20 @@ public:
 		return components[component.first];
 	}
 
+	//optimised form of addComponent when component type is known
+	template <class T>
+	shared_ptr<Component> addComponent(T* component) {
+		static_assert(std::is_base_of<Component, T>::value, "entity.h, failed addComponent base_of check");
+
+		type_index ti = typeid(T);
+		if (components.count(ti) || inPool) {
+			return nullptr;
+		}
+
+		components[ti] = shared_ptr<Component>(component);
+		return components[ti];
+	}
+
 	//a lua bindable addComponent
 	bool l_addComponent(type_index index, Component* component) {
 		if (components.count(index) || inPool) {
