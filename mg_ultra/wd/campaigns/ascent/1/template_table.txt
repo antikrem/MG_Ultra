@@ -1,8 +1,13 @@
 [basic_enemy]
 ent 12
-+position %1 %2 0
++position %1 %2 -1
 +movement
 ->set_velocity(%3, %4)
-+graphics default
++graphics player
+->set_scale(0.3);
 +collision 200
 +health 10
++multiEntity
+
+[rain_light]
++pointLight %1 %2 %3 0.0005 0.001 2
