@@ -46,6 +46,12 @@ function EntityPool.get_graveyard_passed()
 	return pool:getGraveyardPassed()
 end
 
+--attempts to kill an cached entity--returns boolean success
+function EntityPool.kill_cached_entity(entityType)
+	local ent = EntityPool.get_cached_entity(entityType)
+	if ent then ent:kill() return true else return false end
+end
+
 --Attempts to get player, might get nil
 function EntityPool.get_player()
 	return EntityPool.get_cached_entity(EntityPlayer)
