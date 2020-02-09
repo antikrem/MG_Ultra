@@ -47,7 +47,7 @@ public:
 	void cacheFail(EntityPool* pool) override {
 		//create the camera entity
 		auto newEnt = shared_ptr<Entity>(new Entity(ETPlayer));
-		auto newComponent = new ComponentPosition(0, 0, -5.0);
+		auto newComponent = new ComponentPosition(0, 0, 1.0f);
 		newEnt->addComponent(newComponent->pullForEntity());
 		auto newComponent1 = new ComponentGraphics("player");
 		newComponent1->setScale(0.3f);
@@ -79,7 +79,7 @@ public:
 		auto newComponent13 = new ComponentForceApplier(300.0f, 10.0f);
 		newComponent13->setCutThreashold(0.5f);
 		newEnt->addComponent(newComponent13->pullForEntity());
-		auto newComponent14 = new ComponentPointLight(1.0f, 1.0f, 1.0f);
+		auto newComponent14 = new ComponentPointLight(1.0f, 0.75f, 0.05f);
 		newEnt->addComponent(newComponent14->pullForEntity());
 		auto newComponent15 = new ComponentClampPosition(960.0f, 540.0f);
 		newEnt->addComponent(newComponent15->pullForEntity());

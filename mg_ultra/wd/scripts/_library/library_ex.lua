@@ -115,3 +115,9 @@ function test2()
 	print(comp:get_position())
 end
 
+--Some layer constants
+
+LAYER_PLAYER_BULLETS = 2
+LAYER_PLAYER = 1
+LAYER_ENEMY_BULLETS = 0
+LAYER_ENEMY = -1
