@@ -44,6 +44,10 @@ public:
 		movementCommander.chainSmoothPoints(input);
 	}
 
+	void addPolarLaunch(int time, float mag, float ang) {
+		movementCommander.addPolarLaunch(time, mag, ang);
+	}
+
 	Point3 getUpdatedPosition(shared_ptr<ComponentMovement> componentMovement, const Point3& position) {
 		return movementCommander.getUpdatedPosition(componentMovement, position);
 	}
@@ -64,6 +68,10 @@ public:
 			.addFunction(
 				"chain_smooth_points",
 				&ComponentStaticMovement::chainSmoothPoint
+			)
+			.addFunction(
+				"add_polar_launch",
+				&ComponentStaticMovement::addPolarLaunch
 			)
 			.addOverloadedFunctions(
 				"create",

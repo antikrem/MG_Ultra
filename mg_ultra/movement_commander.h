@@ -74,6 +74,15 @@ public:
 		lastSmooth = last;
 	}
 
+	//add a polar laumch
+	void addPolarLaunch(int time, float mag, float ang) {
+		movementCommands.add(
+			time,
+			MovementCommand::createPolarLaunch(mag, ang)
+		);
+	}
+
+
 	Point3 getUpdatedPosition(shared_ptr<ComponentMovement> componentMovement, Point3 position) {
 		currentTime++;
 

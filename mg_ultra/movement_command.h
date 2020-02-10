@@ -6,6 +6,7 @@
 #include "movement_fixed_point.h"
 #include "movement_fixed_move.h"
 #include "movement_smooth_points.h"
+#include "movement_polar_launch.h"
 
 //Base class that represents a single movement quanta
 //Movement command at a given time
@@ -52,6 +53,13 @@ public:
 		return movementCommand;
 	}
 
+
+	//add a polar launch
+	static MovementCommand createPolarLaunch(float mag, float ang) {
+		MovementCommand movementCommand;
+		movementCommand.internalQuanta = new MovementPolarLaunch(Point2(mag, ang));
+		return movementCommand;
+	}
 };
 
 

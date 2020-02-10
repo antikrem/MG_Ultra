@@ -187,10 +187,12 @@ public:
 			.addFunction("get_velocity", &ComponentMovement::lll_getVelocity)
 			.addOverloadedFunctions("set_acceleration", &ComponentMovement::ll_setAcceleration, &ComponentMovement::lll_setAcceleration)
 			.addFunction("get_acceleration", &ComponentMovement::lll_getAcceleration)
+
 			.addFunction("set_angle", &ComponentMovement::setAngle)
 			.addFunction("get_angle", &ComponentMovement::getAngle)
 			.addFunction("set_speed", &ComponentMovement::setSpeed)
 			.addFunction("get_speed", &ComponentMovement::getSpeed)
+
 			.addFunction("set_angle_change", &ComponentMovement::setAngleChange)
 			.addFunction("get_angle_change", &ComponentMovement::getAngleChange)
 			.addFunction("set_speed_change", &ComponentMovement::setSpeedChange)
