@@ -1,5 +1,4 @@
 /*Basic events system
-Not accessible to lua (yet)
 push an event and it will be handled by ecs_master and the main thread
 set 
 */
