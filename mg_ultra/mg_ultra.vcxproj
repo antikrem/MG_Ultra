@@ -109,6 +109,7 @@
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)/api/glfw/lib-vc2015;$(SolutionDir)/api/glew/lib/Release/Win32;$(SolutionDir)/api/lua/lib;$(SolutionDir)/api/libsndfile/lib;$(SolutionDir)/api/openAL/libs/Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;libsndfile-1.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PostBuildEvent>
       <Command>call C:\Users\GayCunt2525\Desktop\projects\mgULTRA\mg_ultra\prep_profile.bat</Command>
@@ -124,6 +125,9 @@
     <PostBuildEvent>
       <Command>call C:\Users\GayCunt2525\Desktop\projects\mgULTRA\mg_ultra\prep_profile.bat</Command>
     </PostBuildEvent>
+    <Link>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -140,6 +144,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(SolutionDir)/api/glfw/lib-vc2015;$(SolutionDir)/api/glew/lib/Release/Win32;$(SolutionDir)/api/lua/lib;$(SolutionDir)/api/libsndfile/lib;$(SolutionDir)/api/openAL/libs/Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;libsndfile-1.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PostBuildEvent>
       <Command>call C:\Users\GayCunt2525\Desktop\projects\mgULTRA\mg_ultra\prep_profile.bat</Command>
@@ -161,6 +166,7 @@
       <AdditionalLibraryDirectories>$(SolutionDir)/api/glfw/lib-vc2015;$(SolutionDir)/api/glew/lib/Release/Win32;$(SolutionDir)/api/lua/lib;$(SolutionDir)/api/libsndfile/lib;$(SolutionDir)/api/openAL/libs/Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3.lib;libsndfile-1.lib;OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <Profile>true</Profile>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PostBuildEvent>
       <Command>call C:\Users\GayCunt2525\Desktop\projects\mgULTRA\mg_ultra\prep_profile.bat</Command>
@@ -178,6 +184,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PostBuildEvent>
       <Command>call C:\Users\GayCunt2525\Desktop\projects\mgULTRA\mg_ultra\prep_profile.bat</Command>
@@ -195,6 +202,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
     <PostBuildEvent>
       <Command>call C:\Users\GayCunt2525\Desktop\projects\mgULTRA\mg_ultra\prep_profile.bat</Command>

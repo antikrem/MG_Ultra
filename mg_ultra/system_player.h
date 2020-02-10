@@ -65,9 +65,7 @@ public:
 		newEnt->addComponent(new ComponentMultiEntity());
 		newEnt->addComponent(new ComponentTimer());
 		newEnt->addComponent(new ComponentCollision(10.0f));
-		//auto newComponent10 = new ComponentAudio();
-		//newEnt->addComponent(newComponent10->pullForEntity());
-
+		newEnt->addComponent(new ComponentAudio());
 		newEnt->addComponent(new ComponentListener());
 		newEnt->addComponent(new ComponentParticle("gold"));
 

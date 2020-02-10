@@ -67,6 +67,15 @@ g_dashDuration = 0
 -- Time spent in cooldown
 g_dashCooldown = 0
 
+--loading assets for player
+Audio.request_load_file("player_shoot_tick", "shoot_click.wav")
+Audio.flush_queue()
+
+--set this audio component to play shoot tick
+this:get_component(ComponentAudio):set_source("player_shoot_tick")
+this:get_component(ComponentAudio):set_repeat(true)
+
+
 -- Functions used to update player during regular gameplay
 g_playerMovementUpdate = function()
 	--The position of the player
@@ -206,6 +215,16 @@ g_playerSpawnBullets = function()
 			cSpawner:push_entity()
 		end
 	end
+
+	-- If we get a press even, play the audio source
+	if cInput:query_press("shoot") == 1 then
+		this:get_component(ComponentAudio):set_repeat(true)
+		this:get_component(ComponentAudio):play_source()
+	-- Otherwise disable repeat to stop audio naturally
+	elseif cInput:query_down("shoot") == 0 then
+		this:get_component(ComponentAudio):set_repeat(false)
+	end
+
 end
 
 --Handler function when player is hit
