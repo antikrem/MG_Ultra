@@ -304,6 +304,7 @@
     <ClInclude Include="mmap.h" />
     <ClInclude Include="movement_fixed_point.h" />
     <ClInclude Include="movement_polar_launch.h" />
+    <ClInclude Include="movement_polar_turn.h" />
     <ClInclude Include="movement_quanta.h" />
     <ClInclude Include="movement_command.h" />
     <ClInclude Include="movement_fixed_move.h" />

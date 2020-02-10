@@ -674,6 +674,9 @@
     <ClInclude Include="movement_polar_launch.h">
       <Filter>Header Files\Static Movement</Filter>
     </ClInclude>
+    <ClInclude Include="movement_polar_turn.h">
+      <Filter>Header Files\Static Movement</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="wd\shaders\base.vert">

@@ -48,6 +48,10 @@ public:
 		movementCommander.addPolarLaunch(time, mag, ang);
 	}
 
+	void addPolarturn(int time, int duration, float totalAngle) {
+		movementCommander.addPolarturn(time, duration, totalAngle);
+	}
+
 	Point3 getUpdatedPosition(shared_ptr<ComponentMovement> componentMovement, const Point3& position) {
 		return movementCommander.getUpdatedPosition(componentMovement, position);
 	}
@@ -72,6 +76,10 @@ public:
 			.addFunction(
 				"add_polar_launch",
 				&ComponentStaticMovement::addPolarLaunch
+			)
+			.addFunction(
+				"add_polar_turn",
+				&ComponentStaticMovement::addPolarturn
 			)
 			.addOverloadedFunctions(
 				"create",

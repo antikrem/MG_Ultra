@@ -7,6 +7,7 @@
 #include "movement_fixed_move.h"
 #include "movement_smooth_points.h"
 #include "movement_polar_launch.h"
+#include "movement_polar_turn.h"
 
 //Base class that represents a single movement quanta
 //Movement command at a given time
@@ -58,6 +59,13 @@ public:
 	static MovementCommand createPolarLaunch(float mag, float ang) {
 		MovementCommand movementCommand;
 		movementCommand.internalQuanta = new MovementPolarLaunch(Point2(mag, ang));
+		return movementCommand;
+	}
+
+	//add a polar turn
+	static MovementCommand createPolarTurn(int duration, float totalTurn) {
+		MovementCommand movementCommand;
+		movementCommand.internalQuanta = new MovementPolarTurn(totalTurn / duration, duration);
 		return movementCommand;
 	}
 };
