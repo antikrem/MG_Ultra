@@ -1,35 +1,36 @@
 --\scripts\_initialise\audio.lua
 
---Sets up Audio interface, which allows loading of audio files
---and some general interactions
+-- Sets up Audio interface, which allows loading of audio files
+-- and some general interactions
 Audio = {}
 
---loads an audio file for usage
---does not load instantly
+-- loads an audio file for usage
+-- does not load instantly
 Audio.request_load_file = addAudioFile
 
---flushses the load request queue
+-- flushses the load request queue
 Audio.flush_queue = flushAudioLoadRequests
 
---adds a file and waits for it to have been processed
+-- adds a file and waits for it to have been processed
 Audio.load_file = function(audioName, fileLocation)
 	Audio.request_load_file(audioName, fileLocation)
 	Audio.flush_queue()
 end
 
---prints a small report on Audio state
+-- prints a small report on Audio state
 Audio.print_report = printAudioReport
 
---Global music player
+-- Global music player
 Music = {}
 
---Music global gain
+-- Music global gain
 Music.globalGain = 1.0
 
---Music last gain
+-- Music last gain, used for only last track
+-- and reset on new track
 Music.lastGain = 1.0
 
---plays a music track, replacing last track
+-- plays a music track, replacing last track
 Music.play_track = function(track)
 	local musicPlayer = EntityPool.get_cached_entity(EntityMusic)
 	
