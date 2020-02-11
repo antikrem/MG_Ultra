@@ -1,6 +1,34 @@
 ---sets g-registar variables, these are used for game control
 registar = getGlobalRegistar();
 
+--add a function to Registar to allow weak typed Registar return
+--returns nil on failure
+function Registar.get(self, name)
+	local v, check
+	--implementation is done by attempting different acessors
+	v, check = self:getInt(name)
+	if check then
+		return v
+	end
+
+	v, check = self:getFloat(name)
+	if check then
+		return v
+	end
+
+	v, check = self:getBool(name)
+	if check then
+		return v
+	end
+
+	v, check = self:getString(name)
+	if check then
+		return v
+	end
+
+	return nil
+end
+
 --global registar modifiers
 GlobalRegistar = {}
 
