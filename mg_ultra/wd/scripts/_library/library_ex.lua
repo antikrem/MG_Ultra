@@ -121,3 +121,12 @@ LAYER_PLAYER_BULLETS = 2
 LAYER_PLAYER = 1
 LAYER_ENEMY_BULLETS = 0
 LAYER_ENEMY = -1
+
+-- Add some debug variables
+getGlobalRegistar():add("debug_render_hitbox", false)
+
+Debug = {}
+
+Debug.set_render_hitbox = function(value)
+	GlobalRegistar.update("debug_render_hitbox", value)
+end

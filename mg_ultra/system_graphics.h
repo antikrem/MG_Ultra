@@ -10,6 +10,7 @@
 #include "component_camera.h"
 #include "component_transparency.h"
 #include "component_min_ambient.h"
+#include "component_collision.h"
 
 #include "camera.h"
 #include "graphics_state.h"
@@ -32,6 +33,9 @@ class SystemGraphics : public System {
 
 	//pointer to particle master
 	atomic<ParticleMaster*> particleMaster = nullptr;
+
+	//debug render hitbox mode
+	bool debugRenderHitbox = false;
 
 public:
 	SystemGraphics() {
@@ -118,6 +122,28 @@ public:
 			}
 		}
 
+
+		if (debugRenderHitbox) {
+			auto col = getComponent<ComponentCollision>(components);
+			if (col) {
+				auto& spec = col->getSpecification();
+
+				AnimationState hitbox;
+				hitbox.centerPostion = spec.getPosition();
+				hitbox.centerPostion.z = hitbox.centerPostion.z - 0.5f;
+				hitbox.animationSetName = "debug_hitbox";
+				hitbox.animationType = 1;
+				hitbox.currentFrame = 0;
+				hitbox.frameskipCounter = 0;
+				hitbox.minimumAmbient = 1.0f;
+				hitbox.transparency = 0.5f;
+
+				hitbox.scale = spec.collidableInformation.circle.radius / 50.0f;
+
+				buffer[boxCount] = graphicsState->evaluateToBox(hitbox, 1.0f);
+				boxCount++;
+			}
+		}
 	}
 
 	void precycle(EntityPool* pool) override {
@@ -128,6 +154,8 @@ public:
 		uiBoxCount = 0;
 		uiBuffer = graphicsState->getUIBoxDataBuffer();
 		uiBufferSize = graphicsState->getUIBoxDataBufferSize();
+
+		debugRenderHitbox = registar->get("debug_render_hitbox", &debugRenderHitbox) && debugRenderHitbox;
 	}
 
 	void postcycle(EntityPool* pool) override {
