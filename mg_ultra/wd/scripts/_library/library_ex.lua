@@ -99,6 +99,14 @@ getGlobalRegistar():add("debug_render_hitbox", false)
 
 Debug = {}
 
+g_isRenderingHitbox = false;
+
 Debug.set_render_hitbox = function(value)
+	g_isRenderingHitbox = value
 	GlobalRegistar.update("debug_render_hitbox", value)
+end
+
+Debug.render_hitbox = function() 
+	g_isRenderingHitbox = not g_isRenderingHitbox
+	GlobalRegistar.update("debug_render_hitbox", g_isRenderingHitbox)
 end
