@@ -54,9 +54,13 @@ class SystemCollision : public System {
 	void compareCollisionLists(const CollisionEvent& collisionEvent) {
 		for (auto source : internalEntityLists.get(collisionEvent.types[SOURCE])) {
 
-			auto& sCol = source->getComponent<ComponentCollision>()->getSpecification();
+			auto pos = source->getComponent<ComponentPosition>()->getPosition3();
+			auto& sCol = source->getComponent<ComponentCollision>()->getSpecification(pos);
+
 			for (auto target : internalEntityLists.get(collisionEvent.types[TARGET])) {
-				auto& tCol = target->getComponent<ComponentCollision>()->getSpecification();
+
+				pos = target->getComponent<ComponentPosition>()->getPosition3();
+				auto& tCol = target->getComponent<ComponentCollision>()->getSpecification(pos);
 
 				if (CollisionSpecification::isColliding(sCol, tCol)) {
 					handleCollision(source, target, collisionEvent);
@@ -65,6 +69,7 @@ class SystemCollision : public System {
 			}
 		}
 	}
+
 public:
 	SystemCollision() {
 		debugName = "s_collision";

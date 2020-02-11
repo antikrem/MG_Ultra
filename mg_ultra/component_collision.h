@@ -35,7 +35,13 @@ public:
 		specification.updatePosition(position);
 	}
 
-	//returns reference to CollisionSpecification
+	//returns reference to CollisionSpecification, while updating
+	CollisionSpecification& getSpecification(const Point3& pos) {
+		specification.updatePosition(pos);
+		return specification;
+	}
+
+	//returns reference to CollisionSpecification, not updating
 	CollisionSpecification& getSpecification() {
 		return specification;
 	}
