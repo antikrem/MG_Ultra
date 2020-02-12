@@ -170,6 +170,12 @@ public:
 		return Point3(b * this->x, b* this->y, b * this->z);
 	}
 
+	//sets x, y, does not effect z
+	void setXY(const Point2& val) {
+		x = val.x;
+		y = val.y;
+	}
+
 	//returns x, y as point2
 	Point2 getXY() const {
 		return Point2(x, y);
