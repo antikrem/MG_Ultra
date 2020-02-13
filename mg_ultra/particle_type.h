@@ -8,12 +8,6 @@
 #include "texture.h"
 #include "particle.h"
 
-enum ParticleBoxResponse {
-	Nothing = 0,
-	Delete = 1,
-	Wrap = 2
-};
-
 struct ParticleType {
 	//set to true on good construction
 	bool wellformed = false;
@@ -151,6 +145,20 @@ struct ParticleType {
 				particle.position.z = particle.position.z + 2 * boundingBoxDimension.z;
 			}
 		}
+	}
+
+	ParticleTypeSpecification getParticleTypeSpecification() {
+		return ParticleTypeSpecification(
+			feathernessMean,
+			feathernessDeviation,
+			weightMean,
+			weightDeviation,
+			maxLifeDeviation,
+			rotateToFace,
+			boundingBoxDimension,
+			boundingBoxPosition,
+			boxResponse
+		);
 	}
 };
 

@@ -49,6 +49,11 @@ public:
 		particleSpawner.setKey(key);
 	}
 
+	//sets all the parameters
+	void setAllParameters(ParticleTypeSpecification& spec) {
+		particleSpawner.setAllParameters(spec);
+	}
+
 	//sets featherness values
 	void setFeathernessParameters(float feathernessMean, float feathernessDeviation) {
 		particleSpawner.setFeathernessParameters(feathernessMean, feathernessDeviation);

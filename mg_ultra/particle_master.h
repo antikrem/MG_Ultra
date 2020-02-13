@@ -332,6 +332,16 @@ public:
 		particles.clear();
 		return particleSize;
 	}
+
+	//gets the specification for a given particle type
+	ParticleTypeSpecification getTypeSpecification(int key) {
+		if (particleTypes.count(key)) {
+			return particleTypes[key].getParticleTypeSpecification();
+		}
+		else {
+			return ParticleTypeSpecification();
+		}
+	}
 };
 
 namespace g_particles {

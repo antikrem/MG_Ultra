@@ -14,9 +14,6 @@
 class ParticleSpawner {
 	atomic<int> particleKey = -1;
 
-	//inate particle generation
-	int particlesPerCycle = 0;
-
 	//lock for particles
 	mutex lock;
 	//particles to create
@@ -74,6 +71,20 @@ public:
 	void setRotateToFace(bool rotateToFace) {
 		this->rotateToFace = rotateToFace;
 	}
+
+	//sets all parameters via a aParticleTypeSpecification
+	void setAllParameters(ParticleTypeSpecification& spec) {
+		this->rotateToFace = spec.rotateToFace;
+
+		this->feathernessMean = spec.feathernessMean;
+		this->feathernessDeviation = spec.feathernessDeviation;
+
+		this->weightMean = spec.weightMean;
+		this->weightDeviation = spec.weightDeviation;
+
+		this->maxLifeDeviation = spec.maxLifeDeviation;
+	}
+
 
 	//spawns count particle within bounds
 	void spawnParticles(int count) {
