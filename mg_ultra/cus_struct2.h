@@ -152,6 +152,11 @@ public:
 		return sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2));
 	}
 
+	Point3 normal() {
+		float mag = magnitude();
+		return Point3(x / mag, y / mag, z / mag);
+	}
+
 	Point3 operator+(const Point3& b) {
 		return Point3(this->x + b.x, this->y + b.y, this->z + b.z);
 	}
@@ -166,7 +171,7 @@ public:
 		this->z += b.z;
 	}
 
-	Point3 operator*(const float& b) {
+	Point3 operator*(float b) const {
 		return Point3(b * this->x, b* this->y, b * this->z);
 	}
 
@@ -205,6 +210,9 @@ public:
 	static float dot(const Point3& a, const Point3& b) {
 		return a.x * b.x + a.y * b.y + a.z * b.z;
 	}
+
+	
+
 	
 #ifdef GLM_ADDED
 	//as glm is avalible use the following conversion
