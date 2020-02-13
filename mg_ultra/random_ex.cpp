@@ -19,6 +19,13 @@ float rand_ex::next_norm(float mu, float sigma) {
 	return nDist(rGen) * sigma + mu;
 }
 
+void rand_ex::populate_next_norms(float* X, int n, float mu, float sigma) {
+	std::unique_lock<std::mutex> lck(randLock);
+	for (int i = 0; i < n; i++) {
+		X[i] = nDist(rGen) * sigma + mu;
+	}
+}
+
 float rand_ex::next_unif(float a, float b) {
 	std::unique_lock<std::mutex> lck(randLock);
 	return (b - a) * uDist(rGen) + a;

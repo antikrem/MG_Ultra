@@ -7,6 +7,9 @@ namespace rand_ex {
 	//gets next normal value
 	float next_norm(float mu, float sigma);
 
+	//populates an array X of size N with normal N(mu, sigma);
+	void populate_next_norms(float* X, int n, float mu, float sigma);
+
 	//gets next uniform value
 	float next_unif(float a, float b);
 
