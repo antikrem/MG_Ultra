@@ -152,7 +152,7 @@ public:
 		return sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2));
 	}
 
-	Point3 normal() {
+	Point3 getUnitVector() {
 		float mag = magnitude();
 		return Point3(x / mag, y / mag, z / mag);
 	}
@@ -211,8 +211,13 @@ public:
 		return a.x * b.x + a.y * b.y + a.z * b.z;
 	}
 
-	
-
+	//rotates this vector about an axis of rotation defind by normal vector k by theta degrees
+	Point3 rotate(const Point3& k, float degrees) {
+		return
+			*this * cos(DEG2RAD(degrees))
+			+ Point3::cross(k, *this) * sin(DEG2RAD(degrees))
+			+ k * (Point3::dot(k, *this) * (1 - cos(DEG2RAD(degrees))));
+	}
 	
 #ifdef GLM_ADDED
 	//as glm is avalible use the following conversion
