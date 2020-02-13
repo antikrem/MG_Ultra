@@ -46,13 +46,7 @@ public:
 				comPar->setKey(key);
 				auto spec = particleMaster->getTypeSpecification(key);
 				comPar->setAllParameters(spec);
-				//comPar->setMaxLifeDeviation(particleMaster->getMaxLifeDeviation(key));
-				//auto featherParameters = particleMaster->getFeathernessParameters(key);
-				//auto weightParameters = particleMaster->getWeightParameters(key);
-				//comPar->setFeathernessParameters(get<0>(featherParameters), get<1>(featherParameters));
-				//comPar->setWeightParameters(get<0>(weightParameters), get<1>(weightParameters));
-				//comPar->setRotateToFace(particleMaster->getRotateToFace(key));
-
+				
 				if (comGra) {
 					string setName = comGra->getAnimationState().animationSetName;
 					int x, y;
