@@ -201,6 +201,11 @@ public:
 		);
 	}
 
+	//returns two vectors dot
+	static float dot(const Point3& a, const Point3& b) {
+		return a.x * b.x + a.y * b.y + a.z * b.z;
+	}
+	
 #ifdef GLM_ADDED
 	//as glm is avalible use the following conversion
 	glm::vec3 getVec3() {
