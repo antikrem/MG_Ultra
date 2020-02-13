@@ -192,6 +192,15 @@ public:
 		return temp * (1.0f / temp.magnitude());
 	}
 
+	//returns two vectors crossed
+	static Point3 cross(const Point3& a, const Point3& b) {
+		return Point3(
+			a.y * b.z - a.z  * b.y,
+			a.z * b.x - a.x  * b.z,
+			a.x * b.y - a.y  * b.x
+		);
+	}
+
 #ifdef GLM_ADDED
 	//as glm is avalible use the following conversion
 	glm::vec3 getVec3() {
