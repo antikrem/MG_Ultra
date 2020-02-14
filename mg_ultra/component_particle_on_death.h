@@ -43,6 +43,11 @@ public:
 		this->particleKeyName = particleKeyName;
 	}
 
+	ComponentParticleOnDeath(string particleKeyName, int count) {
+		this->particleKeyName = particleKeyName;
+		this->count = count;
+	}
+
 	bool isRegistered() {
 		return inPool;
 	}
@@ -124,7 +129,8 @@ public:
 			.addFunction("set_direction_deviation", &ComponentParticleOnDeath::setDirectionDeviation)
 			.addOverloadedFunctions(
 				"create",
-				ScriptableClass::create<ComponentParticleOnDeath, string>
+				ScriptableClass::create<ComponentParticleOnDeath, string>,
+				ScriptableClass::create<ComponentParticleOnDeath, string, int>
 			)
 			.addStaticFunction("type", &getType<ComponentParticleOnDeath>)
 			.addStaticFunction("cast", &Component::castDown<ComponentParticleOnDeath>)
