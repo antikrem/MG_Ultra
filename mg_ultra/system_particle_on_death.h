@@ -142,9 +142,12 @@ public:
 		if (cleanFlag) {
 			erase_sequential_if(internalEntities, [](shared_ptr<Entity> &ent) { return !ent->getFlag(); });
 		}
-
-		particleMaster->addParticles(particleCache);
-		particleCache.clear();
+		
+		if (particleCache.size()) {
+			particleMaster->addParticles(particleCache);
+			particleCache.clear();
+		}
+		
 	}
 };
 
