@@ -55,6 +55,7 @@ class SystemParticleOnDeath : public System {
 		float offset[3];
 
 		float maxLifeDeviation = pod->getMaxLifeDeviation();
+		float directionDeviation = pod->getDirectionDeviation();
 
 		for (int i = 0; i < pod->getCount(); i++) {
 
@@ -64,7 +65,7 @@ class SystemParticleOnDeath : public System {
 				= pos + Point3(offset[0], offset[1], offset[2]);
 
 			Point3 adjustedVel 
-				= (vel * rand_ex::next_unif(lower, higher)).rotate(Point3(0.0f, 0.0f, 1.0f), rand_ex::next_unif(-30.0f, 30.0f));
+				= (vel * rand_ex::next_unif(lower, higher)).rotate(Point3(0.0f, 0.0f, 1.0f), rand_ex::next_norm(0.0f, directionDeviation));
 
 			particleCache.push_back(
 				Particle(

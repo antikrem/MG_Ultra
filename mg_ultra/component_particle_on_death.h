@@ -26,6 +26,8 @@ private:
 	atomic<float> lowerVelocityFactor = 0;
 	atomic<float> upperVelocityFactor = 1.0f;
 
+	atomic<float> directionDeviation = 0.0f;
+
 	ParticleTypeSpecification particleTypeSpecification;
 
 	//sometimes, use an alternative position
@@ -94,6 +96,14 @@ public:
 		this->radius = radius;
 	}
 
+	float getDirectionDeviation() {
+		return directionDeviation;
+	}
+
+	void setDirectionDeviation(float directionDeviation) {
+		this->directionDeviation =  directionDeviation;
+	}
+
 	float getMaxLifeDeviation() {
 		return particleTypeSpecification.maxLifeDeviation;
 	}
@@ -111,6 +121,7 @@ public:
 		state["ComponentParticleOnDeath"].setClass(kaguya::UserdataMetatable<ComponentParticleOnDeath, Component>()
 			.setConstructors<ComponentParticleOnDeath()>()
 			.addFunction("set_velocity_range", &ComponentParticleOnDeath::setVelocityFactorRange)
+			.addFunction("set_direction_deviation", &ComponentParticleOnDeath::setDirectionDeviation)
 			.addOverloadedFunctions(
 				"create",
 				ScriptableClass::create<ComponentParticleOnDeath, string>
