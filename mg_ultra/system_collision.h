@@ -10,6 +10,8 @@
 #include "component_damage.h"
 #include "component_health.h"
 
+#include "component_particle_on_death.h"
+
 #define SOURCE 0
 #define TARGET 1
 
@@ -39,10 +41,17 @@ class SystemCollision : public System {
 	void standardCombatHandle(shared_ptr<Entity> source, shared_ptr<Entity> target) {
 		auto sourceDamage = source->getComponent<ComponentDamage>();
 		auto targetHealth = target->getComponent<ComponentHealth>();
+		
 		if (sourceDamage && targetHealth) {
 			targetHealth->damageHealth(sourceDamage->getDamage());
 			sourceDamage->setDamage(0);
 			sourceDamage->killEntity();
+
+			auto sourcePod = source->getComponent<ComponentParticleOnDeath>();
+
+			if (sourcePod) {
+				sourcePod->setAdjustedPosition(source->getComponent<ComponentPosition>()->getPosition3());
+			}
 		}
 	}
 

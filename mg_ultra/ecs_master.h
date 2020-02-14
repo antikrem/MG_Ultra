@@ -96,6 +96,13 @@ class ECSMaster {
 	master6: audio 
 		-system_audio
 		-system_music
+
+	master7: particles
+		-system_particle_spawner
+		-system_particle_boxes
+		-system_force_applier
+		-system_particle_update
+		-system_particle_on_death
 	*/
 	void createBasicSystems() {
 		
@@ -173,6 +180,8 @@ class ECSMaster {
 		particleBoxeseUpdateSystem->setParticleMaster(pMaster);
 		auto forceApplierSystem = master->createSystem<SystemForceApplier>(registar);
 		forceApplierSystem->setParticleMaster(pMaster);
+		auto particleOnDeathSystem = master->createSystem<SystemParticleOnDeath>(registar);
+		particleOnDeathSystem->setParticleMaster(pMaster);
 	}
 
 	//starts all of the masters

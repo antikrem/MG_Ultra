@@ -53,5 +53,6 @@
 #include "system_particle_boxes.h"
 #include "system_force_applier.h"
 #include "system_particle_update.h"
+#include "system_particle_on_death.h"
 
 #endif

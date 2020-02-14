@@ -93,4 +93,56 @@ struct Particle {
 	}
 };
 
+enum ParticleBoxResponse {
+	Nothing = 0,
+	Delete = 1,
+	Wrap = 2
+};
+
+struct ParticleTypeSpecification {
+	bool wellformed = false;
+
+	float feathernessMean;
+	float feathernessDeviation;
+
+	float weightMean;
+	float weightDeviation;
+
+	float maxLifeDeviation;
+
+	bool rotateToFace;
+
+	Point3 boundingBoxDimension;
+	Point3 boundingBoxPosition;
+	ParticleBoxResponse boxResponse;
+
+	ParticleTypeSpecification(
+		float feathernessMean,
+		float feathernessDeviation,
+		float weightMean,
+		float weightDeviation,
+		float maxLifeDeviation,
+		bool rotateToFace,
+
+		Point3 boundingBoxDimension,
+		Point3 boundingBoxPosition,
+		ParticleBoxResponse boxResponse
+	) : boundingBoxDimension(boundingBoxDimension), boundingBoxPosition(boundingBoxPosition)
+	{
+		this->wellformed = true;
+		this->feathernessMean = feathernessMean;
+		this->feathernessDeviation = feathernessDeviation;
+		this->weightMean = weightMean;
+		this->weightDeviation = weightDeviation;
+		this->maxLifeDeviation = maxLifeDeviation;
+		this->rotateToFace = rotateToFace;
+		this->boxResponse = boxResponse;
+	}
+
+	ParticleTypeSpecification() 
+	: boundingBoxDimension(0), boundingBoxPosition(0) {
+
+	}
+};
+
 #endif
