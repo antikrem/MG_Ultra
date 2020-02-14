@@ -194,12 +194,16 @@ g_playerSpawnBullets = function()
 			cSpawner:create_entity(EntityPlayerBullets)
 	
 			cSpawner:add_component(ComponentPosition.create(0, 40, LAYER_PLAYER_BULLETS))
-			cSpawner:add_component(ComponentCollision.create(100))
+			cSpawner:add_component(ComponentCollision.create(27))
 			cSpawner:add_component(ComponentDamage.create(10))
 			cSpawner:add_component(ComponentOffsetOnce.create())
-			cSpawner:add_component(ComponentMinAmbient.create(0.55))
+			cSpawner:add_component(ComponentMinAmbient.create(0.8))
 			cSpawner:add_component(ComponentRotation.create())
 			cSpawner:add_component(ComponentPointLight.create(1.0, 0.75, 0.05, 0.0015, 0.07, 3.2))
+			local pod = ComponentParticleOnDeath.create("death_gold")
+			pod:set_velocity_range(1.0, 1.3);
+			pod:set_direction_deviation(10);
+			cSpawner:add_component(pod)
 
 			local bulletGComponents = ComponentGraphics.create("bullet_cross")
 			bulletGComponents:set_animation(1)
