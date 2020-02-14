@@ -125,8 +125,9 @@ public:
 
 		if (debugRenderHitbox) {
 			auto col = getComponent<ComponentCollision>(components);
+			auto pos = getComponent<ComponentPosition>(components);
 			if (col) {
-				auto& spec = col->getSpecification();
+				auto& spec = col->getSpecification(pos->getPosition3());
 
 				AnimationState hitbox;
 				hitbox.centerPostion = spec.getPosition();
