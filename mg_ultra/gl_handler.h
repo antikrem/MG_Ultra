@@ -315,7 +315,8 @@ public:
 			postEffects.bindNoClearBuffer();
 			glEnable(GL_BLEND);
 			postEffects.setBlendFunction("scene", GL_FUNC_ADD, GL_ONE_MINUS_DST_ALPHA, GL_ONE);
-			chain = shaderMaster->attachFrameBufferAsSource("unified_lighting", &lightingFrameBuffer);
+			chain = textureMaster->attachNamedTextures(shaderMaster, "point_lighting", "assets/gfx.mgt", "noise");
+			chain = shaderMaster->attachFrameBufferAsSource("unified_lighting", &lightingFrameBuffer, chain);
 			shaderMaster->attachFrameBufferAsSource("unified_lighting", &geometryFrameBuffer, chain);
 			screenVAO.processGLSide();
 			glDisable(GL_BLEND);

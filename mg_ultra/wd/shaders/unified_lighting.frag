@@ -10,6 +10,9 @@ uniform sampler2D minimumAmbient;
 uniform sampler2D frontDepthBuffer;
 uniform sampler2D lightScene;
 
+//sampling noise
+uniform sampler2D noise;
+
 uniform float ambientStrength;
 uniform vec3 ambientColor;
 
