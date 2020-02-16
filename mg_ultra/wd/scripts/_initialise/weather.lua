@@ -37,10 +37,17 @@ Weather.start_heavy_rain = function()
 	Fog.set_strength(0.0017)
 	Fog.set_starting_depth(400)
 
-	local p = EntityPool.get_player()
-	if p then p:get_component(ComponentPointLight):set_parameters(0.00078, 0, 2) end
+	Weather.update_player_light()
 
 	PostEffects.Bloom.set_threshold(0.2)
+end
+
+--Can work if this is is player or player is in pool
+Weather.update_player_light = function()
+	local p = EntityPool.get_player() and EntityPool.get_player() or this
+	if p and registar:get("weather_type") == WeatherTypes.HeavyRain then 
+		p:get_component(ComponentPointLight):set_parameters(0.00078, 0, 2) 
+	end
 end
 
 -- Strikes weak lightning

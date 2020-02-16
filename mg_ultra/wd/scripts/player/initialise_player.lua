@@ -8,6 +8,9 @@ this:get_component(ComponentMovement):set_angle_cap(PLAYER_MAX_TURN_VELOCITY)
 -- The light is activated by other systems (mostly weather)
 this:get_component(ComponentPointLight):set_colour(0.9647, 0.8039, 0.3751)
 
---set this audio component to play shoot tick
+-- Set this audio component to play shoot tick
 this:get_component(ComponentAudio):set_source("player_shoot_tick")
 this:get_component(ComponentAudio):set_repeat(true)
+
+-- Set player lighting
+Weather.update_player_light()
