@@ -23,6 +23,9 @@
 #include "functional_callback_system.h"
 
 class SystemPlayer : public System, public FunctionalCallbackSystem  {
+
+	bool systemScriptRan = false;
+
 public:
 
 	SystemPlayer() {
@@ -45,46 +48,60 @@ public:
 	}
 
 	void cacheFail(EntityPool* pool) override {
-		//create the camera entity
-		auto newEnt = shared_ptr<Entity>(new Entity(ETPlayer));
-		newEnt->addComponent(new ComponentPosition(0, 0, 1.0f));
+		
+		//will need to initialise system atleast once
+		if (!systemScriptRan) {
+			executeAnyScript(debugName,
+				os_kit::getFileAsString("scripts//player//initialise_player_system.lua"),
+				nullptr,
+				nullptr
+			);
+			systemScriptRan = true;
+		}
 
-		auto newComponent1 = new ComponentGraphics("player");
-		newComponent1->setScale(0.3f);
-		newComponent1->setAnimationType(1);
-		newEnt->addComponent(newComponent1->pullForEntity());
+		bool active;
+		if (registar->get("player_active", &active) && active) {
 
-		auto newComponent2 = new ComponentAnimation();
-		newComponent2->changeDefaultAnimation(1);
-		newEnt->addComponent(newComponent2->pullForEntity());
+			//create the camera entity
+			auto newEnt = shared_ptr<Entity>(new Entity(ETPlayer));
+			newEnt->addComponent(new ComponentPosition(0, 0, 1.0f));
 
-		newEnt->addComponent(new ComponentInput());
-		newEnt->addComponent(new ComponentMovement());
-		newEnt->addComponent(new ComponentExtendedScripting());
-		newEnt->addComponent(new ComponentSpawner());
-		newEnt->addComponent(new ComponentMultiEntity());
-		newEnt->addComponent(new ComponentTimer());
-		newEnt->addComponent(new ComponentCollision(10.0f));
-		newEnt->addComponent(new ComponentAudio());
-		newEnt->addComponent(new ComponentListener());
-		newEnt->addComponent(new ComponentParticle("gold"));
+			auto newComponent1 = new ComponentGraphics("player");
+			newComponent1->setScale(0.3f);
+			newComponent1->setAnimationType(1);
+			newEnt->addComponent(newComponent1->pullForEntity());
 
-		auto newComponent13 = new ComponentForceApplier(300.0f, 10.0f);
-		newComponent13->setCutThreashold(0.5f);
-		newEnt->addComponent(newComponent13->pullForEntity());
+			auto newComponent2 = new ComponentAnimation();
+			newComponent2->changeDefaultAnimation(1);
+			newEnt->addComponent(newComponent2->pullForEntity());
 
-		newEnt->addComponent(new ComponentPointLight(1.0f, 0.75f, 0.05f));
-		newEnt->addComponent(new ComponentClampPosition(960.0f, 540.0f));
+			newEnt->addComponent(new ComponentInput());
+			newEnt->addComponent(new ComponentMovement());
+			newEnt->addComponent(new ComponentExtendedScripting());
+			newEnt->addComponent(new ComponentSpawner());
+			newEnt->addComponent(new ComponentMultiEntity());
+			newEnt->addComponent(new ComponentTimer());
+			newEnt->addComponent(new ComponentCollision(10.0f));
+			newEnt->addComponent(new ComponentAudio());
+			newEnt->addComponent(new ComponentListener());
+			newEnt->addComponent(new ComponentParticle("gold"));
 
-		//execute a script to initialise the player
-		executeAnyScript(debugName, 
-			os_kit::getFileAsString("scripts//player//initialise_player.lua"), 
-			newEnt, 
-			&sc
-		);
+			auto newComponent13 = new ComponentForceApplier(300.0f, 10.0f);
+			newComponent13->setCutThreashold(0.5f);
+			newEnt->addComponent(newComponent13->pullForEntity());
 
-		pool->addEnt(newEnt, true);
-		err::logMessage("Player created");
+			newEnt->addComponent(new ComponentPointLight(1.0f, 0.75f, 0.05f));
+			newEnt->addComponent(new ComponentClampPosition(960.0f, 540.0f));
+
+			//execute a script to initialise the player
+			executeAnyScript(debugName,
+				os_kit::getFileAsString("scripts//player//initialise_player.lua"),
+				newEnt,
+				&sc
+			);
+
+			pool->addEnt(newEnt, true);
+		}
 	}
 };
 

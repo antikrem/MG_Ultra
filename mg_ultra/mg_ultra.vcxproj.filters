@@ -823,6 +823,9 @@
     <None Include="wd\campaigns\ascent\1\prelevel.lua">
       <Filter>Resource Files\level\1</Filter>
     </None>
+    <None Include="wd\scripts\player\initialise_player_system.lua">
+      <Filter>Resource Files\scripts\player</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="wd\log.txt">
