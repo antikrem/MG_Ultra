@@ -3,14 +3,19 @@
 void FunctionalCallbackSystem::executeAnyScript(string systemName, string script, shared_ptr<Entity> ent, SuccessCallback* sc) {
 	ScriptUnit su(SS_functionalCallBack, script);
 	su.addDebugData(systemName);
+
 	if (ent) {
 		su.attachEntity(ent);
 	}
-	sc->reset();
-	su.attachSuccessCallback(sc);
+
+	if (sc) {
+		sc->reset();
+		su.attachSuccessCallback(sc);
+	}
+	
 	g_script::executeScriptUnit(su);
 
-	if (!sc->waitForCompletion()) {
+	if (sc && !sc->waitForCompletion()) {
 		err::logMessage("Setup script failed in " + systemName);
 	}
 }
