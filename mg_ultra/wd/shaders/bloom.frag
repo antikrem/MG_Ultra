@@ -14,10 +14,5 @@ layout(location = 0) out vec4 bloom;
 void main() { 
 	vec3 sceneColour = texture(scene, uv).rgb;
     
-	if (dot(sceneColour.rgb, COLOUR_PERCEPTION) > bloomThreshold) {
-		bloom = vec4(sceneColour, 1.0);
-	}
-	else {
-		bloom = vec4(0);
-	}
+	bloom = vec4(sceneColour, 1.0) * step(bloomThreshold, dot(sceneColour.rgb, COLOUR_PERCEPTION));
 }
