@@ -234,3 +234,10 @@ Player = {}
 Player.enable_player = function()
 	GlobalRegistar.add("player_active", true)
 end
+
+-- Execute a function that treats player as this
+Player.execute_against = function(f, ...)
+	this = EntityPool.get_player()
+	f(...)
+	this = nil
+end
