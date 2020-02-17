@@ -12,7 +12,7 @@ layout(location = 0) out vec4 bloom;
 
 
 void main() { 
-	vec3 sceneColour = texture(scene, uv).rgb;
+	vec4 sceneColour = texture(scene, uv).rgba;
     
-	bloom = vec4(sceneColour, 1.0) * step(bloomThreshold, dot(sceneColour.rgb, COLOUR_PERCEPTION));
+	bloom = sceneColour * step(bloomThreshold, dot(sceneColour.rgb, COLOUR_PERCEPTION));
 }
