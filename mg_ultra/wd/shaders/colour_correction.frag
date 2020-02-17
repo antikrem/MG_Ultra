@@ -8,6 +8,8 @@ uniform sampler2D brights;
 
 uniform float exposure;
 
+uniform float letterbox;
+
 in vec2 uv;
 
 out vec4 colour;
@@ -47,5 +49,7 @@ void main() {
 	colour = vec4(
 		exposureMapping(sceneTexel.rgb), 
 		1.0
-	);
+	) 
+	//0 when outside border
+	* (1.0 - step(letterbox, abs(2 * (uv.y - 0.5))));
 }
