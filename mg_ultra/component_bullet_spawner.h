@@ -12,6 +12,8 @@ class ComponentBulletSpawner : public Component, public ScriptableClass {
 private:
 	string bulletMasterName;
 
+	string parameterPack = "";
+
 	int cycle = -1;
 	int lastActiveScript = -1;
 
@@ -22,6 +24,11 @@ public:
 
 	ComponentBulletSpawner(string bulletMasterName) {
 		this->bulletMasterName = bulletMasterName;
+	}
+
+	ComponentBulletSpawner(string bulletMasterName, string parameterPack) {
+		this->bulletMasterName = bulletMasterName;
+		this->parameterPack = parameterPack;
 	}
 
 	int getCycle() {
@@ -42,6 +49,10 @@ public:
 
 	string getBulletMasterName() {
 		return bulletMasterName;
+	}
+
+	string getParameterPack() {
+		return parameterPack;
 	}
 
 	void registerToLua(kaguya::State& state) override {

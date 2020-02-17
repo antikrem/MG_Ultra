@@ -22,12 +22,16 @@ public:
 
 		bs->incrementCycle();
 
+		string pack = bs->getParameterPack();
+
 		ScriptUnit su(
 			SS_inlineLoader,
 			"BulletSpawnerList._spawnerUpdate(\"" 
 			+ bs->getBulletMasterName() + "\", "
 			+ to_string(bs->getCycle()) + ", "
-			+ to_string(bs->getLastActiceScript()) + ")"
+			+ to_string(bs->getLastActiceScript())
+			+ string(pack.size() ? (", " + bs->getParameterPack()) : "")
+			+ ")"
 		);
 
 		su.attachEntity(ent);

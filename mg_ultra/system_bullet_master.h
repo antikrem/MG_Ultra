@@ -48,7 +48,10 @@ public:
 			//and pass to script environment to be set up
 			shared_ptr<Entity> subEnt = shared_ptr<Entity>(new Entity(ETBulletSpawner));
 
-			auto cBulletSpawner = new ComponentBulletSpawner(bm->getBulletMasterName());
+			auto cBulletSpawner = new ComponentBulletSpawner(
+				bm->getBulletMasterName(),
+				bm->getBulletMasterParameterPack()
+			);
 			subEnt->addComponent(cBulletSpawner);
 
 			ScriptUnit su(

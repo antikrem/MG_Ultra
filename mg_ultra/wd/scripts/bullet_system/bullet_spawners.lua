@@ -64,7 +64,7 @@ BulletSpawnerList = {
 
 	--Takes bullet spawner name, current cycle and last valid cycle
 	--will execute correct 
-	_spawnerUpdate = function(name, current, lastValid)
+	_spawnerUpdate = function(name, current, lastValid, ...)
 		--if found then update last valid
 		if BulletSpawnerList[name].scriptLookUp[current] ~= nil then
 			--need to check if this look up is a function or false (end of last active)
@@ -80,7 +80,7 @@ BulletSpawnerList = {
 		
 		--If theres a postive last active, run script
 		if lastValid >= 0 and this:is_alive() then
-			BulletSpawnerList[name].scriptLookUp[lastValid]()
+			BulletSpawnerList[name].scriptLookUp[lastValid](...)
 		end
 	end
 

@@ -14,6 +14,8 @@ private:
 	bool initialised = false;
 	bool valid = true;
 
+	string parameterPack = "";
+
 	int startingTick = 0;
 	int currentTick = -1;
 
@@ -29,6 +31,12 @@ public:
 	ComponentBulletMaster(string bulletMasterName, int startingTick) {
 		this->bulletMasterName = bulletMasterName;
 		this->startingTick = startingTick;
+	}
+
+	ComponentBulletMaster(string bulletMasterName, int startingTick, string parameterPack) {
+		this->bulletMasterName = bulletMasterName;
+		this->startingTick = startingTick;
+		this->parameterPack = parameterPack;
 	}
 
 	bool isInitialised() {
@@ -51,6 +59,10 @@ public:
 		return bulletMasterName;
 	}
 
+	string getBulletMasterParameterPack() {
+		return parameterPack;
+	}
+
 	int incrementAndGetCurrentTick() {
 		return ++currentTick;
 	}
@@ -62,13 +74,28 @@ public:
 	void registerToLua(kaguya::State& state) override {
 		state["ComponentBulletMaster"].setClass(kaguya::UserdataMetatable<ComponentBulletMaster, Component>()
 			.setConstructors<ComponentBulletMaster()>()
-			.addOverloadedFunctions(
-				"create",
-				ScriptableClass::create<ComponentBulletMaster, string>,
-				ScriptableClass::create<ComponentBulletMaster, string, int>
-			)
+			.addStaticFunction("generate", ScriptableClass::create<ComponentBulletMaster, string, int, string>)
 			.addStaticFunction("type", &getType<ComponentBulletMaster>)
 			.addStaticFunction("cast", &Component::castDown<ComponentBulletMaster>)
+		);
+		//Additionally, add this extra function for a templated constructor
+		state.dostring(
+			"function ComponentBulletMaster.create(name, startingTick, ...) \n"
+			"	if is_nil(startingTick) then startingTick = 0 end \n"
+			"	first = true \n"
+			"	pack = \"\" \n"
+			"	\n"
+			"	for i = 1, select('#', ...) do \n"
+			"		if first then \n"
+			"			first = false \n"
+			"		else \n"
+			"			pack = pack .. \", \" \n"
+			"		end \n"
+			"		pack = pack .. tostring(select(i, ...)) \n"
+			"	end \n"
+			"	print(\"hello pack: \", pack) \n"
+			"	return ComponentBulletMaster.generate(name, startingTick, pack) \n"
+			"end"
 		);
 	}
 };
