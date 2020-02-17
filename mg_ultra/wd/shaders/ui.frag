@@ -11,6 +11,8 @@ in vec2 wl;
 in vec2 texSize;
 in float render3D;
 
+in float transparency;
+
 layout(location = 0) out vec4 uiScene;
 
 void main() {
@@ -21,5 +23,5 @@ void main() {
 		discard;
 	}
 
-	uiScene = texel.rgba;
+	uiScene = transparency * texel.rgba;
 }
