@@ -219,6 +219,9 @@
     <ClCompile Include="system_collision.cpp">
       <Filter>Source Files\ECS\Systems</Filter>
     </ClCompile>
+    <ClCompile Include="ui.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="graphics_state.h">
@@ -686,6 +689,12 @@
     <ClInclude Include="system_particle_on_death.h">
       <Filter>Header Files\ECS\Systems\Particle System</Filter>
     </ClInclude>
+    <ClInclude Include="ui.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="system_ui.h">
+      <Filter>Header Files\ECS\Systems</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="wd\shaders\base.vert">
@@ -825,6 +834,9 @@
     </None>
     <None Include="wd\scripts\player\initialise_player_system.lua">
       <Filter>Resource Files\scripts\player</Filter>
+    </None>
+    <None Include="wd\scripts\_initialise\ui.lua">
+      <Filter>Resource Files\scripts\_initialise</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

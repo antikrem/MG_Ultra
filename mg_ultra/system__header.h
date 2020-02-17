@@ -28,6 +28,7 @@
 #include "system_colour_modulation.h"
 #include "system_ambient_light.h"
 #include "system_fog.h"
+#include "system_ui.h"
 #include "system_directional_lighting_update.h"
 
 //ring 3 - main game loop - most important main gameplay loop

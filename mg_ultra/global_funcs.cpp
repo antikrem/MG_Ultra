@@ -18,6 +18,7 @@
 #include "particle_master.h"
 #include "graphics_settings.h"
 #include "colour_modulation.h"
+#include "ui.h"
 
 ///print
 //For use with print function, holds a buffer sting to print
@@ -130,6 +131,10 @@ void registerGlobalFunctions(kaguya::State &kaguya) {
 	kaguya["getFogStart"] = g_fog::getFogStart;
 	kaguya["setFogMax"] = g_fog::setFogMax;
 	kaguya["getFogMax"] = g_fog::getFogMax;
+
+	//ui
+	kaguya["setBorderTrendValue"] = g_ui::setTrend;
+	kaguya["setBorderValue"] = g_ui::set;
 
 	//ambient lighting
 	kaguya["setAmbientLightStrengths"] = g_ambient::setStrengths;

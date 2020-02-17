@@ -242,6 +242,7 @@
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="timed_event_callback.cpp" />
     <ClCompile Include="timer.cpp" />
+    <ClCompile Include="ui.cpp" />
     <ClCompile Include="_graphics_headers.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -377,6 +378,7 @@
     <ClInclude Include="system_text.h" />
     <ClInclude Include="system_timer.h" />
     <ClInclude Include="system_transparency.h" />
+    <ClInclude Include="system_ui.h" />
     <ClInclude Include="system_weather.h" />
     <ClInclude Include="system__header.h" />
     <ClInclude Include="trending_value.h" />
@@ -393,6 +395,7 @@
     <ClInclude Include="timed_event_callback.h" />
     <ClInclude Include="timer.h" />
     <ClInclude Include="n_buffer.h" />
+    <ClInclude Include="ui.h" />
     <ClInclude Include="vao_boxdata.h" />
     <ClInclude Include="vao_buffer.h" />
     <ClInclude Include="vao_directional_light.h" />
@@ -420,6 +423,7 @@
     <None Include="wd\scripts\_initialise\particles.lua" />
     <None Include="wd\scripts\_initialise\post_effects.lua" />
     <None Include="wd\scripts\_initialise\registar.lua" />
+    <None Include="wd\scripts\_initialise\ui.lua" />
     <None Include="wd\scripts\_initialise\unified_lighting.lua" />
     <None Include="wd\scripts\_initialise\weather.lua" />
     <None Include="wd\scripts\_library\library.lua" />

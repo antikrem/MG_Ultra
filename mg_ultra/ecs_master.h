@@ -140,6 +140,7 @@ class ECSMaster {
 		master->createSystem<SystemColourModulation>(registar);
 		master->createSystem<SystemAmbientLighting>(registar);
 		master->createSystem<SystemFog>(registar);
+		master->createSystem<SystemUI>(registar);
 		master->createSystem<SystemDirectionalLightUpdate>(registar);
 
 		//ring 3

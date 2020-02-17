@@ -19,6 +19,7 @@
 #include "vao_screenbuffer.h"
 
 #include "fog.h"
+#include "ui.h"
 #include "ambient_illumination.h"
 #include "colour_modulation.h"
 
@@ -360,6 +361,7 @@ public:
 		//set the geometry frame buffer as the source
 		shaderMaster->useShader("colour_correction");
 		shaderMaster->setUniformF("colour_correction", "exposure", gSettings->exposure);
+		shaderMaster->setUniformF("colour_correction", "letterbox", g_ui::getBorderCutoff());
 		chain = shaderMaster->attachFrameBufferAsSource("colour_correction", &postEffects);
 		shaderMaster->attachFrameBufferAsSource("colour_correction", &bloom1, chain);
 		screenVAO.processGLSide();
