@@ -35,13 +35,15 @@ end
 
 --Creates a sprite and attaches it to calling entities multi ent
 --Requires this to have a ComponentSpawner and ComponentMultiEnt
-function attach_visual_sprite(aniSetName, zOffset, rotationSpeed, minAmbient, fadeIn) 
+function attach_visual_sprite(aniSetName, zOffset, rotationSpeed, minAmbient, fadeIn, rotation) 
 	local e = Entity.create(EntityGeneric)
+
+	if is_nil(rotation) then rotation = 0 end
 
 	local _, _, offset = this:get_component(ComponentPosition):get_position() 
 	e:add_component(ComponentPosition.create(0, 0, offset + zOffset))
 	e:add_component(ComponentGraphics.create(aniSetName))
-	e:add_component(ComponentRotation.create(0, rotationSpeed))
+	e:add_component(ComponentRotation.create(rotation, rotationSpeed))
 
 	if not is_nil(minAmbient) then e:add_component(ComponentMinAmbient.create(minAmbient)) end
 	if not is_nil(fadeIn) then e:add_component(ComponentTransparency.create(1.0, 1.0/fadeIn)) end
