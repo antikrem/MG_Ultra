@@ -75,12 +75,12 @@ public:
 	void registerToLua(kaguya::State& state) override {
 		state["ComponentTransparency"].setClass(kaguya::UserdataMetatable<ComponentTransparency, Component>()
 			.setConstructors<ComponentTransparency()>()
-			.addFunction("setTarget", &ComponentTransparency::setTarget)
-			.addFunction("getTarget", &ComponentTransparency::getTarget)
-			.addFunction("getCurrent", &ComponentTransparency::getCurrent)
-			.addFunction("setCurrent", &ComponentTransparency::setCurrent)
-			.addFunction("getRate", &ComponentTransparency::getRate)
-			.addFunction("setRate", &ComponentTransparency::setRate)
+			.addFunction("set_target", &ComponentTransparency::setTarget)
+			.addFunction("get_target", &ComponentTransparency::getTarget)
+			.addFunction("get_current", &ComponentTransparency::getCurrent)
+			.addFunction("set_current", &ComponentTransparency::setCurrent)
+			.addFunction("get_rate", &ComponentTransparency::getRate)
+			.addFunction("set_rate", &ComponentTransparency::setRate)
 			.addOverloadedFunctions(
 				"create",
 				ScriptableClass::create<ComponentTransparency>,
