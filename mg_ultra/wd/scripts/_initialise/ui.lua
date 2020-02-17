@@ -22,13 +22,27 @@ end
 UI.display_title_card = function(titleSet, fadeIn, delay, fadeOut)
 	local e = Entity.create(EntityGeneric)
 	e:add_component(ComponentPosition.create(0,0,-1))
+
+	if fadeIn < 1 then fadeIn = 1 end
 	e:add_component(ComponentTransparency.create(1.0, 1.0 / fadeIn))
 
 	local gra = ComponentGraphics.create(titleSet)
 	gra:set_render_in_3D(false)
 	e:add_component(gra)
 	
-	
+	local tim = ComponentTimer.create()
+	tim:add_callback(
+		delay, 
+		"this:get_component(ComponentTransparency):set_rate(" .. tostring(1.0 / fadeOut) ..")"..
+		"this:get_component(ComponentTransparency):set_target(0)" 
+		
+	)
+	tim:add_callback(
+		delay + fadeOut, 
+		"this:kill()" 
+		
+	)
+	e:add_component(tim)
 
 	EntityPool.add_entity(e)
 
