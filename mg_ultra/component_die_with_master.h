@@ -42,6 +42,11 @@ public:
 		}
 	}
 
+	void disableDieWithMaster() {
+		//set short death end to easily disable
+		deathEnd = cycle - 1;
+	}
+
 	void setMasterDead() {
 		masterDead = true;
 	}
@@ -49,6 +54,7 @@ public:
 	void registerToLua(kaguya::State& state) override {
 		state["ComponentDieWithMaster"].setClass(kaguya::UserdataMetatable<ComponentDieWithMaster, Component>()
 			.setConstructors<ComponentDieWithMaster()>()
+			.addFunction("disable", &ComponentDieWithMaster::disableDieWithMaster)
 			.addOverloadedFunctions(
 				"create",
 				ScriptableClass::create<ComponentDieWithMaster>,
