@@ -19,6 +19,8 @@ private:
 
 	atomic<bool> fullOffset = false;
 
+	atomic<bool> disabled = false;
+
 	atomic<Point3> masterLastPosition = Point3(0.0f);
 
 public:
@@ -54,16 +56,27 @@ public:
 			return fullOffset ? masterPosition : Point3(0.0f);
 		}
 		else {
-			Point3 newOffset = masterPosition - masterLastPosition.load();
-			masterLastPosition = masterPosition;
-			return newOffset;
+			if (!disabled) {
+				Point3 newOffset = masterPosition - masterLastPosition.load();
+				masterLastPosition = masterPosition;
+				return newOffset;
+			}
+			else {
+				return Point3(0.0f);
+			}
+			
 		}
 
+	}
+
+	void disable() {
+		disabled = true;
 	}
 
 	void registerToLua(kaguya::State& state) override {
 		state["ComponentOffsetMaster"].setClass(kaguya::UserdataMetatable<ComponentOffsetMaster, Component>()
 			.setConstructors<ComponentOffsetMaster()>()
+			.addFunction("disable", &ComponentOffsetMaster::disable)
 			.addOverloadedFunctions(
 				"create",
 				ScriptableClass::create<ComponentOffsetMaster>,
