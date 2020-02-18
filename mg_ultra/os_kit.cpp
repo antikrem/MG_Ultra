@@ -133,3 +133,13 @@ int os_kit::getVMemUsed() {
 	GetProcessMemoryInfo(GetCurrentProcess(), reinterpret_cast<PPROCESS_MEMORY_COUNTERS>(&pmc), sizeof(pmc));
 	return pmc.PrivateUsage;
 }
+
+int os_kit::getTerminalWidth() {
+	CONSOLE_SCREEN_BUFFER_INFO bufferInfo;
+	if (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &bufferInfo)) {
+		return bufferInfo.dwSize.X;
+	}
+	else {
+		return -1;
+	}
+}

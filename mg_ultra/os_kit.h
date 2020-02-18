@@ -34,6 +34,10 @@ namespace os_kit {
 
 	//returns size of memory use
 	int getVMemUsed();
+
+	//will attempt getting the terminal width in character columns
+	//-1 return value on missing terminal or general failures
+	int getTerminalWidth();
 }
 
 #endif
