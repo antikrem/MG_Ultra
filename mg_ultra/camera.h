@@ -27,8 +27,8 @@ class Camera {
 	atomic<glm::mat4> uiProjection = glm::mat4(1.0f);
 
 	//culling distances
-	atomic<float> clipNear = 200.0f;
-	atomic<float> clipFar = 5000.0f;
+	atomic<float> clipNear = 50.0f;
+	atomic<float> clipFar = 4000.0f;
 
 	GraphicsSettings* gSettings = nullptr;
 
