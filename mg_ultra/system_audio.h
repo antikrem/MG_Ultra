@@ -37,8 +37,21 @@ public:
 	void precycle(EntityPool* pool) override {
 		audioMaster->reclaimContext();
 		audioMaster->updateMaster();
-		if (audioMaster->getLastError()) {
-			err::logMessage("AUDIO, Audio subsystem recieved an error");
+
+		ALenum code;
+		if ((code = audioMaster->getLastError())) {
+			string errorName;
+			switch (code) {
+			case AL_NO_ERROR: errorName = "AL_NO_ERROR"; break;
+			case AL_INVALID_NAME: errorName = "AL_INVALID_NAME"; break;
+			case AL_INVALID_ENUM: errorName = "AL_INVALID_ENUM"; break;
+			case AL_INVALID_VALUE: errorName = "AL_INVALID_VALUE"; break;
+			case AL_INVALID_OPERATION: errorName = "AL_INVALID_OPERATION"; break;
+			case AL_OUT_OF_MEMORY: errorName = "AL_OUT_OF_MEMORY"; break;
+			default: errorName = "AL_GENERIC_ERROR"; break;
+			}
+
+			err::logMessage("AUDIO, Audio subsystem recieved an error: " + errorName);
 		}
 	}
 
