@@ -93,7 +93,6 @@ public:
 			"		end \n"
 			"		pack = pack .. tostring(select(i, ...)) \n"
 			"	end \n"
-			"	print(\"hello pack: \", pack) \n"
 			"	return ComponentBulletMaster.generate(name, startingTick, pack) \n"
 			"end"
 		);
