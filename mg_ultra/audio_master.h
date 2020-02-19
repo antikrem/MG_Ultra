@@ -19,8 +19,8 @@ class AudioMaster {
 
 	map<string, AudioFile*> audioFiles;
 
-	mutex dispositionLock;
-	vector<ALuint> toDispose;
+	mutex sourceDispositionLock;
+	vector<ALuint> sourcesToDispose;
 
 	mutex assetsLock;
 	vector<tuple<string, string, AudioFileLifecycle>> requestedLoads;
@@ -74,9 +74,9 @@ public:
 	}
 
 	//adds a buffer to be disposed
-	void disposeBuffer(ALuint buffer) {
-		unique_lock<mutex> lck(dispositionLock);
-		toDispose.push_back(buffer);
+	void disposeSource(ALuint buffer) {
+		unique_lock<mutex> lck(sourceDispositionLock);
+		sourcesToDispose.push_back(buffer);
 	}
 
 	//queues a audio file to be added
@@ -98,9 +98,9 @@ public:
 
 	void updateMaster() {
 		{
-			unique_lock<mutex> lck(dispositionLock);
-			alDeleteBuffers(toDispose.size(), toDispose.data());
-			toDispose.clear();
+			unique_lock<mutex> lck(sourceDispositionLock);
+			alDeleteSources(sourcesToDispose.size(), sourcesToDispose.data());
+			sourcesToDispose.clear();
 		}
 		{
 			unique_lock<mutex> lck(assetsLock);

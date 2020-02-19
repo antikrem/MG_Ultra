@@ -18,10 +18,10 @@ void g_audio::closeAudioPipeLine() {
 	globalAudioMaster = nullptr;
 }
 
-void g_audio::disposeBuffer(ALint buffer) {
+void g_audio::disposeSource(ALint buffer) {
 	shared_lock<shared_mutex> lck(audioPtrLock);
 	if (activePipeline) {
-		globalAudioMaster->disposeBuffer(buffer);
+		globalAudioMaster->disposeSource(buffer);
 	}
 	
 }

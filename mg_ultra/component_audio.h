@@ -23,6 +23,10 @@ public:
 
 	}
 
+	ComponentAudio(string source) {
+		playAudio(source);
+	}
+
 	//sets to play a audio file
 	void setSource(const string& audioName) {
 		source.setQueuedAudio(audioName);
@@ -76,7 +80,8 @@ public:
 			.addFunction("set_gain", &ComponentAudio::setGain)
 			.addOverloadedFunctions(
 				"create",
-				&ScriptableClass::create<ComponentAudio>
+				&ScriptableClass::create<ComponentAudio>,
+				&ScriptableClass::create<ComponentAudio, string>
 			)
 			.addStaticFunction("type", &getType<ComponentAudio>)
 			.addStaticFunction("cast", &Component::castDown<ComponentAudio>)

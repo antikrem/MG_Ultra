@@ -14,7 +14,7 @@
 //forward declaraction of disposition function
 //implementation in audio_master.cpp
 namespace g_audio {
-	void disposeBuffer(ALint buffer);
+	void disposeSource(ALint buffer);
 
 	//destroys g audio master 
 	void closeAudioPipeLine();
@@ -50,7 +50,7 @@ public:
 	~AudioSource() {
 		unique_lock<mutex> lck(lock);
 		if (initialised) {
-			g_audio::disposeBuffer(sourceID);
+			g_audio::disposeSource(sourceID);
 		}
 	}
 
