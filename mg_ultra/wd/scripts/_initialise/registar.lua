@@ -49,11 +49,16 @@ end
 --levels are on cycles, with scripted events occuring on the tick
 registar:add("cycle", -1)
 registar:add("cycle_progress", false)
+registar:add("cycle_in_dialogue", false)
 
 --load request can be put anytime with appropiate events
 --events will set these values, don't touch them otherwise
 registar:add("load_request", false)
 registar:add("loading", false)
+--flag to start loading dialogue
+registar:add("load_dialogue", false)
+registar:add("in_dialogue", false)
+registar:add("in_dialogue_pause", false)
 
 --changing state/campaign/level is done with evets
 --consider these read only values
