@@ -19,15 +19,18 @@ UI.remove_cinematic_borders = function()
 	UI.set_border(1.0, 0.009)
 end
 
-UI.display_title_card = function(titleSet, fadeIn, delay, fadeOut)
+UI.display_title_card = function(titleSet, fadeIn, delay, fadeOut, scale)
+
+	if is_nil(scale) then scale = 1 end
 	local e = Entity.create(EntityGeneric)
-	e:add_component(ComponentPosition.create(0,0,-1))
+	e:add_component(ComponentPosition.create(0,0,-20))
 
 	if fadeIn < 1 then fadeIn = 1 end
 	e:add_component(ComponentTransparency.create(1.0, 1.0 / fadeIn))
 
 	local gra = ComponentGraphics.create(titleSet)
-	gra:set_render_in_3D(false)
+	--gra:set_render_in_3D(false)
+	gra:set_scale(scale)
 	e:add_component(gra)
 	
 	local tim = ComponentTimer.create()
@@ -40,7 +43,7 @@ UI.display_title_card = function(titleSet, fadeIn, delay, fadeOut)
 	tim:add_callback(
 		delay + fadeOut, 
 		"this:kill()" 
-		
+
 	)
 	e:add_component(tim)
 
