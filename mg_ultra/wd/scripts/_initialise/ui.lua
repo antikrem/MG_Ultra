@@ -29,7 +29,6 @@ UI.display_title_card = function(titleSet, fadeIn, delay, fadeOut, scale)
 	e:add_component(ComponentTransparency.create(1.0, 1.0 / fadeIn))
 
 	local gra = ComponentGraphics.create(titleSet)
-	--gra:set_render_in_3D(false)
 	gra:set_scale(scale)
 	e:add_component(gra)
 	
