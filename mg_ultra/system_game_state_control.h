@@ -38,11 +38,13 @@ public:
 		}
 
 		//check if cycle_progress is true
-		bool cycle_progress = false;
-		registar->get("cycle_progress", &cycle_progress);
+		bool cycleProgress = false;
+		registar->get("cycle_progress", &cycleProgress);
+		bool inDialoguePause = false;
+		registar->get("in_dialogue_pause", &inDialoguePause);
 
 		//if cycle progress true increment cycle
-		if (cycle_progress) {
+		if (cycleProgress && !inDialoguePause) {
 			int cycle = 0;
 			registar->get("cycle", &cycle);
 			registar->update("cycle", cycle + 1);

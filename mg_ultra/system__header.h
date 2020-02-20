@@ -38,9 +38,11 @@
 #include "system_movement.h"
 #include "system_rotation.h"
 #include "system_game_state_control.h"
+#include "system_dialogue.h"
 
 //ring 4 - loading
 #include "system_loader.h"
+#include "system_dialogue_loader.h"
 
 //ring 5 - collision
 #include "system_collision.h"

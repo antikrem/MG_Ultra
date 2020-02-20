@@ -152,11 +152,13 @@ class ECSMaster {
 		master->createSystem<SystemMovement>(registar);
 		master->createSystem<SystemRotation>(registar);
 		master->createSystem<SystemGameStateControl>(registar);
+		master->createSystem<SystemDialogue>(registar);
 
 		//ring 4
 		master = newSystemsMaster("m_loader");
 		master->setTimer(10);
 		master->createSystem<SystemLoader>(registar);
+		master->createSystem<SystemDialogueLoader>(registar);
 
 		//ring 5
 		master = newSystemsMaster("m_collision");

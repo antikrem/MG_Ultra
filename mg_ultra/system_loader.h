@@ -592,6 +592,7 @@ public:
 		executeScript(immediateScript);
 
 		registar->update("loading", false);
+		registar->update("load_dialogue", true);
 		registar->update("cycle_progress", true);
 
 	}

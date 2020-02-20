@@ -22,7 +22,8 @@ enum EntityTypes {
 	ETMusic,
 	ETWeather,
 	ETBulletSpawner,
-	ETEnemyBullet
+	ETEnemyBullet,
+	ETDialogue
 
 };
 
