@@ -42,6 +42,12 @@ public:
 		setAniamtionSet(animationSet, true);
 	}
 
+	ComponentGraphics(string animationSet, float scale) {
+		visible.store(true);
+		setAniamtionSet(animationSet, true);
+		setScale(scale);
+	}
+
 	//wrapper
 	void l_setAniamtionSet(string name) {
 		setAniamtionSet(name, true);
@@ -161,7 +167,11 @@ public:
 			.addFunction("get_wrap_factor", &ComponentGraphics::getWrapFactor)
 			.addFunction("set_transparency", &ComponentGraphics::setTransparency)
 			.addFunction("get_transparency", &ComponentGraphics::getTransparency)
-			.addStaticFunction("create", ScriptableClass::create<ComponentGraphics, string>)
+			.addOverloadedFunctions(
+				"create",
+				&ScriptableClass::create<ComponentGraphics, string>,
+				&ScriptableClass::create<ComponentGraphics, string, float>
+			)
 			.addStaticFunction("type", &getType<ComponentGraphics>)
 			.addStaticFunction("cast", &Component::castDown<ComponentGraphics>)
 		);
