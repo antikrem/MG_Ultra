@@ -57,6 +57,28 @@ function math.compute_smallest_turn(target, current)
 	end
 end
 
+--interpolates [0,1] to [a,b] linearly
+function math.lerp(t, a, b)
+	return a + t * (b - a)
+end
+
+--Return of vector of random a, b, default 0,1
+function math.rand_vec(length, a, b)
+	if is_nil(a) then a = 0 end
+	if is_nil(b) then b = 1 end
+
+	return math.q_rand_vec(length, a, b)
+end
+
+--Return of vector of random a, b, no nil check
+function math.q_rand_vec(length, a, b)
+	if length <= 0 then 
+		return nil 
+	else
+		return math.lerp(math.random(), a, b), math.q_rand_vec(length - 1, a, b) 
+	end
+end
+
 ----The array class of functions deal with handling arrays
 ----framed as n-dimensional vectors of numbers
 arrays = {}
