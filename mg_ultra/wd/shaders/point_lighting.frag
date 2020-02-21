@@ -81,7 +81,9 @@ float calculateLightScattering(vec3 fragPos) {
 		calculateZIntergral(offset, frontDepth) 
 			- calculateZIntergral(offset, 0), 
 		0
-	);
+	)
+	//Remove front scatter if the frag pos is infront of the light
+	* step(fragPos.z - outLightPosition.z, 0);
 
 	return max((backScatter + frontScatter) * lightScatteringFactor * ( pow((outRange - offset) / outRange, 2)) - 0.0045, 0);
 }
