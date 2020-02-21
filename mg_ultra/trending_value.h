@@ -55,7 +55,7 @@ public:
 
 	void set(T current) {
 		setCurrent(current);
-		setTarget(target);
+		setTarget(current);
 	}
 
 	void setCurrent(T current) {
