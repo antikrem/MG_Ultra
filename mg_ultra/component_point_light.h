@@ -57,6 +57,10 @@ public:
 		pointLight.setStrength(strength);
 	}
 
+	void l_setStrength(float target, float rate) {
+		pointLight.setStrength(target, rate);
+	}
+
 	void setByPoints(const Point2& p1, const Point2& p2, const Point2& p3) {
 		glm::vec3 Y = glm::vec3(1.0f / p1.y, 1.0f / p2.y, 1.0f / p3.y);
 		glm::mat4 A = glm::mat3(
@@ -82,13 +86,21 @@ public:
 		setByPoints(p0, p1, p2);
 	}
 
+	void update() {
+		pointLight.update();
+	}
+
 	void registerToLua(kaguya::State& state) override {
 		state["ComponentPointLight"].setClass(kaguya::UserdataMetatable<ComponentPointLight, Component>()
 			.setConstructors<ComponentPointLight()>()
 			.addFunction("set_colour", &ComponentPointLight::l_setColour)
 			.addFunction("set_parameters", &ComponentPointLight::setParameters)
 			.addFunction("set_by_points", &ComponentPointLight::setByPoints)
-			.addFunction("set_strength", &ComponentPointLight::setStrength)
+			.addOverloadedFunctions(
+				"set_strength", 
+				&ComponentPointLight::setStrength,
+				&ComponentPointLight::l_setStrength
+			)
 			.addOverloadedFunctions(
 				"create",
 				ScriptableClass::create<ComponentPointLight>,

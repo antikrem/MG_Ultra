@@ -5,6 +5,7 @@ from a given direction*/
 
 #include "cus_struct2.h"
 #include "math_ex.h"
+#include "trending_value.h"
 
 #include <atomic>
 #include <mutex>
@@ -14,6 +15,8 @@ from a given direction*/
 #define DEFAULT_LIGHT_CUTDISTANCE 270.0f
 
 #define POINT_LIGHT_EXTINCTION_LEVEL 0.0045f
+
+#define POINT_LIGHT_ARBITRARY_CUTOFF 0.00000001
 
 //global point light fog drift variable
 namespace g_pointlights {
@@ -76,14 +79,14 @@ private:
 
 	atomic<float> extinctionRange;
 
-	atomic<float> strength = 1.0f;
+	TrendingValue<float> strength = 1.0f;
 
 	void updateExtinctionRange() {
 		auto solutions = math_ex::solve_quadratic(
-			POINT_LIGHT_EXTINCTION_LEVEL * a.load(), 
+			POINT_LIGHT_EXTINCTION_LEVEL * a.load(),
 			POINT_LIGHT_EXTINCTION_LEVEL * b.load(),
 			POINT_LIGHT_EXTINCTION_LEVEL * c.load(),
-			strength.load()
+			strength.get()
 		);
 		extinctionRange = max(get<0>(solutions), get<1>(solutions));
 	}
@@ -110,7 +113,7 @@ public:
 			b,
 			c,
 			extinctionRange,
-			strength
+			strength.get()
 		);
 	}
 
@@ -130,8 +133,20 @@ public:
 	}
 
 	void setStrength(float strength) {
-		this->strength = strength;
+		this->strength.set(strength);
 		updateExtinctionRange();
+	}
+
+	void setStrength(float target, float rate) {
+		strength.set(strength.get(), rate, target);
+		updateExtinctionRange();
+	}
+
+	void update() {
+		float change = abs(strength.updateAndGetChange());
+		if (change > POINT_LIGHT_ARBITRARY_CUTOFF) {
+			updateExtinctionRange();
+		}
 	}
 };
 

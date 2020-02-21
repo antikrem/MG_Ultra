@@ -20,8 +20,10 @@ public:
 	}
 
 	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, shared_ptr<Entity> ent, int id) override {
+		auto compPL = getComponent<ComponentPointLight>(components);
 		//move position data
-		getComponent<ComponentPointLight>(components)->setPointLightPosition(getComponent<ComponentPosition>(components)->getPosition3());
+		compPL->setPointLightPosition(getComponent<ComponentPosition>(components)->getPosition3());
+		compPL->update();
 	}
 
 };
