@@ -36,6 +36,13 @@ public:
 		current = math_ex::tend_to(current.load(), rate.load(), target.load());
 	}
 
+	//update and return change
+	float updateAndGetChange() {
+		float oldCurrent = current;
+		current = math_ex::tend_to(current.load(), rate.load(), target.load());
+		return current - oldCurrent;
+	}
+
 	T get() {
 		return current;
 	}
@@ -43,6 +50,11 @@ public:
 	void set(T current, T rate, T target) {
 		setCurrent(current);
 		setRate(rate);
+		setTarget(target);
+	}
+
+	void set(T current) {
+		setCurrent(current);
 		setTarget(target);
 	}
 
