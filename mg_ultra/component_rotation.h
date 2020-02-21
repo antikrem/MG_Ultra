@@ -67,6 +67,7 @@ public:
 		state["ComponentRotation"].setClass(kaguya::UserdataMetatable<ComponentRotation, Component>()
 			.setConstructors<ComponentRotation()>()
 			.addFunction("set_angle", &ComponentRotation::setRotation)
+			.addFunction("get_angle", &ComponentRotation::getRotation)
 			.addFunction("set_speed", &ComponentRotation::setSpeed)
 			.addFunction("get_speed", &ComponentRotation::getSpeed)
 			.addOverloadedFunctions(
