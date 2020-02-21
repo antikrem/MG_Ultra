@@ -34,6 +34,16 @@ public:
 		particleSpawner.updateSpawner(particles, position);
 	}
 
+	//sets particle name by string
+	void setName(string name) {
+		int key = g_particles::getParticleType(name);
+		if (key > 0) {
+			particleSpawner.setKey(key);
+			auto spec = g_particles::getTypeSpec(key);
+			setAllParameters(spec);
+		}
+	}
+
 	//get string name
 	string getKeyName() {
 		return particleKeyName;
@@ -105,6 +115,7 @@ public:
 			.addFunction("spawn_uniformly", &ComponentParticle::spawnParticlesUniformly)
 			.addFunction("set_velocity", &ComponentParticle::l_setStartingVelocity)
 			.addFunction("set_position_deviation", &ComponentParticle::setPositionDeviation)
+			.addFunction("use_type", &ComponentParticle::setName)
 			.addOverloadedFunctions(
 				"create",
 				ScriptableClass::create<ComponentParticle, string>

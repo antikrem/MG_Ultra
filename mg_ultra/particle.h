@@ -14,6 +14,10 @@ namespace g_particles {
 
 	//returns bounding box center for a particle
 	Point3 getBoundingBoxCenter(int key);
+
+	//returns the key for a given type
+	//returns -1 on invalid key
+	int getParticleType(string particleTypeName);
 }
 
 
@@ -144,5 +148,11 @@ struct ParticleTypeSpecification {
 
 	}
 };
+
+//implementation found in particle_master.cpp
+namespace g_particles {
+	//return spec for a given key
+	ParticleTypeSpecification getTypeSpec(int key);
+}
 
 #endif

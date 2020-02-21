@@ -376,10 +376,6 @@ namespace g_particles {
 	//updates weight of a particle type
 	void updateWeight(string particleName, float weightMean, float weightDeviation);
 
-	//returns the key for a given type
-	//returns -1 on invalid key
-	int getParticleType(string particleTypeName);
-
 	//clears all particles in the engine
 	//returns how many particles were deleted
 	int clearParticles();

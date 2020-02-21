@@ -54,6 +54,10 @@ int g_particles::getParticleType(string particleTypeName) {
 	return gParticleMaster->getKeyFromName(particleTypeName);
 }
 
+ParticleTypeSpecification g_particles::getTypeSpec(int key) {
+	return gParticleMaster->getTypeSpecification(key);
+}
+
 int g_particles::clearParticles() {
 	return gParticleMaster->clearParticles();
 }

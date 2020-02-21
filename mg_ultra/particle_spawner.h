@@ -47,11 +47,13 @@ public:
 
 	//gets the key of this ParticleSpawner
 	int getKey() {
+		unique_lock<mutex> lck(lock);
 		return particleKey;
 	}
 
 	//sets the key
 	void setKey(int key) {
+		unique_lock<mutex> lck(lock);
 		this->particleKey = key;
 	}
 
@@ -74,6 +76,7 @@ public:
 
 	//sets all parameters via a aParticleTypeSpecification
 	void setAllParameters(ParticleTypeSpecification& spec) {
+		unique_lock<mutex> lck(lock);
 		this->rotateToFace = spec.rotateToFace;
 
 		this->feathernessMean = spec.feathernessMean;
