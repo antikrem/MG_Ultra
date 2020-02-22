@@ -53,6 +53,13 @@ namespace math_ex {
 			(-b + sqrtDisc) / (2 * a)
 		);
 	}
+
+	//extrapolates a length through a perspective shift in z axis
+	//angle would be half fov
+	template<typename T>
+	T perp_z(T length, T depth, T angle) {
+		return length + tan(DEG2RAD(angle)) * depth;
+	}
 }
 
 #endif
