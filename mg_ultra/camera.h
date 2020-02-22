@@ -10,6 +10,16 @@
 
 #include <atomic>
 
+//global namespace for reading camera values
+namespace g_camera {
+
+	//sets global fov
+	void setFOV(float value);
+
+	//gets global fov
+	float getFOV();
+}
+
 class Camera {
 	//worldspace eye position
 	atomic<glm::vec3> eyePos = glm::vec3(0);
@@ -27,8 +37,8 @@ class Camera {
 	atomic<glm::mat4> uiProjection = glm::mat4(1.0f);
 
 	//culling distances
-	atomic<float> clipNear = 50.0f;
-	atomic<float> clipFar = 4000.0f;
+	atomic<float> clipNear = 2.0f;
+	atomic<float> clipFar = 3000.0f;
 
 	GraphicsSettings* gSettings = nullptr;
 
