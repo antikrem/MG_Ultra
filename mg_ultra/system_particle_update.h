@@ -36,7 +36,13 @@ public:
 		registar->get("drift_windspeed_y", &wind.y);
 		registar->get("drift_windspeed_z", &wind.z);
 
-		particleMaster->updateParticles(trackingOffset, factor, wind);
+		Point3 scroll(0.0f);
+
+		registar->get("drift_scrollspeed_x", &scroll.x);
+		registar->get("drift_scrollspeed_y", &scroll.y);
+		registar->get("drift_scrollspeed_z", &scroll.z);
+
+		particleMaster->updateParticles(trackingOffset, factor, wind, scroll);
 		
 		particleMaster->clearDeadParticles();
 	}

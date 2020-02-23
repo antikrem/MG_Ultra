@@ -20,6 +20,8 @@ struct ParticleType {
 	float feathernessMean = 0.1f;
 	float feathernessDeviation = 0.025f;
 
+	float scrollness = 0.0f;
+
 	float weightMean = 1.0f;
 	float weightDeviation = 0.1f;
 

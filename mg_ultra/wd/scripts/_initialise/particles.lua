@@ -44,6 +44,9 @@ Particles.set_rotate_to_face = setParticleTypeRotateToFace
 --Modifies the featherness mean and featherness deviation of a particle type
 Particles.set_featherness = setParticleTypeFeatherness
 
+--Modifies the scrollness of a particle type
+Particles.set_scrollness = setParticleTypeScrollness
+
 --Modifies the weight mean and weight deviation of a particle type
 Particles.set_weight = setParticleTypeWeight
 

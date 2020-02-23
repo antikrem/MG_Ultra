@@ -45,6 +45,10 @@ void g_particles::updateFeatherness(string particleName, float featherMean, floa
 	gParticleMaster->setParticleTypeFeatherness(particleName, featherMean, featherDeviation);
 }
 
+void g_particles::updateScrollness(string particleName, float scrollness) {
+	gParticleMaster->setParticleTypeScrollness(particleName, scrollness);
+}
+
 void g_particles::updateWeight(string particleName, float weightMean, float weightDeviation) {
 	gParticleMaster->setParticleTypeWeight(particleName, weightMean, weightDeviation);
 }

@@ -163,6 +163,17 @@ public:
 		}
 	}
 
+	//modifies named particle type's scrollness parameters
+	void setParticleTypeScrollness(string particleName, float scrollness) {
+		unique_lock<shared_mutex> lck(particleTypeLock);
+		if (particleKeys.count(particleName)) {
+			particleTypes[particleKeys[particleName]].scrollness = scrollness;
+		}
+		else {
+			err::logMessage("PARTICLE: Was not able to find named particle " + particleName);
+		}
+	}
+
 	//modifies named particle type's weight parameters
 	void setParticleTypeWeight(string particleName, float weightMean, float weightDeviation) {
 		unique_lock<shared_mutex> lck(particleTypeLock);
@@ -270,8 +281,9 @@ public:
 	}
 
 	//updates particles, uses factoring to split up updating
-	void updateParticles(int offset, int factor, const Point3& wind) {
+	void updateParticles(int offset, int factor, const Point3& wind, const Point3& scroll) {
 		unique_lock<mutex> lck(particlesLock);
+		
 		int size = particles.size();
 		for (int i = offset; i < size; i += factor) {
 			auto& particle = particles[i];
@@ -285,32 +297,34 @@ public:
 				}
 			}
 
-			particle.update(wind, mommentum, (float)factor);
-
+			unique_lock<shared_mutex> tlck(particleTypeLock);
 			//do particle type checking
-			{
-				unique_lock<shared_mutex> lck(particleTypeLock);
-				//check for a box response
-				auto& type = particleTypes[particle.particleKey];
+			auto& type = particleTypes[particle.particleKey];
 
-				switch (type.boxResponse) {
-					//do nothing of break
-				case ParticleBoxResponse::Nothing:
-					break;
+			Point3 adjustedScroll = scroll * type.scrollness;
 
-					//delete on delete
-				case ParticleBoxResponse::Delete:
-					if (!type.checkBoundingBox(particle.position)) {
-						particle.active = false;
-					}
-					break;
+			particle.update(wind, mommentum, (float)factor, adjustedScroll);
 
-					//wrap on particle into box
-				case ParticleBoxResponse::Wrap:
-					type.wrapPosition(particle);
-					break;
+			
+			//check for a box response
+			switch (type.boxResponse) {
+			//do nothing of break
+			case ParticleBoxResponse::Nothing:
+				break;
+
+			//delete on delete
+			case ParticleBoxResponse::Delete:
+				if (!type.checkBoundingBox(particle.position)) {
+					particle.active = false;
 				}
+				break;
+
+			//wrap on particle into box
+			case ParticleBoxResponse::Wrap:
+				type.wrapPosition(particle);
+				break;
 			}
+			
 		}
 	}
 
@@ -372,6 +386,9 @@ namespace g_particles {
 
 	//updates featherness of a particle type
 	void updateFeatherness(string particleName, float featherMean, float featherDeviation);
+
+	//updates scrollness of a particle type
+	void updateScrollness(string particleName, float scrollness);
 
 	//updates weight of a particle type
 	void updateWeight(string particleName, float weightMean, float weightDeviation);

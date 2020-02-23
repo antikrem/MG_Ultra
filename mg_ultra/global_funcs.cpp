@@ -157,6 +157,7 @@ void registerGlobalFunctions(kaguya::State &kaguya) {
 	kaguya["setParticleTypeBoxCenter"] = g_particles::updateBoxCenter;
 	kaguya["setParticleTypeRotateToFace"] = g_particles::updateRotateToFace;
 	kaguya["setParticleTypeFeatherness"] = g_particles::updateFeatherness;
+	kaguya["setParticleTypeScrollness"] = g_particles::updateScrollness;
 	kaguya["setParticleTypeWeight"] = g_particles::updateWeight;
 	kaguya["clearAllParticles"] = g_particles::clearParticles;
 

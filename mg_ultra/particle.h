@@ -77,12 +77,12 @@ struct Particle {
 
 	//updates a particle
 	//time factor refers to how many cycles worth of updates are required
-	void update(const Point3& wind, const Point3 mommentum, float scalarFactor = 1.0f) {
+	void update(const Point3& wind, const Point3 mommentum, float scalarFactor, const Point3& scroll) {
 		this->momentum = mommentum;
 
 		float amendedScalarFactor = abs(scalarFactor * featherness);
 		velocity = velocity * (1.0f - amendedScalarFactor) + (momentum * weight + wind) * amendedScalarFactor;
-		position = position + velocity * scalarFactor;
+		position = position + velocity * scalarFactor + scroll * scalarFactor;
 
 		if (rotateToFace) {
 			rotation = RAD2DEG(atan2(velocity.y, velocity.x));
