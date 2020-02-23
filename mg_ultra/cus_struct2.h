@@ -218,6 +218,11 @@ public:
 			+ Point3::cross(k, *this) * sin(DEG2RAD(degrees))
 			+ k * (Point3::dot(k, *this) * (1 - cos(DEG2RAD(degrees))));
 	}
+
+	//returns true if in given box
+	bool inBox(Point3& center, Point3& size) {
+		return (abs(x - center.x) < size.x) && (abs(y - center.y) < size.y) && (abs(z - center.z) < size.z);
+	}
 	
 #ifdef GLM_ADDED
 	//as glm is avalible use the following conversion
