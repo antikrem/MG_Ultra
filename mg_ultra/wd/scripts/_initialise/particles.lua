@@ -17,9 +17,10 @@ ParticleBoxResponse.Wrap = 2
 --Particles.add_new_type(string particleTypeName, string animationSetName) -> uses default animation (1)
 --Particles.add_new_type(string particleTypeName, string animationSetName, int animation)
 --returns key for further modification
-Particles.add_new_type = function(particleTypeName, animationSetName, animation)
+Particles.add_new_type = function(particleTypeName, animationSetName, animation, scale)
 	animation = animation or 1
-	addNewParticleType(particleTypeName, animationSetName, animation)
+	scale = scale or 1
+	addNewParticleType(particleTypeName, animationSetName, animation, scale)
 end
 
 --Specifies the response for a given particle type
@@ -60,8 +61,8 @@ Particles.clear_all = clearAllParticles;
 --Some default particle types
 Particles.add_new_type("gold", "particle_gold")
 Particles.set_bloom_factor("gold", 4.0)
-Particles.set_max_life_deviation("gold", 4.0)
-Particles.set_featherness("gold", 0.1, 0.01)
+Particles.set_max_life_deviation("gold", 3.0)
+Particles.set_featherness("gold", 0.01, 0.001)
 
 Particles.add_new_type("death_gold", "particle_gold_frag")
 Particles.set_bloom_factor("death_gold", 4.0)

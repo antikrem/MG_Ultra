@@ -33,6 +33,8 @@ struct ParticleType {
 
 	float bloomFactor = 0.0f; 
 
+	float scale = 1.0f;
+
 	//animation information is cached within the particle type
 	//each box is a template for creating a box for a particle
 	vector<BoxData> boxes;
@@ -49,8 +51,9 @@ struct ParticleType {
 
 	}
 
-	ParticleType(string animationSet, AnimationsMaster* animationMaster, int animation) {
+	ParticleType(string animationSet, AnimationsMaster* animationMaster, int animation, float scale) {
 		this->animation = animationSet;
+		this->scale = scale;
 		AnimationState baseState(animationSet, animation, 0, 0);
 
 		auto animationPtr = animationMaster->getAnimationTemplate(animationSet, animation);
@@ -65,7 +68,7 @@ struct ParticleType {
 
 		for (int i = 0; i < frameCount; i++) {
 			baseState.currentFrame = i;
-			boxes.push_back(animationMaster->evaluateToBox(baseState, 1.0f));
+			boxes.push_back(animationMaster->evaluateToBox(baseState, scale));
 		}
 
 		frameSkip = animationPtr->getFrameskip() ? animationPtr->getFrameskip() : INT_MAX;

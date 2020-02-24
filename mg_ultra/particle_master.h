@@ -76,9 +76,9 @@ public:
 
 	//Registers a particle type for use
 	//returning an int of key for access, -1 on error
-	int registerNewParticleType(string particleName, string animationSetName, int animation = 1) {
+	int registerNewParticleType(string particleName, string animationSetName, int animation, float scale) {
 		unique_lock<shared_mutex> lck(particleTypeLock);
-		particleTypes[particleTypeAllocator] = ParticleType(animationSetName, animationMaster, animation);
+		particleTypes[particleTypeAllocator] = ParticleType(animationSetName, animationMaster, animation, scale);
 		particleKeys[particleName] = particleTypeAllocator;
 
 		return particleTypeAllocator++;
@@ -364,7 +364,7 @@ namespace g_particles {
 
 	//adds a new particle type
 	//returns new key
-	int addNewParticleType(string particleName, string animationSetName, int animation);
+	int addNewParticleType(string particleName, string animationSetName, int animation, float scale);
 
 	//updates bloomfactor of named particle
 	void updateBloomFactor(string particleName, float strength);

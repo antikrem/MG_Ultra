@@ -11,8 +11,8 @@ ParticleMaster::ParticleMaster(AnimationsMaster* animationMaster) {
 	g_particles::setParticleMaster(this);
 }
 
-int g_particles::addNewParticleType(string particleName, string animationSetName, int animation) {
-	return gParticleMaster->registerNewParticleType(particleName, animationSetName, animation);
+int g_particles::addNewParticleType(string particleName, string animationSetName, int animation, float scale) {
+	return gParticleMaster->registerNewParticleType(particleName, animationSetName, animation, scale);
 }
 
 void g_particles::updateBloomFactor(string particleName, float strength) {
