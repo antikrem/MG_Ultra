@@ -74,9 +74,9 @@ class SubPoolTarget {
 	vector<SubPoolComponents> targets;
 
 public:
-	//TODO bad default constructor
+	//empty system
 	SubPoolTarget() {
-
+		cachedTarget = ETNoType;
 	}
 
 	//this Subpool looks for a specific target
