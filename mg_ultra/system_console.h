@@ -12,6 +12,8 @@
 class SystemConsole : public System {
 	InputState inputState;
 
+	string oldText = "";
+
 public:
 	SystemConsole() {
 		debugName = "s_console";
@@ -46,7 +48,11 @@ public:
 
 			//put text into console buffer
 			consoleComponent->addText(input::getCurrentInputMaster()->pullFromTextMode());
-			textComponent->setText(consoleComponent->getConsoleText());
+			string text = consoleComponent->getConsoleText();
+			if (oldText != text) {
+				oldText = text;
+				textComponent->setText(text);
+			}
 
 			//check if backspace is pressed
 			if (inputState.pressEvent["console_backspace"]) {
