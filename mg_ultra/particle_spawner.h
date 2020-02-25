@@ -118,6 +118,31 @@ public:
 
 	}
 
+	//spawns count particle within bounds
+	void spawnParticlesAt(const Point3& position) {
+		unique_lock<mutex> lck(lock);
+		particles.push_back(
+			Particle(
+				particleKey,
+				rand_ex::next_unif(1.0f, maxLifeDeviation),
+				Point3(
+					rand_ex::next_norm(position.x, positionDoubleDeviation / 2),
+					rand_ex::next_norm(position.y, positionDoubleDeviation / 2),
+					rand_ex::next_norm(position.z, positionDoubleDeviation / 2)
+				),
+				Point3(
+					rand_ex::next_norm(startingVelocity.load().x, velocityDoubleDeviation / 2),
+					rand_ex::next_norm(startingVelocity.load().y, velocityDoubleDeviation / 2),
+					rand_ex::next_norm(startingVelocity.load().z, velocityDoubleDeviation / 2)
+				),
+				rand_ex::next_norm(feathernessMean, feathernessDeviation),
+				rand_ex::next_norm(weightMean, weightDeviation),
+				rotateToFace
+			)
+		);
+
+	}
+
 	//spawn particles uniformly within its box
 	//at a given density
 	void spawnParticlesUniformly(int total) {
