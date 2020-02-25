@@ -17,7 +17,7 @@ else
 		= (g_sequentialDeadFrames / PLAYER_DEAD_SCROLL) * PLAYER_DEAD_SCROLL_END_Y
 		+ (1 - g_sequentialDeadFrames / PLAYER_DEAD_SCROLL) * PLAYER_DEAD_SCROLL_START_Y
 
-	this:get_component(ComponentPosition):set_position(0, y, -5)
+	this:get_component(ComponentPosition):set_position(0, y, LAYER_PLAYER_BULLETS)
 
 	if (PLAYER_DEAD_SCROLL < g_sequentialDeadFrames) then
 		this:get_component(ComponentClampPosition):set_active(true)

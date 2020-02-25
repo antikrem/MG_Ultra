@@ -9,14 +9,14 @@ GlobalRegistar.add("player_active", false)
 --Table used for gettings certain velocity values
 PLAYER_MAX_VELOCITY_TABLE = {
 	DEFAULT = 13,
-	DASH = 36,
+	DASH = 50,
 	FOCUS = 5.8
 }
 
 --Similar table for acceleration
 PLAYER_MAX_ACCELERATION_TABLE = {
 	DEFAULT = 1.5,
-	DASH = 36,
+	DASH = 50,
 	FOCUS = 0.5
 }
 
@@ -25,7 +25,7 @@ PLAYER_X_CLAMP = 960
 PLAYER_Y_CLAMP = 540
 
 -- Dash related variables
-PLAYER_DASH_LENGTH = 16
+PLAYER_DASH_LENGTH = 13
 PLAYER_DASH_COOLDOWN = 5
 
 -- Constants for dead player
@@ -159,6 +159,10 @@ g_playerMovementUpdate = function()
 		cMovement:set_speed_change(maxAcceleration)
 	end
 
+	if g_inDash then
+		this:get_component(ComponentParticle):spawn(1)
+	end
+
 end
 
 --Standard bullet handler
@@ -180,7 +184,7 @@ g_playerSpawnBullets = function()
 		for bAngle in range(55, 126, 10) do
 			local cSpawner = this:get_component(ComponentSpawner)
 			cSpawner:create_entity(EntityPlayerBullets)
-	
+			
 			cSpawner:add_component(ComponentPosition.create(0, 40, LAYER_PLAYER_BULLETS))
 			cSpawner:add_component(ComponentCollision.create(27))
 			cSpawner:add_component(ComponentDamage.create(10))
@@ -192,18 +196,17 @@ g_playerSpawnBullets = function()
 			pod:set_velocity_range(1.0, 1.3);
 			pod:set_direction_deviation(10);
 			cSpawner:add_component(pod)
-
+			
 			local bulletGComponents = ComponentGraphics.create("bullet_cross")
 			bulletGComponents:set_animation(1)
 			--bulletGComponents:set_scale(0.95)
 			cSpawner:add_component(bulletGComponents)
-
+			
 			local bulletMComponent = ComponentMovement.create()
 			bulletMComponent:set_speed(27)
 			bulletMComponent:set_angle(bAngle + 2.5 * g_playerBulletOscillator)
 			cSpawner:add_component(bulletMComponent)
 
-	
 			cSpawner:push_entity()
 		end
 	end
