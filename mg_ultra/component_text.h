@@ -131,6 +131,10 @@ public:
 
 	}
 
+	ComponentText(string font) : padding(0, 0) {
+		setFont(font);
+	}
+
 	bool getVisible() {
 		return visible.load();
 	}
@@ -209,8 +213,13 @@ public:
 			.addFunction("set_text", &ComponentText::setText)
 			.addFunction("set_scale", &ComponentText::setScale)
 			.addFunction("get_scale", &ComponentText::getScale)
+			.addFunction("set_font", &ComponentText::setFont)
 			.addFunction("set_render_in_3D", &ComponentText::setRenderIn3D)
 			.addFunction("get_render_in_3D", &ComponentText::getRenderIn3D)
+			.addOverloadedFunctions(
+				"create",
+				ScriptableClass::create<ComponentText, string>
+			)
 			.addStaticFunction("type", &getType<ComponentText>)
 			.addStaticFunction("cast", &Component::castDown<ComponentText>)
 		);
