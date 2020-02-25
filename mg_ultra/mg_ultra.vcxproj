@@ -211,6 +211,7 @@
   <ItemGroup>
     <ClCompile Include="ambient_illumination.cpp" />
     <ClCompile Include="audio_master.cpp" />
+    <ClCompile Include="camera.cpp" />
     <ClCompile Include="collision.cpp" />
     <ClCompile Include="colour_modulation.cpp" />
     <ClCompile Include="entity.cpp" />
@@ -457,6 +458,7 @@
     <None Include="wd\shaders\_gauss.vert" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="wd\campaigns\ascent\1\dialogue.txt" />
     <Text Include="wd\campaigns\ascent\1\load_table.txt" />
     <Text Include="wd\campaigns\ascent\1\template_table.txt" />
     <Text Include="wd\log.txt" />

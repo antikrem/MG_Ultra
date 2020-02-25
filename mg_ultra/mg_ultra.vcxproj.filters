@@ -222,6 +222,9 @@
     <ClCompile Include="ui.cpp">
       <Filter>Source Files\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="camera.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="graphics_state.h">
@@ -857,6 +860,9 @@
     </Text>
     <Text Include="wd\log.txt">
       <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="wd\campaigns\ascent\1\dialogue.txt">
+      <Filter>Resource Files\level\1</Filter>
     </Text>
   </ItemGroup>
 </Project>
