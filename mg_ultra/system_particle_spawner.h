@@ -52,7 +52,7 @@ public:
 					int x, y;
 					tie(x, y) = g_aniquery::getAnimationSize(setName, 1);
 					if (x > 0 && y > 0) {
-						comPar->setPositionDeviation((float)max(x, y) / 2);
+						comPar->setPositionDeviation(((float)max(x, y) / 2) * comGra->getScale());
 					}
 					
 				}
