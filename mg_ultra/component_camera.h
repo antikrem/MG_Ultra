@@ -46,6 +46,7 @@ public:
 	}
 
 	void setFOV(float fov) {
+		g_camera::setFOV(fov);
 		this->fov = fov;
 	}
 
