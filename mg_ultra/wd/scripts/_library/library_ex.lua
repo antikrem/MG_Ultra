@@ -94,10 +94,10 @@ end
 
 --Some layer constants
 
-LAYER_PLAYER_BULLETS = 2
-LAYER_PLAYER = 1
-LAYER_ENEMY_BULLETS = 0
-LAYER_ENEMY = -1
+LAYER_PLAYER_BULLETS = 6
+LAYER_PLAYER = 4
+LAYER_ENEMY_BULLETS = 2
+LAYER_ENEMY = 0
 
 -- Add some debug variables
 getGlobalRegistar():add("debug_render_hitbox", false)
@@ -114,4 +114,23 @@ end
 Debug.render_hitbox = function() 
 	g_isRenderingHitbox = not g_isRenderingHitbox
 	GlobalRegistar.update("debug_render_hitbox", g_isRenderingHitbox)
+end
+
+Debug.show_cycle = function()
+	local e = Entity.create(EntityDebugCycle)
+	e:add_component(ComponentPosition.create(860, -540))
+	local c = ComponentText.create("text_consolas58")
+	c:set_render_in_3D(false)
+	c:set_text("Cycle: ")
+	
+	e:add_component(c)
+	c = ComponentTimer.create()
+	c:add_spam_callback("this:get_component(ComponentText):set_text(GlobalRegistar.get(\"cycle\"))")
+	e:add_component(c)
+	EntityPool.add_cached_entity(e)
+end
+
+Debug.hide_cycle = function()
+	local e = EntityPool.get_cached_entity(EntityDebugCycle)
+	if e then e:kill() end
 end

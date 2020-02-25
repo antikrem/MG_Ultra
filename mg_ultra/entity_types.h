@@ -23,7 +23,8 @@ enum EntityTypes {
 	ETWeather,
 	ETBulletSpawner,
 	ETEnemyBullet,
-	ETDialogue
+	ETDialogue,
+	ETDebugCycle
 
 };
 
