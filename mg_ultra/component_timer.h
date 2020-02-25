@@ -13,6 +13,8 @@ class ComponentTimer : public Component, public ScriptableClass {
 	atomic<int> cycle = -1;
 	mutex lock;
 
+	string spamCallback;
+
 	MMap<int, string> timedCallbacks;
 
 public:
@@ -33,14 +35,26 @@ public:
 		timedCallbacks[cycle].push_back(callback);
 	}
 
+	void addSpamCallback(string callback) {
+		lock_guard<mutex> lck(lock);
+		spamCallback = callback;
+	}
+
 	//get vector of all strings
 	vector<string> getCallbacks(int cycle) {
 		lock_guard<mutex> lck(lock);
+		
+		vector<string> ret;
+
 		if (timedCallbacks.count(cycle)) {
-			return timedCallbacks[cycle];
+			ret = timedCallbacks[cycle];
 		}
 
-		return vector<string>();
+		if (spamCallback.size()) {
+			ret.push_back(spamCallback);
+		}
+
+		return ret;
 	}
 
 	void registerToLua(kaguya::State& state) override {
@@ -49,6 +63,7 @@ public:
 			.addFunction("get_cycle", &ComponentTimer::getCycle)
 			.addFunction("set_cycle", &ComponentTimer::setCycle)
 			.addFunction("add_callback", &ComponentTimer::addCallback)
+			.addFunction("add_spam_callback", &ComponentTimer::addSpamCallback)
 			.addStaticFunction("type", &getType<ComponentTimer>)
 			.addStaticFunction("create", &ScriptableClass::create<ComponentTimer>)
 			.addStaticFunction("cast", &Component::castDown<ComponentTimer>)
