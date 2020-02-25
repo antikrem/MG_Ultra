@@ -3,7 +3,7 @@
 
 #include <typeindex>
 #include <vector>
-#include <cassert>
+#include <stdexcept>
 #include <atomic>
 
 #include "constants.h"
@@ -14,6 +14,13 @@
 #include "registar.h"
 
 #include "success_callback.h"
+
+/*A not implemented exception for systems*/
+struct SystemNotImplemented : public std::runtime_error {
+	SystemNotImplemented(std::string error) : std::runtime_error(error) {
+
+	}
+};
 
 /*A system works on entities*/
 class System {
@@ -49,13 +56,13 @@ protected:
 	//To be over written if types is of size greater than zero
 	//Components made availible is of type_index specified in types
 	virtual void handleComponentMap(map<type_index, shared_ptr<Component>>& components, shared_ptr<Entity> ent, int id) {
-		assert(false);
+		throw SystemNotImplemented(debugName);
 	}
 
 	//An alternative to both, if cachedTarget != ETNoType (0), this will be called if cache grab is sucessful
 	//Otherwise cacheFail will be called, must be overwritten if being used
 	virtual void cacheHandle(shared_ptr<Entity> ent) {
-		assert(false);
+		throw SystemNotImplemented(debugName);
 	}
 
 	//On cacheHandle fail, this will be called, not needed to be overwritten
