@@ -20,10 +20,17 @@ EntityMusic = 13
 EntityWeather = 14
 EntityBulletSpawner = 15
 EntityEnemyBullet = 16
+EntityDialogue = 17
+EntityDebugCycle = 18
 
 --Adds to pool, returns boolean success
 function EntityPool.add_entity(entity)
 	return pool:add(entity)
+end
+
+--Adds to pool and cache, returns boolean success
+function EntityPool.add_cached_entity(entity)
+	return pool:addCached(entity)
 end
 
 --returns the entity cached with this types

@@ -83,6 +83,11 @@ public:
 		return (bool)addEnt(shared_ptr<Entity>(ent), false);
 	}
 
+	//adds a cached entity through lua
+	bool addCachedEnt(Entity* ent) {
+		return (bool)addEnt(shared_ptr<Entity>(ent), true);
+	}
+
 	//returns a system from cache, returns null if the system is not cached
 	shared_ptr<Entity> getCachedEnt(int entityType) {
 		//use null type 
@@ -201,6 +206,7 @@ public:
 			kaguya::UserdataMetatable<EntityPool>()
 			.setConstructors<EntityPool()>()
 			.addFunction("add", &EntityPool::l_addEnt)
+			.addFunction("addCached", &EntityPool::addCachedEnt)
 			.addFunction("getEntFromCache", &EntityPool::getCachedEnt)
 			.addFunction("getGraveyardSize", &EntityPool::getGraveyardSize)
 			.addFunction("getGraveyardPassed", &EntityPool::getGraveyardPassed)
