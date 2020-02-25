@@ -45,7 +45,7 @@ public:
 		//create the camera entity
 		auto newEnt = shared_ptr<Entity>(new Entity(ETCamera));
 
-		newEnt->addComponent(new ComponentPosition(0, 0, -1000.0));
+		newEnt->addComponent(new ComponentPosition(0, 0, -600.0));
 		newEnt->addComponent(new ComponentCamera());
 		newEnt->addComponent(new ComponentNoBoundsControl());
 
