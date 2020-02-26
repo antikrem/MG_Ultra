@@ -66,10 +66,10 @@ public:
 		);
 
 		uiProjection = glm::ortho(
-			-(float)gSettings->screenWidth, 
-			(float)gSettings->screenWidth, 
-			-(float)gSettings->screenHeight,
-			(float)gSettings->screenHeight, 
+			-(float)gSettings->screenWidth / 2, 
+			(float)gSettings->screenWidth / 2,
+			-(float)gSettings->screenHeight / 2,
+			(float)gSettings->screenHeight / 2,
 			0.1f, clipFar.load());
 
 	}

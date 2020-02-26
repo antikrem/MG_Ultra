@@ -98,7 +98,7 @@ public:
 		//create a console entity
 		auto newEnt = new Entity(ETConsole);
 
-		newEnt->addComponent(new ComponentPosition(-960, 540, 2));
+		newEnt->addComponent(new ComponentPosition(-930, 510, 2));
 		newEnt->addComponent(new ComponentConsole());
 
 		auto newComponent = new ComponentText();
@@ -106,7 +106,7 @@ public:
 		newComponent->setFont("text_consolas58");
 		newComponent->setVisible(false);
 		newComponent->setRenderIn3D(false);
-		newComponent->setScale(0.75f);
+		newComponent->setScale(0.4f);
 		newEnt->addComponent(newComponent->pullForEntity());
 		newEnt->addComponent(new ComponentNoBoundsControl());
 

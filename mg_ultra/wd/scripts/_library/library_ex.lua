@@ -118,7 +118,7 @@ end
 
 Debug.show_cycle = function()
 	local e = Entity.create(EntityDebugCycle)
-	e:add_component(ComponentPosition.create(860, -540))
+	e:add_component(ComponentPosition.create(850, -500))
 	local c = ComponentText.create("text_consolas58")
 	c:set_render_in_3D(false)
 	c:set_text("Cycle: ")

@@ -128,14 +128,14 @@ public:
 		//create a dialogue textbox
 		auto newEnt = new Entity(ETDialogue);
 
-		newEnt->addComponent(new ComponentPosition(-960, 540, 2));
+		newEnt->addComponent(new ComponentPosition(-930, -500, 2));
 
 		auto newComponent = new ComponentText();
 		newComponent->setText("Console");
 		newComponent->setFont("text_consolas58");
 		newComponent->setVisible(false);
 		newComponent->setRenderIn3D(false);
-		newComponent->setScale(0.75f);
+		newComponent->setScale(0.60f);
 		newEnt->addComponent(newComponent->pullForEntity());
 		newEnt->addComponent(new ComponentDialogue());
 
