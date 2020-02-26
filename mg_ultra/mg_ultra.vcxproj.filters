@@ -707,6 +707,9 @@
     <ClInclude Include="system_dialogue_loader.h">
       <Filter>Header Files\ECS\Systems</Filter>
     </ClInclude>
+    <ClInclude Include="movement_polar_accelerate_to.h">
+      <Filter>Header Files\Static Movement</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="wd\shaders\base.vert">

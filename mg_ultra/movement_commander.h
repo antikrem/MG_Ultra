@@ -89,6 +89,14 @@ public:
 			MovementCommand::createPolarTurn(duration, totalAngle)
 		);
 	}
+	
+	//add a polar accelerate to
+	void addPolarAccelerateTo(int time, int duration, float endingSpeed) {
+		movementCommands.add(
+			time,
+			MovementCommand::createPolarAccelerateTo(duration, endingSpeed)
+		);
+	}
 
 	Point3 getUpdatedPosition(shared_ptr<ComponentMovement> componentMovement, Point3 position) {
 		currentTime++;

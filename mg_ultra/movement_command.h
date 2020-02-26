@@ -8,6 +8,7 @@
 #include "movement_smooth_points.h"
 #include "movement_polar_launch.h"
 #include "movement_polar_turn.h"
+#include "movement_polar_accelerate_to.h"
 
 //Base class that represents a single movement quanta
 //Movement command at a given time
@@ -66,6 +67,13 @@ public:
 	static MovementCommand createPolarTurn(int duration, float totalTurn) {
 		MovementCommand movementCommand;
 		movementCommand.internalQuanta = new MovementPolarTurn(totalTurn / duration, duration);
+		return movementCommand;
+	}
+
+	//add a polar speed shift
+	static MovementCommand createPolarAccelerateTo(int duration, float endingSpeed) {
+		MovementCommand movementCommand;
+		movementCommand.internalQuanta = new MovementPolarAccelerateTo(endingSpeed, duration);
 		return movementCommand;
 	}
 };
