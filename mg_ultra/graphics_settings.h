@@ -8,6 +8,9 @@ using namespace std;
 
 //A struct that contains all the settings for graphics
 struct GraphicsSettings {
+	//is full screen
+	atomic<int> fullScreen = false;
+
 	//level of antialiasing used, must be in the form 2^n or 0
 	atomic<int> antialiasing = 4;
 	//Size of window

@@ -36,7 +36,16 @@ private:
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 		// Open a window and create its OpenGL context
-		GLFWwindow *window = glfwCreateWindow(gSettings->screenWidth, gSettings->screenHeight, "mg_ultra", NULL, NULL);
+		GLFWmonitor* monitor = gSettings->fullScreen ? glfwGetPrimaryMonitor() : nullptr;
+		if (monitor) {
+			const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+			glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+			glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+			glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+			glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+		}
+
+		GLFWwindow *window = glfwCreateWindow(gSettings->screenWidth, gSettings->screenHeight, "mg_ultra", monitor, nullptr);
 		if (window == NULL) {
 			glfwTerminate();
 			return EXIT_FAILURE;

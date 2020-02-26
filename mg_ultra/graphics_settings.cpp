@@ -16,6 +16,10 @@ GraphicsSettings::GraphicsSettings() {
 	//load settings from file
 	INIParser gfxSettings(GFX_FILE_LOCATION);
 
+	fullScreen = gfxSettings.get("general", "full_screen", 0);
+	screenWidth = gfxSettings.get("general", "res_width", 1366);
+	screenHeight = gfxSettings.get("general", "res_height", 768);
+
 	targetFPS = gfxSettings.get("general", "target_fps", 0);
 
 	countMaxSpriteBox = gfxSettings.get("max_renderable", "sprites", 5000);
