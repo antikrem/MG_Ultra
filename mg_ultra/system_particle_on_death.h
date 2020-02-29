@@ -32,6 +32,11 @@ class SystemParticleOnDeath : public System {
 			return;
 		}
 
+		//If component has health, it has not died due to combat collision
+		auto hea = ent->getComponent<ComponentHealth>();
+		if (hea && hea->getHealth() > 0) {
+			return;
+		}
 
 		//otherwise spawn appropiate 
 		Point3 vel(0.0f);
@@ -64,8 +69,11 @@ class SystemParticleOnDeath : public System {
 			Point3 adjustedPos
 				= pos + Point3(offset[0], offset[1], offset[2]);
 
-			Point3 adjustedVel 
-				= (vel * rand_ex::next_unif(lower, higher)).rotate(Point3(0.0f, 0.0f, 1.0f), rand_ex::next_norm(0.0f, directionDeviation));
+			Point3 adjustedVel
+				//base velocity randomly rotated
+				= (vel * rand_ex::next_unif(lower, higher)).rotate(Point3(0.0f, 0.0f, 1.0f), rand_ex::next_norm(0.0f, directionDeviation))
+				//internal explosion
+				+ pos.directionTo(adjustedPos) * rand_ex::next_unif(0, pod->getExplosionSpeed());
 
 			particleCache.push_back(
 				Particle(
@@ -112,7 +120,7 @@ public:
 						int x, y;
 						tie(x, y) = g_aniquery::getAnimationSize(gra->getAnimationState().animationSetName, 1);
 						if (x > 0 && y > 0) {
-							pod->setRadius((float)max(x, y) / 2);
+							pod->setRadius(((float)max(x, y) / 2) * gra->getScale());
 						}
 
 					}
