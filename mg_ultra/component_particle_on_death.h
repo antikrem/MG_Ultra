@@ -28,6 +28,8 @@ private:
 
 	atomic<float> directionDeviation = 0.0f;
 
+	atomic<float> explosionSpeed = 0.0f;
+
 	ParticleTypeSpecification particleTypeSpecification;
 
 	//sometimes, use an alternative position
@@ -101,6 +103,14 @@ public:
 		this->radius = radius;
 	}
 
+	float getExplosionSpeed() {
+		return explosionSpeed;
+	}
+
+	void setExplosionSpeed(float explosionSpeed) {
+		this->explosionSpeed = explosionSpeed;
+	}
+
 	float getDirectionDeviation() {
 		return directionDeviation;
 	}
@@ -127,6 +137,7 @@ public:
 			.setConstructors<ComponentParticleOnDeath()>()
 			.addFunction("set_velocity_range", &ComponentParticleOnDeath::setVelocityFactorRange)
 			.addFunction("set_direction_deviation", &ComponentParticleOnDeath::setDirectionDeviation)
+			.addFunction("set_explosion_speed", &ComponentParticleOnDeath::setExplosionSpeed)
 			.addOverloadedFunctions(
 				"create",
 				ScriptableClass::create<ComponentParticleOnDeath, string>,
