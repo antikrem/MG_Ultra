@@ -13,6 +13,10 @@
 
 #include "script_unit.h"
 
+#define PATH_TO_AUTO_SCRIPT "scripts/_auto_run"
+#define INIT_FOLDER "/_engine_start/"
+#define INIT_RUNNING_FOLDER "/_on_cycle/"
+
 vector<string> pullScriptErrors();
 
 /*Encapsulates the lua state machine
@@ -52,6 +56,9 @@ class ScriptMaster {
 			}
 		}
 	}
+
+	//load auto run scripts
+	void loadAutoRunScript();
 
 	void finalExecuteScriptUnit(ScriptUnit scriptUnit);
 

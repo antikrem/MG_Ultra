@@ -1,5 +1,7 @@
 #include "script_master.h"
 
+#include "os_kit.h"
+
 #include "component_animation.h"
 #include "component_graphics.h"
 #include "component_position.h"
@@ -137,10 +139,8 @@ ScriptMaster::ScriptMaster()
 	quickLoadAndExecute("scripts/_initialise/unified_lighting.lua");
 	quickLoadAndExecute("scripts/_initialise/particles.lua");
 	quickLoadAndExecute("scripts/_initialise/post_effects.lua");
-	quickLoadAndExecute("scripts/_initialise/weather.lua");
-	quickLoadAndExecute("scripts/_initialise/ui.lua");
 
-	quickLoadAndExecute("scripts/bullet_system/bullet_spawners.lua");
+	loadAutoRunScript();
 
 	globalScriptMasterPtr = this;
 }
@@ -161,6 +161,25 @@ ScriptMaster::~ScriptMaster() {
 	//clear the buffer
 	globalScriptMasterPtr = false;
 	std::this_thread::sleep_for(std::chrono::milliseconds(100));
+}
+
+void ScriptMaster::loadAutoRunScript() {
+	string path = PATH_TO_AUTO_SCRIPT;
+	path.append(INIT_FOLDER);
+
+	vector<string> scripts = os_kit::getFilesInFolder(path);
+	vector<string> buffer;
+
+	err::logMessage("AUTORUN: Loading " + to_string(scripts.size()) + " auto scripts");
+	for (auto& scriptLocation : scripts) {
+		kaguya.dofile(path + scriptLocation);
+		buffer = pullScriptErrors();
+		for (auto i : buffer) {
+			err::logMessage("AUTORUN: Error, script failed: " + path + scriptLocation);
+			err::logMessage(i);
+		}
+	}
+	err::logMessage("AUTORUN: Auto scripts loaded");
 }
 
 void ScriptMaster::finalExecuteScriptUnit(ScriptUnit scriptUnit) {
