@@ -56,16 +56,3 @@ Particles.get_type = getParticleType
 
 --Clears all particles
 Particles.clear_all = clearAllParticles;
-
-
---Some default particle types
-Particles.add_new_type("gold", "particle_gold")
-Particles.set_bloom_factor("gold", 4.0)
-Particles.set_max_life_deviation("gold", 3.0)
-Particles.set_featherness("gold", 0.01, 0.001)
-
-Particles.add_new_type("death_gold", "particle_gold_frag")
-Particles.set_bloom_factor("death_gold", 4.0)
-Particles.set_max_life_deviation("death_gold", 3.5)
-Particles.set_featherness("death_gold", 0.012, 0.025)
-Particles.set_rotate_to_face("death_gold", true)
