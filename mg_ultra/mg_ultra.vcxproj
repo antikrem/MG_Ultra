@@ -423,6 +423,7 @@
     <None Include="wd\scripts\profiler\initialise_profiling.lua" />
     <None Include="wd\scripts\profiler\profiler.lua" />
     <None Include="wd\scripts\_auto_run\_engine_start\bullet_spawners.lua" />
+    <None Include="wd\scripts\_auto_run\_engine_start\seed_random.lua" />
     <None Include="wd\scripts\_auto_run\_engine_start\ui.lua" />
     <None Include="wd\scripts\_auto_run\_engine_start\weather.lua" />
     <None Include="wd\scripts\_initialise\animations.lua" />

@@ -874,6 +874,9 @@
     <None Include="wd\scripts\_auto_run\_engine_start\bullet_spawners.lua">
       <Filter>Resource Files\scripts\_auto_run\_engine_start</Filter>
     </None>
+    <None Include="wd\scripts\_auto_run\_engine_start\seed_random.lua">
+      <Filter>Resource Files\scripts\_auto_run\_engine_start</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="wd\campaigns\ascent\1\load_table.txt">
