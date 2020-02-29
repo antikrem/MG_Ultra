@@ -29,6 +29,7 @@ public:
 			vector<string> scripts = os_kit::getFilesInFolder(path);
 			for (auto& scriptLocation : scripts) {
 				script.append(os_kit::getFileAsString(path + scriptLocation));
+				script.append("\n");
 			}
 		}
 
