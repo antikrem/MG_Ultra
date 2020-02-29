@@ -85,7 +85,7 @@ struct Particle {
 		position = position + velocity * scalarFactor + scroll * scalarFactor;
 
 		if (rotateToFace) {
-			rotation = RAD2DEG(atan2(velocity.y, velocity.x));
+			rotation = RAD2DEG(atan2(velocity.y + scroll.y, velocity.x + scroll.x));
 		}
 
 		lifetime = lifetime + scalarFactor;
