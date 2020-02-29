@@ -343,6 +343,7 @@
     <ClInclude Include="system_ambient_light.h" />
     <ClInclude Include="system_animation.h" />
     <ClInclude Include="system_audio.h" />
+    <ClInclude Include="system_auto_run.h" />
     <ClInclude Include="system_background.h" />
     <ClInclude Include="system_bounds_control.h" />
     <ClInclude Include="system_bullet_master.h" />
@@ -421,6 +422,9 @@
     <None Include="wd\scripts\player\player.lua" />
     <None Include="wd\scripts\profiler\initialise_profiling.lua" />
     <None Include="wd\scripts\profiler\profiler.lua" />
+    <None Include="wd\scripts\_auto_run\_engine_start\bullet_spawners.lua" />
+    <None Include="wd\scripts\_auto_run\_engine_start\ui.lua" />
+    <None Include="wd\scripts\_auto_run\_engine_start\weather.lua" />
     <None Include="wd\scripts\_initialise\animations.lua" />
     <None Include="wd\scripts\_initialise\anonymous_spawner.lua" />
     <None Include="wd\scripts\_initialise\audio.lua" />

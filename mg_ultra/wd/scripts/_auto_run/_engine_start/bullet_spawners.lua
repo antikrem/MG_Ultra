@@ -80,7 +80,7 @@ BulletSpawnerList = {
 		
 		--If theres a postive last active, run script
 		if lastValid >= 0 and this:is_alive() then
-			BulletSpawnerList[name].scriptLookUp[lastValid](...)
+			BulletSpawnerList[name].scriptLookUp[lastValid](current, ...)
 		end
 	end
 
