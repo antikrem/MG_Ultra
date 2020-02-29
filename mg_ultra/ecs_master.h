@@ -78,6 +78,7 @@ class ECSMaster {
 		-system_ambient_light
 		-system_fog
 		-system_directional_lighting_update
+		-system_auto_run
 
 	master3: main gameloop
 	    -system_timer
@@ -142,6 +143,7 @@ class ECSMaster {
 		master->createSystem<SystemFog>(registar);
 		master->createSystem<SystemUI>(registar);
 		master->createSystem<SystemDirectionalLightUpdate>(registar);
+		master->createSystem<SystemAutoRun>(registar);
 
 		//ring 3
 		master = newSystemsMaster("m_gameplay");
