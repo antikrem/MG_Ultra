@@ -104,6 +104,9 @@ class ECSMaster {
 		-system_force_applier
 		-system_particle_update
 		-system_particle_on_death
+		
+	master8: autorun
+		-system_auto_run
 	*/
 	void createBasicSystems() {
 		
@@ -143,7 +146,6 @@ class ECSMaster {
 		master->createSystem<SystemFog>(registar);
 		master->createSystem<SystemUI>(registar);
 		master->createSystem<SystemDirectionalLightUpdate>(registar);
-		master->createSystem<SystemAutoRun>(registar);
 
 		//ring 3
 		master = newSystemsMaster("m_gameplay");
@@ -187,6 +189,11 @@ class ECSMaster {
 		forceApplierSystem->setParticleMaster(pMaster);
 		auto particleOnDeathSystem = master->createSystem<SystemParticleOnDeath>(registar);
 		particleOnDeathSystem->setParticleMaster(pMaster);
+
+		//ring 8
+		//master = newSystemsMaster("m_auto_run");
+		//master->setTimer(100);
+		//master->createSystem<SystemAutoRun>(registar);
 	}
 
 	//starts all of the masters

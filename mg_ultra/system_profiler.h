@@ -59,7 +59,7 @@ public:
 		if (registar->get("d_profiler_active", &active) && active) {
 			//create the profiler entity
 			auto newEnt = shared_ptr<Entity>(new Entity(ETProfile));
-			auto newComponent = new ComponentPosition(0, 0);
+			auto newComponent = new ComponentPosition(0, 200);
 			newEnt->addComponent(newComponent->pullForEntity());
 			auto newComponent1 = new ComponentText();
 			newComponent1->setText("Console");

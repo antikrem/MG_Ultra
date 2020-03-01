@@ -22,6 +22,9 @@ EntityBulletSpawner = 15
 EntityEnemyBullet = 16
 EntityDialogue = 17
 EntityDebugCycle = 18
+EntityScoreBoard = 19
+EntityPowerBoard = 20
+EntityFragmentBoard = 21
 
 --Adds to pool, returns boolean success
 function EntityPool.add_entity(entity)

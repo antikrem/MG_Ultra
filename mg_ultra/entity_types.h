@@ -24,8 +24,10 @@ enum EntityTypes {
 	ETBulletSpawner,
 	ETEnemyBullet,
 	ETDialogue,
-	ETDebugCycle
-
+	ETDebugCycle,
+	ETScoreBoard,
+	ETPowerBoard,
+	ETFragmentBoard
 };
 
 //String to Entity type
