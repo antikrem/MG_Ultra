@@ -24,7 +24,7 @@ public:
 	void precycle(EntityPool* pool) override {
 		if (!initialised) {
 			string path = PATH_TO_AUTO_SCRIPT;
-			path.append(INIT_RUNNING_FOLDER);
+			path.append(INIT_ON_CYCLE);
 
 			vector<string> scripts = os_kit::getFilesInFolder(path);
 			for (auto& scriptLocation : scripts) {

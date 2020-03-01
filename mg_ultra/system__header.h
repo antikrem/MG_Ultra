@@ -30,7 +30,6 @@
 #include "system_fog.h"
 #include "system_ui.h"
 #include "system_directional_lighting_update.h"
-#include "system_auto_run.h"
 
 //ring 3 - main game loop - most important main gameplay loop
 #include "system_timer.h"
@@ -59,4 +58,6 @@
 #include "system_particle_update.h"
 #include "system_particle_on_death.h"
 
+//ring 8 - auto run
+#include "system_auto_run.h"
 #endif

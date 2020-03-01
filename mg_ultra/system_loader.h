@@ -529,6 +529,44 @@ class SystemLoader : public System {
 		addTemplate(lastTemplateName, templateText);
 	}
 
+	//run the state change script
+	bool runStateChangeScript() {
+		string path = PATH_TO_AUTO_SCRIPT;
+		path.append(INIT_STATE_CHANGE);
+		string script;
+
+		vector<string> scripts = os_kit::getFilesInFolder(path);
+		for (auto& scriptLocation : scripts) {
+			script.append(os_kit::getFileAsString(path + scriptLocation));
+			script.append("\n");
+		}
+
+		ScriptUnit su(SS_inlineLoader, script);
+		su.addDebugData(" in state_change autorun");
+
+		sc.reset();
+		su.attachSuccessCallback(&sc);
+		g_script::executeScriptUnit(su);
+		return sc.waitForCompletion();
+	}
+
+	//updates level flags
+	void updateFlagsOnSuccessfulLoad() {
+		string state = "none";
+		string campaign = "none";
+		int level = 0;
+
+		registar->get("next_state", &state);
+		registar->get("next_campaign", &campaign);
+		registar->get("next_level", &level);
+
+		registar->update("state", state);
+		registar->update("campaign", campaign);
+		registar->update("level", level);
+
+		
+	}
+
 
 
 public:
@@ -588,9 +626,14 @@ public:
 			err::logMessage("LOAD: Successful, starting level at " + path);
 			registar->update("cycle", -1);
 		}
+		
+		updateFlagsOnSuccessfulLoad();
+
+		runStateChangeScript();
 
 		executeScript(immediateScript);
 
+		//update to indicate loading successful
 		registar->update("loading", false);
 		registar->update("load_dialogue", true);
 		registar->update("cycle_progress", true);

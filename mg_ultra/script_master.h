@@ -14,8 +14,9 @@
 #include "script_unit.h"
 
 #define PATH_TO_AUTO_SCRIPT "scripts/_auto_run"
-#define INIT_FOLDER "/_engine_start/"
-#define INIT_RUNNING_FOLDER "/_on_cycle/"
+#define INIT_ENGINE_START "/_engine_start/"
+#define INIT_ON_CYCLE "/_on_cycle/"
+#define INIT_STATE_CHANGE "/_state_change/"
 
 vector<string> pullScriptErrors();
 

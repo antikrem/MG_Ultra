@@ -124,6 +124,9 @@
     <Filter Include="Resource Files\scripts\_auto_run\_on_cycle">
       <UniqueIdentifier>{df05eacd-7a97-4b50-99f5-2a5a8abe3a19}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\scripts\_auto_run\_state_change">
+      <UniqueIdentifier>{fc50115a-e9c8-46f1-b44b-2d0b6b0093ef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -876,6 +879,18 @@
     </None>
     <None Include="wd\scripts\_auto_run\_engine_start\seed_random.lua">
       <Filter>Resource Files\scripts\_auto_run\_engine_start</Filter>
+    </None>
+    <None Include="wd\scripts\_auto_run\_engine_start\game_variables.lua">
+      <Filter>Resource Files\scripts\_auto_run\_engine_start</Filter>
+    </None>
+    <None Include="wd\scripts\_auto_run\_engine_start\default_particles.lua">
+      <Filter>Resource Files\scripts\_auto_run\_engine_start</Filter>
+    </None>
+    <None Include="wd\scripts\_auto_run\_on_cycle\ui_update.lua">
+      <Filter>Resource Files\scripts\_auto_run\_on_cycle</Filter>
+    </None>
+    <None Include="wd\scripts\_auto_run\_state_change\ui_change.lua">
+      <Filter>Resource Files\scripts\_auto_run\_state_change</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

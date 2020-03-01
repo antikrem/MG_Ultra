@@ -165,7 +165,7 @@ ScriptMaster::~ScriptMaster() {
 
 void ScriptMaster::loadAutoRunScript() {
 	string path = PATH_TO_AUTO_SCRIPT;
-	path.append(INIT_FOLDER);
+	path.append(INIT_ENGINE_START);
 
 	vector<string> scripts = os_kit::getFilesInFolder(path);
 	vector<string> buffer;
