@@ -44,8 +44,8 @@ void erase_associative_if(Container& container, const function<bool(typename Con
 }
 
 //extends a sequential container with another
-template<class Container>
-void extend(Container& container, Container& extension) {
+template<class Container1, class Container2>
+void extend(Container1& container, Container2& extension) {
 	container.insert(container.end(), extension.begin(), extension.end());
 }
 
