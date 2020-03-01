@@ -865,9 +865,6 @@
     <None Include="wd\scripts\player\initialise_player_system.lua">
       <Filter>Resource Files\scripts\player</Filter>
     </None>
-    <None Include="wd\scripts\_initialise\ui.lua">
-      <Filter>Resource Files\scripts\_initialise</Filter>
-    </None>
     <None Include="wd\scripts\_auto_run\_engine_start\ui.lua">
       <Filter>Resource Files\scripts\_auto_run\_engine_start</Filter>
     </None>

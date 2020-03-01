@@ -437,7 +437,6 @@
     <None Include="wd\scripts\_initialise\particles.lua" />
     <None Include="wd\scripts\_initialise\post_effects.lua" />
     <None Include="wd\scripts\_initialise\registar.lua" />
-    <None Include="wd\scripts\_initialise\ui.lua" />
     <None Include="wd\scripts\_initialise\unified_lighting.lua" />
     <None Include="wd\scripts\_initialise\weather.lua" />
     <None Include="wd\scripts\_library\library.lua" />

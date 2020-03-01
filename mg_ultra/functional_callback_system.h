@@ -23,7 +23,7 @@ protected:
 	void setInternalScript(string systemName, string script);
 
 	//Executes the internal script, returns false on attempt to execute failed script
-	bool executeInternalScript(string systemName, string systemErrorMessage, shared_ptr<Entity> ent, SuccessCallback* sc);
+	bool executeInternalScript(string systemName, string systemErrorMessage, shared_ptr<Entity> ent, SuccessCallback* sc, bool priority = false);
 
 };
 

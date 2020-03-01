@@ -43,7 +43,8 @@ public:
 		executeInternalScript(
 			"system_player", "PLAYER: Fatal error executing player script, player update disabled", 
 			ent, 
-			&sc
+			&sc,
+			true
 		);
 	}
 

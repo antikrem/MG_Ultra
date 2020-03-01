@@ -6,6 +6,9 @@
 #include <condition_variable>
 #include <thread>
 #include <queue>
+#include <deque>
+
+#include "algorithm_ex.h"
 
 #include "performance_counter.h"
 #include "events.h"
@@ -40,7 +43,7 @@ class ScriptMaster {
 	condition_variable cv;
 
 	//queue of script units to execute
-	queue<ScriptUnit> scriptQueue;
+	deque<ScriptUnit> scriptQueue;
 
 	PerformanceCounter pCounter;
 
@@ -75,7 +78,7 @@ public:
 		return kaguya;
 	}
 
-	void addScriptUnit(ScriptUnit scriptUnit);
+	void addScriptUnit(ScriptUnit scriptUnit, bool priority = false);
 
 	//gets size of script
 	int getNumberOfScripts() {
@@ -99,11 +102,9 @@ public:
 				if (disabled) {
 					break;
 				}
-				else {
-					while (scriptQueue.size()) {
-						currentScripts.push_back(scriptQueue.front());
-						scriptQueue.pop();
-					}
+				else {	
+					extend(currentScripts, scriptQueue);
+					scriptQueue.clear();
 				}
 			}
 
@@ -140,7 +141,7 @@ namespace g_script {
 	void closeScriptPipeline();
 
 	//execute a script unit globally
-	void executeScriptUnit(ScriptUnit scriptUnit);
+	void executeScriptUnit(ScriptUnit scriptUnit, bool priority = false);
 
 	//returns the last reports count of calls
 	float callsLastSecond();

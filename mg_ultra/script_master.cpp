@@ -299,9 +299,15 @@ void ScriptMaster::finalExecuteScriptUnit(ScriptUnit scriptUnit) {
 	pCounter.increment();
 }
 
-void ScriptMaster::addScriptUnit(ScriptUnit scriptUnit) {
+void ScriptMaster::addScriptUnit(ScriptUnit scriptUnit, bool priority) {
 	unique_lock<mutex> lck(scriptBufferLock);
-	scriptQueue.push(scriptUnit);
+	if (priority) {
+		scriptQueue.push_front(scriptUnit);
+	}
+	else {
+		scriptQueue.push_back(scriptUnit);
+	}
+	
 	cv.notify_one();
 }
 
@@ -322,7 +328,7 @@ void g_script::closeScriptPipeline() {
 	closedScriptPipeLine = true;
 }
 
-void g_script::executeScriptUnit(ScriptUnit scriptUnit) {
+void g_script::executeScriptUnit(ScriptUnit scriptUnit, bool priority) {
 	if (closedScriptPipeLine) {
 		//pipeline is closed, new script units are disposed
 		if (scriptUnit.getSuccessCallback()) {
@@ -330,7 +336,7 @@ void g_script::executeScriptUnit(ScriptUnit scriptUnit) {
 		}
 		return;
 	}
-	globalScriptMasterPtr->addScriptUnit(scriptUnit);
+	globalScriptMasterPtr->addScriptUnit(scriptUnit, priority);
 }
 
 float g_script::callsLastSecond() {

@@ -31,7 +31,7 @@ void FunctionalCallbackSystem::setInternalScript(string systemName, string scrip
 	internalScript = script;
 }
 
-bool FunctionalCallbackSystem::executeInternalScript(string systemName, string systemErrorMessage, shared_ptr<Entity> ent, SuccessCallback* sc) {
+bool FunctionalCallbackSystem::executeInternalScript(string systemName, string systemErrorMessage, shared_ptr<Entity> ent, SuccessCallback* sc, bool priority) {
 	//check for a valid script
 	if (!validInternalScript) {
 		return false;
@@ -43,7 +43,7 @@ bool FunctionalCallbackSystem::executeInternalScript(string systemName, string s
 	su.attachEntity(ent);
 	sc->reset();
 	su.attachSuccessCallback(sc);
-	g_script::executeScriptUnit(su);
+	g_script::executeScriptUnit(su, priority);
 
 	if (!sc->waitForCompletion()) {
 		err::logMessage(systemErrorMessage);
