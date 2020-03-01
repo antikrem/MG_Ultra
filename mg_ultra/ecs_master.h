@@ -191,9 +191,9 @@ class ECSMaster {
 		particleOnDeathSystem->setParticleMaster(pMaster);
 
 		//ring 8
-		//master = newSystemsMaster("m_auto_run");
-		//master->setTimer(100);
-		//master->createSystem<SystemAutoRun>(registar);
+		master = newSystemsMaster("m_auto_run");
+		master->setTimer(100);
+		master->createSystem<SystemAutoRun>(registar);
 	}
 
 	//starts all of the masters

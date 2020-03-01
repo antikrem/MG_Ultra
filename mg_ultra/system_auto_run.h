@@ -31,6 +31,7 @@ public:
 				script.append(os_kit::getFileAsString(path + scriptLocation));
 				script.append("\n");
 			}
+			initialised = true;
 		}
 
 		if (valid && script.size()) {
@@ -39,7 +40,7 @@ public:
 
 			sc.reset();
 			su.attachSuccessCallback(&sc);
-			g_script::executeScriptUnit(su);
+			g_script::executeScriptUnit(su, true);
 			valid = sc.waitForCompletion();
 		}
 	}
