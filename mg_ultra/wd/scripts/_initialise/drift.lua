@@ -8,10 +8,15 @@ registar:add("drift_scrollspeed_x", 0.0)
 registar:add("drift_scrollspeed_y", 0.0)
 registar:add("drift_scrollspeed_z", 0.0)
 
---Speed from wind
+-- Speed from wind
 registar:add("drift_windspeed_x", 0.0)
 registar:add("drift_windspeed_y", 0.0)
 registar:add("drift_windspeed_z", 0.0)
+
+-- Base wind speed
+registar:add("drift_base_windspeed_x", 0.0)
+registar:add("drift_base_windspeed_y", 0.0)
+registar:add("drift_base_windspeed_z", 0.0)
 
 Drift = {}	
 
@@ -33,4 +38,8 @@ function Drift.set_wind_speed(x, y, z)
 	registar:update("drift_windspeed_x", x)
 	registar:update("drift_windspeed_y", y)
 	registar:update("drift_windspeed_z", z)
+
+	registar:update("drift_base_windspeed_x", x)
+	registar:update("drift_base_windspeed_y", y)
+	registar:update("drift_base_windspeed_z", z)
 end
