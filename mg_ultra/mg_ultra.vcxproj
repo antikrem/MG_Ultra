@@ -428,7 +428,9 @@
     <None Include="wd\scripts\_auto_run\_engine_start\seed_random.lua" />
     <None Include="wd\scripts\_auto_run\_engine_start\ui.lua" />
     <None Include="wd\scripts\_auto_run\_engine_start\weather.lua" />
+    <None Include="wd\scripts\_auto_run\_engine_start\wind_burst.lua" />
     <None Include="wd\scripts\_auto_run\_on_cycle\ui_update.lua" />
+    <None Include="wd\scripts\_auto_run\_on_cycle\wind_burst_update.lua" />
     <None Include="wd\scripts\_auto_run\_state_change\ui_change.lua" />
     <None Include="wd\scripts\_initialise\animations.lua" />
     <None Include="wd\scripts\_initialise\anonymous_spawner.lua" />
