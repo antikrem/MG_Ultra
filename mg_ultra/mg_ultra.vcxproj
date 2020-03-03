@@ -222,6 +222,7 @@
     <ClCompile Include="frame_buffer.cpp" />
     <ClCompile Include="functional_callback_system.cpp" />
     <ClCompile Include="geometry_kit.cpp" />
+    <ClCompile Include="global_collision_interface.cpp" />
     <ClCompile Include="global_funcs.cpp" />
     <ClCompile Include="gl_handler.cpp" />
     <ClCompile Include="graphics_settings.cpp" />
@@ -296,6 +297,7 @@
     <ClInclude Include="cus_struct2.h" />
     <ClInclude Include="fog.h" />
     <ClInclude Include="geometry_kit.h" />
+    <ClInclude Include="global_collision_interface.h" />
     <ClInclude Include="ini_parser.h" />
     <ClInclude Include="directional_light.h" />
     <ClInclude Include="ecs_master.h" />
@@ -423,6 +425,7 @@
     <None Include="wd\scripts\profiler\initialise_profiling.lua" />
     <None Include="wd\scripts\profiler\profiler.lua" />
     <None Include="wd\scripts\_auto_run\_engine_start\bullet_spawners.lua" />
+    <None Include="wd\scripts\_auto_run\_engine_start\default_collision.lua" />
     <None Include="wd\scripts\_auto_run\_engine_start\default_particles.lua" />
     <None Include="wd\scripts\_auto_run\_engine_start\game_variables.lua" />
     <None Include="wd\scripts\_auto_run\_engine_start\seed_random.lua" />
@@ -435,6 +438,7 @@
     <None Include="wd\scripts\_initialise\animations.lua" />
     <None Include="wd\scripts\_initialise\anonymous_spawner.lua" />
     <None Include="wd\scripts\_initialise\audio.lua" />
+    <None Include="wd\scripts\_initialise\collision.lua" />
     <None Include="wd\scripts\_initialise\drift.lua" />
     <None Include="wd\scripts\_initialise\particles.lua" />
     <None Include="wd\scripts\_initialise\post_effects.lua" />

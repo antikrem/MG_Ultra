@@ -12,22 +12,10 @@
 
 #include "component_particle_on_death.h"
 
-#define SOURCE 0
-#define TARGET 1
+#include "global_collision_interface.h"
 
 #include <iostream>
 
-struct CollisionEvent {
-	EntityTypes types[2];
-	//if non-empty, execute script on collision
-	string suplementaryScript = "";
-
-	CollisionEvent(EntityTypes source, EntityTypes target, const string& suplementaryScript = "") {
-		types[SOURCE] = source;
-		types[TARGET] = target;
-		this->suplementaryScript = suplementaryScript;
-	}
-};
 
 class SystemCollision : public System {
 	//internal map of entity types used to internalEntityLists
@@ -61,12 +49,12 @@ class SystemCollision : public System {
 
 	//conducts collision comparison between two entity types
 	void compareCollisionLists(const CollisionEvent& collisionEvent) {
-		for (auto source : internalEntityLists.get(collisionEvent.types[SOURCE])) {
+		for (auto source : internalEntityLists.get(collisionEvent.types[COLLISION_SOURCE])) {
 
 			auto pos = source->getComponent<ComponentPosition>()->getPosition3();
 			auto& sCol = source->getComponent<ComponentCollision>()->getSpecification(pos);
 
-			for (auto target : internalEntityLists.get(collisionEvent.types[TARGET])) {
+			for (auto target : internalEntityLists.get(collisionEvent.types[COLLISION_TARGET])) {
 
 				pos = target->getComponent<ComponentPosition>()->getPosition3();
 				auto& tCol = target->getComponent<ComponentCollision>()->getSpecification(pos);
@@ -85,12 +73,13 @@ public:
 		target = SubPoolTarget(
 			SubPoolComponents::ByComponents<ComponentPosition, ComponentCollision>()
 		);
-		collisionEvents.push_back(
-			CollisionEvent(ETPlayerBullets, ETEnemy)
-		);
-		collisionEvents.push_back(
-			CollisionEvent(ETPlayer, ETEnemyBullet, "g_bulletPlayerCollision()")
-		);
+	}
+
+	void precycle(EntityPool* pool) override {
+		if (g_collision::isQueuedColisionEvent()) {
+			collisionEvents.push_back(g_collision::getQueuedColisionEvent());
+		}
+
 	}
 
 	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, shared_ptr<Entity> ent, int id) override {
@@ -115,8 +104,8 @@ public:
 		);
 
 		for (auto& i : collisionEvents) {
-			if (internalEntityLists.count(i.types[SOURCE])
-				&& internalEntityLists.count(i.types[TARGET])) {
+			if (internalEntityLists.count(i.types[COLLISION_SOURCE])
+				&& internalEntityLists.count(i.types[COLLISION_TARGET])) {
 				compareCollisionLists(i);
 			}
 		}

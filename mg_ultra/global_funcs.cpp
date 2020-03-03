@@ -19,6 +19,7 @@
 #include "graphics_settings.h"
 #include "colour_modulation.h"
 #include "ui.h"
+#include "global_collision_interface.h"
 
 ///print
 //For use with print function, holds a buffer sting to print
@@ -176,5 +177,9 @@ void registerGlobalFunctions(kaguya::State &kaguya) {
 	kaguya["getColourModulationBackgroundColour"] = g_colour_modulation::l_getBackgroundColour;
 	kaguya["setColourModulationForegroundCutoff"] = g_colour_modulation::setForegroundCutoff;
 	kaguya["setColourModulationBackgroundCutoff"] = g_colour_modulation::setBackgroundCutoff;
+
+	//global collision
+	kaguya["setCollisionEvent"] = g_collision::registerNewCollision;
+	kaguya["setCollisionEventWithScript"] = g_collision::registerNewCollisionWithScript;
 
 }

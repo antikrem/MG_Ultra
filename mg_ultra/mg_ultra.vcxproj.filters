@@ -127,6 +127,12 @@
     <Filter Include="Resource Files\scripts\_auto_run\_state_change">
       <UniqueIdentifier>{fc50115a-e9c8-46f1-b44b-2d0b6b0093ef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Collision">
+      <UniqueIdentifier>{c1d47552-4836-453a-a675-a0b9806a1e9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Collision">
+      <UniqueIdentifier>{40fea066-aa66-4206-81aa-432aa4dd1754}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -236,6 +242,9 @@
     </ClCompile>
     <ClCompile Include="camera.cpp">
       <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="global_collision_interface.cpp">
+      <Filter>Source Files\Collision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -506,9 +515,6 @@
     <ClInclude Include="system_directional_lighting.h">
       <Filter>Header Files\ECS\Systems\Graphics System</Filter>
     </ClInclude>
-    <ClInclude Include="collision.h">
-      <Filter>Header Files\Support</Filter>
-    </ClInclude>
     <ClInclude Include="system_collision.h">
       <Filter>Header Files\ECS\Systems</Filter>
     </ClInclude>
@@ -725,6 +731,12 @@
     <ClInclude Include="system_auto_run.h">
       <Filter>Header Files\ECS\Systems</Filter>
     </ClInclude>
+    <ClInclude Include="collision.h">
+      <Filter>Header Files\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="global_collision_interface.h">
+      <Filter>Header Files\Collision</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="wd\shaders\base.vert">
@@ -894,6 +906,12 @@
     </None>
     <None Include="wd\scripts\_auto_run\_on_cycle\wind_burst_update.lua">
       <Filter>Resource Files\scripts\_auto_run\_on_cycle</Filter>
+    </None>
+    <None Include="wd\scripts\_initialise\collision.lua">
+      <Filter>Resource Files\scripts\_initialise</Filter>
+    </None>
+    <None Include="wd\scripts\_auto_run\_engine_start\default_collision.lua">
+      <Filter>Resource Files\scripts\_auto_run\_engine_start</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
