@@ -1,3 +1,5 @@
+-- \scripts\_auto_run\_engine_start\default_particles.lua
+
 --Some default particle types
 Particles.add_new_type("gold", "particle_gold")
 Particles.set_bloom_factor("gold", 4.0)

@@ -1,4 +1,4 @@
---\scripts\_initialise\weather.lua
+-- \scripts\_auto_run\_engine_start\weather.lua
 
 WeatherTypes = {}
 WeatherTypes.None = "None"
@@ -13,6 +13,7 @@ Particles.set_box_dimension("weather_heavyrain", 960, 540, 700)
 Particles.set_box_center("weather_heavyrain", 0, 0, -160)
 Particles.set_weight("weather_heavyrain", 0.00, 0.00)
 Particles.set_type_response("weather_heavyrain", ParticleBoxResponse.Wrap)
+Particles.set_featherness("weather_heavyrain", 0.05, 0.019)
 Particles.set_scrollness("weather_heavyrain", 1)
 Particles.set_rotate_to_face("weather_heavyrain", true)
 
