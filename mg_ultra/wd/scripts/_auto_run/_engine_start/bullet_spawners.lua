@@ -1,4 +1,4 @@
---\scripts\bullet_system\bullet_spawners.lua
+-- \scripts\_auto_run\_engine_start\bullet_spawners.lua
 
 --The spawning of bullets is handled by bullet spawners
 --These entities will be attached as sub entities to enemies
