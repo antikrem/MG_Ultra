@@ -1,4 +1,4 @@
---\scripts\_initialise\audio.lua
+-- \scripts\_initialise\audio.lua
 
 -- Sets up Audio interface, which allows loading of audio files
 -- and some general interactions
