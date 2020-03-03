@@ -21,7 +21,6 @@ extern "C" {
 
 void registerGlobalFunctions(kaguya::State &kaguya);
 
-//using ProfileMap = map<string, tuple<int, int, int>>;
 using ProfileMap = map<string, vector<int>>;
 
 
