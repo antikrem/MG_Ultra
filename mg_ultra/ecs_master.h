@@ -19,6 +19,9 @@ class ECSMaster {
 	//Master loop control
 	bool executing = true;
 
+	//game is pause
+	atomic<bool> paused = false;
+
 	//Master entity pool
 	EntityPool* entityPool = nullptr;
 
@@ -112,14 +115,14 @@ class ECSMaster {
 		
 		//ring 0
 		auto master = newSystemsMaster("m_meta");
-		master->setTimer(10);
+		master->setTimer(10, false);
 		master->createSystem<SystemGarbageCollector>(registar);
 		master->createSystem<SystemBoundsControl>(registar);
 		master->createSystem<SystemProfiler>(registar);
 
 		//ring 1
 		master = newSystemsMaster("m_h_meta");
-		master->setTimer(100);
+		master->setTimer(100, true);
 		master->createSystem<SystemMultiEnt>(registar);
 		master->createSystem<SystemBulletMaster>(registar);
 		master->createSystem<SystemBulletSpawner>(registar);
@@ -128,12 +131,9 @@ class ECSMaster {
 
 		//ring 2
 		master = newSystemsMaster("m_graphics2");
-		master->setTimer(100);
+		master->setTimer(100, true);
 		auto animationSystem = master->createSystem<SystemAnimation>(registar);
 		animationSystem->setAnimationMaster(gMaster->getAnimationsMaster());
-		auto textSystem = master->createSystem<SystemText>(registar);
-		textSystem->setAnimationMaster(gMaster->getAnimationsMaster());
-		master->createSystem<SystemConsole>(registar);
 		master->createSystem<SystemSpawner>(registar);
 		master->createSystem<SystemBackground>(registar);
 		master->createSystem<SystemDriftable>(registar);
@@ -149,7 +149,7 @@ class ECSMaster {
 
 		//ring 3
 		master = newSystemsMaster("m_gameplay");
-		master->setTimer(100);
+		master->setTimer(100, true);
 		master->createSystem<SystemTimer>(registar);
 		master->createSystem<SystemPlayer>(registar);
 		master->createSystem<SystemCamera>(registar);
@@ -160,25 +160,25 @@ class ECSMaster {
 
 		//ring 4
 		master = newSystemsMaster("m_loader");
-		master->setTimer(10);
+		master->setTimer(10, true);
 		master->createSystem<SystemLoader>(registar);
 		master->createSystem<SystemDialogueLoader>(registar);
 
 		//ring 5
 		master = newSystemsMaster("m_collision");
-		master->setTimer(100);
+		master->setTimer(100, true);
 		master->createSystem<SystemCollision>(registar);
 
 		//ring 6
 		master = newSystemsMaster("m_audio");
-		master->setTimer(50);
+		master->setTimer(50, true);
 		auto audioSystem = master->createSystem<SystemAudio>(registar);
 		audioSystem->setAudioMaster(aMaster);
 		master->createSystem<SystemMusic>(registar);
 
 		//ring 7
 		master = newSystemsMaster("m_particles");
-		master->setTimer(100);
+		master->setTimer(100, true);
 		auto particleSpawnerSystem = master->createSystem<SystemParticleSpawner>(registar);
 		particleSpawnerSystem->setParticleMaster(pMaster);
 		auto particleBoxesSystem = master->createSystem<SystemParticleBoxes>(registar);
@@ -192,8 +192,15 @@ class ECSMaster {
 
 		//ring 8
 		master = newSystemsMaster("m_auto_run");
-		master->setTimer(100);
+		master->setTimer(100, true);
 		master->createSystem<SystemAutoRun>(registar);
+
+		//ring 9
+		master = newSystemsMaster("m_responsive_frontend");
+		master->setTimer(100, false);
+		auto textSystem = master->createSystem<SystemText>(registar);
+		textSystem->setAnimationMaster(gMaster->getAnimationsMaster());
+		master->createSystem<SystemConsole>(registar);
 	}
 
 	//starts all of the masters
@@ -312,9 +319,9 @@ private:
 	}
 
 	void handleSystemsInvoke(Event* event) {
-		if (event->data.size() != 2) {
+		if (event->data.size() != 3) {
 			err::logMessage(
-				"EVENT: error, expected 2 parameters, got: " 
+				"EVENT: error, expected 3 parameters, got: " 
 				+ to_string(event->data.size()) 
 				+ " " 
 				+ str_kit::reconstituteVectorIntoString(event->data, " ")
@@ -330,7 +337,12 @@ private:
 			return;
 		}
 		
-		systemsMasters[event->data[0]]->executeSystemMaster();
+		//ignore paused case
+		if not(paused && (event->data[2]) == "p") {
+			systemsMasters[event->data[0]]->executeSystemMaster();
+		}
+
+		
 	}
 
 	void handleEvents() {
@@ -368,7 +380,9 @@ private:
 		case EV_profilingUpdate:
 			updateProfileMap();
 			break;
-
+		case EV_pause:
+			paused = !paused;
+			break;
 		}
 
 		delete event;

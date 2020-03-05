@@ -133,9 +133,9 @@ public:
 	//Puts this system on a timer, each iteration will compute asyncronously
 	//N will be the number of times computed per second, set n=0 to turn off timer
 	//n=0 causes finite recursion, where the end of each cycle causes the next one 
-	void setTimer(int n) {
+	void setTimer(int n, bool pause) {
 		timing = n;
-		timer = new TimedEventCallback(n, name);
+		timer = new TimedEventCallback(n, name, pause);
 	}
 
 	//puts the system into use

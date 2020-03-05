@@ -19,6 +19,11 @@ function Entity.add_component(self, component)
 	return self:addComponent(component.type(), component)
 end
 
+-- Pause and unpause the game
+function pause()
+	emit_event(EventPause)
+end
+
 --Function to get angle from a position to player
 --Otherwise just angles down
 function get_angle_to_player(x, y)

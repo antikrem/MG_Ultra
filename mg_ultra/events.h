@@ -15,6 +15,7 @@ enum EventType {
 	EV_loadNextState,
 	EV_invokeSystemMaster,
 	EV_profilingUpdate,
+	EV_pause,
 	EV_LENGTH
 };
 

@@ -129,11 +129,12 @@ EventQuit = 1
 EventStateChange = 2
 EventCallback = 3
 EventProfileUpdate = 4
+EventPause = 5
 
 --Emits an event to the event que, 
 function emit_event(eventType, ...)
 	--check event is valid
-	if not check_element_in_set(eventType, EventNone, EventQuit, EventStateChange, EventCallback, EventProfileUpdate) then
+	if not check_element_in_set(eventType, EventNone, EventQuit, EventStateChange, EventCallback, EventProfileUpdate, EventPause) then
 		print("EVENT: error, invalid event type submitted with emit_event")
 		return
 	end

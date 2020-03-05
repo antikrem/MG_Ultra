@@ -46,6 +46,9 @@ end
 
 ----Engine level variables
 
+--Pause Engine
+registar:add("pause", false)
+
 --levels are on cycles, with scripted events occuring on the tick
 registar:add("cycle", -1)
 registar:add("cycle_progress", false)
