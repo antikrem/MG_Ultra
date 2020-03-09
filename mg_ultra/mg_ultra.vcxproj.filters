@@ -100,9 +100,6 @@
     <Filter Include="Header Files\Static Movement">
       <UniqueIdentifier>{387b8395-6d35-48eb-b558-33ef6e75c892}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\scripts\bullet_system">
-      <UniqueIdentifier>{7f3715d1-c41b-49e7-9989-f2afe73cf3b6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resource Files\level">
       <UniqueIdentifier>{80547aa8-3ae9-4142-9da0-446fd8172777}</UniqueIdentifier>
     </Filter>
@@ -132,6 +129,9 @@
     </Filter>
     <Filter Include="Source Files\Collision">
       <UniqueIdentifier>{40fea066-aa66-4206-81aa-432aa4dd1754}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Settings">
+      <UniqueIdentifier>{c8d3446e-8dcc-4256-9598-ab13d8c5fe6f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -737,6 +737,9 @@
     <ClInclude Include="global_collision_interface.h">
       <Filter>Header Files\Collision</Filter>
     </ClInclude>
+    <ClInclude Include="component_death_script.h">
+      <Filter>Header Files\ECS\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="wd\shaders\base.vert">
@@ -862,9 +865,6 @@
     <None Include="wd\shaders\point_lighting.vert">
       <Filter>Resource Files\shaders</Filter>
     </None>
-    <None Include="wd\scripts\bullet_system\bullet_spawners.lua">
-      <Filter>Resource Files\scripts\bullet_system</Filter>
-    </None>
     <None Include="wd\shaders\_gauss.vert">
       <Filter>Resource Files\shaders</Filter>
     </None>
@@ -912,6 +912,18 @@
     </None>
     <None Include="wd\scripts\_auto_run\_engine_start\default_collision.lua">
       <Filter>Resource Files\scripts\_auto_run\_engine_start</Filter>
+    </None>
+    <None Include="wd\settings\gfx_settings.ini">
+      <Filter>Resource Files\Settings</Filter>
+    </None>
+    <None Include="wd\settings\key_binds.ini">
+      <Filter>Resource Files\Settings</Filter>
+    </None>
+    <None Include="wd\scripts\_auto_run\_engine_start\power_ups.lua">
+      <Filter>Resource Files\scripts\_auto_run\_engine_start</Filter>
+    </None>
+    <None Include="wd\scripts\_initialise\death_scripts.lua">
+      <Filter>Resource Files\scripts\_initialise</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

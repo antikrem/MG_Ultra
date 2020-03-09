@@ -36,6 +36,7 @@
 #include "component_die_with_master.h"
 #include "component_spawn_protection.h"
 #include "component_particle_on_death.h"
+#include "component_death_script.h"
 
 #include "registar.h"
 #include "pool.h"
@@ -123,6 +124,7 @@ ScriptMaster::ScriptMaster()
 	forceLuaRegistration<ComponentDieWithMaster>(kaguya);
 	forceLuaRegistration<ComponentSpawnProtection>(kaguya);
 	forceLuaRegistration<ComponentParticleOnDeath>(kaguya);
+	forceLuaRegistration<ComponentDeathScript>(kaguya);
 
 	//set contextual script functions
 	kaguya["getEntityPool"] = getGlobalPool;
@@ -140,6 +142,7 @@ ScriptMaster::ScriptMaster()
 	quickLoadAndExecute("scripts/_initialise/particles.lua");
 	quickLoadAndExecute("scripts/_initialise/post_effects.lua");
 	quickLoadAndExecute("scripts/_initialise/collision.lua");
+	quickLoadAndExecute("scripts/_initialise/death_scripts.lua");
 
 	loadAutoRunScript();
 

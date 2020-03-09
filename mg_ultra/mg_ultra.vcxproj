@@ -268,6 +268,7 @@
     <ClInclude Include="component_collision.h" />
     <ClInclude Include="component_console.h" />
     <ClInclude Include="component_damage.h" />
+    <ClInclude Include="component_death_script.h" />
     <ClInclude Include="component_dialogue.h" />
     <ClInclude Include="component_die_with_master.h" />
     <ClInclude Include="component_directional_light.h" />
@@ -416,7 +417,6 @@
     <None Include="wd\campaigns\ascent\1\prelevel.lua" />
     <None Include="wd\scripts\backgrounds\background_master.lua" />
     <None Include="wd\scripts\backgrounds\initialise_background_master.lua" />
-    <None Include="wd\scripts\bullet_system\bullet_spawners.lua" />
     <None Include="wd\scripts\camera\camera.lua" />
     <None Include="wd\scripts\camera\initialise_camera.lua" />
     <None Include="wd\scripts\player\initialise_player.lua" />
@@ -428,6 +428,7 @@
     <None Include="wd\scripts\_auto_run\_engine_start\default_collision.lua" />
     <None Include="wd\scripts\_auto_run\_engine_start\default_particles.lua" />
     <None Include="wd\scripts\_auto_run\_engine_start\game_variables.lua" />
+    <None Include="wd\scripts\_auto_run\_engine_start\power_ups.lua" />
     <None Include="wd\scripts\_auto_run\_engine_start\seed_random.lua" />
     <None Include="wd\scripts\_auto_run\_engine_start\ui.lua" />
     <None Include="wd\scripts\_auto_run\_engine_start\weather.lua" />
@@ -439,6 +440,7 @@
     <None Include="wd\scripts\_initialise\anonymous_spawner.lua" />
     <None Include="wd\scripts\_initialise\audio.lua" />
     <None Include="wd\scripts\_initialise\collision.lua" />
+    <None Include="wd\scripts\_initialise\death_scripts.lua" />
     <None Include="wd\scripts\_initialise\drift.lua" />
     <None Include="wd\scripts\_initialise\particles.lua" />
     <None Include="wd\scripts\_initialise\post_effects.lua" />
@@ -450,6 +452,8 @@
     <None Include="wd\scripts\_library\math_utils.lua" />
     <None Include="wd\scripts\_library\pool_utils.lua" />
     <None Include="wd\scripts\_library\string_ex.lua" />
+    <None Include="wd\settings\gfx_settings.ini" />
+    <None Include="wd\settings\key_binds.ini" />
     <None Include="wd\shaders\base.frag" />
     <None Include="wd\shaders\base.vert" />
     <None Include="wd\shaders\bloom.frag" />
