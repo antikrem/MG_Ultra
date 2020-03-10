@@ -53,6 +53,7 @@ struct Particle {
 
 	bool rotateToFace;
 	float rotation = 0;
+	float velocityRotation = 0;
 
 	float featherness;
 	float weight;
@@ -64,15 +65,17 @@ struct Particle {
 
 	int particleKey;
 
-	Particle(int key, float lifetimeFactor, 
-		const Point3& position, const Point3& startingVelocity = Point3(0.0f), 
-		float featherness = 0.1f, float weight = 1.0f, bool rotateToFace = false)
+	Particle(int key, float lifetimeFactor,
+		const Point3& position, const Point3& startingVelocity = Point3(0.0f),
+		float featherness = 0.1f, float weight = 1.0f, bool rotateToFace = false,
+		float velocityRotation = 0.0f)
 	: position(position), velocity(startingVelocity), momentum(startingVelocity) {
 		this->particleKey = key;
 		this->lifetimeFactor = lifetimeFactor;
 		this->featherness = featherness;
 		this->weight = weight;
 		this->rotateToFace = rotateToFace;
+		this->velocityRotation = velocityRotation;
 	}
 
 	//updates a particle
@@ -82,10 +85,11 @@ struct Particle {
 
 		float amendedScalarFactor = abs(scalarFactor * featherness);
 		velocity = velocity * (1.0f - amendedScalarFactor) + (momentum * weight + wind) * amendedScalarFactor;
-		position = position + velocity * scalarFactor + scroll * scalarFactor;
+		Point3 adjustedVelocity = (velocity * scalarFactor).rotate(Point3(0, 0, 1), velocityRotation) + scroll * scalarFactor;
+		position = position + adjustedVelocity;
 
 		if (rotateToFace) {
-			rotation = RAD2DEG(atan2(velocity.y + scroll.y, velocity.x + scroll.x));
+			rotation = RAD2DEG(atan2(adjustedVelocity.y, adjustedVelocity.x));
 		}
 
 		lifetime = lifetime + scalarFactor;
@@ -115,6 +119,7 @@ struct ParticleTypeSpecification {
 	float maxLifeDeviation;
 
 	bool rotateToFace;
+	float velocityRotation;
 
 	Point3 boundingBoxDimension;
 	Point3 boundingBoxPosition;
@@ -127,6 +132,7 @@ struct ParticleTypeSpecification {
 		float weightDeviation,
 		float maxLifeDeviation,
 		bool rotateToFace,
+		float velocityRotation,
 
 		Point3 boundingBoxDimension,
 		Point3 boundingBoxPosition,
@@ -140,6 +146,7 @@ struct ParticleTypeSpecification {
 		this->weightDeviation = weightDeviation;
 		this->maxLifeDeviation = maxLifeDeviation;
 		this->rotateToFace = rotateToFace;
+		this->velocityRotation = velocityRotation;
 		this->boxResponse = boxResponse;
 	}
 

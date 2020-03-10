@@ -16,6 +16,7 @@ Particles.set_type_response("weather_heavyrain", ParticleBoxResponse.Wrap)
 Particles.set_featherness("weather_heavyrain", 0.05, 0.019)
 Particles.set_scrollness("weather_heavyrain", 1)
 Particles.set_rotate_to_face("weather_heavyrain", true)
+Particles.set_velocity_max_rotation("weather_heavyrain", 10)
 
 Particles.add_new_type("weather_darkcloud", "weather_cloud0", 1, 2.4)
 Particles.set_box_dimension("weather_darkcloud", 1300, 1600, 490)

@@ -53,6 +53,10 @@ void g_particles::updateWeight(string particleName, float weightMean, float weig
 	gParticleMaster->setParticleTypeWeight(particleName, weightMean, weightDeviation);
 }
 
+void g_particles::updateVelocityRotation(string particleName, float velocityRotation) {
+	gParticleMaster->setParticleMaxVelocityRotation(particleName, velocityRotation);
+}
+
 
 int g_particles::getParticleType(string particleTypeName) {
 	return gParticleMaster->getKeyFromName(particleTypeName);

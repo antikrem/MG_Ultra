@@ -186,6 +186,17 @@ public:
 		}
 	}
 
+	//modifies named particle type's velocity rotation
+	void setParticleMaxVelocityRotation(string particleName, float velocityRotation) {
+		unique_lock<shared_mutex> lck(particleTypeLock);
+		if (particleKeys.count(particleName)) {
+			particleTypes[particleKeys[particleName]].velocityRotation = velocityRotation;
+		}
+		else {
+			err::logMessage("PARTICLE: Was not able to find named particle " + particleName);
+		}
+	}
+
 	//gets half particle box size
 	Point3 getBoundingBoxSize(int key) {
 		unique_lock<shared_mutex> lck(particleTypeLock);
@@ -392,6 +403,9 @@ namespace g_particles {
 
 	//updates weight of a particle type
 	void updateWeight(string particleName, float weightMean, float weightDeviation);
+
+	//update velocity rotation
+	void updateVelocityRotation(string particleName, float velocityRotation);
 
 	//clears all particles in the engine
 	//returns how many particles were deleted

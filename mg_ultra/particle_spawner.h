@@ -21,6 +21,7 @@ class ParticleSpawner {
 
 	//if true rotate to face
 	atomic<bool> rotateToFace = false;
+	atomic<float> velocityRotation = 0.0f;
 
 	//values for featherness
 	atomic<float> feathernessMean = 0.1f;
@@ -78,6 +79,7 @@ public:
 	void setAllParameters(ParticleTypeSpecification& spec) {
 		unique_lock<mutex> lck(lock);
 		this->rotateToFace = spec.rotateToFace;
+		this->velocityRotation = spec.velocityRotation;
 
 		this->feathernessMean = spec.feathernessMean;
 		this->feathernessDeviation = spec.feathernessDeviation;
@@ -110,7 +112,8 @@ public:
 					),
 					rand_ex::next_norm(feathernessMean, feathernessDeviation),
 					rand_ex::next_norm(weightMean, weightDeviation),
-					rotateToFace
+					rotateToFace,
+					rand_ex::next_unif(-velocityRotation - 0.01f, velocityRotation + 0.01f)
 				)
 
 			);
@@ -137,7 +140,8 @@ public:
 				),
 				rand_ex::next_norm(feathernessMean, feathernessDeviation),
 				rand_ex::next_norm(weightMean, weightDeviation),
-				rotateToFace
+				rotateToFace,
+				rand_ex::next_unif(-velocityRotation - 0.01f, velocityRotation + 0.01f)
 			)
 		);
 
@@ -163,7 +167,8 @@ public:
 					Point3(0, 0, 0),
 					rand_ex::next_norm(feathernessMean, feathernessDeviation),
 					rand_ex::next_norm(weightMean, weightDeviation),
-					rotateToFace
+					rotateToFace,
+					rand_ex::next_unif(-velocityRotation - 0.01f, velocityRotation + 0.01f)
 				)
 
 			);

@@ -17,6 +17,8 @@ struct ParticleType {
 	//specifies if this particle looks towards target
 	bool rotateToFace = false;
 
+	float velocityRotation = 0.0f;
+
 	float feathernessMean = 0.1f;
 	float feathernessDeviation = 0.025f;
 
@@ -160,6 +162,7 @@ struct ParticleType {
 			weightDeviation,
 			maxLifeDeviation,
 			rotateToFace,
+			velocityRotation,
 			boundingBoxDimension,
 			boundingBoxPosition,
 			boxResponse
