@@ -22,6 +22,9 @@ BulletSpawner = {
 	--before the initialiser script is run
 	components = {},
 
+	--Links a keyword to a value for additional handling
+	additionals = {},
+
 	 --use to spawn new bullet spawner templates
 	new = function(name, obj)
 		obj = obj or {} 
@@ -82,8 +85,16 @@ BulletSpawnerList = {
 		if lastValid >= 0 and this:is_alive() then
 			BulletSpawnerList[name].scriptLookUp[lastValid](current, ...)
 		end
-	end
+	end,
 
+	--returns additionals 
+	_getAdditionals = function(name)
+		if BulletSpawnerList[name]~=nil then
+			return BulletSpawnerList[name].additionals
+		else
+			return nil
+		end
+	end
 }
 
 --Flag for last Bullet Spawner initialisation sucess

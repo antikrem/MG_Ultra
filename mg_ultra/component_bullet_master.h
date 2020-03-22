@@ -74,6 +74,7 @@ public:
 	void registerToLua(kaguya::State& state) override {
 		state["ComponentBulletMaster"].setClass(kaguya::UserdataMetatable<ComponentBulletMaster, Component>()
 			.setConstructors<ComponentBulletMaster()>()
+			.addFunction("get_name", &ComponentBulletMaster::getBulletMasterName)
 			.addStaticFunction("generate", ScriptableClass::create<ComponentBulletMaster, string, int, string>)
 			.addStaticFunction("type", &getType<ComponentBulletMaster>)
 			.addStaticFunction("cast", &Component::castDown<ComponentBulletMaster>)
