@@ -51,6 +51,8 @@ private:
 			return EXIT_FAILURE;
 		}
 
+		glViewport(0, 0, gSettings->screenWidth, gSettings->screenHeight);
+
 		//Make context current for a bit on initialise thread
 		glfwMakeContextCurrent(window);
 		glewExperimental = true;
