@@ -261,13 +261,27 @@ str_kit::LexicalAnalysisResult str_kit::lexicalAnalysis(string line, string id, 
 	vector<string> vec = splitOnToken(line, ' ');
 
 	//check if the number of parameters is correct
-	if (vec.size() != lex.size() + 1) {
+	if (lex.find('%') == string::npos && vec.size() != lex.size() + 1) {
 		return LAR_lexLengthFail;
 	}
 
+	//used for idChar perma set
+	bool permaSet = false;
+	char lastChar = -1;
+
 	//check if lex is fine
 	for (unsigned int i = 1; i < vec.size(); i++) {
-		char idChar = lex[i - 1];
+		char idChar;
+
+		// idChar depends on if permaSet is active
+		if (permaSet) {
+			idChar = lastChar;
+		}
+		else {
+			idChar = lex[i - 1];
+		}
+
+		lastChar = idChar;
 		if (idChar == 'i') {
 			if (!isInt(vec[i])) {
 				return LAR_lexTypeFail;
@@ -280,6 +294,9 @@ str_kit::LexicalAnalysisResult str_kit::lexicalAnalysis(string line, string id, 
 		}
 		else if (idChar == 's') {
 			pass;
+		}
+		else if (idChar == '%') {
+			permaSet = true;
 		}
 		else {
 			return LAR_invalidIDString;
