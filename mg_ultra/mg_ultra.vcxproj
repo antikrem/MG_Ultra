@@ -273,6 +273,7 @@
     <ClInclude Include="component_die_with_master.h" />
     <ClInclude Include="component_directional_light.h" />
     <ClInclude Include="component_driftable.h" />
+    <ClInclude Include="component_magnetise_to_player.h" />
     <ClInclude Include="component_min_ambient.h" />
     <ClInclude Include="component_offset_master.h" />
     <ClInclude Include="component_offset_once.h" />
