@@ -1,5 +1,5 @@
-/*A interface for finer details regarding movement
-*/
+/* A interface for finer details regarding movement
+ */
 #ifndef __COMPONENT_MOVEMENT__
 #define __COMPONENT_MOVEMENT__
 
@@ -155,14 +155,14 @@ public:
 		return updateInSystem;
 	}
 
-	//stops all acceleration and speed changes 
+	// Stops all acceleration and speed changes 
 	void pinVelocity() {
 		acceleration = Point3(0,0,0);
 		angleChange = 0;
 		speedChange = 0;
 	}
 
-	//converts all velocity into polar part
+	// Converts all velocity into polar part
 	void pushVelocityToPolar() {
 		Point3 temp = velocity.load() + Point3(Point2::generateFromPolar(speed, angle), 0);
 		speed = temp.magnitude();
@@ -170,7 +170,15 @@ public:
 		velocity = Point3(0, 0, 0);
 	}
 
-	//gets angle of rotation
+	// Converts all polar part into velocity
+	void pushPolarToVelocity() {
+		velocity = velocity.load() + Point3(Point2::generateFromPolar(speed, angle), 0);
+		speed = 0;
+		angle = 0;
+	}
+
+
+	// Gets angle of rotation
 	float getDirection() {
 		return (velocity.load() + Point3(Point2::generateFromPolar(speed, angle), 0)).getXY().getAng();
 	}
