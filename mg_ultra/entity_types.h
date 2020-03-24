@@ -27,7 +27,8 @@ enum EntityTypes {
 	ETDebugCycle,
 	ETScoreBoard,
 	ETPowerBoard,
-	ETFragmentBoard
+	ETFragmentBoard,
+	ETPowerUp
 };
 
 //String to Entity type

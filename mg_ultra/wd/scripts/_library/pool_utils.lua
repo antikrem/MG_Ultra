@@ -1,6 +1,6 @@
---Adds utilities to interact with the pool
+-- Adds utilities to interact with the pool
 
---global pool, contains all the entities in the game
+-- Global pool, contains all the entities in the game
 pool = getEntityPool()
 
 ---Enumeration of different types of entities
@@ -25,19 +25,20 @@ EntityDebugCycle = 18
 EntityScoreBoard = 19
 EntityPowerBoard = 20
 EntityFragmentBoard = 21
+EntityPowerUp = 22
 
---Adds to pool, returns boolean success
+-- Adds to pool, returns boolean success
 function EntityPool.add_entity(entity)
 	return pool:add(entity)
 end
 
---Adds to pool and cache, returns boolean success
+-- Adds to pool and cache, returns boolean success
 function EntityPool.add_cached_entity(entity)
 	return pool:addCached(entity)
 end
 
---returns the entity cached with this types
---or nil on failure due to invalid type or no respective cached ent
+-- Returns the entity cached with this types
+-- or nil on failure due to invalid type or no respective cached ent
 function EntityPool.get_cached_entity(entityType)
 	return pool:getEntFromCache(entityType)
 end
@@ -46,17 +47,18 @@ function EntityPool.get_entity_count()
 	return pool:size()
 end
 
---gets the number of entities in the graveyard
+-- Gets the number of entities in the graveyard
 function EntityPool.get_graveyard_size() 
 	return pool:getGraveyardSize()
 end
 
---gets the number of entities passed by the pool
+-- Gets the number of entities passed by the pool
 function EntityPool.get_graveyard_passed() 
 	return pool:getGraveyardPassed()
 end
 
---attempts to kill an cached entity--returns boolean success
+-- Attempts to kill an cached entity
+-- Returns boolean success
 function EntityPool.kill_cached_entity(entityType)
 	local ent = EntityPool.get_cached_entity(entityType)
 	if ent then ent:kill() return true else return false end
