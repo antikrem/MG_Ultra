@@ -79,8 +79,8 @@ public:
 		return addEnt(shared_ptr<Entity>(ent), cacheEnt);
 	}
 
-	bool l_addEnt(Entity* ent) {
-		return (bool)addEnt(shared_ptr<Entity>(ent), false);
+	shared_ptr<Entity> l_addEnt(Entity* ent) {
+		return addEnt(shared_ptr<Entity>(ent), false);
 	}
 
 	//adds a cached entity through lua
