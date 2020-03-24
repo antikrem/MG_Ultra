@@ -1,8 +1,8 @@
 ---Extended library
---Classes and mg functionality have been bounded
+-- Classes and mg functionality have been bounded
 
---Add a function within Entity class to allow components to be retrived 
---by component name, returns nil if the entity does not have the specified component
+-- Add a function within Entity class to allow components to be retrived 
+-- by component name, returns nil if the entity does not have the specified component
 function Entity.get_component(self, component)
 	if component == nil then
 		print("ENTITY: Error, attempting to get a nil component from an entity")
@@ -17,11 +17,18 @@ function Entity.get_component(self, component)
 	end
 end
 
---Adding a component to an entity after its been put in a pool
---will not attach them for modification from associated systems
---will return false if operation failed
+-- Adding a component to an entity after its been put in a pool
+-- will not attach them for modification from associated systems
+-- will return false if operation failed
 function Entity.add_component(self, component)
 	return self:addComponent(component.type(), component)
+end
+
+-- Executes a script that uses "this" as target against an entity
+function Entity.execute_against(self, f, ...)
+	this = self
+	f(...)
+	this = nil
 end
 
 -- Pause and unpause the game
@@ -29,8 +36,8 @@ function pause()
 	emit_event(EventPause)
 end
 
---Function to get angle from a position to player
---Otherwise just angles down
+-- Function to get angle from a position to player
+-- Otherwise just angles down
 function get_angle_to_player(x, y)
 	
 	local p = EntityPool.get_cached_entity(EntityPlayer)
@@ -43,8 +50,8 @@ function get_angle_to_player(x, y)
 	return angle
 end
 
---Creates a sprite and attaches it to calling entities multi ent
---Requires this to have a ComponentSpawner and ComponentMultiEnt
+-- Creates a sprite and attaches it to calling entities multi ent
+-- Requires this to have a ComponentSpawner and ComponentMultiEnt
 function attach_visual_sprite(aniSetName, zOffset, rotationSpeed, minAmbient, fadeIn, rotation, offsetX, offsetY, scale) 
 	local e = Entity.create(EntityGeneric)
 
@@ -67,16 +74,16 @@ function attach_visual_sprite(aniSetName, zOffset, rotationSpeed, minAmbient, fa
 	this:get_component(ComponentSpawner):add_entity(e)
 end
 
---general function to load a level by setting the correct values in the Registar
---first parameter is state: title, level
---second parameter is campaign name, valid on title state
---third parameter is level number, valid on title state
+-- General function to load a level by setting the correct values in the Registar
+-- First parameter is state: title, level
+-- Second parameter is campaign name, valid on title state
+-- Third parameter is level number, valid on title state
 function load_state(...)
 	--Handling erreoneos event parameters will be handled by the engine's event handler
 	emit_event(EventStateChange, ...)
 end
 
---Test
+-- Loads level
 function test() 
 	load_state("level", "ascent", 1)
 end
@@ -102,7 +109,7 @@ function test2()
 	print(comp:get_position())
 end
 
---Some layer constants
+-- Some layer constants
 
 LAYER_PLAYER_BULLETS = 6
 LAYER_PLAYER = 4
