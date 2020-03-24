@@ -42,6 +42,9 @@ Particles.set_max_life_deviation = setParticleTypeMaxLife
 --towards movement
 Particles.set_rotate_to_face = setParticleTypeRotateToFace
 
+--Sets the random angle deviation of the velocity of a particle
+Particles.set_velocity_max_rotation = setParticleTypeVelocityRotation
+
 --Modifies the featherness mean and featherness deviation of a particle type
 Particles.set_featherness = setParticleTypeFeatherness
 
