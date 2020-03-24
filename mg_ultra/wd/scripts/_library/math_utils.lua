@@ -80,7 +80,7 @@ function math.q_rand_vec(length, a, b)
 end
 
 -- Returns a point from a random circle
-function math.sample_uniform_sample(radius)
+function math.sample_uniform_circle(radius)
 	local r = radius * math.sqrt(math.random())
 	local t = math.pi * 2 * math.random()
 	return r * math.cos(t), r * math.sin(t)
