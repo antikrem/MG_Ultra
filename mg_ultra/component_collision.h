@@ -46,6 +46,13 @@ public:
 		return specification;
 	}
 
+	//sets radius only if this is a circle collision
+	void setCircleRadius(float radius) {
+		if (specification.collisionType == CollisionTypes::CoTy_Circle) {
+			specification.collidableInformation.circle.radius = radius;
+		}
+	}
+
 	//returns if the entity this component is added to is in system
 	//collision
 	bool isAddedToSystem() {
@@ -60,6 +67,7 @@ public:
 	void registerToLua(kaguya::State& state) override {
 		state["ComponentCollision"].setClass(kaguya::UserdataMetatable<ComponentCollision, Component>()
 			.setConstructors<ComponentCollision()>()
+			.addFunction("set_circle_radius", &ComponentCollision::setCircleRadius)
 			.addOverloadedFunctions(
 				"create",
 				ScriptableClass::create<ComponentCollision, float>,
