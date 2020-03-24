@@ -33,6 +33,7 @@ ent [string] - ent table look up
 
 #include "registar.h"
 #include "os_kit.h"
+#include "vec_kit.h"
 #include "script_master.h"
 #include "mmap.h"
 #include "algorithm_ex.h"
@@ -56,7 +57,7 @@ enum TargetSpecification {
 
 struct TargetFullSpecification {
 	TargetSpecification target = TaSp_noTarget;
-	int cycle = 0;
+	vector<int> cycles;
 	string callback = "";
 };
 
@@ -70,6 +71,16 @@ class SystemLoader : public System {
 	//error stuff
 	int lineNumber;
 	string file;
+
+	// Static generator for spawning entities from entity spawn line
+	std::function<shared_ptr<Entity>(string)> entityGeneratorLine = [](string line) {
+		return make_shared<Entity>(str_kit::qStringToInt(line, 1));
+	};
+
+	// Static generator for spawning entities from entity string name
+	std::function<shared_ptr<Entity>(string)> entityGeneratorToken = [](string token) {
+		return make_shared<Entity>(stringToEntType(token));
+	};
 
 	static string loadTableComponentNameToScriptName(string loadName) {
 		loadName = loadName.substr(1);
@@ -211,10 +222,13 @@ class SystemLoader : public System {
 		//conduct lexical analysis
 		str_kit::LexicalAnalysisResult result;
 
-		if ( result = str_kit::lexicalAnalysis(line, "@cycle", "i") ) {
+		if ( result = str_kit::lexicalAnalysis(line, "@cycle", "i%") ) {
 			if (result == str_kit::LAR_valid) {
 				spec->target = TaSp_cycle;
-				spec->cycle = str_kit::qStringToInt(line, 1);
+				spec->cycles.clear();
+				for (unsigned int i = 1; i < str_kit::splitOnToken(line, ' ').size(); i++) {
+					spec->cycles.push_back(str_kit::qStringToInt(line, i));
+				}
 				return true;
 			}
 			else {
@@ -226,7 +240,8 @@ class SystemLoader : public System {
 		else if (result = str_kit::lexicalAnalysis(line, "@counter", "i")) {
 			if (result == str_kit::LAR_valid) {
 				spec->target = TaSp_counter;
-				spec->cycle = str_kit::qStringToInt(line, 1);
+				spec->cycles.clear();
+				spec->cycles.push_back(str_kit::qStringToInt(line, 1));
 				return true;
 			}
 			else {
@@ -253,33 +268,43 @@ class SystemLoader : public System {
 
 	}
 
-	//Takes a line and generates a ptr, null indicates the line could not be converted
-	shared_ptr<Entity> createEnt(string line) {
+	//Takes a line and generates a ptr, empty vector indicates an error
+	vector<shared_ptr<Entity>> createEnt(string line, TargetFullSpecification spec) {
 		//lex analysis for first template
 		if (str_kit::lexicalAnalysis(line, "ent", "i") == str_kit::LAR_valid) {
-			return make_shared<Entity>( str_kit::qStringToInt(line, 1) );
+			return vec_kit::generate(
+				(int)spec.cycles.size(),
+				SystemLoader::entityGeneratorLine,
+				line
+			);
 		}
 		else if (str_kit::lexicalAnalysis(line, "ent", "s") == str_kit::LAR_valid) {
 			string token = str_kit::splitOnToken(line, ' ')[1];
 			if (stringToEntType(token) < 0) {
 				err::logMessage("LOAD: Error resolving token " + token + " to a recognized ent type at line " + to_string(lineNumber) + " in file " +  file);
-				return nullptr;
+				return vector<shared_ptr<Entity>>();
 			}
-			return make_shared<Entity>( stringToEntType(token) );
+			return vec_kit::generate(
+				(int)spec.cycles.size(),
+				SystemLoader::entityGeneratorToken,
+				token
+			);
 		}
 		err::logMessage("LOAD: Error creating ent at" + to_string(lineNumber) + " in file " + file +
 			+"\n --> Expected: ent [float:ent_type]/[string:ent_type]");
-		return nullptr;
+		return vector<shared_ptr<Entity>>();
 	}
 
 	//adds ent to imediate pool
-	bool pushEnt(shared_ptr<Entity> ent, TargetFullSpecification target) {
+	bool pushEnts(vector<shared_ptr<Entity>> ents, TargetFullSpecification target) {
 		if (target.target == TaSp_noTarget) {
 			err::logMessage("LOAD: Error, Entity pushed at " + to_string(lineNumber) + " in file " + file + " with no target set prior");
 			return false;
 		}
 		else if (target.target == TaSp_cycle) {
-			cycleEnts.add(target.cycle, ent);
+			for (unsigned int i = 0; i < target.cycles.size(); i++) {
+				cycleEnts.add(target.cycles[i], ents[i]);
+			}
 			return true;
 		}
 		return false;
@@ -338,45 +363,59 @@ class SystemLoader : public System {
 	}
 
 	//Adds a component to the lates ent
-	bool addComponent(string line, shared_ptr<Entity> ent, string& componentName) {
-		if not(ent) {
+	bool addComponent(string line, vector<shared_ptr<Entity>>& ents, string& componentName) {
+		if not(ents.size()) {
 			err::logMessage("LOAD: Error, attempting to add a component with no prior entity declaration " + to_string(lineNumber) + " in file " + file);
 			return false;
 		}
 		
 		//get call
 		string call = evaluateComponentLine(line, componentName);
+		for (auto& e : ents) {
+			ScriptUnit su(SS_inlineLoader, call);
+			su.addDebugData(" in " + file + " at line " + to_string(lineNumber) + " ");
+			su.attachEntity(e);
+			sc.reset();
+			su.attachSuccessCallback(&sc);
+			g_script::executeScriptUnit(su);
+			if (!sc.waitForCompletion()) {
+				return false;
+			}
 
-		ScriptUnit su(SS_inlineLoader, call);
-		su.addDebugData(" in " + file + " at line " + to_string(lineNumber) + " ");
-		su.attachEntity(ent);
-		sc.reset();
-		su.attachSuccessCallback(&sc);
-		g_script::executeScriptUnit(su);
-		return sc.waitForCompletion();
+		}
+		return true;
 	}
 
 	//executes the given command against a component of an ent
-	bool inlineExecuteOnComponent(shared_ptr<Entity> ent, string componentName, string line) {
-		string source = "this:get_component(" + componentName + "):" + line.substr(2);
-		ScriptUnit su(SS_inlineLoader, source);
-		su.addDebugData(" in " + file + " at line " + to_string(lineNumber) + " ");
-		su.attachEntity(ent);
-		sc.reset();
-		su.attachSuccessCallback(&sc);
-		g_script::executeScriptUnit(su);
-		return sc.waitForCompletion();
+	bool inlineExecuteOnComponent(vector<shared_ptr<Entity>>& ents, string componentName, string line) {
+		for (auto& e : ents) {
+			string source = "this:get_component(" + componentName + "):" + line.substr(2);
+			ScriptUnit su(SS_inlineLoader, source);
+			su.addDebugData(" in " + file + " at line " + to_string(lineNumber) + " ");
+			su.attachEntity(e);
+			sc.reset();
+			su.attachSuccessCallback(&sc);
+			g_script::executeScriptUnit(su);
+			if (!sc.waitForCompletion()) {
+				return false;
+			}
+		}
+		return true;
+		
 	}
 
 	//Adds a line of scripting to level manifest
 	bool loadScriptLevel(string line, const TargetFullSpecification& destination) {
 		line = line.substr(2);
 		if (destination.target == TaSp_cycle) {
-			//attach script
-			if (!cycleStrings.count(destination.cycle)) {
-				cycleStrings[destination.cycle] = "";
+			for (unsigned int i = 0; i < destination.cycles.size(); i++) {
+				//attach script
+				if (!cycleStrings.count(destination.cycles[i])) {
+					cycleStrings[destination.cycles[i]] = "";
+				}
+				cycleStrings[destination.cycles[i]].append(line + "\n");
 			}
-			cycleStrings[destination.cycle].append(line + "\n");
+			
 		}
 		else if (destination.target == TaSp_immediate) {
 			//attach script
@@ -443,7 +482,7 @@ class SystemLoader : public System {
 		immediateScript = "";
 
 		TargetFullSpecification currentTarget;
-		shared_ptr<Entity> ent = nullptr;
+		vector<shared_ptr<Entity>> ents = vector<shared_ptr<Entity>>();
 		//The load_table name of the last component used
 		string componentName = "";
 
@@ -451,7 +490,7 @@ class SystemLoader : public System {
 		vector<string> buffer;
 		ifstream table(filepath);
 		bool valid = true;
-		while (nextLine(table, buffer, line) && valid) {
+		while (valid && nextLine(table, buffer, line)) {
 
 			line = str_kit::trimString(line);
 			if (str_kit::isTrivialString(line)) {
@@ -464,19 +503,19 @@ class SystemLoader : public System {
 			}
 			//else check if it spawns an ent
 			else if ( str_kit::compareStart("ent ", line) ) {
-				ent = createEnt(line);
-				valid = (bool)ent;
+				ents = createEnt(line, currentTarget);
+				valid = (bool)ents.size();
 				if (valid) {
-					valid = pushEnt(ent, currentTarget);
+					valid = pushEnts(ents, currentTarget);
 				}
 			}
 			//else check if an component needs to be added'
 			else if (line[0] == '+') {
-				valid = addComponent(line, ent, componentName);
+				valid = addComponent(line, ents, componentName);
 			}
 			//else check if a inline component script has been requested
 			else if (line.size() > 1 && line[0] == '-' && line[1] == '>') {
-				valid = inlineExecuteOnComponent(ent, componentName, line);
+				valid = inlineExecuteOnComponent(ents, componentName, line);
 			}
 			//else check if a fixed script is added
 			else if (line.size() > 1 && line[0] == '<' && line[1] == '<') {
