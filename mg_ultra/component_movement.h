@@ -162,6 +162,12 @@ public:
 		speedChange = 0;
 	}
 
+	// Unlocks all caps on speed
+	void unlockCaps() {
+		speedCap = INFINITY;
+		angleCap = INFINITY;
+	}
+
 	// Converts all velocity into polar part
 	void pushVelocityToPolar() {
 		Point3 temp = velocity.load() + Point3(Point2::generateFromPolar(speed, angle), 0);
