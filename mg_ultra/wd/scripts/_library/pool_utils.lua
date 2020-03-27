@@ -64,7 +64,7 @@ function EntityPool.kill_cached_entity(entityType)
 	if ent then ent:kill() return true else return false end
 end
 
---Attempts to get player, might get nil
+-- Attempts to get player, might get nil
 function EntityPool.get_player()
 	return EntityPool.get_cached_entity(EntityPlayer)
 end
