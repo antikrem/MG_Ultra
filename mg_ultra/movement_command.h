@@ -30,8 +30,8 @@ public:
 	}
 
 	//updates movement command and position
-	Point3 updateExecution(shared_ptr<ComponentMovement> componentMovement, const Point3& position) {
-		return internalQuanta->updateExecution(componentMovement, position);
+	Point3 update(shared_ptr<ComponentMovement> componentMovement, const Point3& position) {
+		return internalQuanta->update(componentMovement, position);
 	}
 
 	//named constructors for creating new MovementCommands

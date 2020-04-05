@@ -6,7 +6,6 @@
 class MovementPolarTurn : public MovementQuanta {
 	float rate;
 	int duration;
-	int cycle = -1;
 public:
 	MovementPolarTurn(float rate, int duration) {
 		this->rate = rate;
@@ -21,8 +20,6 @@ public:
 	}
 
 	Point3 updateExecution(shared_ptr<ComponentMovement> componentMovement, const Point3& position) override {
-		cycle++;
-		
 		if (!cycle) {
 			componentMovement->setAngleChange(rate);
 		}

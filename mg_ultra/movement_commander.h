@@ -109,7 +109,7 @@ public:
 		//iterate over executing movement commands, deleting where necessary
 		auto it = executingMovementCommands.begin();
 		while (it != executingMovementCommands.end()) {
-			position = it->updateExecution(componentMovement, position);
+			position = it->update(componentMovement, position);
 			it = it->isExecuting() ? ++it : executingMovementCommands.erase(it);
 		}
 		
