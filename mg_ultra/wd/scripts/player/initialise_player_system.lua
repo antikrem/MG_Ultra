@@ -199,7 +199,7 @@ g_playerSpawnBullets = function()
 			
 			local bulletGComponents = ComponentGraphics.create("bullet_cross")
 			bulletGComponents:set_animation(1)
-			--bulletGComponents:set_scale(0.95)
+			bulletGComponents:set_scale(0.7)
 			cSpawner:add_component(bulletGComponents)
 			
 			local bulletMComponent = ComponentMovement.create()
