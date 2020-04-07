@@ -197,10 +197,9 @@ Weather.strike_point_lightning = function(x, y, z, delay, fadeout, r, g, b, stre
 	)
 	e:add_component(c)
 	
-	local p = ComponentPointLight.create(r, g, b, 0.00003, 0.001, 2)
-	e:add_component(p)
-	local p = ComponentPosition.create(x, y, z)
-	e:add_component(p)
+	e:add_component(ComponentPointLight.create(r, g, b, 0.00003, 0.001, 2))
+	e:add_component(ComponentPosition.create(x, y, z))
+	e:add_component(ComponentDriftable.create())
 	e:add_component(ComponentNoBoundsControl.create())
 
 	EntityPool.add_entity(e)
@@ -208,14 +207,14 @@ end
 
 --Strike lightning as a flash of powerful point lightning randomly
 Weather.strike_random_point_lightning = function()
-	
-	local x,y = math.rand_vec(2, -1000, 1000)
 	local z = math.lerp(math.random(), 500, 700)
+
+	local x,y = math.rand_vec(2, -1000, 1000)
 	Weather.strike_point_lightning(
 		x,y,z,
 		10,
 		2,
-		1.0,1.0,1.0,
+		10.0,10.0,10.0,
 		1.0
 	)
 end
