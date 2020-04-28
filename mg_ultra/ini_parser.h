@@ -13,7 +13,7 @@ into a file*/
 #include "str_kit.h"
 
 #define INI_DELIMITER '='
-#define COMMENT_DELIMITER ','
+#define COMMENT_DELIMITER ';'
 #define SECTION_NAME_START_DELIMITER '['
 #define SECTION_NAME_END_DELIMITER ']'
 
