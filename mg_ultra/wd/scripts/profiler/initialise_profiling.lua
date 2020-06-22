@@ -12,12 +12,12 @@ g_d_profiler_currentSampleCount = g_d_profiler_samples - 1
 
 
 --A function for starting the Profiler
-function start_profiling()
+function Debug.start_profiling()
 	registar:update("d_profiler_active", true)
 end
 
 --Stop profiling
-function stop_profiling()
+function  Debug.stop_profiling()
 	registar:update("d_profiler_active", false)
 end
 
@@ -35,7 +35,7 @@ end
 function convertToProfileString(name, slice)
 	if slice[3] < 1 then
 		--If theres a timing, we want to display :
-		-- 1. proportion of period spent executinf
+		-- 1. proportion of period spent executing
 		-- 2. effective timing,
 		return 
 			string.pad_string(name, 12)
