@@ -42,7 +42,7 @@ public:
 		velocity = acceleration.load() + velocity.load();
 
 		speed.store(
-			math_ex::clamp(speed + speedChange, -speedCap, speedCap.load())
+			math_ex::clamp(speed + speedChange, -speedCap.load(), speedCap.load())
 		);
 		angle.store(angle + angleChange);
 		
