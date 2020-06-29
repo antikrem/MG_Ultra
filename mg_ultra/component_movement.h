@@ -8,7 +8,7 @@
 #include "cus_struct2.h"
 #include "math_ex.h"
 
-class ComponentMovement : public Component, public ScriptableClass {
+class ComponentMovement : public Component, public ScriptableClass<ComponentMovement> {
 	//specifies this system to update in system_movement
 	atomic<bool> updateInSystem = true;
 
@@ -193,7 +193,7 @@ public:
 		updateInSystem = !value;
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentMovement"].setClass(kaguya::UserdataMetatable<ComponentMovement, Component>()
 			.setConstructors<ComponentMovement()>()
 			.addOverloadedFunctions("get_updated_position", &ComponentMovement::lll_getUpdatedPosition, &ComponentMovement::ll_getUpdatedPosition)

@@ -11,7 +11,7 @@ but only works once for the frame the sub entity is added*/
 #include "constants.h"
 #include "scriptable_class.h"
 
-class ComponentOffsetOnce : public Component, public ScriptableClass {
+class ComponentOffsetOnce : public Component, public ScriptableClass<ComponentOffsetOnce> {
 private:
 
 public:
@@ -19,7 +19,7 @@ public:
 
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentOffsetOnce"].setClass(kaguya::UserdataMetatable<ComponentOffsetOnce, Component>()
 			.setConstructors<ComponentOffsetOnce()>()
 			.addOverloadedFunctions(

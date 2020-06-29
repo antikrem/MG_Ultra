@@ -8,7 +8,7 @@
 #include "constants.h"
 #include "scriptable_class.h"
 
-class ComponentMagnetiseToPlayer : public Component, public ScriptableClass {
+class ComponentMagnetiseToPlayer : public Component, public ScriptableClass<ComponentMagnetiseToPlayer> {
 private:
 	atomic<bool> magnetised = false;
 	atomic<bool> initialised = false;
@@ -45,7 +45,7 @@ public:
 		return acceleration;
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentMagnetiseToPlayer"].setClass(kaguya::UserdataMetatable<ComponentMagnetiseToPlayer, Component>()
 			.setConstructors<ComponentMagnetiseToPlayer()>()
 			.addFunction("set_magnetise", &ComponentMagnetiseToPlayer::setMagnetise)

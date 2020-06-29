@@ -22,7 +22,7 @@ Works in conjunction with component_spawner*/
 //forward declaraction that entities exist
 class Entity;
 
-class ComponentMultiEntity : public Component, public ScriptableClass {
+class ComponentMultiEntity : public Component, public ScriptableClass<ComponentMultiEntity> {
 private:
 	int iterator = 0;
 	shared_mutex lock;
@@ -131,7 +131,7 @@ public:
 		applyFunction(&ComponentMultiEntity::killDieWithMaster);
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentMultiEntity"].setClass(kaguya::UserdataMetatable<ComponentMultiEntity, Component>()
 			.setConstructors<ComponentMultiEntity()>()
 			.addFunction("reset_iterator", &ComponentMultiEntity::resetIterator)

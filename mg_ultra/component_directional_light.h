@@ -8,7 +8,7 @@
 #include "scriptable_class.h"
 #include "directional_light.h"
 
-class ComponentDirectionalLight : public Component, public ScriptableClass {
+class ComponentDirectionalLight : public Component, public ScriptableClass<ComponentDirectionalLight> {
 	DirectionalLight directionLight;
 
 public:
@@ -44,7 +44,7 @@ public:
 		return directionLight.getData();
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentDirectionalLight"].setClass(kaguya::UserdataMetatable<ComponentDirectionalLight, Component>()
 			.setConstructors<ComponentDirectionalLight()>()
 			.addFunction("setStrength", &ComponentDirectionalLight::setStrength)

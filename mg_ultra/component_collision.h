@@ -7,7 +7,7 @@
 
 //Allocates a collision to an entity
 //Collidable box can take multiple forms
-class ComponentCollision : public Component, public ScriptableClass {
+class ComponentCollision : public Component, public ScriptableClass<ComponentCollision> {
 private:
 	//set to true when added to system
 	bool addedToSystem = false;
@@ -64,7 +64,7 @@ public:
 		addedToSystem = true;
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentCollision"].setClass(kaguya::UserdataMetatable<ComponentCollision, Component>()
 			.setConstructors<ComponentCollision()>()
 			.addFunction("set_circle_radius", &ComponentCollision::setCircleRadius)

@@ -8,7 +8,7 @@ Great for bloom*/
 #include "constants.h"
 #include "scriptable_class.h"
 
-class ComponentMinAmbient : public Component, public ScriptableClass {
+class ComponentMinAmbient : public Component, public ScriptableClass<ComponentMinAmbient> {
 private:
 	atomic<float> minAmbient = 0.0f;
 
@@ -29,7 +29,7 @@ public:
 		return minAmbient;
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentMinAmbient"].setClass(kaguya::UserdataMetatable<ComponentMinAmbient, Component>()
 			.setConstructors<ComponentMinAmbient()>()
 			.addFunction("get", &ComponentMinAmbient::getValue)

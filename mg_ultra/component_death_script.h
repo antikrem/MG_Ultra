@@ -9,7 +9,7 @@ on death according on script side DeathScript*/
 
 #include "scriptable_class.h"
 
-class ComponentDeathScript : public Component, public ScriptableClass {
+class ComponentDeathScript : public Component, public ScriptableClass<ComponentDeathScript> {
 
 
 public:
@@ -18,7 +18,7 @@ public:
 
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentDeathScript"].setClass(kaguya::UserdataMetatable<ComponentDeathScript, Component>()
 			.setConstructors<ComponentDeathScript()>()
 			.addOverloadedFunctions(

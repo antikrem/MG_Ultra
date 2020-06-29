@@ -8,7 +8,7 @@ Most importantly, allows values to be stored to this component*/
 #include "scriptable_class.h"
 #include "any_type.h"
 
-class ComponentExtendedScripting : public Component, public ScriptableClass {
+class ComponentExtendedScripting : public Component, public ScriptableClass<ComponentExtendedScripting> {
 	map<string, TypeContainer*> reg;
 
 public:
@@ -76,7 +76,7 @@ public:
 		return make_tuple(val, valid);
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentExtendedScripting"].setClass(kaguya::UserdataMetatable<ComponentExtendedScripting, Component>()
 			.setConstructors<ComponentExtendedScripting()>()
 			.addOverloadedFunctions("add",

@@ -1,4 +1,5 @@
-/*System interaction*/
+/* System interaction
+*/
 #ifndef __REGISTAR__
 #define __REGISTAR__
 
@@ -15,10 +16,11 @@
 
 #include "scriptable_class.h"
 
-/*Singleton class, allows systems to exchange states
-save only for global values
-Exposed to lua*/
-class Registar : public ScriptableClass {
+/* Singleton class, allows systems to exchange states
+ * save only for global values
+ * Exposed to lua
+ */
+class Registar : public ScriptableClass<Registar> {
 	map<string, TypeContainer*> reg;
 	shared_mutex lock;
 
@@ -37,7 +39,7 @@ public:
 		reg[name] = temp;
 	}
 
-	//add to base for ints
+	// Add to base for ints
 	template <>
 	void addToBase<int>(string name, int data) {
 		unique_lock<shared_mutex> lck(lock);
@@ -46,17 +48,17 @@ public:
 		reg[name] = temp;
 	}
 
-	//updates a current value
+	// Updates a current value
 	template <class T>
 	bool update(string name, T data) {
 		{
 			shared_lock<shared_mutex> lck(lock);
-			//check reg contains
+			// Check reg contains
 			if not(reg.count(name)) {
 				return false;
 			}
 
-			//check type is correct
+			// Check type is correct
 			if not(reg[name]->value().hash_code() == typeid(T).hash_code()) {
 				return false;
 			}
@@ -67,17 +69,17 @@ public:
 		return true;
 	}
 
-	//updates a current float value
+	// Updates a current float value
 	template <>
 	bool update<int>(string name, int data) {
 		{
 			shared_lock<shared_mutex> lck(lock);
-			//check reg contains
+			// Check reg contains
 			if not(reg.count(name)) {
 				return false;
 			}
 
-			//check type is correct
+			// Check type is correct
 			if not(reg[name]->value().hash_code() == typeid(float).hash_code()) {
 				return false;
 			}
@@ -88,56 +90,56 @@ public:
 		return true;
 	}
 
-	//use valid to check
+	// Use valid to check
 	template <class T>
 	bool get(string name, T *value) {
 		shared_lock<shared_mutex> lck(lock);
-		//check reg contains
+		// Check reg contains
 		if not(reg.count(name)) {
 			return false;
 		}
 
-		//check type is correct
+		// Check type is correct
 		if not(reg[name]->value().hash_code() == typeid(T).hash_code()) {
 			return false;
 		}
 		
-		//check ptr is legit
+		// Check ptr is legit
 		if not(value) {
 			return false;
 		}
 
-		//cast down and return
+		// Cast down and return
 		*value = ((AnyType<T>*)reg[name])->pullValue();
 		return true;
 	}
 
-	//use valid to check, specialised for ints
+	// Use valid to check, specialised for ints
 	template <>
 	bool get<int>(string name, int *value) {
 		shared_lock<shared_mutex> lck(lock);
-		//check reg contains
+		// Check reg contains
 		if not(reg.count(name)) {
 			return false;
 		}
 
-		//check type is correct
+		// Check type is correct
 		if not(reg[name]->value().hash_code() == typeid(float).hash_code()) {
 			return false;
 		}
 
-		//check ptr is legit
+		// Check ptr is legit
 		if not(value) {
 			return false;
 		}
 
-		//cast down and return
+		// Cast down and return
 		*value = (int)((AnyType<float>*)reg[name])->pullValue();
 		return true;
 	}
 
-	//no check get
-	//not safe, returns uninitialised values on fail
+	// No check get
+	// Not safe, returns uninitialised values on fail
 	template <class T>
 	tuple<T, bool> noCheckGet(string name) {
 		T val;
@@ -145,7 +147,7 @@ public:
 		return make_tuple(val, valid);
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["Registar"].setClass(
 			kaguya::UserdataMetatable<Registar>()
 			.setConstructors<Registar()>()

@@ -7,7 +7,7 @@
 
 #include "scriptable_class.h"
 
-class ComponentRotation : public Component, public ScriptableClass {
+class ComponentRotation : public Component, public ScriptableClass<ComponentRotation> {
 
 	atomic<bool> faceMovement = false;
 
@@ -63,7 +63,7 @@ public:
 		return speed;
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentRotation"].setClass(kaguya::UserdataMetatable<ComponentRotation, Component>()
 			.setConstructors<ComponentRotation()>()
 			.addFunction("set_angle", &ComponentRotation::setRotation)

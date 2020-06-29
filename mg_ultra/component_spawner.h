@@ -11,7 +11,7 @@ then pushed to the pool*/
 //forward declaraction that entities exist
 class Entity;
 
-class ComponentSpawner : public Component, public ScriptableClass {
+class ComponentSpawner : public Component, public ScriptableClass<ComponentSpawner> {
 	mutex entitiesLock;
 	vector<Entity*> entities;
 
@@ -74,7 +74,7 @@ public:
 		entities.clear();
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentSpawner"].setClass(kaguya::UserdataMetatable<ComponentSpawner, Component>()
 			.setConstructors<ComponentSpawner()>()
 			.addFunction("create_entity", &ComponentSpawner::createFactoryEntity)

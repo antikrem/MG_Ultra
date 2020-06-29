@@ -8,7 +8,7 @@ used for managing time*/
 #include "constants.h"
 #include "scriptable_class.h"
 
-class ComponentBulletSpawner : public Component, public ScriptableClass {
+class ComponentBulletSpawner : public Component, public ScriptableClass<ComponentBulletSpawner> {
 private:
 	string bulletMasterName;
 
@@ -55,7 +55,7 @@ public:
 		return parameterPack;
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentBulletSpawner"].setClass(kaguya::UserdataMetatable<ComponentBulletSpawner, Component>()
 			.setConstructors<ComponentBulletSpawner()>()
 			.addFunction("setLastActive", &ComponentBulletSpawner::setLastActiceScript)

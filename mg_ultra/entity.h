@@ -17,7 +17,7 @@
 
 /*A colection of components, each entity represents everything discrete in the game
 */
-class Entity : public ScriptableClass {
+class Entity : public ScriptableClass<Entity> {
 private:
 	//lock applied when entity is added to pool
 	//blocking component additions
@@ -154,7 +154,7 @@ public:
 		return components;
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["Entity"].setClass(
 			kaguya::UserdataMetatable<Entity>()
 			.setConstructors<Entity(int)>()

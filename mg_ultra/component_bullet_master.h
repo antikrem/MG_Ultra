@@ -8,7 +8,7 @@ Which will be used */
 #include "constants.h"
 #include "scriptable_class.h"
 
-class ComponentBulletMaster : public Component, public ScriptableClass {
+class ComponentBulletMaster : public Component, public ScriptableClass<ComponentBulletMaster> {
 private:
 	string bulletMasterName;
 	bool initialised = false;
@@ -71,7 +71,7 @@ public:
 		return startingTick;
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentBulletMaster"].setClass(kaguya::UserdataMetatable<ComponentBulletMaster, Component>()
 			.setConstructors<ComponentBulletMaster()>()
 			.addFunction("get_name", &ComponentBulletMaster::getBulletMasterName)

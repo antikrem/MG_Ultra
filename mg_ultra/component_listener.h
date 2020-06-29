@@ -11,7 +11,7 @@
 
 #include "audio_listener.h"
 
-class ComponentListener : public Component, public ScriptableClass {
+class ComponentListener : public Component, public ScriptableClass<ComponentListener> {
 	AudioListener audioListener;
 
 public:
@@ -55,7 +55,7 @@ public:
 		audioListener.updateListener();
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentListener"].setClass(kaguya::UserdataMetatable<ComponentListener, Component>()
 			.setConstructors<ComponentListener()>()
 			.addFunction("set_listen_target", &ComponentListener::l_setListenTarget)

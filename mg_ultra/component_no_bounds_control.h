@@ -7,9 +7,9 @@ Culled when out of game bounds*/
 
 #include "scriptable_class.h"
 
-class ComponentNoBoundsControl : public Component, public ScriptableClass {
+class ComponentNoBoundsControl : public Component, public ScriptableClass<ComponentNoBoundsControl> {
 public:
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentNoBoundsControl"].setClass(kaguya::UserdataMetatable<ComponentNoBoundsControl, Component>()
 			.setConstructors<ComponentNoBoundsControl()>()
 			.addStaticFunction("create", ScriptableClass::create<ComponentNoBoundsControl>)

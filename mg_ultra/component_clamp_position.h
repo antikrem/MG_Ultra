@@ -12,7 +12,7 @@
 
 #include "math_ex.h"
 
-class ComponentClampPosition : public Component, public ScriptableClass {
+class ComponentClampPosition : public Component, public ScriptableClass<ComponentClampPosition> {
 private:
 	atomic<bool> active = true;
 	Point3 center;
@@ -60,7 +60,7 @@ public:
 		);
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentClampPosition"].setClass(kaguya::UserdataMetatable<ComponentClampPosition, Component>()
 			.setConstructors<ComponentClampPosition()>()
 			.addFunction("set_active", &ComponentClampPosition::setActive)

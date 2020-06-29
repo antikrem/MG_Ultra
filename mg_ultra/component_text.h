@@ -27,7 +27,7 @@ enum AlignmentText {
 	AT_BottomRight
 };
 
-class ComponentText : public Component, public ScriptableClass {
+class ComponentText : public Component, public ScriptableClass<ComponentText> {
 	//Only rendered if true
 	atomic<bool> visible = true;
 
@@ -206,7 +206,7 @@ public:
 		return renderIn3D;
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentText"].setClass(kaguya::UserdataMetatable<ComponentText, Component>()
 			.setConstructors<ComponentText()>()
 			.addFunction("set_visible", &ComponentText::setVisible)

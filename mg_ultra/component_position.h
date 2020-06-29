@@ -11,7 +11,7 @@
 
 
 /*position is stored as Point2 + z value*/
-class ComponentPosition : public Component, public ScriptableClass {
+class ComponentPosition : public Component, public ScriptableClass<ComponentPosition> {
 private:
 	atomic<Point2> position = Point2(0,0);
 	atomic<float> z;
@@ -102,7 +102,7 @@ public:
 		this->z = this->z + z;
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentPosition"].setClass(kaguya::UserdataMetatable<ComponentPosition, Component>()
 			.setConstructors<ComponentPosition(), ComponentPosition(float, float), ComponentPosition(float, float, float)>()
 			.addOverloadedFunctions("set_position", &ComponentPosition::lll_setPosition, &ComponentPosition::ll_setPosition)

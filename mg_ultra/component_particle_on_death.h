@@ -11,7 +11,7 @@
 
 #include "particle.h"
 
-class ComponentParticleOnDeath : public Component, public ScriptableClass {
+class ComponentParticleOnDeath : public Component, public ScriptableClass<ComponentParticleOnDeath> {
 private:
 
 	bool inPool = false;
@@ -132,7 +132,7 @@ public:
 		return make_tuple(lowerVelocityFactor.load(), upperVelocityFactor.load());
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentParticleOnDeath"].setClass(kaguya::UserdataMetatable<ComponentParticleOnDeath, Component>()
 			.setConstructors<ComponentParticleOnDeath()>()
 			.addFunction("set_velocity_range", &ComponentParticleOnDeath::setVelocityFactorRange)

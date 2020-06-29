@@ -10,7 +10,7 @@ will push particles away*/
 #include "scriptable_class.h"
 
 
-class ComponentForceApplier : public Component, public ScriptableClass {
+class ComponentForceApplier : public Component, public ScriptableClass<ComponentForceApplier> {
 private:
 	ForceApplier forceApplier;
 
@@ -45,7 +45,7 @@ public:
 		return forceApplier.getSpecification();
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentForceApplier"].setClass(kaguya::UserdataMetatable<ComponentForceApplier, Component>()
 			.setConstructors<ComponentForceApplier()>()
 			.addFunction("set_peak", &ComponentForceApplier::setPeak)

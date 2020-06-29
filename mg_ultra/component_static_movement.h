@@ -7,7 +7,7 @@
 #include "constants.h"
 #include "scriptable_class.h"
 
-class ComponentStaticMovement : public Component, public ScriptableClass {
+class ComponentStaticMovement : public Component, public ScriptableClass<ComponentStaticMovement> {
 private:
 	MovementCommander movementCommander;
 public:
@@ -60,7 +60,7 @@ public:
 		return movementCommander.getUpdatedPosition(componentMovement, position);
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentStaticMovement"].setClass(kaguya::UserdataMetatable<ComponentStaticMovement, Component>()
 			.setConstructors<ComponentStaticMovement()>()
 			.addOverloadedFunctions(

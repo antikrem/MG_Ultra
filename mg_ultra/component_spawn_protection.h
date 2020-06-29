@@ -8,7 +8,7 @@
 #include "scriptable_class.h"
 
 
-class ComponentSpawnProtection : public Component, public ScriptableClass {
+class ComponentSpawnProtection : public Component, public ScriptableClass<ComponentSpawnProtection> {
 private:
 	atomic<bool> awaitingDeath = false;
 	atomic<int> cycle = -1;
@@ -47,7 +47,7 @@ public:
 		return awaitingDeath && cycle >= spawnProtectionFrames;
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentSpawnProtection"].setClass(kaguya::UserdataMetatable<ComponentSpawnProtection, Component>()
 			.setConstructors<ComponentSpawnProtection()>()
 			.addOverloadedFunctions(

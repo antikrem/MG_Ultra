@@ -12,7 +12,7 @@ get more control over transparency*/
 
 /*Mostly workes by settings a target and speed
 which will be tended to by the current*/
-class ComponentTransparency : public Component, public ScriptableClass {
+class ComponentTransparency : public Component, public ScriptableClass<ComponentTransparency> {
 private:
 	atomic<float> target = 1.0f;
 	atomic<float> current = 1.0f;
@@ -72,7 +72,7 @@ public:
 		current = math_ex::tend_to(current.load(), rate.load(), target.load());
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentTransparency"].setClass(kaguya::UserdataMetatable<ComponentTransparency, Component>()
 			.setConstructors<ComponentTransparency()>()
 			.addFunction("set_target", &ComponentTransparency::setTarget)

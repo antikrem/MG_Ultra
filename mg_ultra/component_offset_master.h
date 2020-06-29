@@ -12,7 +12,7 @@ optionally, its initial position value can be treated as an offset*/
 #include "constants.h"
 #include "scriptable_class.h"
 
-class ComponentOffsetMaster : public Component, public ScriptableClass {
+class ComponentOffsetMaster : public Component, public ScriptableClass<ComponentOffsetMaster> {
 private:
 
 	atomic<bool> initialised = false;
@@ -73,7 +73,7 @@ public:
 		disabled = true;
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentOffsetMaster"].setClass(kaguya::UserdataMetatable<ComponentOffsetMaster, Component>()
 			.setConstructors<ComponentOffsetMaster()>()
 			.addFunction("disable", &ComponentOffsetMaster::disable)

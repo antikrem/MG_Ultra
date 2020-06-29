@@ -7,7 +7,7 @@ position shift/wind, */
 
 #include "scriptable_class.h"
 
-class ComponentDriftable : public Component, public ScriptableClass {
+class ComponentDriftable : public Component, public ScriptableClass<ComponentDriftable> {
 	atomic<bool> scrolling = true;
 	atomic<bool> windDrift = true;
 public:
@@ -27,7 +27,7 @@ public:
 		return windDrift;
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentDriftable"].setClass(kaguya::UserdataMetatable<ComponentDriftable, Component>()
 			.setConstructors<ComponentDriftable()>()
 			.addFunction("set_scrolling", &ComponentDriftable::setScrolling)

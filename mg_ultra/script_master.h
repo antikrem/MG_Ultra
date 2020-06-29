@@ -1,4 +1,5 @@
-/*Abstraction of lua state*/
+/* Abstraction of lua state
+*/
 #ifndef __SCRIPT_MASTER__
 #define __SCRIPT_MASTER__
 
@@ -23,35 +24,35 @@
 
 vector<string> pullScriptErrors();
 
-/*Encapsulates the lua state machine
-execution done by systems_masters
+/* Encapsulates the lua state machine
+   execution done by systems_masters
 */
 class ScriptMaster {
 	kaguya::State kaguya;
 
-	//true when executing a script
+	// True when executing a script
 	atomic<bool> executingScript = false;
-	//script master is shut down
+	// Script master is shut down
 	atomic<bool> disabled = false;
-	//script master shut down has completed
+	// Script master shut down has completed
 	atomic<bool> finalised = false;
 
-	//locks when copying script buffer
+	// Locks when copying script buffer
 	mutex scriptBufferLock;
-	//conditional variable for allowing script handle thread
-	//to execute
+	// Conditional variable for allowing script handle thread
+	// to execute
 	condition_variable cv;
 
-	//queue of script units to execute
+	// Queue of script units to execute
 	deque<ScriptUnit> scriptQueue;
 
 	PerformanceCounter pCounter;
 
-	//loads and executes a script
-	//use to load and initialise scripts
+	// Loads and executes a script
+	// Use to load and initialise scripts
 	void quickLoadAndExecute(string location) {
 		kaguya.dofile(location.c_str());
-		//check script errors
+		// Check script errors
 		vector<string> buffer = pullScriptErrors();
 		if (buffer.size()) {
 			err::logMessage("SCRIPT: Error, an error occured during the execution of a script in " + location);
@@ -61,7 +62,7 @@ class ScriptMaster {
 		}
 	}
 
-	//load auto run scripts
+	// Load auto run scripts
 	void loadAutoRunScript();
 
 	void finalExecuteScriptUnit(ScriptUnit scriptUnit);
@@ -69,7 +70,7 @@ class ScriptMaster {
 public:
 	ScriptMaster();
 
-	//call before destroying
+	// Call before destroying
 	void disable();
 
 	~ScriptMaster();
@@ -80,17 +81,17 @@ public:
 
 	void addScriptUnit(ScriptUnit scriptUnit, bool priority = false);
 
-	//gets size of script
+	// Gets size of script
 	int getNumberOfScripts() {
 		unique_lock<mutex> lck(scriptBufferLock);
 		return scriptQueue.size();
 	}
 
-	//Executes scripts in loop
-	//until disabled
+	// Executes scripts in loop
+	// until disabled
 	void scriptHandling() {
 		while (true) {
-			//lock and wait for a script to come in
+			// lock and wait for a script to come in
 			vector<ScriptUnit> currentScripts;
 			{
 				unique_lock<mutex> lck(scriptBufferLock);
@@ -115,38 +116,38 @@ public:
 		finalised = true;
 	}
 
-	//starts a new thread to handle script execution
-	//will continue until script master is disabled
+	// Starts a new thread to handle script execution
+	// will continue until script master is disabled
 	void beginScriptHandling() {
 		thread scriptHandler(&ScriptMaster::scriptHandling, this);
 		scriptHandler.detach();
 	}
 
-	//creates an entity to handle anonymous adding of ents
+	// creates an entity to handle anonymous adding of ents
 	void createAnonymousEntityHandling();
 
-	//reports counts last second
+	// reports counts last second
 	float getExecutionsLastSecond() {
 		return pCounter.getReportedCalls();
 	}
 
-	//reports fps
+	// reports fps
 	float getFPS() {
 		return pCounter.getFPS();
 	}
 };
 
 namespace g_script {
-	//closes the pipeline
+	// Closes the pipeline
 	void closeScriptPipeline();
 
-	//execute a script unit globally
+	// Execute a script unit globally
 	void executeScriptUnit(ScriptUnit scriptUnit, bool priority = false);
 
-	//returns the last reports count of calls
+	// Returns the last reports count of calls
 	float callsLastSecond();
 
-	//gets fps
+	// Gets fps
 	float FPS();
 }
 

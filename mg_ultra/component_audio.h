@@ -8,7 +8,7 @@
 #include "scriptable_class.h"
 #include "audio_source.h"
 
-class ComponentAudio : public Component, public ScriptableClass {
+class ComponentAudio : public Component, public ScriptableClass<ComponentAudio> {
 private:
 	AudioSource source;
 
@@ -68,7 +68,7 @@ public:
 		source.alSideUpdate(audioFiles, position);
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentAudio"].setClass(kaguya::UserdataMetatable<ComponentAudio, Component>()
 			.setConstructors<ComponentAudio()>()
 			.addFunction("play", &ComponentAudio::playAudio)

@@ -1,5 +1,6 @@
-/*A container for entities used with entities,
-Can be iterated over safely*/
+/* A container for entities used with entities,
+ *Can be iterated over safely
+ */
 #ifndef __POOL__
 #define __POOL__
 
@@ -15,39 +16,40 @@ Can be iterated over safely*/
 
 #include "algorithm_ex.h"
 
-/*This can be asyncly iterated over,
-Use begin() to get an id int,
-Use this id and next() to get next pair
-After the last pair, return negative id, not guranteed: null ptr*/
-class EntityPool : public ScriptableClass {
+/* This can be asyncly iterated over,
+ * Use begin() to get an id int,
+ * Use this id and next() to get next pair
+ * After the last pair, return negative id, not guranteed: null ptr
+ */
+class EntityPool : public ScriptableClass<EntityPool> {
 private:
-	//Locks cache access
+	// Locks cache access
 	shared_mutex cacheLock;
-	//A seperate cache, int refers to the entity type
-	//Entities will be in both cache and list. Both are cleared by clearDeadEnts
+	// A seperate cache, int refers to the entity type
+	// Entities will be in both cache and list. Both are cleared by clearDeadEnts
 	map<int, shared_ptr<Entity>> cache;
 
-	//The EntityPool also keeps a list of subpools
-	//which is an optimised access to entities
+	// The EntityPool also keeps a list of subpools
+	// which is an optimised access to entities
 	map<int, SubPool> subPools;
 
-	//if active, will move dead entities to a staging area
+	// If active, will move dead entities to a staging area
 	//and only clear sometimes
 	atomic<bool> gravekeep = true;
-	//lock for graveyard
+	// Lock for graveyard
 	mutex graveyardLock;
-	//graveyard
+	// Graveyard
 	vector<shared_ptr<Entity>> graveyard;
-	//count of number of entities cleared
+	// Count of number of entities cleared
 	atomic<int> passed = 0;
 
 public:
-	//Add the empty default pool
+	// Add the empty default pool
 	EntityPool() {
 		subPools[0] = SubPool(SubPoolTarget(SubPoolComponents()));
 	}
 
-	//adds an entity to the pool, will potentially cache
+	// Adds an entity to the pool, will potentially cache
 	shared_ptr<Entity> addEnt(shared_ptr<Entity> ent, bool cacheEnt = false) {
 		if (ent->isInPool()) {
 			err::logMessage("POOL: Error, entity already in pool, operation aborted");
@@ -83,14 +85,14 @@ public:
 		return addEnt(shared_ptr<Entity>(ent), false);
 	}
 
-	//adds a cached entity through lua
+	// Adds a cached entity through lua
 	bool addCachedEnt(Entity* ent) {
 		return (bool)addEnt(shared_ptr<Entity>(ent), true);
 	}
 
-	//returns a system from cache, returns null if the system is not cached
+	// Returns a system from cache, returns null if the system is not cached
 	shared_ptr<Entity> getCachedEnt(int entityType) {
-		//use null type 
+		// Use null type 
 		if (entityType == ETNoType) {
 			return nullptr;
 		}
@@ -103,18 +105,18 @@ public:
 		}
 	}
 
-	//clear dead entities, needs to be sometimes, locks access to ents, so should only be done sometimes
-	//returns how many ents were killed
+	// Clear dead entities, needs to be sometimes, locks access to ents, so should only be done sometimes
+	// Returns how many ents were killed
 	int clearDeadEnts() {
 		int cleanedEnts = 0;
 
-		//need to clear each subpool
+		// Need to clear each subpool
 		for (auto& i : subPools) {
 			i.second.clearDeadEnts();
 		}
 
 		{
-			//clear cache
+			// Clear cache
 			unique_lock<shared_mutex> glck(cacheLock);
 			erase_associative_if(cache, [](auto pair) { return !pair.second->getFlag(); });
 		}
@@ -122,42 +124,42 @@ public:
 		return cleanedEnts;
 	}
 
-	//sends the entity to the graveyard
+	// Sends the entity to the graveyard
 	void sendToGraveYard(shared_ptr<Entity> ent) {
 		unique_lock<mutex> glck(graveyardLock);
 		graveyard.push_back(ent);
 	}
 
 
-	//locks and returns size of entitypool
+	// Locks and returns size of entitypool
 	tuple<int, int> size() {
 		unique_lock<shared_mutex> lck(cacheLock);
 		return make_tuple(subPools[0].size(), cache.size());
 	}
 
-	//returns size of graveyard
+	// Returns size of graveyard
 	int getGraveyardSize() {
 		unique_lock<mutex> glck(graveyardLock);
 		return graveyard.size();
 	}
 
-	//sets gravekeep
+	// Sets gravekeep
 	void setGravekeep(bool gravekeep) {
 		this->gravekeep = gravekeep;
 	}
 
-	//gets gravekeep
+	// Gets gravekeep
 	bool getGravekeep() {
 		return this->gravekeep;
 	}
 
-	//get number of entities passed by the graveyard
+	// Get number of entities passed by the graveyard
 	int getGraveyardPassed() {
 		return this->passed;
 	}
 
-	//clears all entites in the gravekeep
-	//that have no other references
+	// Clears all entites in the gravekeep
+	// That have no other references
 	void clearGraveyard() {
 		unique_lock<mutex> glck(graveyardLock);
 
@@ -172,36 +174,36 @@ public:
 		passed += (oldSize - graveyard.size());
 	}
 
-	//Adds a new system to the entity pool
-	//returns an index to a subpool to query
-	//in future operation
+	// Adds a new system to the entity pool
+	// Returns an index to a subpool to query
+	// in future operation
 	int allocateToSubPool(SubPoolTarget& subpoolTarget) {
-		//check if target is empty
+		// Check if target is empty
 		if (subpoolTarget.isEmpty()) {
 			return -1;
 		}
 
-		//check if a subpool currently exists
+		// Check if a subpool currently exists
 		for (auto& i : subPools) {
 			if (i.second.getTarget() == subpoolTarget) {
 				return i.first;
 			}
 		}
 
-		//otherwise create a new subpool
+		// Otherwise create a new subpool
 		int newIndex = subPools.rbegin()->first + 1;
 		subPools[newIndex] = SubPool(subpoolTarget);
 		return newIndex;
 	}
 
-	//gets a shared ptr to entity
-	//return nullptr at end index
-	//negative key indicates an empty request
+	// Gets a shared ptr to entity
+	// return nullptr at end index
+	// negative key indicates an empty request
 	shared_ptr<Entity> getFromSubPool(int key, int index) {
 		return key < 0 ? nullptr : subPools[key].getEntity(index);
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["EntityPool"].setClass(
 			kaguya::UserdataMetatable<EntityPool>()
 			.setConstructors<EntityPool()>()

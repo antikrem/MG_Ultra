@@ -9,7 +9,7 @@ the script loaded is in script/camera.lua
 #include "script_master.h"
 #include "scriptable_class.h"
 
-class ComponentCamera : public Component, public ScriptableClass {
+class ComponentCamera : public Component, public ScriptableClass<ComponentCamera> {
 	//fov of camera
 	atomic<float> fov = 45.0f;
 
@@ -54,7 +54,7 @@ public:
 		return fov;
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentCamera"].setClass(kaguya::UserdataMetatable<ComponentCamera, Component>()
 			.setConstructors<ComponentCamera()>()
 			.addOverloadedFunctions("set_view_target", &ComponentCamera::ll_setViewTarget, &ComponentCamera::lll_setViewTarget)

@@ -11,7 +11,7 @@
 
 #include "scriptable_class.h"
 
-class ComponentGraphics : public Component, public ScriptableClass {
+class ComponentGraphics : public Component, public ScriptableClass<ComponentGraphics> {
 private:
 	shared_mutex lock;
 	AnimationState state;
@@ -153,7 +153,7 @@ public:
 		return temp;
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentGraphics"].setClass(kaguya::UserdataMetatable<ComponentGraphics, Component>()
 			.setConstructors<ComponentGraphics(string animationSet)>()
 			.addFunction("set_animation_set", &ComponentGraphics::l_setAniamtionSet)

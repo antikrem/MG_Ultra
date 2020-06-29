@@ -1,5 +1,5 @@
-/* Declaractions of static functions for use in lua
- */
+/* Base class for a class to export to lua state for scripting
+*/
 #ifndef __SCRIPTABLE_CLASS__
 #define __SCRIPTABLE_CLASS__
 
@@ -17,37 +17,36 @@ static type_index getType() {
  * additionally, takes another template parameter B, which is a base
  * finally, the new derived class must have a default constructior
  */
+template<class This>
 class ScriptableClass {
 
 protected:
 	// Required to implement this method to add the class to lua
-	virtual void registerToLua(kaguya::State& state) = 0;
+	// virtual void registerToLua(kaguya::State& state);
 
 	// A templated way to create a new instance of a scriptable class
 	// that will remain on the heap
-	template <class T, class ... Args>
-	static T* create(Args ... args) {
-		return new T(args ...);
+	template<class Temp, class ... Args>
+	static Temp* create(Args ... args) {
+		return new Temp(args ...);
+	}
+	/*
+	template<class ... Args>
+	static This* create(Args ... args) {
+		return new This(args ...);
+	}
+	*/
+
+	/* Forces a class to become scripted
+	* The class must have inherited Scriptable class and over written registerToLua
+	* The class must also have a default constructor
+	*/
+	void forceLuaRegistration(kaguya::State& kaguya) {
+		ScriptableClass<This>::registerToLua(kaguya);
 	}
 };
 
-/* Forces a class to become scripted
- * The class must have inherited Scriptable class and over written registerToLua
- * The class must also have a default constructor
- */
-template <class T>
-void forceLuaRegistration(kaguya::State& kaguya) {
 
-	if (is_base_of<ScriptableClass, T>::value) {
-		T temporary;
-		temporary.registerToLua(kaguya);
-	}
-	else {
-		string a("A class was forced to bind when it has not inherited ScriptableClass, the class is: ");
-		string b(typeid(T).name());
-		err::logMessage(a + b);
-	}
-}
 
 
 #endif

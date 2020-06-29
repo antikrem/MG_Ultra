@@ -10,7 +10,7 @@
 
 #include "glm/glm.hpp"
 
-class ComponentPointLight : public Component, public ScriptableClass {
+class ComponentPointLight : public Component, public ScriptableClass<ComponentPointLight> {
 	PointLight pointLight;
 
 public:
@@ -90,7 +90,7 @@ public:
 		pointLight.update();
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentPointLight"].setClass(kaguya::UserdataMetatable<ComponentPointLight, Component>()
 			.setConstructors<ComponentPointLight()>()
 			.addFunction("set_colour", &ComponentPointLight::l_setColour)

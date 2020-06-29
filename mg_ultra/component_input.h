@@ -8,7 +8,7 @@ update is not async to lua query*/
 #include "script_master.h"
 #include "input.h"
 
-class ComponentInput : public Component, public ScriptableClass {
+class ComponentInput : public Component, public ScriptableClass<ComponentInput> {
 	InputState inputState;
 
 public:
@@ -37,7 +37,7 @@ private:
 	}
 
 public:
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentInput"].setClass(kaguya::UserdataMetatable<ComponentInput, Component>()
 			.setConstructors<ComponentInput()>()
 			.addFunction("query_press", &ComponentInput::queryPress)

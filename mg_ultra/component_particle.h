@@ -7,7 +7,7 @@
 
 #include "particle_spawner.h"
 
-class ComponentParticle : public Component, public ScriptableClass {
+class ComponentParticle : public Component, public ScriptableClass<ComponentParticle> {
 private:
 	//ambient spawning of particles
 	atomic<float> ambientSpawning = 0.0f;
@@ -113,7 +113,7 @@ public:
 		particleSpawner.setRotateToFace(rotateToFace);
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentParticle"].setClass(kaguya::UserdataMetatable<ComponentParticle, Component>()
 			.setConstructors<ComponentParticle()>()
 			.addFunction("spawn", &ComponentParticle::spawnParticles)

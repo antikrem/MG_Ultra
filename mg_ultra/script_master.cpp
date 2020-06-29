@@ -44,7 +44,7 @@
 
 #include "scriptable_class.h"
 
-//lua error reporting catch, no error when empty
+// Lua error reporting catch, no error when empty
 vector<string> luaErrorMessage;
 
 atomic<bool> failedLastScript = false;
@@ -62,20 +62,20 @@ vector<string> pullScriptErrors() {
 	return buffer;
 }
 
-//used to get a global pointer to kaguya
+// Used to get a global pointer to kaguya
 ScriptMaster* globalScriptMasterPtr = nullptr;
 
 ScriptMaster::ScriptMaster()
 	: kaguya() {
 	kaguya.setErrorHandler(&handleError);
 
-	//register global funcs
+	// Register global funcs
 	registerGlobalFunctions(kaguya);
 
-	//load local library
+	// Load local library
 	quickLoadAndExecute("scripts/_library/library.lua");
 
-	//Register base component
+	// Register base component
 	kaguya["Component"].setClass(kaguya::UserdataMetatable<Component>()
 		.setConstructors<Component()>()
 		.addFunction("killEntity", &Component::killEntity)
@@ -83,52 +83,52 @@ ScriptMaster::ScriptMaster()
 		.addStaticFunction("type", &getType<Component>)
 	);
 
-	//register base entity
-	forceLuaRegistration<Entity>(kaguya);
+	// Register base entity
+	Entity::registerToLua(kaguya);
 
-	//register entity pool
-	forceLuaRegistration<EntityPool>(kaguya);
+	// Register entity pool
+	EntityPool::registerToLua(kaguya);
 
-	//register registar
-	forceLuaRegistration<Registar>(kaguya);
+	// Register registar
+	Registar::registerToLua(kaguya);
 
-	forceLuaRegistration<ComponentPosition>(kaguya);
-	forceLuaRegistration<ComponentGraphics>(kaguya);
-	forceLuaRegistration<ComponentText>(kaguya);
-	forceLuaRegistration<ComponentTimer>(kaguya);
-	forceLuaRegistration<ComponentCamera>(kaguya);
-	forceLuaRegistration<ComponentInput>(kaguya);
-	forceLuaRegistration<ComponentMovement>(kaguya);
-	forceLuaRegistration<ComponentExtendedScripting>(kaguya);
-	forceLuaRegistration<ComponentMultiEntity>(kaguya);
-	forceLuaRegistration<ComponentSpawner>(kaguya);
-	forceLuaRegistration<ComponentDriftable>(kaguya);
-	forceLuaRegistration<ComponentNoBoundsControl>(kaguya);
-	forceLuaRegistration<ComponentDirectionalLight>(kaguya);
-	forceLuaRegistration<ComponentCollision>(kaguya);
-	forceLuaRegistration<ComponentDamage>(kaguya);
-	forceLuaRegistration<ComponentHealth>(kaguya);
-	forceLuaRegistration<ComponentAudio>(kaguya);
-	forceLuaRegistration<ComponentListener>(kaguya);
-	forceLuaRegistration<ComponentTransparency>(kaguya);
-	forceLuaRegistration<ComponentParticle>(kaguya);
-	forceLuaRegistration<ComponentForceApplier>(kaguya);
-	forceLuaRegistration<ComponentStaticMovement>(kaguya);
-	forceLuaRegistration<ComponentPointLight>(kaguya);
-	forceLuaRegistration<ComponentOffsetMaster>(kaguya);
-	forceLuaRegistration<ComponentOffsetOnce>(kaguya);
-	forceLuaRegistration<ComponentMinAmbient>(kaguya);
-	forceLuaRegistration<ComponentClampPosition>(kaguya);
-	forceLuaRegistration<ComponentRotation>(kaguya);
-	forceLuaRegistration<ComponentBulletMaster>(kaguya);
-	forceLuaRegistration<ComponentBulletSpawner>(kaguya);
-	forceLuaRegistration<ComponentDieWithMaster>(kaguya);
-	forceLuaRegistration<ComponentSpawnProtection>(kaguya);
-	forceLuaRegistration<ComponentParticleOnDeath>(kaguya);
-	forceLuaRegistration<ComponentDeathScript>(kaguya);
-	forceLuaRegistration<ComponentMagnetiseToPlayer>(kaguya);
+	ComponentPosition::registerToLua(kaguya);
+	ComponentGraphics::registerToLua(kaguya);
+	ComponentText::registerToLua(kaguya);
+	ComponentTimer::registerToLua(kaguya);
+	ComponentCamera::registerToLua(kaguya);
+	ComponentInput::registerToLua(kaguya);
+	ComponentMovement::registerToLua(kaguya);
+	ComponentExtendedScripting::registerToLua(kaguya);
+	ComponentMultiEntity::registerToLua(kaguya);
+	ComponentSpawner::registerToLua(kaguya);
+	ComponentDriftable::registerToLua(kaguya);
+	ComponentNoBoundsControl::registerToLua(kaguya);
+	ComponentDirectionalLight::registerToLua(kaguya);
+	ComponentCollision::registerToLua(kaguya);
+	ComponentDamage::registerToLua(kaguya);
+	ComponentHealth::registerToLua(kaguya);
+	ComponentAudio::registerToLua(kaguya);
+	ComponentListener::registerToLua(kaguya);
+	ComponentTransparency::registerToLua(kaguya);
+	ComponentParticle::registerToLua(kaguya);
+	ComponentForceApplier::registerToLua(kaguya);
+	ComponentStaticMovement::registerToLua(kaguya);
+	ComponentPointLight::registerToLua(kaguya);
+	ComponentOffsetMaster::registerToLua(kaguya);
+	ComponentOffsetOnce::registerToLua(kaguya);
+	ComponentMinAmbient::registerToLua(kaguya);
+	ComponentClampPosition::registerToLua(kaguya);
+	ComponentRotation::registerToLua(kaguya);
+	ComponentBulletMaster::registerToLua(kaguya);
+	ComponentBulletSpawner::registerToLua(kaguya);
+	ComponentDieWithMaster::registerToLua(kaguya);
+	ComponentSpawnProtection::registerToLua(kaguya);
+	ComponentParticleOnDeath::registerToLua(kaguya);
+	ComponentDeathScript::registerToLua(kaguya);
+	ComponentMagnetiseToPlayer::registerToLua(kaguya);
 
-	//set contextual script functions
+	// Set contextual script functions
 	kaguya["getEntityPool"] = getGlobalPool;
 	kaguya["getGlobalRegistar"] = g_registar::getGlobalRegistar;
 
@@ -153,18 +153,18 @@ ScriptMaster::ScriptMaster()
 
 void ScriptMaster::disable() {
 	disabled = true;
-	//close the pipeline
+	// Close the pipeline
 	g_script::closeScriptPipeline();
-	//notify change in state
+	// Notify change in state
 	cv.notify_one();
-	//wait for finalisation
+	// Wait for finalisation
 	while (!finalised) {
 		pass;
 	}
 }
 
 ScriptMaster::~ScriptMaster() {
-	//clear the buffer
+	// Clear the buffer
 	globalScriptMasterPtr = false;
 	std::this_thread::sleep_for(std::chrono::milliseconds(100));
 }

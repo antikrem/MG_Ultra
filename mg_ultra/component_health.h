@@ -7,7 +7,7 @@
 #include "constants.h"
 #include "scriptable_class.h"
 
-class ComponentHealth : public Component, public ScriptableClass {
+class ComponentHealth : public Component, public ScriptableClass<ComponentHealth> {
 private:
 	atomic<float> health;
 
@@ -32,7 +32,7 @@ public:
 		return health;
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentHealth"].setClass(kaguya::UserdataMetatable<ComponentHealth, Component>()
 			.setConstructors<ComponentHealth()>()
 			.addFunction("get_health", &ComponentHealth::getHealth)

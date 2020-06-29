@@ -11,7 +11,7 @@ Has internal flags to allow dying on a specific timeout*/
 
 #include "scriptable_class.h"
 
-class ComponentDieWithMaster : public Component, public ScriptableClass {
+class ComponentDieWithMaster : public Component, public ScriptableClass<ComponentDieWithMaster> {
 	int cycle = 0;
 	atomic<bool> masterDead = false;
 
@@ -51,7 +51,7 @@ public:
 		masterDead = true;
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentDieWithMaster"].setClass(kaguya::UserdataMetatable<ComponentDieWithMaster, Component>()
 			.setConstructors<ComponentDieWithMaster()>()
 			.addFunction("disable", &ComponentDieWithMaster::disableDieWithMaster)

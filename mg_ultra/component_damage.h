@@ -8,7 +8,7 @@ if comes into contact with an entity */
 #include "constants.h"
 #include "scriptable_class.h"
 
-class ComponentDamage : public Component, public ScriptableClass {
+class ComponentDamage : public Component, public ScriptableClass<ComponentDamage> {
 private:
 	atomic<float> damage;
 
@@ -29,7 +29,7 @@ public:
 		return damage;
 	}
 
-	void registerToLua(kaguya::State& state) override {
+	static void registerToLua(kaguya::State& state) {
 		state["ComponentDamage"].setClass(kaguya::UserdataMetatable<ComponentDamage, Component>()
 			.setConstructors<ComponentDamage()>()
 			.addFunction("get_damage", &ComponentDamage::getDamage)
