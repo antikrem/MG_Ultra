@@ -10,29 +10,29 @@
 using namespace std;
 
 namespace math_ex {
-	//templated clamp
+	// Templated clamp
 	template <typename T>
 	T clamp(const T& value, const T& min, const T& max) {
 		return value > max ? max : (value < min ? min : value);
 	}
 
-	//templated tend to
-	//will tend current towards target at rate
-	//will not overshoort
-	//rate must be non-negative
+	// Templated tend to
+	// Will tend current towards target at rate
+	// Will not overshoort
+	// Tate must be non-negative
 	template<typename T>
 	T tend_to(const T& current, const T& rate, const T& target) {
 		T difference = min(abs(target - current), rate);
 		return current > target ? current - difference : current + difference;
 	}
 
-	//converts to principle range
+	// Converts to principle range
 	float to_principle(float angle);
 
-	//computes shortest turn to target from current
+	// Computes shortest turn to target from current
 	float compute_smallest_turn(float target, float current);
 
-	//solves quadratic equation
+	// Solves quadratic equation
 	template<typename T>
 	tuple<T, T> solve_quadratic(T a, T b, T c) {
 		T sqrtDisc = sqrt(SQUARE(b) - ((T)4) * a * c);
@@ -43,7 +43,7 @@ namespace math_ex {
 		);
 	}
 
-	//solves quadratic given y
+	// Solves quadratic given y
 	template<typename T>
 	tuple<T, T> solve_quadratic(T a, T b, T c, T y) {
 		T sqrtDisc = sqrt(SQUARE(b) - ((T)4) * a * (c-y));
@@ -54,11 +54,17 @@ namespace math_ex {
 		);
 	}
 
-	//extrapolates a length through a perspective shift in z axis
-	//angle would be half fov
+	// Extrapolates a length through a perspective shift in z axis
+	// Angle would be half fov
 	template<typename T>
 	T perp_z(T length, T depth, T angle) {
 		return length + tan(DEG2RAD(angle)) * depth;
+	}
+
+	// Does comparison with given error tolerence
+	template<typename T>
+	bool comp(T a, T b, T e) {
+		return abs(a-b) < e;
 	}
 }
 
