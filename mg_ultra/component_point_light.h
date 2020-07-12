@@ -90,6 +90,14 @@ public:
 		pointLight.update();
 	}
 
+	void updateExtinctionRange(float newExtinctionRange) {
+		pointLight.updateExtinctionRange(newExtinctionRange);
+	}
+
+	bool isNew() {
+		return pointLight.isNewPointLight();
+	}
+
 	static void registerToLua(kaguya::State& state) {
 		state["ComponentPointLight"].setClass(kaguya::UserdataMetatable<ComponentPointLight, Component>()
 			.setConstructors<ComponentPointLight()>()

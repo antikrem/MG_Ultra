@@ -14,16 +14,16 @@ from a given direction*/
 #define DEFAULT_LIGHT_CUTOFF 0.01f
 #define DEFAULT_LIGHT_CUTDISTANCE 270.0f
 
-#define POINT_LIGHT_EXTINCTION_LEVEL 0.0045f
+#define POINT_LIGHT_DEFAULT_EXTINCTION_LEVEL 0.0045f
 
 #define POINT_LIGHT_ARBITRARY_CUTOFF 0.00000001
 
-//global point light fog drift variable
+// Global point light control variables
 namespace g_pointlights {
-	//updates drift against noise width
+	// Updates drift against noise width
 	void updateDrift(const Point2& shift);
 
-	//gets the drift
+	// Gets the drift
 	Point2 getDrift();
 }
 
@@ -75,17 +75,19 @@ private:
 	//values for generating 
 	atomic<float> a = 0.0f;
 	atomic<float> b = 0.0f;
-	atomic<float> c = (2.0f / POINT_LIGHT_EXTINCTION_LEVEL); //Choose c s.t. its always less than extinction 
+	atomic<float> c = (2.0f / POINT_LIGHT_DEFAULT_EXTINCTION_LEVEL); // Choose c s.t. its always less than extinction 
 
+	bool isNew = true;
+	float extinctionLevel = POINT_LIGHT_DEFAULT_EXTINCTION_LEVEL;
 	atomic<float> extinctionRange;
 
 	TrendingValue<float> strength = 1.0f;
 
 	void updateExtinctionRange() {
 		auto solutions = math_ex::solve_quadratic(
-			POINT_LIGHT_EXTINCTION_LEVEL * a.load(),
-			POINT_LIGHT_EXTINCTION_LEVEL * b.load(),
-			POINT_LIGHT_EXTINCTION_LEVEL * c.load(),
+			extinctionLevel * a.load(),
+			extinctionLevel * b.load(),
+			extinctionLevel * c.load(),
 			strength.get()
 		);
 		extinctionRange = max(get<0>(solutions), get<1>(solutions));
@@ -142,11 +144,25 @@ public:
 		updateExtinctionRange();
 	}
 
+	// Update internal light strength
 	void update() {
 		float change = abs(strength.updateAndGetChange());
 		if (change > POINT_LIGHT_ARBITRARY_CUTOFF) {
 			updateExtinctionRange();
 		}
+	}
+
+	// Gets and updates new flag
+	bool isNewPointLight() {
+		bool oldValue = isNew;
+		isNew = false;
+		return oldValue;
+	}
+
+	// Updates this point lights extinction range
+	void updateExtinctionRange(float newExtinctionRange) {
+		extinctionLevel = newExtinctionRange;
+		updateExtinctionRange();
 	}
 };
 

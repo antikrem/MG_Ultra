@@ -6,41 +6,42 @@
 
 using namespace std;
 
-//A struct that contains all the settings for graphics
+// A struct that contains all the settings for graphics
 struct GraphicsSettings {
-	//is full screen
+	// Is full screen
 	atomic<int> fullScreen = false;
 
-	//level of antialiasing used, must be in the form 2^n or 0
+	// Level of antialiasing used, must be in the form 2^n or 0
 	atomic<int> antialiasing = 4;
-	//Size of window
+	// Size of window
 	atomic<int> screenWidth = 1366, screenHeight = 768;
-	//number of passes for depth peeling
+	// Number of passes for depth peeling
 	atomic<int> depthPeelingPasses = 4;
 
-	//exposure for the scene
+	// Exposure for the scene
 	atomic<float> exposure = 0.3f;
-	//bloom threshold
+	// Bloom threshold
 	atomic<float> bloomThreshold = 1.0f;
-	//bloom deviation
+	// Bloom deviation
 	atomic<float> bloomDeviation = 5.0f;
 
-	//rendering constants
+	// Rendering constants
 	atomic<int> countMaxSpriteBox = 1000;
 	atomic<int> countMaxUIBox = 1000;
 	atomic<int> countMaxDirectionalLights = 10;
 	atomic<int> countMaxPointLights = 100;
 
-	//lighting constants
+	// Lighting constants
 	atomic<int> pointLightVolumetric = true;
 	atomic<int> pointLightPeels = 2;
+	atomic<float> pointLightExtinctionRange = 0.0045f;
 
-	//post effects constants
+	// Post effects constants
 	atomic<int> bloomEnabled = true;
 	atomic<int> bloomPasses = 1;
 	atomic<float> bloomResolution = 0.5f;
 
-	//target fps
+	// Target fps
 	atomic<int> targetFPS = 0;
 
 	GraphicsSettings();
@@ -49,23 +50,27 @@ struct GraphicsSettings {
 namespace g_graphicsSettings {
 	void setGlobalGraphicsSettings(GraphicsSettings* globalGraphicsSettings);
 
-	//updates some parameters of graphics settings
+	// Updates some parameters of graphics settings
 	void update();
 
-	//sets target
+	// Sets target
 	void setExposureTarget(float target);
 
-	//sets rate
+	// Sets rate
 	void setExposureRate(float rate);
 
-	//allows exposure to be directly set
+	// Allows exposure to be directly set
 	void setExposure(float exposure);
 	
-	//sets threshold for bloom
+	// Sets threshold for bloom
 	void setBloomThreshold(float threshold);
 
-	//sets deviation for bloom
+	// Sets deviation for bloom
 	void setBloomDeviation(float deviation);
+
+	// Get point light extinction range
+	float getPointLightExtinctionRange();
+
 }
 
 #endif

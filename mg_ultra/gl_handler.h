@@ -289,6 +289,7 @@ public:
 				chain = textureMaster->attachNamedTextures(shaderMaster, "point_lighting", "assets/gfx.mgt", "noise");
 				shaderMaster->attachFrameBufferAsSource("point_lighting", &geometryFrameBuffer, chain);
 				shaderMaster->setUniformI("point_lighting", "enableVolumetricScattering", gSettings->pointLightVolumetric);
+				shaderMaster->setUniformF("point_lighting", "lightExtinctionLevel", (float)gSettings->pointLightExtinctionRange);
 				shaderMaster->setUniformF("point_lighting", "viewport_w", (float)gSettings->screenWidth);
 				shaderMaster->setUniformF("point_lighting", "viewport_h", (float)gSettings->screenHeight);
 				shaderMaster->setUniform2F("point_lighting", "fogDrift", g_pointlights::getDrift().getVec2());

@@ -10,6 +10,8 @@ atomic<float> pointLightDriftFactor = 0.8f;
 mutex gPointLightLock;
 Point2 combinedDrift = Point2(0.0f);
 
+atomic<float> pointLightExtinctionRange = 0.0045f;
+
 void g_pointlights::updateDrift(const Point2& shift) {
 	unique_lock<mutex> lck(gPointLightLock);
 	combinedDrift = Point2(

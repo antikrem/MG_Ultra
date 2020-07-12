@@ -2,19 +2,20 @@
 
 #include "helper.glsl"
 
-//need to use lambertian cutoff until normals are added
+// Need to use lambertian cutoff until normals are added
 #define LAMBERT_CUTOFF -0.0
 
-//settings
+// Settings
 uniform int enableVolumetricScattering;
+uniform float lightExtinctionLevel;
 
-//uniform sampler2D 
+// Uniform sampler2D 
 uniform sampler2D noise;
 uniform sampler2D spriteColour;
 uniform sampler2D spriteWorldPosition;
 uniform sampler2D normals;
 
-//viewport sizeof
+// Viewport sizeof
 uniform float viewport_w;
 uniform float viewport_h;
 uniform vec3 cameraPos;
@@ -111,7 +112,7 @@ void main() {
 
 	//distance based light strength
 	float lightStrength = max( 
-		outStrength / (outA * pow(length(lightDirection), 2) + outB * length(lightDirection) + outC) - 0.0045,
+		outStrength / (outA * pow(length(lightDirection), 2) + outB * length(lightDirection) + outC) - lightExtinctionLevel,
 		0
 	);
 
