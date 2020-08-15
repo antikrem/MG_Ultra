@@ -121,7 +121,7 @@ void main() {
 
 	if (enableVolumetricScattering) {
 		float lightScatter = calculateLightScattering(worldspace);
-		volScatter = vec4(outLightColour * fogColour * lightScatter, lightScatter) * texel.a;
+		volScatter = vec4(outLightColour * fogColour * lightScatter, lightScatter);
 	}
 
 	//output 
