@@ -77,6 +77,29 @@ public:
 		return ent;
 	}
 
+	// Add multiple entities in a single cached add
+	void addEnts(vector<shared_ptr<Entity>> ents) {
+		if (!ents.size()) {
+			return;
+		}
+
+		set<type_index> signature = ents[0]->getComponentSignature();
+
+		for (int i = 1; i < ents.size(); i++) {
+			if (signature != ents[i]->getComponentSignature()) {
+				err::logMessage("POOL: Error, add_entities contained entities with different signatures");
+				return;
+			}
+		}
+
+		for (auto& i : subPools) {
+			if (i.second.getTarget().isFullSubPool()
+				&& i.second.getTarget().checkEntityInSubPoolTarget(ents[0])) {
+				i.second.addEnts(ents);
+			}
+		}
+	}
+
 	shared_ptr<Entity> addEnt(Entity* ent, bool cacheEnt = false) {
 		return addEnt(shared_ptr<Entity>(ent), cacheEnt);
 	}
@@ -84,6 +107,7 @@ public:
 	shared_ptr<Entity> l_addEnt(Entity* ent) {
 		return addEnt(shared_ptr<Entity>(ent), false);
 	}
+
 
 	// Adds a cached entity through lua
 	bool addCachedEnt(Entity* ent) {

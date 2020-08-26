@@ -12,14 +12,14 @@ The latest optimisation over systems caching*/
 #include <set>
 #include <vector>
 
-//Unpacking struct
+// Unpacking struct
 template<typename...>
 struct Unpacker {};
 
-//A possible target for this subpool
-//That is comprised of only components
+// A possible target for this subpool
+// That is comprised of only components
 class SubPoolComponents {
-	//This rule requires certain required types
+	// This rule requires certain required types
 	set<type_index> requiredTypes;
 
 	template<typename T, typename... Args>
@@ -42,12 +42,12 @@ public:
 
 	}
 
-	//Adds a type id to this Subpooling
+	// Adds a type id to this Subpooling
 	void addAComponent(type_index type) {
 		requiredTypes.insert(type);
 	}
 
-	//SubPoolComponents uses a bunch of components
+	// SubPoolComponents uses a bunch of components
 	template<typename... Args>
 	static SubPoolComponents ByComponents() {
 		SubPoolComponents target(ETNoType);
@@ -55,7 +55,7 @@ public:
 		return target;
 	}
 
-	//gets set of targets
+	// Gets set of targets
 	set<type_index>& getRequiredTypes() {
 		return requiredTypes;
 	}
@@ -68,30 +68,30 @@ public:
 	friend bool operator==(const SubPoolComponents& lhs, const SubPoolComponents& rhs);
 };
 
-//The total specification for targeting a SubPool
+// The total specification for targeting a SubPool
 class SubPoolTarget {
 	EntityTypes cachedTarget;
 	vector<SubPoolComponents> targets;
 
 public:
-	//empty system
+	// Empty system
 	SubPoolTarget() {
 		cachedTarget = ETNoType;
 	}
 
-	//this Subpool looks for a specific target
+	// This Subpool looks for a specific target
 	SubPoolTarget(SubPoolComponents target) {
 		cachedTarget = ETNoType;
 		targets.push_back(target);
 	}
 
-	//create a subpool with a given targets
+	// Create a subpool with a given targets
 	SubPoolTarget(vector<SubPoolComponents> targets) {
 		cachedTarget = ETNoType;
 		this->targets = targets;
 	}
 
-	//this subpool looks for a fixed type
+	// This subpool looks for a fixed type
 	SubPoolTarget(EntityTypes type) {
 		cachedTarget = type;
 	}
@@ -101,34 +101,34 @@ public:
 		this->targets = rhs.targets;
 	}
 
-	//checks if this SubPoolTarget is for caching
+	// Checks if this SubPoolTarget is for caching
 	bool isCachedTarget() {
 		return cachedTarget != ETNoType;
 	}
 
-	//returns the cache type
+	// Returns the cache type
 	EntityTypes getCachedTarget() {
 		return cachedTarget;
 	}
 
-	//checks if this SubPoolTarget is a full subpool
+	// Checks if this SubPoolTarget is a full subpool
 	bool isFullSubPool() {
 		return cachedTarget == ETNoType;
 	}
 
-	//returns inverted bool value of component targets,
+	// Returns inverted bool value of component targets,
 	//used for determining cache only scenarios
 	bool isCacheOnly() {
 		return !targets.size();
 	}
 
-	//checks if this target is empty
+	// Checks if this target is empty
 	bool isEmpty() {
 		return cachedTarget == ETNoType && !targets.size();
 	}
 
-	//Checks if an entity fits in a SubPool
-	//only valid if not a cached target
+	// Checks if an entity fits in a SubPool
+	// only valid if not a cached target
 	bool checkEntityInSubPoolTarget(shared_ptr<Entity> ent) {
 		//check component map works out
 		auto& componentMap = ent->getMapComponent();
@@ -155,49 +155,55 @@ public:
 	friend bool operator==(const SubPoolTarget& lhs, const SubPoolTarget& rhs);
 };
 
-//A subpool is kept by the EntityPool
-//A subpool can be a facade for a cached entity
-//or have the full pool
+// A subpool is kept by the EntityPool
+// A subpool can be a facade for a cached entity
+// or have the full pool
 class SubPool {
 	mutex lock;
 	SubPoolTarget target;
 	vector<shared_ptr<Entity>> ents;
 	
 public:
-	//TODO easy fix
-	//use map<int, SubPool>::find() in pool.h
+	// TODO easy fix
+	// Use map<int, SubPool>::find() in pool.h
 	SubPool() {
 	}
 
-	//subpool that defers to any entity
+	// Subpool that defers to any entity
 	SubPool(SubPoolTarget target) 
 		: target(target) {
 	}
 
-	//returns a reference to internal target
+	// Returns a reference to internal target
 	SubPoolTarget& getTarget() {
 		return target;
 	}
 
-	//Adds an entity, no check
+	// Adds an entity, no check
 	void addEnt(shared_ptr<Entity> ent) {
 		unique_lock<mutex> lck(lock);
 		ents.push_back(ent);
 	}
 
-	//gets shared ptr from vector, returns nullptr on invalid size
+	// Adds multiple entities by range
+	void addEnts(vector<shared_ptr<Entity>> ents) {
+		unique_lock<mutex> lck(lock);
+		extend(this->ents, ents);
+	}
+
+	// Gets shared ptr from vector, returns nullptr on invalid size
 	shared_ptr<Entity> getEntity(int key) {
 		unique_lock<mutex> lck(lock);
 		return key < (int)ents.size() ? ents[key] : nullptr;
 	}
 
-	//clears the subpool of dead entities
+	// Clears the subpool of dead entities
 	void clearDeadEnts() {
 		unique_lock<mutex> lck(lock);
 		erase_sequential_if(ents, [](shared_ptr<Entity> &ent) { return !ent->getFlag(); });
 	}
 
-	//returns size of the ent pool
+	// Returns size of the ent pool
 	int size() {
 		unique_lock<mutex> lck(lock);
 		return ents.size();
