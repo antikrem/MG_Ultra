@@ -10,6 +10,7 @@
 #include <mutex>
 #include <shared_mutex>
 
+#include "algorithm_ex.h"
 #include "component.h"
 #include "entity_types.h"
 
@@ -19,24 +20,27 @@
 */
 class Entity : public ScriptableClass<Entity> {
 private:
-	//lock applied when entity is added to pool
-	//blocking component additions
+
+	// Lock applied when entity is added to pool
+	// Blocking component additions
 	atomic<bool> inPool = false;
-	//map of components
+
+	// Map of components
 	map<type_index, shared_ptr<Component>> components;
 	
-	//when false the enemy will be removed from pool
+	// When false the enemy will be removed from pool
 	atomic<bool> flag = true;
 
-	//set to false when internal cleanup has occured
+	// Set to false when internal cleanup has occured
 	atomic<bool> componentCleanUpRequired = true;
 
-	//All entities have a type
+	// All entities have a type
 	int entityType = ETNoType;
-	//set to true when entity is ready to be deleted and memory returned
+
+	// Set to true when entity is ready to be deleted and memory returned
 	bool gcReady = false;
 
-	//function to create an entity in the program stack
+	// Function to create an entity in the program stack
 	static Entity* createEntity(int type) {
 		return new Entity(type);
 	}
@@ -49,8 +53,13 @@ public:
 	Entity(int type) {
 		entityType = type;
 	}
+
+	// Returns set of component types
+	set<type_index> getComponentSignature() {
+		return to_keys(components);
+	}
 	
-	//for scrpting purposes
+	// For scrpting purposes
 	shared_ptr<Component> l_getComponent(type_index type) {
 		return components.count(type) ? components[type] : nullptr;
 	}
@@ -59,13 +68,13 @@ public:
 		return components.count(type) ? components[type] : nullptr ;
 	}
 
-	//alternative method to get component with template, nullptr on no component
+	// Alternative method to get component with template, nullptr on no component
 	template <class T>
 	shared_ptr<T> getComponent() {
 		return components.count(typeid(T)) ? dynamic_pointer_cast<T>(components[typeid(T)]) : nullptr;
 	}
 
-	//returns a valid shared pointer if successful, otherwise returns a nullptr
+	// Returns a valid shared pointer if successful, otherwise returns a nullptr
 	shared_ptr<Component> addComponent(pair<type_index, Component*> component) {
 		if (components.count(component.first) || inPool) {
 			return nullptr;
@@ -75,7 +84,7 @@ public:
 		return components[component.first];
 	}
 
-	//optimised form of addComponent when component type is known
+	// Optimised form of addComponent when component type is known
 	template <class T>
 	shared_ptr<Component> addComponent(T* component) {
 		static_assert(std::is_base_of<Component, T>::value, "entity.h, failed addComponent base_of check");
@@ -89,7 +98,7 @@ public:
 		return components[ti];
 	}
 
-	//a lua bindable addComponent
+	// A lua bindable addComponent
 	bool l_addComponent(type_index index, Component* component) {
 		if (components.count(index) || inPool) {
 			if (inPool) {
@@ -105,7 +114,7 @@ public:
 		return true;
 	}
 
-	//A general update to set entity flag
+	// A general update to set entity flag
 	void entityUpdate() {
 		bool tempFlag = true;
 		for (auto i : components) {
@@ -116,40 +125,40 @@ public:
 		}
 	}
 
-	//Gets type
+	// Gets type
 	int getType() {
 		return entityType;
 	}
 
-	//kills entity directly
+	// Kills entity directly
 	void killEntity();
 
-	//returns flag, if false, delete this ent
+	// Returns flag, if false, delete this ent
 	bool getFlag() {
 		return flag;
 	}
 
-	//gets inPool flag
+	// Gets inPool flag
 	bool isInPool() {
 		return inPool;
 	}
 
-	//sets this entity to be in the pool
+	// Sets this entity to be in the pool
 	void markAddToPool() {
 		inPool = true;
 	}
 
-	//sets the entity to be ready for garbage collection
+	// Sets the entity to be ready for garbage collection
 	void markGCReady() {
 		gcReady = true;
 	}
 
-	//gets if this entity is ready for reclamation
+	// Gets if this entity is ready for reclamation
 	bool getGCReady() {
 		return gcReady;
 	}
 
-	//exposes internal component map for evaluation
+	// Exposes internal component map for evaluation
 	map<type_index, shared_ptr<Component>>& getMapComponent() {
 		return components;
 	}
