@@ -85,7 +85,7 @@ public:
 
 		set<type_index> signature = ents[0]->getComponentSignature();
 
-		for (int i = 1; i < ents.size(); i++) {
+		for (unsigned int i = 1; i < ents.size(); i++) {
 			if (signature != ents[i]->getComponentSignature()) {
 				err::logMessage("POOL: Error, add_entities contained entities with different signatures");
 				return;
