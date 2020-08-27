@@ -30,6 +30,7 @@ GraphicsSettings::GraphicsSettings() {
 	pointLightPeels = gfxSettings.get("lighting", "pointlight_peeldepth", 2);
 	pointLightVolumetric = gfxSettings.get("lighting", "pointlight_volumetricScattering", 1);
 	pointLightExtinctionRange = gfxSettings.get("lighting", "pointlight_extinctionRange", 0.0045f);
+	pointLightDebug = gfxSettings.get("lighting", "pointlight_debug", 0);
 
 	bloomEnabled = gfxSettings.get("post_effects", "bloom_enabled", 1);
 	bloomPasses = gfxSettings.get("post_effects", "bloom_passes", 1);

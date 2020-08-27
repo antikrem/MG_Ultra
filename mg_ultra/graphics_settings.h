@@ -34,6 +34,7 @@ struct GraphicsSettings {
 	// Lighting constants
 	atomic<int> pointLightVolumetric = true;
 	atomic<int> pointLightPeels = 2;
+	atomic<int> pointLightDebug = 0;
 	atomic<float> pointLightExtinctionRange = 0.0045f;
 
 	// Post effects constants

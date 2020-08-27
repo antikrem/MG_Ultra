@@ -8,6 +8,7 @@
 // Settings
 uniform int enableVolumetricScattering;
 uniform float lightExtinctionLevel;
+uniform float debug;
 
 // Uniform sampler2D 
 uniform sampler2D noise;
@@ -129,5 +130,6 @@ void main() {
 		//direct lighting upon fragment strength
 		= lightStrength * vec4(outLightColour * texel.xyz, 1) * step(LAMBERT_CUTOFF, lambertFactor) +
 		//add volumetric component
-		+ volScatter * perlin;	
+		+ volScatter * perlin
+		+ 1000 * vec4(debug);	
 }

@@ -296,6 +296,7 @@ public:
 				shaderMaster->setUniform3F("point_lighting", "cameraPosition", camera->getEyePos());
 				shaderMaster->setUniformF("point_lighting", "lightScatteringFactor", g_fog::getFogStrength());
 				shaderMaster->setUniform3F("point_lighting", "fogColour", g_fog::getFogColour().getVec3());
+				shaderMaster->setUniformF("point_lighting", "debug", (float)gSettings->pointLightDebug);
 				pointLightVAOBuffer.processGLSide();
 				glDepthMask(GL_TRUE);
 				glDisable(GL_CULL_FACE);
