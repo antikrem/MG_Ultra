@@ -19,7 +19,7 @@ Particles.set_rotate_to_face("weather_heavyrain", true)
 Particles.set_velocity_max_rotation("weather_heavyrain", 10)
 
 Particles.add_new_type("weather_darkcloud", "weather_cloud0", 1, 2.4)
-Particles.set_box_dimension("weather_darkcloud", 1300, 1600, 490)
+Particles.set_box_dimension("weather_darkcloud", 1300, 2000, 490)
 Particles.set_box_center("weather_darkcloud", 0, 0, 500)
 Particles.set_featherness("weather_darkcloud", 0.00, 0.00)
 Particles.set_scrollness("weather_darkcloud", 1)
@@ -153,7 +153,7 @@ Weather.strike_blinding_lightning = function(delay, fadeout)
 	if is_nil(fadeout) then fadeout = 100 end
 
 	ColourModulation.set_cutoff(650)
-	ColourModulation.set_background_colour(100000, 100000, 100000)
+	ColourModulation.set_background_colour(100000000, 100000000, 100000000)
 	ColourModulation.set_foreground_colour(0,0,0)
 	ColourModulation.set_strength(1.2)
 
