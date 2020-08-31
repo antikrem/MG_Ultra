@@ -266,9 +266,12 @@ api/
 /mg_ultra/wd/mg_ultra.exe
 /Profile
 
-#ignore log files
+# ignore log files
 log.txt
 *.old
 
-#ignore settings
+# ignore settings
 *.ini
+
+# ignore campaign folder
+/mg_ultra/wd/campaigns
