@@ -57,12 +57,12 @@ public:
 		this->z = z;
 	}
 
-	//wrapper for setposition(float, float ,float), allowing lua binding
+	// Wrapper for setposition(float, float, float), allowing lua binding
 	void lll_setPosition(float x, float y, float z) {
 		setPosition(x, y, z);
 	}
 
-	//wrapper for setposition(float, float ,float), allowing lua binding
+	// Wrapper for setposition(float, float), allowing lua binding
 	void ll_setPosition(float x, float y) {
 		setPosition(x, y, this->z);
 	}
@@ -77,12 +77,12 @@ public:
 		return position;
 	}
 
-	//wrapper for get position allowing lua binding
+	// Wrapper for get position allowing lua binding
 	tuple<float, float, float> getPosition() {
 		return tuple<float, float, float>(position.load().x, position.load().y, z);
 	}
 
-	//Adds to position, is more thread consistent then combining getPosition and setPosition
+	// Adds to position, is more thread consistent then combining getPosition and setPosition
 	void addPosition(Point3 pos) {
 		position = Point2(pos.x, pos.y) + position.load();
 		z = z + pos.z;
