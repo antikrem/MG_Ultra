@@ -87,3 +87,11 @@ function BackgroundMaster.update_background_layer(backgroundLayer)
 
 	cPos:set_position(x % cEScript:get("tilesize_x"), y % cEScript:get("tilesize_y"))
 end
+
+-- Deletes all background layer
+function BackgroundMaster.delete_all_layers()
+	local bm = BackgroundMaster.getBM()
+	local backgroundLayers = bm:get_component(ComponentMultiEntity)
+
+	backgroundLayers:kill_children()
+end
