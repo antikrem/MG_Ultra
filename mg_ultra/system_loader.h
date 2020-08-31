@@ -1,29 +1,28 @@
-/*Loading is done asyncronously by the loader
-Loader runs on game loop master, and uses the registar to control switching of levels
-Loader interfaces with gl handler for mgt loading
-Loader also has a list of entities on cycle timer
-Loader loads a table from file, The file is in ent_table format
+/** 
+ * Loading is done asyncronously by the loader
+ * Loader runs on game loop master, and uses the registar to control switching of levels
+ * Loader interfaces with gl handler for mgt loading
+ * Loader also has a list of entities on cycle timer
+ * Loader loads a table from file, The file is in ent_table format
 
-Ent_table:
+ Ent_table:
+ ---ent declaraction
 
+ 1: spawn condition: Sets the spawn conditions for next entities
+	@cycle [int] - spawn on cycle
+	@counter [int] - spawn on counter
+	@callback [string] - spawn on an emmitted callback
+	@immediate - spawn now
 
----ent declaraction
+ 2: ent declaration
+	ent [int] - ent direct
+	ent [string] - ent table look up
 
-1: spawn condition: Sets the spawn conditions for next entities
-@cycle [int] - spawn on cycle
-@counter [int] - spawn on counter
-@callback [string] - spawn on an emmitted callback
-@immediate - spawn now
+ 3. component adding
+	+[Component name] ...parameters
 
-2: ent declaration
-ent [int] - ent direct
-ent [string] - ent table look up
-
-3. component adding
-+[Component name] ...parameters
-
-4 executing script against component
-->{script...}
+ 4 executing script against component
+	->{script...}
 
 */
 #ifndef __SYSTEM_LOADER__
@@ -616,46 +615,50 @@ public:
 	}
 
 	void precycle(EntityPool* pool) override {
-		//get cycle
+		// Get cycle
 		int cycle;
 		registar->get("cycle", &cycle);
 
-		//push current cycle of ents
+		// Push current cycle of ents
 		transferBufferedEntsToGame(pool, cycle);
-		//execute buffered scripts
+		// Execute buffered scripts
 		executeBufferedCycleScripts(cycle);
 
-		//check if loading is requested
+		// Check if loading is requested
 		bool loading = false;
 		registar->get("loading", &loading);
-		//if not loading exit
+		// If not loading exit
 		if not(loading) {
 			return;
 		}
 
 		string loadFolder = getLoadFolderPath();
 
-		//check for prelevel tables
+		// Generate path to load table based on registar
+		string path = getLoadTablePath(loadFolder);
+		// Empty path is an error
+		if (path == "") {
+			registar->update("loading", false);
+			return;
+		}
+
+		// Check for prelevel tables
 		string preLevelPath = getPrelevelScript(loadFolder);
 		if (preLevelPath.size()) {
 			executeScript(os_kit::getFileAsString(preLevelPath));
 		}
 
-		//check for templates
+		// Check for templates
 		string templatePath = getTemplateTablePath(loadFolder);
 		if (templatePath.size()) {
 			parseTemplateFile(templatePath);
 		}
 
-		//generate path to load table based on registar
-		string path = getLoadTablePath(loadFolder);
-		//empty path is an error
-		if (path == "") {
-			return;
-		}
+		/** 
+		 * A load request has been evaluated by system_gamestate_controller, and has to be completed
+		 */
 
-		/*a load request has been evaluated by system_gamestate_controller, and has to be completed*/
-		//delete future ents
+		// Delete future ents
 		deleteAllFutureEnts();
 
 		if (!parseLoadTable(path)) {
@@ -672,7 +675,7 @@ public:
 
 		executeScript(immediateScript);
 
-		//update to indicate loading successful
+		// Update to indicate loading successful
 		registar->update("loading", false);
 		registar->update("load_dialogue", true);
 		registar->update("cycle_progress", true);
