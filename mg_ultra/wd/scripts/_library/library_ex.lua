@@ -82,11 +82,7 @@ function load_state(...)
 	--Handling erreoneos event parameters will be handled by the engine's event handler
 	emit_event(EventStateChange, ...)
 end
-
--- Loads level
-function test() 
-	load_state("level", "ascent", 1)
-end
+ 
 
 function get_dump_report() 
 	local dumpReport = string.format("Event size: %d\n", get_event_length())
@@ -150,4 +146,12 @@ end
 Debug.hide_cycle = function()
 	local e = EntityPool.get_cached_entity(EntityDebugCycle)
 	if e then e:kill() end
+end
+
+Debug.run_demo = function()
+	load_state("level", "demo", 1)
+end
+
+Debug.run_test = function()
+	load_state("level", "test", 1)
 end
