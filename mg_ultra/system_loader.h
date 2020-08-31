@@ -143,7 +143,7 @@ class SystemLoader : public System {
 		registar->get("next_state", &state);
 
 		if (state == "title") {
-			return "sequences\\title\\";
+			return "campaigns\\title\\";
 		}
 		else if (state == "level") {
 			string campaign;
