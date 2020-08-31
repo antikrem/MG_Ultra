@@ -74,15 +74,6 @@ function attach_visual_sprite(aniSetName, zOffset, rotationSpeed, minAmbient, fa
 	this:get_component(ComponentSpawner):add_entity(e)
 end
 
--- General function to load a level by setting the correct values in the Registar
--- First parameter is state: title, level
--- Second parameter is campaign name, valid on title state
--- Third parameter is level number, valid on title state
-function load_state(...)
-	--Handling erreoneos event parameters will be handled by the engine's event handler
-	emit_event(EventStateChange, ...)
-end
- 
 
 function get_dump_report() 
 	local dumpReport = string.format("Event size: %d\n", get_event_length())
@@ -152,6 +143,21 @@ Debug.run_demo = function()
 	load_state("level", "demo", 1)
 end
 
+run_demo = Debug.run_demo
+
 Debug.run_test = function()
 	load_state("level", "test", 1)
 end
+
+run_test = Debug.run_test
+
+-- General function to load a level by setting the correct values in the Registar
+-- First parameter is state: title, level
+-- Second parameter is campaign name, valid on title state
+-- Third parameter is level number, valid on title state
+function load_state(...)
+	--Handling erreoneos event parameters will be handled by the engine's event handler
+	emit_event(EventStateChange, ...)
+end
+ 
+
