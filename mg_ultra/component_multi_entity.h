@@ -1,6 +1,8 @@
-/*A Component that allows an entity to contain multiple other entities
-These entities also exist in the entity pool
-Works in conjunction with component_spawner*/
+/** 
+ * A Component that allows an entity to contain multiple other entities
+ * These entities also exist in the entity pool
+ * Works in conjunction with component_spawner
+ */
 #ifndef __COMPONENT_MULTI_ENTITY__
 #define __COMPONENT_MULTI_ENTITY__
 
@@ -19,7 +21,7 @@ Works in conjunction with component_spawner*/
 
 #include "scriptable_class.h"
 
-//forward declaraction that entities exist
+// Forward declaraction that entities exist
 class Entity;
 
 class ComponentMultiEntity : public Component, public ScriptableClass<ComponentMultiEntity> {
@@ -30,7 +32,7 @@ private:
 
 	Point3 lastMasterPosition = Point3(0.0f);
 
-	//static function to use on subents of killed entities
+	// Static function to use on subents of killed entities
 	static void killDieWithMaster(shared_ptr<Entity> subEnt) {
 		auto dwm = subEnt->getComponent<ComponentDieWithMaster>();
 
@@ -40,7 +42,7 @@ private:
 	}
 
 public:
-	//adds a shared_ptr to this MultiEntities' internal store
+	// Adds a shared_ptr to this MultiEntities' internal store
 	void addEntity(shared_ptr<Entity> newEnt) {
 		unique_lock<shared_mutex> lck(lock);
 
@@ -62,14 +64,14 @@ public:
 		internalEntities.push_back(newEnt);
 	}
 
-	//clears any dead entities from this internal store
+	// Clears any dead entities from this internal store
 	void clearDeadEntities() {
 		unique_lock<shared_mutex> lck(lock);
 		//erase dead entities
 		erase_sequential_if(internalEntities, [](shared_ptr<Entity> &ent) { return !ent->getFlag(); });
 	}
 
-	//updates any sub entities with ComponentOffsetMaster
+	// Updates any sub entities with ComponentOffsetMaster
 	void updateOffsetSubs(Point3 masterPosition) {
 		unique_lock<shared_mutex> lck(lock);
 		lastMasterPosition = masterPosition;
@@ -89,8 +91,8 @@ public:
 		iterator = 0;
 	}
 
-	//gets a shared pointer to the next entity
-	//gets nullptr if there is no next entity
+	// Gets a shared pointer to the next entity
+	// Gets nullptr if there is no next entity
 	shared_ptr<Entity> nextEntity() {
 		unique_lock<shared_mutex> lck(lock);
 		if (iterator < (int)internalEntities.size()) {
@@ -101,8 +103,8 @@ public:
 		}
 	}
 
-	//gets first sub entity by type, returns nullptr if not found
-	//can utilise skip to ignore a number of results
+	// Gets first sub entity by type, returns nullptr if not found
+	// Can utilise skip to ignore a number of results
 	shared_ptr<Entity> getByType(EntityTypes entityType, int skip = 0) {
 		unique_lock<shared_mutex> lck(lock);
 		for (auto i : internalEntities) {
@@ -117,8 +119,8 @@ public:
 		return nullptr;
 	}
 
-	//apply a lambda in the form f : shared_ptr<ent> -> void
-	//to all internal entities
+	// Apply a lambda in the form f : shared_ptr<ent> -> void
+	// to all internal entities
 	void applyFunction(function<void(shared_ptr<Entity>)> lambda) {
 		unique_lock<shared_mutex> lck(lock);
 		for (auto i : internalEntities) {
@@ -126,14 +128,24 @@ public:
 		}
 	}
 
-	//Kill all sub entities marked to die
+	// Kill all sub entities marked to die
 	void propogateDeathTag() {
 		applyFunction(&ComponentMultiEntity::killDieWithMaster);
+	}
+
+	// Kill all children
+	void killAllChildren() {
+		applyFunction(
+			[](shared_ptr<Entity> subEnt) {
+				subEnt->killEntity();
+			}
+		);
 	}
 
 	static void registerToLua(kaguya::State& state) {
 		state["ComponentMultiEntity"].setClass(kaguya::UserdataMetatable<ComponentMultiEntity, Component>()
 			.setConstructors<ComponentMultiEntity()>()
+			.addFunction("kill_children", &ComponentMultiEntity::killAllChildren)
 			.addFunction("reset_iterator", &ComponentMultiEntity::resetIterator)
 			.addFunction("get_next", &ComponentMultiEntity::nextEntity)
 			.addStaticFunction("create",ScriptableClass::create<ComponentMultiEntity>)
