@@ -1,4 +1,6 @@
-/*A Component that is simply a position, that can be access in a safe way*/
+/** 
+ * A Component that is simply a position, that can be access in a safe way
+ */
 #ifndef __COMPONENT_POSITION__
 #define __COMPONENT_POSITION__
 
@@ -10,7 +12,9 @@
 #include <atomic>
 
 
-/*position is stored as Point2 + z value*/
+/** 
+ *position is stored as Point2 + z value
+ */
 class ComponentPosition : public Component, public ScriptableClass<ComponentPosition> {
 private:
 	atomic<Point2> position = Point2(0,0);
