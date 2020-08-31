@@ -1,7 +1,7 @@
----Basic functions, can be used in any script
---No classes or mg functionality have been bounded, outside of global functions
+--- Basic functions, can be used in any script
+-- No classes or mg functionality have been bounded, outside of global functions
 
---gets length of vairable input/tables/etc
+-- Gets length of vairable input/tables/etc
 function length(a)
 	count = 0
 	for i,v in pairs(a) do
@@ -10,12 +10,12 @@ function length(a)
 	return count
 end
 
---checks if value is nil
+-- Checks if value is nil
 function is_nil(a)
 	return a == nil
 end
 
---checks if value is numer
+-- Checks if value is numer
 function is_number(a)
 	return type(a) == "number"
 end
@@ -26,12 +26,12 @@ function print_table(class)
 	end
 end
 
---Variadic print to console/log
+-- Variadic print to console/log
 function print(...) 
-	--get size of input
+	-- Get size of input
 	local size = #{...}
 
-	--handle single input of type table, for doing things like printing classes
+	-- Handle single input of type table, for doing things like printing classes
 	if size == 1 and type(select(1, ...)) == "table" then
 		printAdd(select(1, ...).__name)
 		printPush()
@@ -40,14 +40,14 @@ function print(...)
 	
 	printAdd(">>")
 
-	--check for nil inputs
+	-- Check for nil inputs
 	if size == 0 then
 		printAdd("nil")
 		printPush()
 		return
 	end
 
-	--otherwise general print
+	-- Otherwise general print
 	for i = 1,size do
 
 		local v = select(i, ...)
@@ -78,7 +78,7 @@ function typeof(a)
 	print(t)
 end
 
---checks element is in the provided list of elements
+-- Checks element is in the provided list of elements
 function check_element_in_set(element, ...)
 	for i = 1,#{...} do
 		if (element == select(i, ...)) then
@@ -88,7 +88,7 @@ function check_element_in_set(element, ...)
 	return false;
 end
 
---sums all elements in a set
+-- Sums all elements in a set
 function sum_set(first, ...)
 	if is_nil(first) then
 		return 0
@@ -97,7 +97,7 @@ function sum_set(first, ...)
 	end
 end
 
---implementation of lua global unpack
+-- Implementation of lua global unpack
 function unpack(a, i)
 	i = i or 1
 	if not is_nil(a[i]) then
@@ -105,15 +105,15 @@ function unpack(a, i)
 	end
 end
 
---inverse operation of unpack
+-- Inverse operation of unpack
 function pack(...)
 	return {...}
 end
 
---takes a function f and multiple arguments
---f will be applied with each of the arguments
---f should be in the form f : x -> f(x)
---then returned
+-- Takes a function f and multiple arguments
+-- f will be applied with each of the arguments
+-- f should be in the form f : x -> f(x)
+-- then returned
 function apply_function_to_set(f, ...)
 	local result = {}
 	for i = 1, #{...} do
@@ -123,7 +123,7 @@ function apply_function_to_set(f, ...)
 	return unpack(result)
 end
 
---definitions for events
+-- Definitions for events
 EventNone = 0
 EventQuit = 1
 EventStateChange = 2
@@ -131,7 +131,7 @@ EventCallback = 3
 EventProfileUpdate = 4
 EventPause = 5
 
---Emits an event to the event que, 
+-- Emits an event to the event que, 
 function emit_event(eventType, ...)
 	--check event is valid
 	if not check_element_in_set(eventType, EventNone, EventQuit, EventStateChange, EventCallback, EventProfileUpdate, EventPause) then
@@ -148,8 +148,8 @@ function emit_event(eventType, ...)
 	pushEvent()
 end
 
---creates a python style range
---shamelessly stolen from http://lua-users.org/wiki/RangeIterator
+-- Creates a python style range
+-- shamelessly stolen from http://lua-users.org/wiki/RangeIterator
 function range(from, to, step)
 	step = step or 1
 	return function(_, lastvalue)
@@ -160,9 +160,8 @@ function range(from, to, step)
 	end, nil, from - step
 end
 
---Requests engine shutdown by emmiting a quit event
+-- Requests engine shutdown by emmiting a quit event
 function quit()
 	print("Exiting from console...")
 	emit_event(EventQuit)
 end
-
