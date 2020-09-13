@@ -13,9 +13,6 @@ class ComponentCamera : public Component, public ScriptableClass<ComponentCamera
 	// Wrapping camera
 	Camera* camera = nullptr;
 
-	//fov of camera
-	atomic<float> fov = 45.0f;
-
 	//treats location as a vector
 	atomic<Point3> viewTarget;
 
@@ -55,11 +52,11 @@ public:
 	}
 
 	void setFOV(float fov) {
-		this->fov = fov;
+		camera->setFOV(fov);
 	}
 
 	float getFOV() {
-		return fov;
+		return camera->getFOV();
 	}
 
 	static void registerToLua(kaguya::State& state) {

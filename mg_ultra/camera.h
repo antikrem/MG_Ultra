@@ -13,24 +13,27 @@
 
 
 class Camera {
-	//worldspace eye position
+	// Worldspace eye position
 	atomic<glm::vec3> eyePos = glm::vec3(0);
 
-	//view 
+	// View 
 	atomic<glm::mat4> inWorldView = glm::mat4(1.0f);
 
-	//projections
+	// Projections
 	atomic<glm::mat4> inWorldProjection = glm::mat4(1.0f);
 
-	//ui view
+	// UI view
 	atomic<glm::mat4> uiView = glm::mat4(1.0f);
 
-	//ui projection
+	// UI projection
 	atomic<glm::mat4> uiProjection = glm::mat4(1.0f);
 
-	//culling distances
+	// Culling distances
 	atomic<float> clipNear = 10.0f;
 	atomic<float> clipFar = 4000.0f;
+
+	// FOV
+	atomic<float> fov = 45.0f;
 
 	GraphicsSettings* gSettings = nullptr;
 
@@ -66,13 +69,13 @@ public:
 
 	}
 
-	void updateCamera(glm::vec3 eyePos, glm::vec3 lookAt, float fov) {
+	void updateCamera(glm::vec3 eyePos, glm::vec3 lookAt) {
 		eyePos.z = -1 * eyePos.z;
 
 		this->eyePos = eyePos;
 
 		inWorldProjection = glm::perspective(
-			glm::radians(fov), 
+			glm::radians(fov.load()), 
 			(float)gSettings->screenWidth / (float)gSettings->screenHeight, 
 			clipNear.load(), 
 			clipFar.load()
@@ -119,6 +122,14 @@ public:
 	//sets far clip distance
 	void setClipFar(float clipFar) {
 		this->clipFar = clipFar;
+	}
+
+	void setFOV(float fov) {
+		this->fov = fov;
+	}
+
+	float getFOV() {
+		return fov;
 	}
 
 };
