@@ -10,6 +10,9 @@ the script loaded is in script/camera.lua
 #include "scriptable_class.h"
 
 class ComponentCamera : public Component, public ScriptableClass<ComponentCamera> {
+	// Wrapping camera
+	Camera* camera = nullptr;
+
 	//fov of camera
 	atomic<float> fov = 45.0f;
 
@@ -18,7 +21,13 @@ class ComponentCamera : public Component, public ScriptableClass<ComponentCamera
 
 public:
 
-	ComponentCamera() : viewTarget{ Point3(0,0,0) } {
+	ComponentCamera() 
+			: viewTarget{ Point3(0,0,0) } {
+	}
+
+	ComponentCamera(Camera* camera) 
+			: viewTarget{ Point3(0,0,0) } {
+		this->camera = camera;
 	}
 	
 	glm::vec3 getViewTarget() {
@@ -46,7 +55,6 @@ public:
 	}
 
 	void setFOV(float fov) {
-		g_camera::setFOV(fov);
 		this->fov = fov;
 	}
 

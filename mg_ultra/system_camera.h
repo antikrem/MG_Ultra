@@ -13,23 +13,29 @@
 #include "component_position.h"
 
 class SystemCamera : public System, public FunctionalCallbackSystem {
+	GraphicsState* graphicsState = nullptr;
+
 public:
 	SystemCamera() {
 		debugName = "s_camera";
 		target = SubPoolTarget(
 			ETCamera
 		);
-		//load camera script
+		// Load camera script
 		setInternalScript(debugName, os_kit::getFileAsString("scripts//camera//camera.lua"));
 	}
 
-	//quickly update some settings
+	void setGState(GraphicsState* graphicsState) {
+		this->graphicsState = graphicsState;
+	}
+
+	// Quickly update some settings
 	void precycle(EntityPool* entityPool) override {
 		g_graphicsSettings::update();
 	}
 
 	void cacheHandle(shared_ptr<Entity> ent) override {
-		//check if camera script is used
+		// Check if camera script is used
 		bool value;
 		if (registar->get("camera_script_update", &value) && !value) {
 			return;
@@ -42,11 +48,13 @@ public:
 	}
 
 	void cacheFail(EntityPool* pool) override {
-		//create the camera entity
+		// Create the camera entity
 		auto newEnt = shared_ptr<Entity>(new Entity(ETCamera));
 
+		auto camera = graphicsState->getCamera();
+
 		newEnt->addComponent(new ComponentPosition(0, 0, -600.0));
-		newEnt->addComponent(new ComponentCamera());
+		newEnt->addComponent(new ComponentCamera(camera));
 		newEnt->addComponent(new ComponentNoBoundsControl());
 
 		pool->addEnt(newEnt, true);
