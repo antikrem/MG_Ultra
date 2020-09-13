@@ -10,15 +10,7 @@
 
 #include <atomic>
 
-//global namespace for reading camera values
-namespace g_camera {
 
-	//sets global fov
-	void setFOV(float value);
-
-	//gets global fov
-	float getFOV();
-}
 
 class Camera {
 	//worldspace eye position
