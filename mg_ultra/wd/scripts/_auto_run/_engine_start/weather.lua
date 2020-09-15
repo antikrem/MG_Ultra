@@ -4,10 +4,10 @@ WeatherTypes = {}
 WeatherTypes.None = "None"
 WeatherTypes.HeavyRain = "HeavyRain"
 
---Current weather is saved as a string
+-- Current weather is saved as a string
 registar:add("weather_type", WeatherTypes.None)
 
---particles used for weather
+-- Particles used for weather
 Particles.add_new_type("weather_heavyrain", "weather_rain0")
 Particles.set_box_dimension("weather_heavyrain", 960, 540, 700)
 Particles.set_box_center("weather_heavyrain", 0, 0, -160)
@@ -32,7 +32,7 @@ Particles.set_featherness("weather_frontcloud", 0.00, 0.00)
 Particles.set_scrollness("weather_frontcloud", 1)
 Particles.set_type_response("weather_frontcloud", ParticleBoxResponse.Wrap)
 
---Assets for weather
+-- Assets for weather
 Audio.request_load_file("rain", "rain.wav")
 Audio.request_load_file("thunder_strike0", "strike0.wav")
 Audio.request_load_file("thunder_rumble0", "thunder0.wav")
@@ -40,12 +40,44 @@ Audio.request_load_file("thunder_rumble1", "thunder1.wav")
 
 Weather = {}
 
---starts heavy rain
-Weather.start_heavy_rain = function()
-	--Set weather flag 
+-- Pause toggle on music
+Weather.toggle_audio_pause = function()
+	local weatherEnt = EntityPool.get_cached_entity(EntityWeather)
+	
+	if not is_nil(weatherEnt) then
+		local cAudio = weatherEnt:get_component(ComponentAudio)
+		local state = cAudio:get_state()
+		print(state)
+		if state == AudioState.PLAY then
+			print("bause")
+			cAudio:pause()
+		elseif state == AudioState.PAUSE then
+			print("unbause")
+			cAudio:resume()
+		end
+	else
+		print("WEATHER, Warning pausing weather ent audio, entity could not be found")
+	end
+end
+
+-- Stops all weather
+Weather.stop = function()
+	-- Set weather flag 
 	registar:update("weather_type", WeatherTypes.HeavyRain)
 
-	--Start rain
+	Particles.clear_all()
+	EntityPool.get_cached_entity(EntityWeather):get_component(ComponentAudio):stop()
+
+	Drift.set_wind_speed(0, 0, 0)
+
+end
+
+-- Starts heavy rain
+Weather.start_heavy_rain = function()
+	-- Set weather flag 
+	registar:update("weather_type", WeatherTypes.HeavyRain)
+
+	-- Start rain
 	EntityPool.get_cached_entity(EntityWeather):get_component(ComponentParticle):spawn_uniformly(900)
 	EntityPool.get_cached_entity(EntityWeather):get_component(ComponentParticle):use_type("weather_darkcloud")
 	EntityPool.get_cached_entity(EntityWeather):get_component(ComponentParticle):spawn_uniformly(7)
@@ -55,7 +87,7 @@ Weather.start_heavy_rain = function()
 	EntityPool.get_cached_entity(EntityWeather):get_component(ComponentAudio):play("rain")
 	Drift.set_wind_speed(16, -20, 0)
 
-	--Moody lights and fog
+	-- Moody lights and fog
 	PostEffects.Exposure.set(1.1)
 	AmbientLight.set_strength(0.02)
 	Fog.set_colour(1.0, 1.0, 1.0)
@@ -67,7 +99,7 @@ Weather.start_heavy_rain = function()
 	PostEffects.Bloom.set_threshold(0.2)
 end
 
---Can work if this is is player or player is in pool
+-- Can work if this is is player or player is in pool
 Weather.update_player_light = function()
 	local p = EntityPool.get_player() and EntityPool.get_player() or this
 	if p and registar:get("weather_type") == WeatherTypes.HeavyRain then 
@@ -126,7 +158,7 @@ Weather.strike_lightning = function(bursts, pX, pY)
 	local e = Entity.create(EntityGeneric)
 	local c = ComponentTimer.create()
 
-	--Add each burst
+	-- Add each burst
 	c:add_callback(
 		1,
 		"PostEffects.Bloom.set_threshold(4.0)" 
@@ -179,14 +211,14 @@ Weather.strike_blinding_lightning = function(delay, fadeout)
 	EntityPool.add_entity(e)
 end
 
---Strike lightning as a flash of powerful point lightning
+-- Strike lightning as a flash of powerful point lightning
 Weather.strike_point_lightning = function(x, y, z, delay, fadeout, r, g, b, strength)
 	
 	local e = Entity.create(EntityGeneric)
 
 	local c = ComponentTimer.create()
 
-	--Add each burst
+	-- Add each burst
 	c:add_callback(
 		delay,
 		"this:get_component(ComponentPointLight):set_strength(0, " .. tostring(strength / fadeout) .. ")" 
@@ -205,7 +237,7 @@ Weather.strike_point_lightning = function(x, y, z, delay, fadeout, r, g, b, stre
 	EntityPool.add_entity(e)
 end
 
---Strike lightning as a flash of powerful point lightning randomly
+-- Strike lightning as a flash of powerful point lightning randomly
 Weather.strike_random_point_lightning = function()
 	local z = math.lerp(math.random(), 500, 700)
 
@@ -219,7 +251,7 @@ Weather.strike_random_point_lightning = function()
 	)
 end
 
---Strike lightning as a burst of multiple lights
+-- Strike lightning as a burst of multiple lights
 Weather.strike_burst_lightning = function()
 	
 	local e = Entity.create(EntityGeneric)
@@ -236,7 +268,7 @@ Weather.strike_burst_lightning = function()
 	EntityPool.add_entity(e)
 end
 
---Strike lightning as a burst of multiple lights, with heavy sound
+-- Strike lightning as a burst of multiple lights, with heavy sound
 Weather.strike_burst_lightning_alt = function()
 	
 	local e = Entity.create(EntityGeneric)
@@ -253,7 +285,7 @@ Weather.strike_burst_lightning_alt = function()
 	EntityPool.add_entity(e)
 end
 
---Strike lightning as burst with a bit of a blind
+-- Strike lightning as burst with a bit of a blind
 Weather.strike_blinding_burst_light = function()
 	Weather.strike_burst_lightning_alt()
 	Weather.strike_lightning()
