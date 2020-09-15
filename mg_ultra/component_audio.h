@@ -12,10 +12,10 @@ class ComponentAudio : public Component, public ScriptableClass<ComponentAudio> 
 private:
 	AudioSource source;
 
-	//set to true if there was a play request
-	//that would be able to be stopped
-	//consider it a neccesary (but not sufficient) condition
-	//that audio is currently playing
+	// Set to true if there was a play request
+	// that would be able to be stopped
+	// consider it a neccesary (but not sufficient) condition
+	// that audio is currently playing
 	atomic<bool> playRequested = false;
 public:
 
@@ -27,7 +27,7 @@ public:
 		playAudio(source);
 	}
 
-	//sets to play a audio file
+	// Sets to play a audio file
 	void setSource(const string& audioName) {
 		source.setQueuedAudio(audioName);
 	}
@@ -37,13 +37,13 @@ public:
 		playRequested = true;
 	}
 
-	//plays an audio file
+	// Plays an audio file
 	void playAudio(const string& audioName) {
 		source.playAudio(audioName);
 		playRequested = true;
 	}
 
-	//stop audio being played
+	// Stop audio being played
 	void stopAudio() {
 		if (playRequested) {
 			source.stopAudio();
@@ -51,19 +51,30 @@ public:
 		}
 	}
 
-	
+	// Pause this audio source
+	void pauseAudio() {
+		if (playRequested) {
+			source.pauseAudio();
+			playRequested = false;
+		}
+	}
 
-	//sets the repeat value
+	// Gets the current audio state
+	int getAudioState() {
+		return (int)source.getState();
+	}
+
+	// Sets the repeat value
 	void setRepeat(bool repeat) {
 		source.setRepeat(repeat);
 	}
 
-	//sets the gain value
+	// Sets the gain value
 	void setGain(float gain) {
 		source.setGain(gain);
 	}
 
-	//al processing of audio component
+	// Al processing of audio component
 	void alComponentHandle(map<string, AudioFile*>& audioFiles, const Point3& position) {
 		source.alSideUpdate(audioFiles, position);
 	}
@@ -73,11 +84,15 @@ public:
 			.setConstructors<ComponentAudio()>()
 			.addFunction("play", &ComponentAudio::playAudio)
 			.addFunction("play_source", &ComponentAudio::playSource)
+			.addFunction("resume", &ComponentAudio::playSource)
 			.addFunction("stop", &ComponentAudio::stopAudio)
 			.addFunction("stop_source", &ComponentAudio::stopAudio)
+			.addFunction("pause", &ComponentAudio::pauseAudio)
+			.addFunction("pause_source", &ComponentAudio::pauseAudio)
 			.addFunction("set_source", &ComponentAudio::setSource)
 			.addFunction("set_repeat", &ComponentAudio::setRepeat)
 			.addFunction("set_gain", &ComponentAudio::setGain)
+			.addFunction("get_state", &ComponentAudio::getAudioState)
 			.addOverloadedFunctions(
 				"create",
 				&ScriptableClass::create<ComponentAudio>,

@@ -57,6 +57,7 @@ private:
 
 
 	AudioState requestedState = AudioState::none;
+	AudioState currentState = AudioState::stop;
 
 	// id of source
 	ALuint sourceID;
@@ -94,6 +95,12 @@ public:
 		requestedState = AudioState::stop;
 	}
 
+	// Stops audio
+	void pauseAudio() {
+		unique_lock<mutex> lck(lock);
+		requestedState = AudioState::pause;
+	}
+
 	// Sets this source to a certain repeat value
 	void setRepeat(bool repeat) {
 		unique_lock<mutex> lck(lock);
@@ -104,6 +111,12 @@ public:
 	void setGain(float gain) {
 		unique_lock<mutex> lck(lock);
 		this->requestedGain = gain;
+	}
+
+	// Gets current state
+	AudioState getState() {
+		unique_lock<mutex> lck(lock);
+		return currentState;
 	}
 
 
@@ -147,6 +160,7 @@ public:
 
 		// Handle requests to change audio
 		if (requestedState != AudioState::none) {
+			currentState = requestedState;
 			AUDIO_STATE_TRANSISTORS.find(requestedState)->second(sourceID);
 			requestedState = AudioState::none;
 		}

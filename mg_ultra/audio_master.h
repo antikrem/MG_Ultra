@@ -31,8 +31,8 @@ class AudioMaster {
 	}
 
 public:
-	//creates a new audio file from given source
-	//if not possible, returns false and makes no change
+	// Creates a new audio file from given source
+	// If not possible, returns false and makes no change
 	bool createAudioFile(const string& name, const string& location, AudioFileLifecycle lifeCycle) {
 		if (audioFiles.count(name)) {
 			return false;
@@ -73,19 +73,19 @@ public:
 		return audioFiles;
 	}
 
-	//adds a buffer to be disposed
+	// Adds a buffer to be disposed
 	void disposeSource(ALuint buffer) {
 		unique_lock<mutex> lck(sourceDispositionLock);
 		sourcesToDispose.push_back(buffer);
 	}
 
-	//queues a audio file to be added
+	// Queues a audio file to be added
 	void queueAssetLoad(const string& audioName, const string& audioLocation, AudioFileLifecycle lifeCycle) {
 		unique_lock<mutex> lck(assetsLock);
 		requestedLoads.push_back(make_tuple(audioName, audioLocation, lifeCycle));
 	}
 
-	//flushes all queued assets
+	// Flushes all queued assets
 	void flushAssetLoadRequests() {
 		unique_lock<mutex> lck(assetsLock);
 		assetsQueueCondition.wait(
@@ -118,17 +118,17 @@ public:
 		}
 	}
 
-	//takes ownership of context into this thread
+	// Takes ownership of context into this thread
 	void reclaimContext() {
 		alcMakeContextCurrent(context);
 	}
 
-	//returns the last error of audio
+	// Returns the last error of audio
 	ALenum getLastError() {
 		return alGetError();
 	}
 
-	//prints a report
+	// Prints a report
 	void printReport() {
 		err::logMessage("AUDIO: generating report:");
 		unique_lock<mutex> lck(assetsLock);
@@ -141,16 +141,16 @@ public:
 };
 
 namespace g_audio {
-	//sets global audio master
+	// Sets global audio master
 	void setAudioMaster(AudioMaster* audioMaster);
 
-	//adds an audio to the audio master when AL is next updated
+	// Adds an audio to the audio master when AL is next updated
 	void addAudioFile(const string& fileName, const string& fileLocation);
 
-	//flushes all audio load requests
+	// Flushes all audio load requests
 	void flushAudioLoadRequests();
 
-	//prints a small audio report
+	// Prints a small audio report
 	void print();
 }
 
