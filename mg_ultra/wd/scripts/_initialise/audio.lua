@@ -1,5 +1,12 @@
 -- \scripts\_initialise\audio.lua
 
+-- Enumeration of states an audio state can be in
+AudioState = {}
+AudioState.NONE = -1
+AudioState.STOP = 0
+AudioState.PLAY = 1 
+AudioState.PAUSE = 2 
+
 -- Sets up Audio interface, which allows loading of audio files
 -- and some general interactions
 Audio = {}
@@ -30,7 +37,7 @@ Music.globalGain = 1.0
 -- and reset on new track
 Music.lastGain = 1.0
 
--- plays a music track, replacing last track
+-- Plays a music track, replacing last track
 Music.play_track = function(track)
 	local musicPlayer = EntityPool.get_cached_entity(EntityMusic)
 	
@@ -41,6 +48,23 @@ Music.play_track = function(track)
 		Music.evaluateNewGain()
 	else
 		print("MUSIC, Error playing track " .. track .. ", music player was not found")
+	end
+	
+end
+
+-- Pause toggle on music
+Music.toggle_pause = function()
+	local musicPlayer = EntityPool.get_cached_entity(EntityMusic)
+	
+	if not is_nil(musicPlayer) then
+		local cAudio = musicPlayer:get_component(ComponentAudio)
+		if cAudio:get_state() == AudioState.PLAY then
+			cAudio:pause()
+		elseif cAudio:get_state() == AudioState.PAUSE then
+			cAudio:resume()
+		end
+	else
+		print("MUSIC, Error pausing music, music player was not found")
 	end
 	
 end
