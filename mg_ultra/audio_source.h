@@ -11,17 +11,34 @@
 #include "audio_file.h"
 #include "cus_struct2.h"
 
-//forward declaraction of disposition function
-//implementation in audio_master.cpp
+// Forward declaraction of disposition function
+// implementation in audio_master.cpp
 namespace g_audio {
 	void disposeSource(ALint buffer);
 
-	//destroys g audio master 
+	// Destroys g audio master 
 	void closeAudioPipeLine();
 }
 
+
+// Enumeration of stance an audio source can be in
+enum AudioState {
+	none = -1,
+	stop = 0,
+	play = 1,
+	pause = 2
+};
+
 class AudioSource {
 private:
+	// Map of functions to call when 
+	const map<AudioState, void(*)(ALuint)> AUDIO_STATE_TRANSISTORS 
+		= {
+			{AudioState::stop, alSourceStop},
+			{AudioState::play, alSourcePlay},
+			{AudioState::pause, alSourcePause},
+		};
+
 	mutex lock;
 
 	bool initialised = false;
@@ -38,15 +55,14 @@ private:
 	string currentAudio;
 	string requestedAudio;
 
-	bool requestPlay = false;
-	bool requestStop = false;
 
+	AudioState requestedState = AudioState::none;
 
-	//id of source
+	// id of source
 	ALuint sourceID;
 public:
-	//On destruction, sends out a disposal request
-	//to AL handle thread
+	// On destruction, sends out a disposal request
+	// to AL handle thread
 	~AudioSource() {
 		unique_lock<mutex> lck(lock);
 		if (initialised) {
@@ -54,44 +70,44 @@ public:
 		}
 	}
 
-	//sets a sound file as what will be played
+	// Sets a sound file as what will be played
 	void setQueuedAudio(const string& audioName) {
 		unique_lock<mutex> lck(lock);
 		requestedAudio = audioName;
 	}
 
-	//played the queued audio
+	// Played the queued audio
 	void playQueuedAudio() {
 		unique_lock<mutex> lck(lock);
-		requestPlay = true;
+		requestedState = AudioState::play;
 	}
 
-	//plays a sound through this audio source
+	// Plays a sound through this audio source
 	void playAudio(const string& audioName) {
 		setQueuedAudio(audioName);
 		playQueuedAudio();
 	}
 
-	//stops audio
+	// Stops audio
 	void stopAudio() {
 		unique_lock<mutex> lck(lock);
-		requestStop = true;
+		requestedState = AudioState::stop;
 	}
 
-	//sets this source to a certain repeat value
+	// Sets this source to a certain repeat value
 	void setRepeat(bool repeat) {
 		unique_lock<mutex> lck(lock);
 		requestedRepeat = (int)repeat;
 	}
 
-	//sets this source to a certain gain
+	// Sets this source to a certain gain
 	void setGain(float gain) {
 		unique_lock<mutex> lck(lock);
 		this->requestedGain = gain;
 	}
 
 
-	//AL side updating
+	// AL side updating
 	void alSideUpdate(map<string, AudioFile*>& audioFiles, const Point3& position) {
 		unique_lock<mutex> lck(lock);
 		if (!initialised) {
@@ -101,23 +117,23 @@ public:
 
 		alSource3f(sourceID, AL_POSITION, position.x, position.y, position.z);
 
-		//handle new repeat request
+		// Handle new repeat request
 		if (requestedRepeat >= 0) {
 			alSourcei(sourceID, AL_LOOPING, requestedRepeat);
 			requestedRepeat = -1;
 		}
 
-		//handle new repeat request
+		// Handle new repeat request
 		if (requestedGain >= 0) {
 			alSourcef(sourceID, AL_GAIN, requestedGain);
 			requestedGain = -1.0f;
 		}
 
-		//if a requested audio is in, switch to it
+		// If a requested audio is in, switch to it
 		if (requestedAudio.size()) {
-			//check if requested audio is availible
+			// Check if requested audio is availible
 			if (audioFiles.count(requestedAudio)) {
-				//get new bufferID to play
+				// Get new bufferID to play
 				int bufferID = audioFiles[requestedAudio]->getBufferID();
 				alSourcei(sourceID, AL_BUFFER, bufferID);
 				currentAudio = requestedAudio;
@@ -129,17 +145,12 @@ public:
 			requestedAudio = "";
 		}
 
-		//if a requested audio has come in
-		if (requestPlay) {
-			requestPlay = false;
-			alSourcePlay(sourceID);
+		// Handle requests to change audio
+		if (requestedState != AudioState::none) {
+			AUDIO_STATE_TRANSISTORS.find(requestedState)->second(sourceID);
+			requestedState = AudioState::none;
 		}
-
-		//if a requested stop has come in
-		if (requestStop) {
-			requestStop = false;
-			alSourceStop(sourceID);
-		}
+		
 
 	}
 };
