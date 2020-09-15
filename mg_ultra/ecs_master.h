@@ -172,7 +172,7 @@ class ECSMaster {
 
 		//ring 6
 		master = newSystemsMaster("m_audio");
-		master->setTimer(50, true);
+		master->setTimer(50, false);
 		auto audioSystem = master->createSystem<SystemAudio>(registar);
 		audioSystem->setAudioMaster(aMaster);
 		master->createSystem<SystemMusic>(registar);
