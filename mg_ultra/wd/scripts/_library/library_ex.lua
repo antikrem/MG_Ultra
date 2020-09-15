@@ -33,6 +33,8 @@ end
 
 -- Pause and unpause the game
 function pause()
+	Weather.toggle_audio_pause()
+	Music.toggle_pause()
 	emit_event(EventPause)
 end
 
