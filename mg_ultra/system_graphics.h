@@ -168,8 +168,7 @@ public:
 
 			camera->updateCamera(
 				cPosition->getPosition3().getVec3(),
-				cCamera->getViewTarget(),
-				cCamera->getFOV()
+				cCamera->getViewTarget()
 			);
 		}
 

@@ -59,6 +59,23 @@ public:
 		return camera->getFOV();
 	}
 
+	float getClipNear() {
+		return camera->getClipNear();
+	}
+
+	void setClipNear(float clipNear) {
+		camera->setClipNear(clipNear);
+	}
+
+	float getClipFar() {
+		return camera->getClipFar();
+	}
+
+	void setClipFar(float clipFar) {
+		camera->setClipFar(clipFar);
+	}
+
+
 	static void registerToLua(kaguya::State& state) {
 		state["ComponentCamera"].setClass(kaguya::UserdataMetatable<ComponentCamera, Component>()
 			.setConstructors<ComponentCamera()>()
@@ -66,6 +83,10 @@ public:
 			.addFunction("get_view_target", &ComponentCamera::l_getViewTarget)
 			.addFunction("get_fov", &ComponentCamera::getFOV)
 			.addFunction("set_fov", &ComponentCamera::setFOV)
+			.addFunction("get_clip_near", &ComponentCamera::getClipNear)
+			.addFunction("set_clip_cear", &ComponentCamera::setClipNear)
+			.addFunction("get_clip_far", &ComponentCamera::getClipFar)
+			.addFunction("set_clip_far", &ComponentCamera::setClipFar)
 			.addStaticFunction("type", &getType<ComponentCamera>)
 			.addStaticFunction("cast", &Component::castDown<ComponentCamera>)
 		);
