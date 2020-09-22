@@ -240,13 +240,6 @@ public:
 			shaderMaster->setUniformF("base", "viewport_w", (float)gSettings->screenWidth);
 			shaderMaster->setUniformF("base", "viewport_h", (float)gSettings->screenHeight);
 
-			shaderMaster->setUniformF("base", "foregroundCutoff", g_colour_modulation::getForegroundCutoff());
-			shaderMaster->setUniformF("base", "backgroundCutoff", g_colour_modulation::getBackgroundCutoff());
-			shaderMaster->setUniformF("base", "foregroundStrength", g_colour_modulation::getForegroundStrength());
-			shaderMaster->setUniformF("base", "backgroundStrength", g_colour_modulation::getBackgroundStrength());
-			shaderMaster->setUniform3F("base", "foregroundColour", g_colour_modulation::getForegroundColour().getVec3());
-			shaderMaster->setUniform3F("base", "backgroundColour", g_colour_modulation::getBackgroundColour().getVec3());
-
 			shaderMaster->setUniformMatrix4F("base", "MVP", camera->getVPMatrix());
 			geometryFrameBuffer.bindBuffer();
 			//process the box buffer, which renders the geometry
@@ -314,6 +307,13 @@ public:
 			shaderMaster->setUniformF("unified_lighting", "fogClip", g_fog::getFogStart());
 			shaderMaster->setUniformF("unified_lighting", "fogMax", g_fog::getFogMax());
 			shaderMaster->setUniform3F("unified_lighting", "fogColour", g_fog::getFogColour().getVec3());
+
+			shaderMaster->setUniformF("unified_lighting", "foregroundCutoff", g_colour_modulation::getForegroundCutoff());
+			shaderMaster->setUniformF("unified_lighting", "backgroundCutoff", g_colour_modulation::getBackgroundCutoff());
+			shaderMaster->setUniformF("unified_lighting", "foregroundStrength", g_colour_modulation::getForegroundStrength());
+			shaderMaster->setUniformF("unified_lighting", "backgroundStrength", g_colour_modulation::getBackgroundStrength());
+			shaderMaster->setUniform3F("unified_lighting", "foregroundColour", g_colour_modulation::getForegroundColour().getVec3());
+			shaderMaster->setUniform3F("unified_lighting", "backgroundColour", g_colour_modulation::getBackgroundColour().getVec3());
 
 			postEffects.bindNoClearBuffer();
 			glEnable(GL_BLEND);

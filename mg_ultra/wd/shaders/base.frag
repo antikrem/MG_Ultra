@@ -2,23 +2,15 @@
 
 #define MAX_TEXTURES 16
 
-//Contains all currently loaded mgt
+// Contains all currently loaded mgt
 uniform sampler2D mgtSamplers[MAX_TEXTURES];
 
-//viewport sizeof
+// Viewport sizeof
 uniform float viewport_w;
 uniform float viewport_h;
 
-//forward depth buffer
+// Forward depth buffer
 uniform sampler2D frontDepthBuffer;
-
-//uniforms for modulating colour
-uniform float foregroundCutoff;
-uniform float backgroundCutoff;
-uniform float foregroundStrength;
-uniform float backgroundStrength;
-uniform vec3 foregroundColour;
-uniform vec3 backgroundColour;
 
 in vec3 worldPosition;
 in vec2 uv;
@@ -36,7 +28,7 @@ layout(location = 4) out float minimumAmbient;
 layout(location = 5) out float nextFrontDepthBuffer;
 
 void main() {
-	//check if this fragment is infront of the current closest fragment 
+	// Check if this fragment is infront of the current closest fragment 
 	float z = gl_FragCoord.z / gl_FragCoord.w;
 
 	vec2 depthSampleTex = gl_FragCoord.xy / vec2(viewport_w, viewport_h);
@@ -46,35 +38,25 @@ void main() {
 	}
 
 	vec2 ad_wl = mod(wl, texSize);
-	//adjust sampling: flip y coordinate
+	// Adjust sampling: flip y coordinate
 
-	//remove fully transparent parts
+	// Remove fully transparent parts
 	vec4 texel = texture(mgtSamplers[0], uv + ad_wl).rgba;
 	if (texel.a < 0.01) {
 		discard;
 	}
 
-	//compute foreground background mixing ratio
-	float fbMix = smoothstep(foregroundCutoff, backgroundCutoff, z);
-	float modStrength = mix(foregroundStrength, backgroundStrength, fbMix);
-	vec3 modColour = mix(foregroundColour,backgroundColour, fbMix);
-
-	texel = vec4(
-		mix(texel.rgb, modColour * texel.rgb, modStrength),
-		texel.a
-	);
-
-	//colours are pre multiplied by alpha
+	// Colours are pre multiplied by alpha
 	color =  transparency * texel.a * vec4(texel.rgb , 1.0);
 	position = worldPosition;
 
-	//normal for sprites always face towards the camera
+	// Normal for sprites always face towards the camera
 	normals = vec3(0.0, 0.0, 1.0);
 
 
 	lightingSensitivity = inputLightSensitivity;
 	minimumAmbient = inputAmbientMinimum;
 
-	//position for front depth
+	// Position for front depth
 	nextFrontDepthBuffer = z;
 }
