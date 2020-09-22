@@ -22,7 +22,7 @@ end
 
 function print_table(class)
 	for key,val in pairs(class) do
-		print(key, "=>", val);
+		print(key, "=>", val)
 	end
 end
 
@@ -42,7 +42,7 @@ function print(...)
 
 	-- Check for nil inputs
 	if size == 0 then
-		printAdd("nil")
+		printAdd("<nil>")
 		printPush()
 		return
 	end
@@ -53,10 +53,12 @@ function print(...)
 		local v = select(i, ...)
 	
 		if v == nil then
-			printAdd("nil")
+			printAdd("<nil>")
+		elseif type(v) == "function" then 
+			printAdd("<function>")
 		elseif type(v) == "userdata" and v.__name then
-			--v is a class
-			printAdd(v.__name)
+			-- v is a class
+			printAdd("<Object " .. v.__name .. ">")
 		else
 			printAdd(v)
 		end
