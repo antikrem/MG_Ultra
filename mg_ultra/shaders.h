@@ -73,6 +73,8 @@ private:
 
 	vector<string> includes;
 
+	bool debug = false;
+
 	//conducts the internal inclusion recusivly
 	bool internalHandleIncludes(string& input) {
 		smatch locations;
@@ -239,7 +241,7 @@ public:
 	//throws GraphicsException on error
 	GLint getUniformLocation(string programName, string uniformName, bool failSilently = false) {
 		if (programMap.count(programName)) {
-			return programMap.find(programName)->second.getUniformLocation(uniformName, failSilently);
+			return programMap.find(programName)->second.getUniformLocation(uniformName, failSilently || !debug);
 		}
 		else {
 			throw GraphicsException("Invalid program: " + programName);
