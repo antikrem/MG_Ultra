@@ -27,7 +27,7 @@ class Entity;
 class ComponentMultiEntity : public Component, public ScriptableClass<ComponentMultiEntity> {
 private:
 	int iterator = 0;
-	shared_mutex lock;
+	mutex lock;
 	vector<shared_ptr<Entity>> internalEntities;
 
 	Point3 lastMasterPosition = Point3(0.0f);
@@ -44,7 +44,7 @@ private:
 public:
 	// Adds a shared_ptr to this MultiEntities' internal store
 	void addEntity(shared_ptr<Entity> newEnt) {
-		unique_lock<shared_mutex> lck(lock);
+		unique_lock<mutex> lck(lock);
 
 		auto subPos = newEnt->getComponent<ComponentPosition>();
 		auto subOff = newEnt->getComponent<ComponentOffsetMaster>();
@@ -66,14 +66,14 @@ public:
 
 	// Clears any dead entities from this internal store
 	void clearDeadEntities() {
-		unique_lock<shared_mutex> lck(lock);
+		unique_lock<mutex> lck(lock);
 		//erase dead entities
 		erase_sequential_if(internalEntities, [](shared_ptr<Entity> &ent) { return !ent->getFlag(); });
 	}
 
 	// Updates any sub entities with ComponentOffsetMaster
 	void updateOffsetSubs(Point3 masterPosition) {
-		unique_lock<shared_mutex> lck(lock);
+		unique_lock<mutex> lck(lock);
 		lastMasterPosition = masterPosition;
 		for (auto i : internalEntities) {
 			auto subPos = i->getComponent<ComponentPosition>();
@@ -94,7 +94,7 @@ public:
 	// Gets a shared pointer to the next entity
 	// Gets nullptr if there is no next entity
 	shared_ptr<Entity> nextEntity() {
-		unique_lock<shared_mutex> lck(lock);
+		unique_lock<mutex> lck(lock);
 		if (iterator < (int)internalEntities.size()) {
 			return internalEntities[iterator++];
 		}
@@ -106,7 +106,7 @@ public:
 	// Gets first sub entity by type, returns nullptr if not found
 	// Can utilise skip to ignore a number of results
 	shared_ptr<Entity> getByType(EntityTypes entityType, int skip = 0) {
-		unique_lock<shared_mutex> lck(lock);
+		unique_lock<mutex> lck(lock);
 		for (auto i : internalEntities) {
 			if (i->getType() == entityType) {
 				skip--;
@@ -122,7 +122,7 @@ public:
 	// Apply a lambda in the form f : shared_ptr<ent> -> void
 	// to all internal entities
 	void applyFunction(function<void(shared_ptr<Entity>)> lambda) {
-		unique_lock<shared_mutex> lck(lock);
+		unique_lock<mutex> lck(lock);
 		for (auto i : internalEntities) {
 			lambda(i);
 		}
