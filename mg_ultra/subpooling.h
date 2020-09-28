@@ -197,6 +197,12 @@ public:
 		return key < (int)ents.size() ? ents[key] : nullptr;
 	}
 
+	// Get a copy of all ents
+	vector<shared_ptr<Entity>> getAllEnts() {
+		unique_lock<mutex> lck(lock);
+		return ents;
+	}
+
 	// Clears the subpool of dead entities
 	void clearDeadEnts() {
 		unique_lock<mutex> lck(lock);
