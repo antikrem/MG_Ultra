@@ -1,3 +1,5 @@
+-- \scripts\camera\initialise_camera.lua
+
 -- Executed when a camera entity is created
 -- "this" references camera entity
 
@@ -41,4 +43,24 @@ end
 Camera.get_clip_near = function(clipFar)
 	local camera = EntityPool.get_camera()
 	if camera then return camera:get_component(ComponentCamera):get_clip_near() end
+end
+
+-- Enable camera scripts
+Camera.enable = function()
+	registar:update("camera_script_update", true)
+end
+
+-- Disable camera scripts
+Camera.disable = function()
+	registar:update("camera_script_update", false)
+end
+
+-- Reset camera
+Camera.reset = function()
+	registar:update("camera_script_update", false)
+	local camera = EntityPool.get_camera()
+	if camera then 
+		camera:get_component(ComponentCamera):set_view_target(0, 0)
+		camera:get_component(ComponentPosition):set_position(0, 0)
+	end
 end
