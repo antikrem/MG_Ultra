@@ -19,7 +19,7 @@ struct GraphicsSettings {
 	atomic<int> depthPeelingPasses = 4;
 
 	// Exposure for the scene
-	atomic<float> exposure = 0.3f;
+	atomic<float> exposure = 1.0f;
 	// Bloom threshold
 	atomic<float> bloomThreshold = 1.0f;
 	// Bloom deviation
