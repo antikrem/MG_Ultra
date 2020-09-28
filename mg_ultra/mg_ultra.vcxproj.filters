@@ -100,12 +100,6 @@
     <Filter Include="Header Files\Static Movement">
       <UniqueIdentifier>{387b8395-6d35-48eb-b558-33ef6e75c892}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\level">
-      <UniqueIdentifier>{80547aa8-3ae9-4142-9da0-446fd8172777}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\level\1">
-      <UniqueIdentifier>{35d539f2-c214-4e5a-b23c-eeef684b8d59}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\ECS\Systems">
       <UniqueIdentifier>{2f06b558-4401-4d93-9063-ba6d0ea7c6ea}</UniqueIdentifier>
     </Filter>
@@ -743,6 +737,12 @@
     <ClInclude Include="component_magnetise_to_player.h">
       <Filter>Header Files\ECS\Components</Filter>
     </ClInclude>
+    <ClInclude Include="script_library.h">
+      <Filter>Header Files\Script</Filter>
+    </ClInclude>
+    <ClInclude Include="component_name.h">
+      <Filter>Header Files\ECS\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="wd\shaders\base.vert">
@@ -859,23 +859,11 @@
     <None Include="wd\scripts\profiler\profiler.lua">
       <Filter>Resource Files\scripts\profiler</Filter>
     </None>
-    <None Include="wd\scripts\_initialise\weather.lua">
-      <Filter>Resource Files\scripts\_initialise</Filter>
-    </None>
     <None Include="wd\shaders\point_lighting.frag">
       <Filter>Resource Files\shaders</Filter>
     </None>
     <None Include="wd\shaders\point_lighting.vert">
       <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="wd\shaders\_gauss.vert">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="wd\shaders\_gauss.frag">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="wd\campaigns\ascent\1\prelevel.lua">
-      <Filter>Resource Files\level\1</Filter>
     </None>
     <None Include="wd\scripts\player\initialise_player_system.lua">
       <Filter>Resource Files\scripts\player</Filter>
@@ -930,17 +918,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="wd\campaigns\ascent\1\load_table.txt">
-      <Filter>Resource Files\level\1</Filter>
-    </Text>
-    <Text Include="wd\campaigns\ascent\1\template_table.txt">
-      <Filter>Resource Files\level\1</Filter>
-    </Text>
     <Text Include="wd\log.txt">
       <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="wd\campaigns\ascent\1\dialogue.txt">
-      <Filter>Resource Files\level\1</Filter>
     </Text>
   </ItemGroup>
 </Project>

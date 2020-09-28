@@ -18,6 +18,7 @@
 #include "component_die_with_master.h"
 #include "component_offset_master.h"
 #include "component_offset_once.h"
+#include "component_name.h"
 
 #include "scriptable_class.h"
 
@@ -29,6 +30,9 @@ private:
 	int iterator = 0;
 	mutex lock;
 	vector<shared_ptr<Entity>> internalEntities;
+
+	// Entities with component name will be cached
+	map<string, shared_ptr<Entity>> namedLookup;
 
 	Point3 lastMasterPosition = Point3(0.0f);
 
@@ -43,12 +47,15 @@ private:
 
 public:
 	// Adds a shared_ptr to this MultiEntities' internal store
-	void addEntity(shared_ptr<Entity> newEnt) {
+	// Returns false if an entity already exists with the same name
+	// and will not add to named cache
+	bool addEntity(shared_ptr<Entity> newEnt) {
 		unique_lock<mutex> lck(lock);
 
 		auto subPos = newEnt->getComponent<ComponentPosition>();
 		auto subOff = newEnt->getComponent<ComponentOffsetMaster>();
 		auto subOffOnce = newEnt->getComponent<ComponentOffsetOnce>();
+		auto subName = newEnt->getComponent<ComponentName>();
 
 		if (subPos && subOff) {
 			subPos->setPosition(
@@ -62,13 +69,27 @@ public:
 		}
 
 		internalEntities.push_back(newEnt);
+
+		if (subName) {
+			if (namedLookup.count(subName->getName()) > 0) {
+				return false;
+			}
+
+			namedLookup[subName->getName()] = newEnt;
+		}
+
+		return true;
 	}
 
 	// Clears any dead entities from this internal store
 	void clearDeadEntities() {
 		unique_lock<mutex> lck(lock);
 		//erase dead entities
+		unsigned int count = internalEntities.size();
 		erase_sequential_if(internalEntities, [](shared_ptr<Entity> &ent) { return !ent->getFlag(); });
+		if (count != internalEntities.size()) {
+			erase_associative_if(internalEntities, [](shared_ptr<Entity> &ent) { return !ent->getFlag(); });
+		}
 	}
 
 	// Updates any sub entities with ComponentOffsetMaster
@@ -119,6 +140,17 @@ public:
 		return nullptr;
 	}
 
+	// Gets an entity by name
+	shared_ptr<Entity> getByName(string name) {
+		unique_lock<mutex> lck(lock);
+		if (namedLookup.count(name)) {
+			return namedLookup[name];
+		}
+		else {
+			return nullptr;
+		}
+	}
+
 	// Apply a lambda in the form f : shared_ptr<ent> -> void
 	// to all internal entities
 	void applyFunction(function<void(shared_ptr<Entity>)> lambda) {
@@ -148,6 +180,7 @@ public:
 			.addFunction("kill_children", &ComponentMultiEntity::killAllChildren)
 			.addFunction("reset_iterator", &ComponentMultiEntity::resetIterator)
 			.addFunction("get_next", &ComponentMultiEntity::nextEntity)
+			.addFunction("get", &ComponentMultiEntity::getByName)
 			.addStaticFunction("create",ScriptableClass::create<ComponentMultiEntity>)
 			.addStaticFunction("type", &getType<ComponentMultiEntity>)
 			.addStaticFunction("cast", &Component::castDown<ComponentMultiEntity>)
