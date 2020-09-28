@@ -65,6 +65,15 @@ function EntityPool.kill_cached_entity(entityType)
 	if ent then ent:kill() return true else return false end
 end
 
+-- Kills all entities in the pool
+function EntityPool.kill_all()
+	 return pool:killByType(EntityNoType)
+end
+
+-- Kills all entities by type
+function EntityPool.kill_by_type(type)
+	 return pool:killByType(type)
+end
 -- Attempts to get player, might get nil
 function EntityPool.get_player()
 	return EntityPool.get_cached_entity(EntityPlayer)

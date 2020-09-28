@@ -15,6 +15,7 @@
 #include "subpooling.h"
 
 #include "algorithm_ex.h"
+#include "vec_kit.h"
 
 /* This can be asyncly iterated over,
  * Use begin() to get an id int,
@@ -108,6 +109,14 @@ public:
 		return addEnt(shared_ptr<Entity>(ent), false);
 	}
 
+	vector<shared_ptr<Entity>> l_addEnts(vector<Entity*> ents) {
+		vector<shared_ptr<Entity>> processed;
+		for (auto i : ents) {
+			processed.push_back(shared_ptr<Entity>(i));
+		}
+		addEnts(processed);
+		return processed;
+	}
 
 	// Adds a cached entity through lua
 	bool addCachedEnt(Entity* ent) {
@@ -127,6 +136,21 @@ public:
 		else {
 			return nullptr;
 		}
+	}
+
+	// Kills all entities by a type
+	int killByType(int entityType) {
+		// Copy in all ents
+		int count = 0;
+		auto list = subPools[0].getAllEnts();
+		for (auto i : list) {
+			auto type = i->getType();
+			if (entityType == EntityTypes::ETNoType || type == entityType) {
+				i->killEntity();
+				count++;
+			}
+		}
+		return count;
 	}
 
 	// Clear dead entities, needs to be sometimes, locks access to ents, so should only be done sometimes
@@ -231,8 +255,10 @@ public:
 		state["EntityPool"].setClass(
 			kaguya::UserdataMetatable<EntityPool>()
 			.setConstructors<EntityPool()>()
-			.addFunction("add", &EntityPool::l_addEnt)
+			.addFunction("addSingular", &EntityPool::l_addEnt)
+			.addFunction("addMultiple", &EntityPool::l_addEnts)
 			.addFunction("addCached", &EntityPool::addCachedEnt)
+			.addFunction("killByType", &EntityPool::killByType)
 			.addFunction("getEntFromCache", &EntityPool::getCachedEnt)
 			.addFunction("getGraveyardSize", &EntityPool::getGraveyardSize)
 			.addFunction("getGraveyardPassed", &EntityPool::getGraveyardPassed)
