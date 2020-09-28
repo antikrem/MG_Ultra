@@ -163,3 +163,24 @@ function load_state(...)
 end
  
 
+Debug.tracker_offset = 0
+
+Debug.track_variable = function(name)
+	local e = Entity.create(EntityVariableTracker)
+	e:add_component(ComponentPosition.create(0, 56 * Debug.tracker_offset, -5))
+	local c = ComponentText.create("text_consolas58")
+	c:set_render_in_3D(false)
+	c:set_text("TRACKING")
+	e:add_component(c)
+
+	local tim = ComponentTimer.create()
+	tim:add_spam_callback(
+		"local value = tostring(" .. name .. ") this:get_component(ComponentText):set_text(\"" .. name .. ": \" .. value)" 
+		
+	)
+	e:add_component(tim)
+
+	EntityPool.add_entity(e)
+
+	Debug.tracker_offset =  Debug.tracker_offset + 1
+ end
