@@ -11,19 +11,19 @@ Doesnt actually do much gl tho*/
 
 class GraphicsState {
 private:
-	//Graphics settings
+	// Graphics settings
 	GraphicsSettings* gSettings = new GraphicsSettings();
 
-	//Handles GL calls and interaction with the gl interface
+	// Handles GL calls and interaction with the gl interface
 	GLHandler* glHandler = nullptr;
 
-	//camera object
+	// Camera object
 	Camera* camera = nullptr;
 
-	//Texture master
+	// Texture master
 	AnimationsMaster* animationsMaster = nullptr;
 	
-	//creates window returns EXIT_FAILURE on fail, else EXIT_SUCCESS
+	// Creates window returns EXIT_FAILURE on fail, else EXIT_SUCCESS
 	int createWindowAndPassToGLHandler() {
 		// Initialise GLFW
 		if (!glfwInit()) {
@@ -53,7 +53,7 @@ private:
 
 		glViewport(0, 0, gSettings->screenWidth, gSettings->screenHeight);
 
-		//Make context current for a bit on initialise thread
+		// Make context current for a bit on initialise thread
 		glfwMakeContextCurrent(window);
 		glewExperimental = true;
 		if (glewInit() != GLEW_OK) {
@@ -61,20 +61,20 @@ private:
 			return EXIT_FAILURE;
 		}
 
-		//create camera
+		// Create camera
 		camera = new Camera(gSettings);
 		
-		//create texture master
+		// Create texture master
 		animationsMaster = new AnimationsMaster();
 
-		//Switch over to the GLHandler
+		// Switch over to the GLHandler
 		glHandler = new GLHandler(window, gSettings, animationsMaster, camera);
 
 		return EXIT_SUCCESS;
 	}
 
 public:
-	//Creates graphic states and initialises openGL
+	// Creates graphic states and initialises openGL
 	GraphicsState() {
 		//create a window and pass it off to GLHander
 		if FAILURE(createWindowAndPassToGLHandler()) {
@@ -105,7 +105,7 @@ public:
 		glHandler->glThreadInitialise(getWindow(), gSettings);
 	}
 
-	//gets the GLHandler to render
+	// Gets the GLHandler to render
 	void renderGL() {
 		glHandler->render();
 	}
@@ -116,67 +116,67 @@ public:
 
 	///BoxDataBuffer
 
-	//gets a pointer to a buffered map
+	// Gets a pointer to a buffered map
 	BoxData* getBoxDataBuffer() {
 		return glHandler->getBoxDataBuffer().getWriteBuffer();
 	}
 
-	//commit the directionalLightVAOBuffer buffer
+	// Commit the directionalLightVAOBuffer buffer
 	void commitBoxDataBuffer(int boxCount) {
 		glHandler->getBoxDataBuffer().commitBuffer(boxCount);
 	}
 
-	//returns the size of the GLHandler's boxBufferDataBuffer size
+	// Returns the size of the GLHandler's boxBufferDataBuffer size
 	int getBoxDataBufferSize() {
 		return glHandler->getBoxDataBuffer().getMaxSize();
 	}
 
 	///UI BoxData
 
-	//gets a pointer to a buffered map
+	// Gets a pointer to a buffered map
 	BoxData* getUIBoxDataBuffer() {
 		return glHandler->getUIBoxDataBuffer().getWriteBuffer();
 	}
 
-	//commit the directionalLightVAOBuffer buffer
+	// Commit the directionalLightVAOBuffer buffer
 	void commitUIBoxDataBuffer(int boxCount) {
 		glHandler->getUIBoxDataBuffer().commitBuffer(boxCount);
 	}
 
-	//returns the size of the GLHandler's boxBufferDataBuffer size
+	// Returns the size of the GLHandler's boxBufferDataBuffer size
 	int getUIBoxDataBufferSize() {
 		return glHandler->getUIBoxDataBuffer().getMaxSize();
 	}
 
 	///DirectionalDataBuffer
 
-	//gets a pointer to a buffered map
+	// Gets a pointer to a buffered map
 	DirectionalData* getDirectionDataBuffer() {
 		return glHandler->getDirectionalLightBuffer().getWriteBuffer();
 	}
 
-	//commit the directionalLightVAOBuffer buffer
+	// Commit the directionalLightVAOBuffer buffer
 	void commitDirectionalDataBuffer(int directionCount) {
 		glHandler->getDirectionalLightBuffer().commitBuffer(directionCount);
 	}
 
-	//returns the size of the GLHandler's directionalLightVAOBuffer size
+	// Returns the size of the GLHandler's directionalLightVAOBuffer size
 	int getDirectionalDataBufferSize() {
 		return glHandler->getDirectionalLightBuffer().getMaxSize();
 	}
 
 	///PointLightDataBuffer
-	//gets a pointer to a buffered map
+	// Gets a pointer to a buffered map
 	PointLightData* getPointLightDataBuffer() {
 		return glHandler->getPointLightBuffer().getWriteBuffer();
 	}
 
-	//commit the directionalLightVAOBuffer buffer
+	// Commit the directionalLightVAOBuffer buffer
 	void commitPointLightDataBuffer(int directionCount) {
 		glHandler->getPointLightBuffer().commitBuffer(directionCount);
 	}
 
-	//returns the size of the GLHandler's directionalLightVAOBuffer size
+	// Returns the size of the GLHandler's directionalLightVAOBuffer size
 	int getPointLightDataBufferSize() {
 		return glHandler->getPointLightBuffer().getMaxSize();
 	}
