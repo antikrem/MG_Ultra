@@ -26,10 +26,11 @@ EntityScoreBoard = 19
 EntityPowerBoard = 20
 EntityFragmentBoard = 21
 EntityPowerUp = 22
+EntityVariableTracker = 23
 
 -- Adds to pool, returns boolean success
 function EntityPool.add_entity(entity)
-	return pool:add(entity)
+	return pool:addSingular(entity)
 end
 
 -- Adds to pool and cache, returns boolean success
@@ -67,4 +68,9 @@ end
 -- Attempts to get player, might get nil
 function EntityPool.get_player()
 	return EntityPool.get_cached_entity(EntityPlayer)
+end
+
+-- Attempts to get camera, might get nil
+function EntityPool.get_camera()
+	return EntityPool.get_cached_entity(EntityCamera)
 end
