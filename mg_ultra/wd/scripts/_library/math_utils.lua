@@ -1,6 +1,6 @@
---A bunch of mathematical functions
+-- A bunch of mathematical functions
 
---returns value clammped between min and max
+-- Returns value clammped between min and max
 function math.clamp(value, min, max)
 	if value < min then
 		return min
@@ -11,6 +11,12 @@ function math.clamp(value, min, max)
 	end
 end
 
+-- Implementation of tend to
+function math.tend_to(current, target, step)
+	local difference = math.min(math.abs(target - current), step)
+	if current > target then return current - difference else return current + difference end
+end
+
 function math.to_degrees(r)
 	return r*(180/math.pi)
 end
@@ -19,7 +25,7 @@ function math.to_radians(d)
 	return d*(math.pi/180)
 end
 
---takes an angle and reframes it within the principle
+-- Takes an angle and reframes it within the principle
 -- range of -180 to 180
 function math.to_principle(angle)
 	angle = angle % 360
@@ -34,18 +40,18 @@ function math.to_magnitude(x, y)
 	return math.sqrt(x^2+y^2)
 end
 
---takes a cartesian point, and returns a polar vector (mag, ang)
+-- Takes a cartesian point, and returns a polar vector (mag, ang)
 function math.to_polar(x, y)
 	return math.to_magnitude(x,y), math.to_degrees(math.atan2(y,x))
 end
 
---takes a polar vector, and returns cartesian
+-- Takes a polar vector, and returns cartesian
 function math.to_point(mag, ang)
 	return mag*math.cos(math.to_radians(ang)), mag*math.sin(math.to_radians(ang))
 end
 
---takes two angles a and b
---computes what to add to a to get to b in the fastest way
+-- Takes two angles a and b
+-- computes what to add to a to get to b in the fastest way
 function math.compute_smallest_turn(target, current)
 	local difference = math.to_principle(target) - math.to_principle(current)
 	if -180 < difference and difference < 180 then
@@ -57,12 +63,12 @@ function math.compute_smallest_turn(target, current)
 	end
 end
 
---interpolates [0,1] to [a,b] linearly
+-- Interpolates [0,1] to [a,b] linearly
 function math.lerp(t, a, b)
 	return a + t * (b - a)
 end
 
---Return of vector of random a, b, default 0,1
+--R eturn of vector of random a, b, default 0,1
 function math.rand_vec(length, a, b)
 	if is_nil(a) then a = 0 end
 	if is_nil(b) then b = 1 end
@@ -70,7 +76,7 @@ function math.rand_vec(length, a, b)
 	return math.q_rand_vec(length, a, b)
 end
 
---Return of vector of random a, b, no nil check
+-- Return of vector of random a, b, no nil check
 function math.q_rand_vec(length, a, b)
 	if length <= 0 then 
 		return nil 
@@ -86,12 +92,12 @@ function math.sample_uniform_circle(radius)
 	return r * math.cos(t), r * math.sin(t)
 end
 
-----The array class of functions deal with handling arrays
-----framed as n-dimensional vectors of numbers
+--- The array class of functions deal with handling arrays
+--- framed as n-dimensional vectors of numbers
 arrays = {}
 
---takes multiple arrays and a index
---and returns multiple indexed values
+-- Takes multiple arrays and a index
+-- and returns multiple indexed values
 function arrays.index_multiple_array(i, first, ...)
 	if is_nil(first) then
 		return nil;
@@ -100,16 +106,16 @@ function arrays.index_multiple_array(i, first, ...)
 	end
 end
 
---adds an element to the end of a new array
+-- Adds an element to the end of a new array
 function arrays.append(current, element)
 	current[#current + 1] = element
 end
 
---takes multiple n-d arrays and composes into a single (n+1)-d array 
---e.g:
---a = {10, 13, 14}
---b = {11, 12, 13}
---c = {{10, 13, 14}, {11, 12, 13}}
+-- Takes multiple n-d arrays and composes into a single (n+1)-d array 
+-- e.g:
+-- a = {10, 13, 14}
+-- b = {11, 12, 13}
+-- c = {{10, 13, 14}, {11, 12, 13}}
 function arrays.compose(...) 
 	local current = {}
 	for i = 1,select("#",...) do
@@ -119,14 +125,14 @@ function arrays.compose(...)
 end
 
 
---takes an n-d array and decomposes it into
---a set of (n-1)-d arrays
+-- Takes an n-d array and decomposes it into
+-- a set of (n-1)-d arrays
 function arrays.decompose(array)
 	return unpack(array)
 end
 
---create an iterator which allows iterating over multiple arrays
---will continue until first array is nil
+-- Create an iterator which allows iterating over multiple arrays
+-- will continue until first array is nil
 function arrays.multi_iter(...)
 	local i = 0
 	local p = arrays.compose(...) 
@@ -136,7 +142,7 @@ function arrays.multi_iter(...)
 	end
 end
 
---takes an n-d array and returns a negated version
+-- Takes an n-d array and returns a negated version
 function arrays.negate(a)
 	if is_number(a) then
 		return -a
@@ -145,7 +151,7 @@ function arrays.negate(a)
 	end
 end
 
---takes an n-d array and transposes upon the 2 highest dimensions
+-- Takes an n-d array and transposes upon the 2 highest dimensions
 function arrays.transpose(a)
 	local result = {}
 
@@ -159,9 +165,9 @@ function arrays.transpose(a)
     return result
 end
 
---takes m count n-dimensional arrays
---alternativly takes a composition of n-dimension arrays
---and adds each element
+-- Takes m count n-dimensional arrays
+-- alternativly takes a composition of n-dimension arrays
+-- and adds each element
 function arrays.sum(first, ...)
 	--if we have more than 1 element
 	--this is the first invokation
@@ -184,8 +190,8 @@ function arrays.sum(first, ...)
 	return arrays.compose( apply_function_to_set(arrays.sum, arrays.decompose(tFirst)) )
 end
 
---takes an n-dimension array A,
---and multiplies by m
+-- Takes an n-dimension array A,
+-- and multiplies by m
 function arrays.multiply(m, A)
 	if is_number(A) then
 		return m*A 
