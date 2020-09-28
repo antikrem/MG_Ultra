@@ -1,5 +1,7 @@
-/*Indicates the entity not be
-Culled when out of game bounds*/
+/** 
+ * Indicates the entity not be
+ * Culled when out of game bounds
+ */
 #ifndef __COMPONENT_NO_BOUNDS_CONTROL__
 #define __COMPONENT_NO_BOUNDS_CONTROL__
 
