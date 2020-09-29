@@ -60,6 +60,11 @@ g_dashDuration = 0
 -- Time spent in cooldown
 g_dashCooldown = 0
 
+-- Tends from 0 to one when in shift
+g_shiftFactor = 0
+-- Shift factor change value
+PLAYER_SHIFT_FACTOR_DELTA = 0.02
+
 --loading assets for player
 Audio.request_load_file("player_shoot_tick", "shoot_click.wav")
 Audio.flush_queue()
@@ -112,7 +117,8 @@ g_playerMovementUpdate = function()
 		g_dashReleased = true
 	end
 
-	local isFocusInput = cInput:query_down("focus") == 1 and not g_inDash
+	local focusValue = cInput:query_down("focus")
+	local isFocusInput = focusValue == 1 and not g_inDash
 
 	local movementMode = g_inDash and "DASH" or (isFocusInput and "FOCUS" or "DEFAULT")
 
@@ -160,9 +166,11 @@ g_playerMovementUpdate = function()
 	end
 
 	if g_inDash then
-		this:get_component(ComponentParticle):spawn(1)
+		this:get_component(ComponentParticle):spawn(1)	
 	end
 
+	-- Modify shift factor
+	g_shiftFactor = math.tend_to(g_shiftFactor, focusValue, PLAYER_SHIFT_FACTOR_DELTA)
 end
 
 --Standard bullet handler
@@ -243,4 +251,50 @@ Player.execute_against = function(f, ...)
 	this = EntityPool.get_player()
 	f(...)
 	this = nil
+end
+
+-- Returns player position
+Player.get_position = function()
+	local player = EntityPool.get_player()
+	if player then return player:get_component(ComponentPosition):get_position() else return nil end
+end
+
+-- Add friend magic circle
+-- Works only when this points to player
+Player.add_friend_magic_circle = function(layer)
+	-- Create freind magic circles
+	local mc = Entity.create(EntityGeneric)
+
+	mc:add_component(ComponentPosition.create(0, 200, 0))
+	mc:add_component(ComponentGraphics.create("mc_fire_circle"))
+	mc:add_component(ComponentRotation.create(0, 2))
+
+	mc:add_component(ComponentOffsetMaster.create(true))
+	mc:add_component(ComponentDieWithMaster.create())
+	mc:add_component(ComponentNoBoundsControl.create())
+
+	mc:add_component(ComponentPointLight.create(1.0, 0.75, 0.05, 0.0015, 0.07, 3.2))
+	--mc:add_component(ComponentNoBoundsControl.create())
+
+	mc:add_component(ComponentName.create(tostring(layer)))
+
+	this:get_component(ComponentSpawner):add_entity(mc)
+
+	mc = Entity.create(EntityGeneric)
+
+	mc:add_component(ComponentPosition.create(0, 200, 0))
+	mc:add_component(ComponentGraphics.create("mc_fire_circle"))
+	mc:add_component(ComponentRotation.create(0, 2))
+
+	mc:add_component(ComponentOffsetMaster.create(true))
+	mc:add_component(ComponentDieWithMaster.create())
+	mc:add_component(ComponentNoBoundsControl.create())
+
+	mc:add_component(ComponentPointLight.create(1.0, 0.75, 0.05, 0.0015, 0.07, 3.2))
+	--mc:add_component(ComponentNoBoundsControl.create())
+
+	mc:add_component(ComponentName.create(tostring(-layer)))
+
+	this:get_component(ComponentSpawner):add_entity(mc)
+
 end
