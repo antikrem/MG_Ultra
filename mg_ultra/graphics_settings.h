@@ -20,6 +20,10 @@ struct GraphicsSettings {
 
 	// Exposure for the scene
 	atomic<float> exposure = 1.0f;
+
+	// Grayscale factor
+	atomic<float> greyScaleFactor = .0f;
+
 	// Bloom threshold
 	atomic<float> bloomThreshold = 1.0f;
 	// Bloom deviation
@@ -54,14 +58,23 @@ namespace g_graphicsSettings {
 	// Updates some parameters of graphics settings
 	void update();
 
-	// Sets target
+	// Sets exposure target
 	void setExposureTarget(float target);
 
-	// Sets rate
+	// Sets exposure rate
 	void setExposureRate(float rate);
 
 	// Allows exposure to be directly set
 	void setExposure(float exposure);
+
+	// Sets target greyscale
+	void setGreyScaleFactorTarget(float target);
+
+	// Sets grey scale factor rate
+	void setGreyScaleFactorRate(float rate);
+
+	// Allows grey scale to be directly set
+	void setGreyScaleFactor(float greyScaleFactor);
 	
 	// Sets threshold for bloom
 	void setBloomThreshold(float threshold);

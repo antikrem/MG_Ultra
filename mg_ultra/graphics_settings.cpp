@@ -12,6 +12,9 @@ GraphicsSettings* globalGSettings = nullptr;
 atomic<float> targetExposure = 1.0f;
 atomic<float> rateExposure = 1.0f;
 
+atomic<float> targetGreyScaleFactor = 0.0f;
+atomic<float> rateGreyScaleFactor = 1.0f;
+
 GraphicsSettings::GraphicsSettings() {
 	//load settings from file
 	INIParser gfxSettings(GFX_FILE_LOCATION);
@@ -48,7 +51,23 @@ void g_graphicsSettings::setGlobalGraphicsSettings(GraphicsSettings* globalGraph
 
 void g_graphicsSettings::update() {
 	shared_lock<shared_mutex> lck(globalGSettingsPtrLock);
-	globalGSettings->exposure = math_ex::tend_to(globalGSettings->exposure.load(), rateExposure.load(), targetExposure.load());
+	globalGSettings->exposure 
+			= math_ex::tend_to(
+					globalGSettings->exposure.load(), 
+					rateExposure.load(), 
+					targetExposure.load()
+				);
+
+	float temp = math_ex::tend_to(
+			globalGSettings->greyScaleFactor.load(),
+			rateGreyScaleFactor.load(),
+			targetGreyScaleFactor.load()
+		);
+	globalGSettings->greyScaleFactor = math_ex::clamp(
+			temp,
+			0.0f,
+			1.0f
+		);
 }
 
 void g_graphicsSettings::setExposureTarget(float target) {
@@ -63,6 +82,20 @@ void g_graphicsSettings::setExposure(float exposure) {
 	targetExposure = exposure;
 	shared_lock<shared_mutex> lck(globalGSettingsPtrLock);
 	globalGSettings->exposure = exposure;
+}
+
+void g_graphicsSettings::setGreyScaleFactorTarget(float target) {
+	targetGreyScaleFactor = target;
+}
+
+void g_graphicsSettings::setGreyScaleFactorRate(float rate) {
+	rateGreyScaleFactor = rate;
+}
+
+void g_graphicsSettings::setGreyScaleFactor(float greyScaleFactor) {
+	targetGreyScaleFactor = greyScaleFactor;
+	shared_lock<shared_mutex> lck(globalGSettingsPtrLock);
+	globalGSettings->greyScaleFactor = greyScaleFactor;
 }
 
 void g_graphicsSettings::setBloomThreshold(float threshold) {

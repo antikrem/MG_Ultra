@@ -1,6 +1,8 @@
 #version 330 core
 //Applies filmic tonmapping 
 
+#include "helper.glsl"
+
 //full scene
 uniform sampler2D scene;
 //brights
@@ -9,6 +11,8 @@ uniform sampler2D brights;
 uniform float exposure;
 
 uniform float letterbox;
+
+uniform float greyscaleFactor;
 
 in vec2 uv;
 
@@ -46,8 +50,11 @@ void main() {
 	vec3 sceneTexel 
 		= bright.rgb * max(bright.a, 1.0 - lows.a)  + lows.rgb * (1.0 - bright.a);
 
+	vec3 greyscaleScene
+		= vec3(dot(sceneTexel, COLOUR_PERCEPTION));
+
 	colour = vec4(
-		exposureMapping(sceneTexel.rgb), 
+		exposureMapping(mix(sceneTexel, greyscaleScene, greyscaleFactor)), 
 		1.0
 	) 
 	//0 when outside border
