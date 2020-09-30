@@ -249,6 +249,9 @@ end
 -- Execute a function that treats player as this
 Player.execute_against = function(f, ...)
 	this = EntityPool.get_player()
+
+	if is_nil(this) then return end
+
 	f(...)
 	this = nil
 end
@@ -296,5 +299,4 @@ Player.add_friend_magic_circle = function(layer)
 	mc:add_component(ComponentName.create(tostring(-layer)))
 
 	this:get_component(ComponentSpawner):add_entity(mc)
-
 end
