@@ -86,14 +86,16 @@ struct TimedCallbackPack {
 };
 
 namespace g_timer {
-	// Initialiser
-
 
 	// Periodic callback required to update callbacks
 	void updateTimers();
 
 	// Registers a new callback executor
 	CallbackExecutor* newTimer(std::chrono::microseconds period, std::function<void(void*)> callback, void* parameter);
+
+	// Finaliser method that clears all unused timers
+	// updateTiemrs does this automatically, but this can't start new callbacks
+	void finalise();
 }
 
 /**

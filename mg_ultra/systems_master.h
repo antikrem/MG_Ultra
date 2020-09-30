@@ -107,6 +107,7 @@ public:
 		//if has a timer, stop it
 		if (timer) {
 			timer->stopTimer();
+			delete timer;
 		}
 
 		//dirty kill each systems sucess callback

@@ -17,17 +17,20 @@ void glfwErrorCallback(int error, const char* description) {
 }
 
 int main() {
-	//start error logger
+	// Start error logger
 	err::primeErrorFile();
 
-	//set error call back right at the start
+	// Set error call back right at the start
 	glfwSetErrorCallback(&glfwErrorCallback);
 
 	ECSMaster* master = new ECSMaster();
 	master->gameloop();
 	delete master;
 
-	//ends the log
+	// Stop global timers
+	g_timer::finalise();
+
+	// Ends the log
 	err::endLog();
 
 	return EXIT_SUCCESS;
