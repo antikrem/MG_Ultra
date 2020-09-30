@@ -165,9 +165,6 @@
     <ClCompile Include="success_callback.cpp">
       <Filter>Source Files\Support</Filter>
     </ClCompile>
-    <ClCompile Include="timed_event_callback.cpp">
-      <Filter>Source Files\ECS</Filter>
-    </ClCompile>
     <ClCompile Include="functional_callback_system.cpp">
       <Filter>Source Files\Script</Filter>
     </ClCompile>
@@ -239,6 +236,9 @@
     </ClCompile>
     <ClCompile Include="global_collision_interface.cpp">
       <Filter>Source Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="timed_callback.cpp">
+      <Filter>Source Files\Support</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

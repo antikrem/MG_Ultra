@@ -13,7 +13,7 @@ class TimedEventCallback {
 	
 public:
 	TimedEventCallback(int callsPerSecond, string systemName, bool pause) 
-		: internalTimer(MS_IN_SECOND / callsPerSecond, &emitEvent, Event(EV_invokeSystemMaster))  {
+		: internalTimer(callsPerSecond, &emitEvent, Event(EV_invokeSystemMaster))  {
 		internalTimer.getParameter().data.push_back(systemName);
 		internalTimer.getParameter().data.push_back("timer");
 		internalTimer.getParameter().data.push_back(pause ? "p" : "np");
@@ -28,7 +28,7 @@ public:
 	}
 
 	void stopTimer() {
-		internalTimer.stopTimer();
+		internalTimer.pauseTimer();
 	}
 
 };
