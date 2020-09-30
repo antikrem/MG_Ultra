@@ -19,7 +19,9 @@ enum EventType {
 	EV_LENGTH
 };
 
-/*Encapsulates an event, this can be thrown from anywhere in the engine*/
+/** 
+ *Encapsulates an event, this can be thrown from anywhere in the engine
+ */
 struct Event {
 	EventType type;
 	vector<string> data;
@@ -28,13 +30,13 @@ struct Event {
 		this->type = type;
 	}
 
-	//create an event by reference
+	// Create an event by reference
 	Event(const Event& event) {
 		this->type = event.type;
 		this->data = event.data;
 	}
 	
-	//create an event by pointer to another event
+	// Create an event by pointer to another event
 	Event(const Event* event) {
 		this->type = event->type;
 		this->data = event->data;
@@ -42,21 +44,23 @@ struct Event {
 };
 
 namespace g_events {
-	/*Push the event onto the event que*/
+	/** 
+	 * Push the event onto the event que
+	 */
 	void pushEvent(Event* event);
 
-	//blocks thread until a new event comes in
-	//updates event with pointer to new event
+	// Updates event with pointer to new event
+	// If no event in queue, returns false
 	bool pollEvents(Event** event);
 
-	//clears all events currently in the queue
+	// Clears all events currently in the queue
 	void clearEventQueue();
 
-	//closes event pipeline
-	//then clears all events in queue
+	// Closes event pipeline
+	// then clears all events in queue
 	void closeEventPipeline();
 
-	//debugging
+	// Debugging
 	int queueSize();
 }
 

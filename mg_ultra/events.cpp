@@ -8,7 +8,6 @@
 queue<Event*> eventQueue;
 atomic<bool> pipelineOpen = true;
 mutex lck;
-condition_variable gate;
 
 void g_events::pushEvent(Event* event) {
 	unique_lock<mutex> l(lck);
@@ -18,18 +17,19 @@ void g_events::pushEvent(Event* event) {
 	}
 	eventQueue.push(event);
 	l.unlock();
-	gate.notify_one();
 }
 
 bool g_events::pollEvents(Event** event) {
 	//wait for event to come in
 	unique_lock<mutex> l(lck);
-	gate.wait(l, [] { return g_events::queueSize(); });
 
-	Event* currentEvent = eventQueue.front();
-	*event = currentEvent;
-	eventQueue.pop();
-	return true;
+	if (eventQueue.size() > 0) {
+		Event* currentEvent = eventQueue.front();
+		*event = currentEvent;
+		eventQueue.pop();
+		return true;
+	}
+	return false;
 }
 
 void g_events::clearEventQueue() {

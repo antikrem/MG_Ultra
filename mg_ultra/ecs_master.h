@@ -348,7 +348,9 @@ private:
 
 	void handleEvents() {
 		Event* event = nullptr;
-		g_events::pollEvents(&event);
+		if (!g_events::pollEvents(&event)) {
+			return;
+		}
 
 		if (g_events::queueSize() > 1000 && event->data.size()) {
 			cout << "cycleing " << event->data[0] << " " << g_events::queueSize() << endl;
@@ -406,6 +408,9 @@ public:
 			if (glfwWindowShouldClose(gMaster->getWindow())) {
 				g_events::pushEvent(new Event(EV_quit));
 			}
+
+			// Update global timers
+			g_timer::updateTimers();
 		}
 	}
 
