@@ -10,56 +10,82 @@ and keeping a list of all commands
 #include <vector>
 #include <string>
 
+enum ConsoleState {
+	closed = 0,
+	active = 1,
+	pinned = 2
+};
+
 class ComponentConsole : public Component {
-	bool active = false;
-	//previous lines, like from log
+	// Nothing drawn if closed
+	// if active, takes input
+	// if pinned, drawn but takes no input
+	ConsoleState state = ConsoleState::closed;
+
+	// Previous lines, like from log
 	vector<string> previousLines;
-	//previous commmands
+
+	// Previous commmands
 	vector<string> previousCommands;
-	//commands to be send to script system for execution
+
+	// Commands to be send to script system for execution
 	vector<string> commandBuffer;
 	string currentLine;
 	mutex lock;
 
-	//number of lines displayed above the current line
+	// Number of lines displayed above the current line
 	atomic<int> numberOfPreviousLines = 10;
-	//skips this number of lines from the bottom, scrolling up to look at previous text
+
+	// Skips this number of lines from the bottom, scrolling up to look at previous text
 	atomic<int> skip = 0;
 
-	//the current previous line recall pointer, current line is how far to go
+	// The current previous line recall pointer, current line is how far to go
 	atomic<int> previousRecall = -1;
 public:
 	ComponentConsole() {
 		previousCommands.push_back("[TOP]");
 	}
 
-	//flips active flag and returns current state
-	bool flipFlag() {
+	// Modifies state given shift modifier and returns new state
+	ConsoleState flipState(bool modifier) {
 		lock_guard<mutex> lck(lock);
-		active = !active;
-		return active;
+		if (state) {
+			if (modifier && state == ConsoleState::active) {
+				state = ConsoleState::pinned;
+			}
+			else if (modifier && state == ConsoleState::pinned) {
+				state = ConsoleState::active;
+			}
+			else {
+				state = ConsoleState::closed;
+			}
+		}
+		else {
+			state = modifier ? ConsoleState::pinned : ConsoleState::active;
+		}
+		return state;
 	}
 
-	//get current flag
-	bool getActive() {
+	// Get current flag
+	ConsoleState getState() {
 		lock_guard<mutex> lck(lock);
-		return active;
+		return state;
 	}
 
-	//adds to the console current line buffer
+	// Adds to the console current line buffer
 	void addText(string text) {
 		lock_guard<mutex> lck(lock);
 		currentLine.append(text);
 	}
 
-	//adds new line to the line buffer, press enter
+	// Adds new line to the line buffer, press enter
 	void addNewLine() {
 		lock_guard<mutex> lck(lock);
 		previousRecall = -1;
 		currentLine.push_back('\n');
 	}
 
-	//removes last character from current line buffer
+	// Removes last character from current line buffer
 	void backspace() {
 		lock_guard<mutex> lck(lock);
 		previousRecall = -1;
@@ -68,7 +94,7 @@ public:
 		}
 	}
 
-	//pushes current line into line buffer
+	// Pushes current line into line buffer
 	void pushCurrentLine() {
 		lock_guard<mutex> lck(lock);
 		previousRecall = -1;
@@ -80,7 +106,7 @@ public:
 		}
 	}
 
-	//adds to previous line buffer
+	// Adds to previous line buffer
 	void addPreviousLines(vector<string> buffer) {
 		lock_guard<mutex> lck(lock);
 		if (buffer.size()) {
@@ -88,10 +114,10 @@ public:
 		}
 	}
 
-	//goes up a step in previous command recall, and replaces current buffer with recall
+	// Goes up a step in previous command recall, and replaces current buffer with recall
 	void recallAStep() {
 		lock_guard<mutex> lck(lock);
-		//check if the previous line recall can handle more presses
+		// Check if the previous line recall can handle more presses
 		if (previousRecall < (int)previousCommands.size()-1) {
 			previousRecall++;
 		}
@@ -99,10 +125,10 @@ public:
 		currentLine = previousCommands[(int)previousCommands.size() - previousRecall - 1];
 	}
 	
-	//goes down a step
+	// Goes down a step
 	void redownAStep() {
 		lock_guard<mutex> lck(lock);
-		//check if the previous line recall can handle more presses
+		// Check if the previous line recall can handle more presses
 		if (previousRecall > 0) {
 			previousRecall--;
 			currentLine.clear();
@@ -114,7 +140,7 @@ public:
 		}
 	}
 
-	//returns current command buffer, and clears
+	// Returns current command buffer, and clears
 	vector<string> pullCommandLineBuffer() {
 		lock_guard<mutex> lck(lock);
 		vector<string> buffer = commandBuffer;
@@ -122,13 +148,13 @@ public:
 		return buffer;
 	}
 
-	//gets the console text, the text that needs to be shown
+	// Gets the console text, the text that needs to be shown
 	string getConsoleText() {
 		vector<string> pastLines;
 		lock_guard<mutex> lck(lock);
-		//need to create numberOfPreviousLines
-		//implemented by scrolling from end of past commands
-		//until enough has beenn generated for both numberOfPreviousLines + skip
+		// Need to create numberOfPreviousLines
+		// implemented by scrolling from end of past commands
+		// until enough has beenn generated for both numberOfPreviousLines + skip
 		for (int i = (int)previousLines.size()-1; i >= 0; i--) {
 			vector<string> splitLine = str_kit::splitOnToken(previousLines[i], '\n');
 			pastLines.insert(pastLines.begin(), splitLine.begin(), splitLine.end());
@@ -137,13 +163,13 @@ public:
 			}
 		}
 
-		//Most likely theres too many lines, these need to be trimmed
-		//Alternativly theres not enough lines, pad for 5 by adding more
+		// Most likely theres too many lines, these need to be trimmed
+		// Alternativly theres not enough lines, pad for 5 by adding more
 		while ((int)pastLines.size() > numberOfPreviousLines) {
 			pastLines.erase(pastLines.begin());
 		}
 
-		//Alternativly theres not enough lines, pad for more by adding more
+		// Alternativly theres not enough lines, pad for more by adding more
 		while ((int)pastLines.size() < numberOfPreviousLines) {
 			pastLines.insert(pastLines.begin(), "");
 		}
@@ -154,7 +180,14 @@ public:
 			buffer.append("\n");
 		}
 
-		return buffer + " :" + str_kit::replaceToken(currentLine, "\n", "\n :");
+		// If pinned, stop here
+		if (state == ConsoleState::pinned) {
+			return buffer;
+		}
+		else {
+			return buffer + " :" + str_kit::replaceToken(currentLine, "\n", "\n :");
+		}
+
 	}
 
 };
