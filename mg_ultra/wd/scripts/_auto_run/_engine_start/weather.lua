@@ -185,6 +185,8 @@ Weather.strike_blinding_lightning = function(delay, fadeout)
 	ColourModulation.set_background_colour(5, 5, 5)
 	ColourModulation.set_foreground_colour(0,0,0)
 	ColourModulation.set_strength(1.2)
+	PostEffects.Greyscale.set(1) 
+	PostEffects.Greyscale.set_rate(tostring(1/fadeout))
 
 	Fog.set_strength(0)
 
@@ -194,10 +196,13 @@ Weather.strike_blinding_lightning = function(delay, fadeout)
 		delay, 
 		"ColourModulation.set_strength(1.2," .. tostring(1.2/fadeout) .. ", 0.000) " ..
 		"Fog.set_strength(0, " .. tostring(0.0017/fadeout) .. ", 0.00165) " ..
+		"PostEffects.Greyscale.set_target(0) " ..
 		"this:get_component(ComponentDirectionalLight):set_strength(1.0, " .. tostring(1.0 / fadeout) .. ", 0)" 
 	)
 	c:add_callback(
 		math.max(delay + fadeout, 1000), 
+		"PostEffects.Greyscale.set(0) " ..
+		"PostEffects.Greyscale.set_rate(1) " ..
 		"this:kill()"
 	)
 	e:add_component(c)
