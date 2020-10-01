@@ -50,6 +50,13 @@ function math.to_point(mag, ang)
 	return mag*math.cos(math.to_radians(ang)), mag*math.sin(math.to_radians(ang))
 end
 
+-- Rotate a point about the origin
+function math.rotate_point(x, y, delta)
+	local mag, ang = math.to_polar(x, y)
+	ang = ang + delta
+	return math.to_point(mag, ang)
+end
+
 -- Takes two angles a and b
 -- computes what to add to a to get to b in the fastest way
 function math.compute_smallest_turn(target, current)
