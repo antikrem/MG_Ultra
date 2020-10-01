@@ -47,7 +47,6 @@ Weather.toggle_audio_pause = function()
 	if not is_nil(weatherEnt) then
 		local cAudio = weatherEnt:get_component(ComponentAudio)
 		local state = cAudio:get_state()
-		print(state)
 		if state == AudioState.PLAY then
 			cAudio:pause()
 		elseif state == AudioState.PAUSE then
