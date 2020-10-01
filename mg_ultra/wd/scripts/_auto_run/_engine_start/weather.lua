@@ -49,10 +49,8 @@ Weather.toggle_audio_pause = function()
 		local state = cAudio:get_state()
 		print(state)
 		if state == AudioState.PLAY then
-			print("bause")
 			cAudio:pause()
 		elseif state == AudioState.PAUSE then
-			print("unbause")
 			cAudio:resume()
 		end
 	else
