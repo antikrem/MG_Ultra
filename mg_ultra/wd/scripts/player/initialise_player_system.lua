@@ -8,9 +8,9 @@ GlobalRegistar.add("player_active", false)
 
 --Table used for gettings certain velocity values
 PLAYER_MAX_VELOCITY_TABLE = {
-	DEFAULT = 13,
+	DEFAULT = 11.5,
 	DASH = 50,
-	FOCUS = 5.8
+	FOCUS = 4.3
 }
 
 --Similar table for acceleration
@@ -64,6 +64,11 @@ g_dashCooldown = 0
 g_shiftFactor = 0
 -- Shift factor change value
 PLAYER_SHIFT_FACTOR_DELTA = 0.02
+
+-- Constants for bullet freind circle position
+PLAYER_FRIEND_RESTING_OFFSET = 150
+PLAYER_FRIEND_FOCUS_OFFSET = 150
+PLAYER_FRIEND_FOCUS_ROTATION_MULTIPLIER = 17
 
 --loading assets for player
 Audio.request_load_file("player_shoot_tick", "shoot_click.wav")
@@ -268,7 +273,7 @@ Player.add_friend_magic_circle = function(layer)
 	-- Create freind magic circles
 	local mc = Entity.create(EntityGeneric)
 
-	mc:add_component(ComponentPosition.create(0, 200, 0))
+	mc:add_component(ComponentPosition.create(0, PLAYER_FRIEND_RESTING_OFFSET, 0))
 	mc:add_component(ComponentGraphics.create("mc_fire_circle"))
 	mc:add_component(ComponentRotation.create(0, 2))
 
@@ -277,7 +282,7 @@ Player.add_friend_magic_circle = function(layer)
 	mc:add_component(ComponentNoBoundsControl.create())
 
 	mc:add_component(ComponentPointLight.create(1.0, 0.75, 0.05, 0.0015, 0.07, 3.2))
-	--mc:add_component(ComponentNoBoundsControl.create())
+	mc:add_component(ComponentMinAmbient.create(0.6))
 
 	mc:add_component(ComponentName.create(tostring(layer)))
 
@@ -285,7 +290,7 @@ Player.add_friend_magic_circle = function(layer)
 
 	mc = Entity.create(EntityGeneric)
 
-	mc:add_component(ComponentPosition.create(0, 200, 0))
+	mc:add_component(ComponentPosition.create(0, PLAYER_FRIEND_RESTING_OFFSET, 0))
 	mc:add_component(ComponentGraphics.create("mc_fire_circle"))
 	mc:add_component(ComponentRotation.create(0, 2))
 
@@ -294,9 +299,43 @@ Player.add_friend_magic_circle = function(layer)
 	mc:add_component(ComponentNoBoundsControl.create())
 
 	mc:add_component(ComponentPointLight.create(1.0, 0.75, 0.05, 0.0015, 0.07, 3.2))
-	--mc:add_component(ComponentNoBoundsControl.create())
+	mc:add_component(ComponentMinAmbient.create(0.6))
 
-	mc:add_component(ComponentName.create(tostring(-layer)))
+	mc:add_component(ComponentName.create("-" .. tostring(layer)))
 
 	this:get_component(ComponentSpawner):add_entity(mc)
+end
+
+
+-- Update friend magic circle
+-- Works only when this points to player
+Player.update_a_friend_magic_circle = function(layer)
+	local offsetX, offsetY = this:get_component(ComponentPosition):get_position()
+
+
+	-- Left circle
+	local mc = this:get_component(ComponentMultiEntity):get("-" .. tostring(layer))
+
+	-- Generate desired point
+	local targetX, targetY = math.rotate_point(0, -PLAYER_FRIEND_FOCUS_OFFSET, PLAYER_FRIEND_FOCUS_ROTATION_MULTIPLIER * layer)
+
+	-- lerp current position to tarrget
+	targetX = math.lerp(g_shiftFactor, 0, targetX)
+	targetY = math.lerp(g_shiftFactor, PLAYER_FRIEND_RESTING_OFFSET, targetY)
+
+	mc:get_component(ComponentPosition):set_position(offsetX + targetX, offsetY + targetY)
+
+
+	-- Right circle
+	local mc = this:get_component(ComponentMultiEntity):get(tostring(layer))
+
+	-- Generate desired point
+	local targetX, targetY = math.rotate_point(0, -PLAYER_FRIEND_FOCUS_OFFSET, -PLAYER_FRIEND_FOCUS_ROTATION_MULTIPLIER * layer)
+
+	-- lerp current position to tarrget
+	targetX = math.lerp(g_shiftFactor, 0, targetX)
+	targetY = math.lerp(g_shiftFactor, PLAYER_FRIEND_RESTING_OFFSET, targetY)
+
+	mc:get_component(ComponentPosition):set_position(offsetX + targetX, offsetY + targetY)
+
 end
