@@ -1,16 +1,21 @@
 -- \scripts\_initialise\power_ups.lua
 
-POWER_UP_SPAWN_RADIUS = 75
-POWER_UP_SPEED_CAP = 9
-POWER_UP_ACCELERATION = 0.08
+POWER_UP_SPAWN_RADIUS = 50
+POWER_UP_SPEED_CAP = 8
+POWER_UP_ACCELERATION = 0.12
 
-POWER_UP_MAGNET_RANGE = 200
-POWER_UP_COLLISION_RANGE = 50
+POWER_UP_MAGNET_RANGE = 150
+POWER_UP_COLLISION_RANGE = 40
 
 POWER_UP_ACCELERATION_TO_PLAYER = 0.5
 
+POWER_UP_FRAGMENT_POINTS = 2
 
---spawn a power up
+POWER_UP_TYPES = {}
+POWER_UP_TYPES.POWER = "pu_power"
+POWER_UP_TYPES.FRAGMENT = "pu_fragment"
+
+-- Spawn a power up
 g_spawn_individual_powerup = function(powerupType)
 	local x, y = this:get_component(ComponentPosition):get_position()
 	local off_x, off_y = math.sample_uniform_circle(POWER_UP_SPAWN_RADIUS)
@@ -35,9 +40,9 @@ g_spawn_powerup = function()
 	if this:get_component(ComponentBulletMaster) then
 		print(this:get_component(ComponentBulletMaster):get_name())
 	else
-		g_spawn_individual_powerup("pu_power")
+		g_spawn_individual_powerup(POWER_UP_TYPES.POWER)
 		if math.random() < 0.3 then
-			g_spawn_individual_powerup("pu_power")
+			g_spawn_individual_powerup(POWER_UP_TYPES.POWER)
 		end
 	end
 	
@@ -52,11 +57,20 @@ g_powerup_collision_handle = function()
 
 	local distance = math.to_magnitude(x1 - x2, y1 - y2);
 
-	this:get_component(ComponentCollision):set_circle_radius(POWER_UP_COLLISION_RANGE + 5)
+	this:get_component(ComponentCollision):set_circle_radius(POWER_UP_COLLISION_RANGE)
 	this:get_component(ComponentMagnetiseToPlayer):magnetise()
 
 	if distance < POWER_UP_COLLISION_RANGE then
+		-- Kill powerup
 		this:kill()
+
+		-- Based on what power up, modify state
+		local powerupType = this:get_component(ComponentGraphics):get_animation_set()
+
+		if powerupType == POWER_UP_TYPES.POWER then
+			g_power = g_power + POWER_UP_FRAGMENT_POINTS
+		end
+
 	end
 end
 

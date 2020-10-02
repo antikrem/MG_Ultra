@@ -53,6 +53,8 @@ g_playerBulletOscillator = -1
 g_lx, g_ly = 0,0
 -- Set to true when a dash is occuring
 g_inDash = false
+-- Set to true when focus
+g_inFocus = false
 -- Set to true when the dash key is released
 g_dashReleased = true
 -- Time spent in dash
@@ -65,10 +67,31 @@ g_shiftFactor = 0
 -- Shift factor change value
 PLAYER_SHIFT_FACTOR_DELTA = 0.02
 
+-- Variables for power 
+PLAYER_POWER_LEVEL_THRESHOLD = 20
+
 -- Constants for bullet freind circle position
 PLAYER_FRIEND_RESTING_OFFSET = 150
 PLAYER_FRIEND_FOCUS_OFFSET = 150
 PLAYER_FRIEND_FOCUS_ROTATION_MULTIPLIER = 17
+
+-- Variables about health
+g_lives = 3
+
+-- Total point
+g_points = 0
+
+-- Variables on fragments for new lives
+FRAGMENT_PERIOD = 25
+g_fragments = 0
+g_nextFragments = FRAGMENT_PERIOD
+
+-- Power of player
+PLAYER_RESTING_FRAGMENT_POINTS_DRAIN = 0.05
+PLAYER_FOCUS_FRAGMENT_POINTS_DRAIN = 0.01
+g_power = 0
+g_power_level = 0
+
 
 --loading assets for player
 Audio.request_load_file("player_shoot_tick", "shoot_click.wav")
@@ -123,9 +146,9 @@ g_playerMovementUpdate = function()
 	end
 
 	local focusValue = cInput:query_down("focus")
-	local isFocusInput = focusValue == 1 and not g_inDash
+	g_inFocus = focusValue == 1 and not g_inDash
 
-	local movementMode = g_inDash and "DASH" or (isFocusInput and "FOCUS" or "DEFAULT")
+	local movementMode = g_inDash and "DASH" or (g_inFocus and "FOCUS" or "DEFAULT")
 
 	--calculate updated movement
 	local maxAcceleration = PLAYER_MAX_ACCELERATION_TABLE[movementMode]
@@ -235,6 +258,14 @@ g_playerSpawnBullets = function()
 
 end
 
+-- Cyclic update to modify Power
+g_playerPowerUpdate = function()
+	local drain = 0
+	if g_inFocus then drain = PLAYER_FOCUS_FRAGMENT_POINTS_DRAIN else drain = PLAYER_RESTING_FRAGMENT_POINTS_DRAIN end
+	g_power = g_power - drain
+	g_power = math.max(0, g_power)
+end
+
 -- Handler function when player is hit
 g_bulletPlayerCollision = function() 
 	if GlobalRegistar.get("player_alive") then
@@ -317,7 +348,7 @@ Player.update_a_friend_magic_circle = function(layer)
 	local mc = this:get_component(ComponentMultiEntity):get("-" .. tostring(layer))
 
 	-- Generate desired point
-	local targetX, targetY = math.rotate_point(0, -PLAYER_FRIEND_FOCUS_OFFSET, PLAYER_FRIEND_FOCUS_ROTATION_MULTIPLIER * layer)
+	local targetX, targetY = math.rotate_point(0, -PLAYER_FRIEND_FOCUS_OFFSET, PLAYER_FRIEND_FOCUS_ROTATION_MULTIPLIER * (layer - 0.5))
 
 	-- lerp current position to tarrget
 	targetX = math.lerp(g_shiftFactor, 0, targetX)
@@ -330,7 +361,7 @@ Player.update_a_friend_magic_circle = function(layer)
 	local mc = this:get_component(ComponentMultiEntity):get(tostring(layer))
 
 	-- Generate desired point
-	local targetX, targetY = math.rotate_point(0, -PLAYER_FRIEND_FOCUS_OFFSET, -PLAYER_FRIEND_FOCUS_ROTATION_MULTIPLIER * layer)
+	local targetX, targetY = math.rotate_point(0, -PLAYER_FRIEND_FOCUS_OFFSET, -PLAYER_FRIEND_FOCUS_ROTATION_MULTIPLIER * (layer - 0.5))
 
 	-- lerp current position to tarrget
 	targetX = math.lerp(g_shiftFactor, 0, targetX)
