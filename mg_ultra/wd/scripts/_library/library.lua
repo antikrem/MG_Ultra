@@ -162,6 +162,13 @@ function range(from, to, step)
 	end, nil, from - step
 end
 
+-- repeats a function a number of given times
+function replicate(n, f, ...)
+	for i in range(0, n) do
+		f(...)
+	end
+end
+
 -- Requests engine shutdown by emmiting a quit event
 function quit()
 	print("Exiting from console...")
