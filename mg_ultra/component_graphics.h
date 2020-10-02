@@ -1,4 +1,6 @@
-/*A Component that allowed */
+/** 
+ * A Component that allowed
+ */
 #ifndef __COMPONENT_GRAPHICS__
 #define __COMPONENT_GRAPHICS__
 
@@ -16,20 +18,20 @@ private:
 	shared_mutex lock;
 	AnimationState state;
 
-	//an internal visible sign
+	// An internal visible sign
 	atomic<bool> visible;
-	//sets the render space, true will be default 3d
-	//false renders in 2d mode, using an orthogonal perspective
+	// Sets the render space, true will be default 3d
+	// False renders in 2d mode, using an orthogonal perspective
 	atomic<bool> renderIn3D = true;
 
-	//wraping factor to use when texturing
+	// Wraping factor to use when texturing
 	atomic<float> wrapFactor = 1.0f;
 
-	//rotaion value in degrees
+	// Rotaion value in degrees
 	atomic<float> rotation = 0;
 
-	//transparency of this graphic
-	//defaults at 1.0f;
+	// Transparency of this graphic
+	// defaults at 1.0f;
 	atomic<float> transparency = 1.0f;
 
 public:
@@ -48,13 +50,13 @@ public:
 		setScale(scale);
 	}
 
-	//wrapper
+	// Wrapper
 	void l_setAniamtionSet(string name) {
 		setAniamtionSet(name, true);
 	}
 
-	//sets the animation type
-	//if reset is true, sets the animation to idle, frame to zero and valid will be true
+	// Sets the animation type
+	// If reset is true, sets the animation to idle, frame to zero and valid will be true
 	void setAniamtionSet(string name, bool reset = true) {
 		unique_lock<shared_mutex> lck(lock);
 		state.animationSetName = name;
@@ -65,11 +67,13 @@ public:
 		}
 	}
 
-	//sets the animation state directly
+	// Sets the animation state directly
 	void setAnimationState(AnimationState state) {
 		unique_lock<shared_mutex> lck(lock);
 		this->state = state;
 	}
+
+	// 
 
 	void setVisible(bool visible) {
 		this->visible = visible;
@@ -84,65 +88,70 @@ public:
 		return state;
 	}
 
-	//set rotation value
+	string getAnimationSet() {
+		shared_lock<shared_mutex> lck(lock);
+		return state.animationSetName;
+	}
+
+	// Set rotation value
 	void setSpriteRotation(float angle) {
 		this->rotation = angle;
 	}
 
-	//get rotation value
+	// Get rotation value
 	float getRotation() {
 		return rotation;
 	}
 
-	//set scale
+	// Set scale
 	void setScale(float scale) {
 		unique_lock<shared_mutex> lck(lock);
 		this->state.scale = scale;
 	}
 
-	//get scale
+	// Get scale
 	float getScale() {
 		unique_lock<shared_mutex> lck(lock);
 		return this->state.scale;
 	}
 
-	//set render in 3d
+	// Set render in 3d
 	void setRenderIn3D(bool renderIn3D) {
 		this->renderIn3D = renderIn3D;
 	}
 
-	//get render in 3d
+	// Get render in 3d
 	bool getRenderIn3D() {
 		return renderIn3D;
 	}
 
-	//set wrap factor
+	// Set wrap factor
 	void setWrapFactor(float wrapFactor) {
 		this->wrapFactor = wrapFactor;
 	}
 
-	//get wrap factor
+	// Get wrap factor
 	float getWrapFactor() {
 		return wrapFactor;
 	}
 
-	//set transparency (0 - 1)
+	// Set transparency (0 - 1)
 	void setTransparency(float transparency) {
 		this->transparency = transparency;
 	}
 
-	//get transparency (0 - 1)
+	// Get transparency (0 - 1)
 	float getTransparency() {
 		return transparency;
 	}
 
-	//set animation, not to be used 
+	// Set animation, not to be used 
 	void setAnimationType(unsigned int animation) {
 		unique_lock<shared_mutex> lck(lock);
 		state.animationType = animation;
 	}
 
-	//Takes a position and returns a complete AnimationState
+	// Takes a position and returns a complete AnimationState
 	AnimationState getAnimationState(bool* valid, Point3 pos) {
 		auto temp = getAnimationState();
 		*valid = temp.valid && temp.visible && visible.load();
@@ -157,6 +166,7 @@ public:
 		state["ComponentGraphics"].setClass(kaguya::UserdataMetatable<ComponentGraphics, Component>()
 			.setConstructors<ComponentGraphics(string animationSet)>()
 			.addFunction("set_animation_set", &ComponentGraphics::l_setAniamtionSet)
+			.addFunction("get_animation_set", &ComponentGraphics::getAnimationSet)
 			.addFunction("set_animation", &ComponentGraphics::setAnimationType)
 			.addFunction("set_visible", &ComponentGraphics::setVisible)
 			.addFunction("set_scale", &ComponentGraphics::setScale)
