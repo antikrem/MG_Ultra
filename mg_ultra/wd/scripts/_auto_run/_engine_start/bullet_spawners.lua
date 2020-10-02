@@ -1,44 +1,47 @@
 -- \scripts\_auto_run\_engine_start\bullet_spawners.lua
 
---The spawning of bullets is handled by bullet spawners
---These entities will be attached as sub entities to enemies
+-- The spawning of bullets is handled by bullet spawners
+-- These entities will be attached as sub entities to enemies
 
---Each bullet spawner is based on a spawner template
---And a bullet spawner will look up its coresponding bullet template
---and execute any scripts
+-- Each bullet spawner is based on a spawner template
+-- and a bullet spawner will look up its coresponding bullet template
+-- and execute any scripts
 
---This is the class used for generating bullet templates
+-- This is the class used for generating bullet templates
 BulletSpawner = {
-	--Initialiser function ran before any other script
-	--or attachement to an entity
+	-- Initialiser function ran before any other script
+	-- or attachement to an entity
 	initialiserScript = false,
 
-	--look up table for scripts
-	--a looked up script will be repeated until
-	--another script or false entry is founf
+	-- Look up table for scripts
+	-- a looked up script will be repeated until
+	-- another script or false entry is founf
 	scriptLookUp = {},
 
-	--Used for adding components to the bullet spawner entity
-	--before the initialiser script is run
+	-- Used for adding components to the bullet spawner entity
+	-- before the initialiser script is run
 	components = {},
 
-	--Links a keyword to a value for additional handling
+	-- Links a keyword to a value for additional handling
 	additionals = {},
 
-	 --use to spawn new bullet spawner templates
+	-- Map of powerup names to counts
+	powerups = {},
+
+	 -- Use to spawn new bullet spawner templates
 	new = function(name, obj)
 		obj = obj or {} 
 		setmetatable(obj, BulletSpawner)
 		BulletSpawner.__index = BulletSpawner
 
-		--Add to global spawner list
+		-- Add to global spawner list
 		BulletSpawnerList[name] = obj
 		
 		return obj
     end,
 
-	--Allows a bullet spawner entity to be initialised from 
-	--this spawner template
+	-- Allows a bullet spawner entity to be initialised from 
+	-- this spawner template
 	initialise = function(self, entity, name)
 		entity:add_component(ComponentExtendedScripting.create())
 		for _, comps in ipairs(self.components) do
@@ -51,11 +54,11 @@ BulletSpawner = {
 	end
 }
 
---A table of all BulletSpawners made
---Which is acessed when looking up for bullet spawners
+-- A table of all BulletSpawners made
+-- Which is acessed when looking up for bullet spawners
 BulletSpawnerList = {
-	--Takes a blank entity and initialises its
-	--will set the success value in Flag
+	-- Takes a blank entity and initialises its
+	-- will set the success value in Flag
 	_initialise = function(blankEntity, name)
 		if BulletSpawnerList[name] ~= nil then
 			BulletSpawnerList[name]:initialise(blankEntity,name)
@@ -65,12 +68,12 @@ BulletSpawnerList = {
 		end
 	end,
 
-	--Takes bullet spawner name, current cycle and last valid cycle
-	--will execute correct 
+	-- Takes bullet spawner name, current cycle and last valid cycle
+	-- will execute correct 
 	_spawnerUpdate = function(name, current, lastValid, ...)
-		--if found then update last valid
+		-- If found then update last valid
 		if BulletSpawnerList[name].scriptLookUp[current] ~= nil then
-			--need to check if this look up is a function or false (end of last active)
+			-- Need to check if this look up is a function or false (end of last active)
 			if BulletSpawnerList[name].scriptLookUp[current] == false then
 				lastValid = -1
 				this:get_component(ComponentBulletSpawner):setLastActive(-1)
@@ -81,21 +84,30 @@ BulletSpawnerList = {
 			
 		end
 		
-		--If theres a postive last active, run script
+		-- If theres a postive last active, run script
 		if lastValid >= 0 and this:is_alive() then
 			BulletSpawnerList[name].scriptLookUp[lastValid](current, ...)
 		end
 	end,
 
-	--returns additionals 
+	-- Returns additionals 
 	_getAdditionals = function(name)
 		if BulletSpawnerList[name]~=nil then
 			return BulletSpawnerList[name].additionals
 		else
 			return nil
 		end
+	end,
+
+	-- Returns powerups 
+	getPowerUps = function(name)
+		if BulletSpawnerList[name]~=nil then
+			return BulletSpawnerList[name].powerups
+		else
+			return nil
+		end
 	end
 }
 
---Flag for last Bullet Spawner initialisation sucess
+-- Flag for last Bullet Spawner initialisation sucess
 registar:add("bullet_spawner_initialisation_success", 1)

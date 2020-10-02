@@ -1,8 +1,10 @@
 -- \scripts\_initialise\power_ups.lua
 
-POWER_UP_SPAWN_RADIUS = 50
+POWER_UP_SPAWN_RADIUS = 80
 POWER_UP_SPEED_CAP = 8
 POWER_UP_ACCELERATION = 0.12
+
+POWER_UP_SCALE = 0.8
 
 POWER_UP_MAGNET_RANGE = 150
 POWER_UP_COLLISION_RANGE = 40
@@ -21,7 +23,7 @@ g_spawn_individual_powerup = function(powerupType)
 	local off_x, off_y = math.sample_uniform_circle(POWER_UP_SPAWN_RADIUS)
 
 	local e = Entity.create(EntityPowerUp)
-	e:add_component(ComponentGraphics.create(powerupType))
+	e:add_component(ComponentGraphics.create(powerupType, POWER_UP_SCALE))
 	e:add_component(ComponentPosition.create(x + off_x, y + off_y))
 	e:add_component(ComponentMinAmbient.create(0.6))
 	e:add_component(ComponentPointLight.create(1.0, 0.75, 0.05, 0.0005, 0.001, 4))
@@ -38,8 +40,15 @@ end
 
 g_spawn_powerup = function()
 	if this:get_component(ComponentBulletMaster) then
-		print(this:get_component(ComponentBulletMaster):get_name())
+		local powerupName = this:get_component(ComponentBulletMaster):get_name()
+		local powerupTable = BulletSpawnerList.getPowerUps(powerupName)
+
+		for k, v in pairs(powerupTable) do
+			replicate(v, g_spawn_individual_powerup, k)
+		end
+
 	else
+		g_spawn_individual_powerup(POWER_UP_TYPES.POWER)
 		g_spawn_individual_powerup(POWER_UP_TYPES.POWER)
 		if math.random() < 0.3 then
 			g_spawn_individual_powerup(POWER_UP_TYPES.POWER)
@@ -50,7 +59,7 @@ end
 
 DeathScripts.add_callback(12, g_spawn_powerup)
 
---Handles power up and player Collision
+-- Handles power up and player Collision
 g_powerup_collision_handle = function()
 	local x1, y1 = this:get_component(ComponentPosition):get_position()
 	local x2, y2 = target1:get_component(ComponentPosition):get_position()
