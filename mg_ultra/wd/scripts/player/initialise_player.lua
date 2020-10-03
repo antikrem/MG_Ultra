@@ -23,6 +23,3 @@ Weather.update_player_light()
 
 --Make player visible
 this:get_component(ComponentGraphics):set_visible(true)
-
-Player.add_friend_magic_circle("1")
-Player.add_friend_magic_circle("2")

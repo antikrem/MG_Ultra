@@ -330,7 +330,7 @@ Player.add_friend_magic_circle = function(layer)
 	mc:add_component(ComponentNoBoundsControl.create())
 
 	mc:add_component(ComponentPointLight.create(1.0, 0.75, 0.05, 0.0015, 0.07, 3.2))
-	mc:add_component(ComponentMinAmbient.create(0.6))
+	mc:add_component(ComponentMinAmbient.create(1.1))
 
 	mc:add_component(ComponentName.create("-" .. tostring(layer)))
 
@@ -354,8 +354,9 @@ Player.update_a_friend_magic_circle = function(layer)
 	targetX = math.lerp(g_shiftFactor, 0, targetX)
 	targetY = math.lerp(g_shiftFactor, PLAYER_FRIEND_RESTING_OFFSET, targetY)
 
-	mc:get_component(ComponentPosition):set_position(offsetX + targetX, offsetY + targetY)
-
+	if not is_nil(mc) then
+		mc:get_component(ComponentPosition):set_position(offsetX + targetX, offsetY + targetY)
+	end
 
 	-- Right circle
 	local mc = this:get_component(ComponentMultiEntity):get(tostring(layer))
@@ -367,6 +368,21 @@ Player.update_a_friend_magic_circle = function(layer)
 	targetX = math.lerp(g_shiftFactor, 0, targetX)
 	targetY = math.lerp(g_shiftFactor, PLAYER_FRIEND_RESTING_OFFSET, targetY)
 
-	mc:get_component(ComponentPosition):set_position(offsetX + targetX, offsetY + targetY)
+	if not is_nil(mc) then
+		mc:get_component(ComponentPosition):set_position(offsetX + targetX, offsetY + targetY)
+	end
 
+end
+
+-- General handling for friends
+Player.friend_handle = function(layer)
+	requiredLevel = math.floor(g_power / PLAYER_POWER_LEVEL_THRESHOLD) + 1
+	while g_power_level < requiredLevel do
+		g_power_level = g_power_level + 1
+		Player.add_friend_magic_circle(tostring(g_power_level))
+	end
+
+	for i in range(1, g_power_level + 1) do
+		Player.update_a_friend_magic_circle(i)
+	end
 end

@@ -9,8 +9,7 @@ if GlobalRegistar.get("player_alive") then
 	g_playerMovementUpdate()
 	g_playerSpawnBullets()
 	g_playerPowerUpdate()
-	Player.update_a_friend_magic_circle(1)
-	Player.update_a_friend_magic_circle(2)
+	Player.friend_handle()
 
 -- Dead player handle
 else
