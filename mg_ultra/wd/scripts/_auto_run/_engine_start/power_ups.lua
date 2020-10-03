@@ -78,6 +78,12 @@ g_powerup_collision_handle = function()
 
 		if powerupType == POWER_UP_TYPES.POWER then
 			g_power = g_power + POWER_UP_FRAGMENT_POINTS
+		elseif powerupType == POWER_UP_TYPES.FRAGMENT then 
+			g_fragments = g_fragments + 1
+			if g_fragments == g_nextFragments then
+				g_lives = glives + 1
+				g_nextFragments = g_nextFragments + FRAGMENT_PERIOD
+			end
 		end
 
 	end
