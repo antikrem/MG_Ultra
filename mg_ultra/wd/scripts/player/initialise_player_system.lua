@@ -374,12 +374,38 @@ Player.update_a_friend_magic_circle = function(layer)
 
 end
 
+-- Removes friend circles
+-- Works only when this points to player
+Player.remove_a_friend_magic_circle = function(layer)
+
+	-- Left circle
+	local mc = this:get_component(ComponentMultiEntity):get("-" .. tostring(layer))
+
+	if not is_nil(mc) then
+		mc:kill()
+	end
+
+	-- Right circle
+	local mc = this:get_component(ComponentMultiEntity):get(tostring(layer))
+
+	if not is_nil(mc) then
+		mc:kill()
+	end
+
+end
+
 -- General handling for friends
 Player.friend_handle = function(layer)
 	requiredLevel = math.floor(g_power / PLAYER_POWER_LEVEL_THRESHOLD) + 1
+
 	while g_power_level < requiredLevel do
 		g_power_level = g_power_level + 1
 		Player.add_friend_magic_circle(tostring(g_power_level))
+	end
+
+	while g_power_level > requiredLevel do
+		Player.remove_a_friend_magic_circle(tostring(g_power_level))
+		g_power_level = g_power_level - 1
 	end
 
 	for i in range(1, g_power_level + 1) do
