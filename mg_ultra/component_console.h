@@ -10,6 +10,8 @@ and keeping a list of all commands
 #include <vector>
 #include <string>
 
+#define CONSOLE_OUT_TOKEN "<< "
+
 enum ConsoleState {
 	closed = 0,
 	active = 1,
@@ -101,7 +103,7 @@ public:
 		if (currentLine.size()) {
 			previousCommands.push_back(currentLine);
 			commandBuffer.push_back(currentLine);
-			err::logMessage("<<" + currentLine);
+			err::logMessage(CONSOLE_OUT_TOKEN + currentLine);
 			currentLine.clear();
 		}
 	}

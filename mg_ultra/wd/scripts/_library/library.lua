@@ -38,7 +38,7 @@ function print(...)
 		return
 	end
 	
-	printAdd(">>")
+	printAdd(">> ")
 
 	-- Check for nil inputs
 	if size == 0 then
