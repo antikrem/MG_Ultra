@@ -50,14 +50,16 @@ public:
 	}
 
 	AudioMaster() {
+		err::logMessage("AUDIO: Initialising audio subsystem");
+
 		const char* deviceName = alcGetString(NULL, ALC_ALL_DEVICES_SPECIFIER);
 
 		device = alcOpenDevice(deviceName);
 		context = alcCreateContext(device, NULL);
 		alcMakeContextCurrent(context);
 
-		err::logMessage("AUDIO, audio subsystems initialised");
-		err::logMessage("AUDIO, Utilising device: " + string(deviceName));
+		err::logMessage("AUDIO: Audio subsystem initialised");
+		err::logMessage("AUDIO: Utilising device: " + string(deviceName));
 
 		alGetError();
 	}
