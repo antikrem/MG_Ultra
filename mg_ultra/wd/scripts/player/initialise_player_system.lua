@@ -41,7 +41,7 @@ PLAYER_MAX_TURN_VELOCITY = 7;
 PLAYER_QUICK_SHIFT_THRESHOLD = 70
 
 -- shooting timer
-PLAYER_SHOOT_TIMING = 11
+PLAYER_SHOOT_TIMING = 13
 
 -- Counter for number of dead frames
 g_sequentialDeadFrames = 0
@@ -304,6 +304,8 @@ end
 -- Handler function when player is hit
 g_bulletPlayerCollision = function() 
 	if GlobalRegistar.get("player_alive") then
+		g_power_level = 1
+		this:get_component(ComponentMultiEntity):kill_children()
 		this:get_component(ComponentClampPosition):set_active(false)
 		g_sequentialDeadFrames = 0
 		GlobalRegistar.update("player_alive", false)
