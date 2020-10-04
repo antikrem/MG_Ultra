@@ -11,7 +11,7 @@ POWER_UP_COLLISION_RANGE = 40
 
 POWER_UP_ACCELERATION_TO_PLAYER = 0.5
 
-POWER_UP_FRAGMENT_POINTS = 2
+POWER_UP_POWER_POINTS = 1
 
 POWER_UP_TYPES = {}
 POWER_UP_TYPES.POWER = "pu_power"
@@ -77,7 +77,7 @@ g_powerup_collision_handle = function()
 		local powerupType = this:get_component(ComponentGraphics):get_animation_set()
 
 		if powerupType == POWER_UP_TYPES.POWER then
-			g_power = g_power + POWER_UP_FRAGMENT_POINTS
+			g_power = g_power + POWER_UP_POWER_POINTS
 		elseif powerupType == POWER_UP_TYPES.FRAGMENT then 
 			g_fragments = g_fragments + 1
 			if g_fragments == g_nextFragments then
