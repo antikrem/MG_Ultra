@@ -50,6 +50,15 @@ function math.to_point(mag, ang)
 	return mag*math.cos(math.to_radians(ang)), mag*math.sin(math.to_radians(ang))
 end
 
+-- Takes two positions and compute angle from first to second
+function math.angle_to(x1, y1, x2, y2)
+	local x = x2 - x1
+	local y = y2 - y1
+
+	local mag, ang = math.to_polar(x, y)
+	return ang
+end
+
 -- Rotate a point about the origin
 function math.rotate_point(x, y, delta)
 	local mag, ang = math.to_polar(x, y)
