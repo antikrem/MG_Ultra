@@ -70,8 +70,6 @@ g_powerup_collision_handle = function()
 	this:get_component(ComponentMagnetiseToPlayer):magnetise()
 
 	if distance < POWER_UP_COLLISION_RANGE then
-		-- Kill powerup
-		this:kill()
 
 		-- Based on what power up, modify state
 		local powerupType = this:get_component(ComponentGraphics):get_animation_set()
@@ -86,6 +84,8 @@ g_powerup_collision_handle = function()
 			end
 		end
 
+		-- Kill powerup
+		this:kill()
 	end
 end
 
