@@ -70,10 +70,13 @@ PLAYER_SHIFT_FACTOR_DELTA = 0.02
 -- Variables for power 
 PLAYER_POWER_LEVEL_THRESHOLD = 20
 
--- Constants for bullet freind circle position
+-- Constants for bullet friend circle position
 PLAYER_FRIEND_RESTING_OFFSET = 150
 PLAYER_FRIEND_FOCUS_OFFSET = 150
 PLAYER_FRIEND_FOCUS_ROTATION_MULTIPLIER = 17
+
+-- Constants for bullet targets when firing
+PLAYER_FRIEND_TARGET = 550
 
 -- Variables about health
 g_lives = 3
@@ -201,10 +204,46 @@ g_playerMovementUpdate = function()
 	g_shiftFactor = math.tend_to(g_shiftFactor, focusValue, PLAYER_SHIFT_FACTOR_DELTA)
 end
 
---Standard bullet handler
-g_playerSpawnBullets = function()
+-- spawn bullet at given layer
+g_playerSpawnBullet = function(x, y, tx, ty)
 	--The position of the player
 	local cPosition = this:get_component(ComponentPosition)
+
+	local angle = math.angle_to(x, y, tx, ty)
+
+	local cSpawner = this:get_component(ComponentSpawner)
+	cSpawner:create_entity(EntityPlayerBullets)
+			
+	cSpawner:add_component(ComponentPosition.create(x, y, LAYER_PLAYER_BULLETS))
+	cSpawner:add_component(ComponentCollision.create(27))
+	cSpawner:add_component(ComponentDamage.create(10))
+	cSpawner:add_component(ComponentOffsetOnce.create())
+	cSpawner:add_component(ComponentMinAmbient.create(0.8))
+	cSpawner:add_component(ComponentRotation.create())
+	cSpawner:add_component(ComponentPointLight.create(1.0, 0.75, 0.05, 0.0015, 0.07, 3.2))
+
+	local pod = ComponentParticleOnDeath.create("death_gold_fragments")
+	pod:set_velocity_range(1.0, 1.3);
+	pod:set_direction_deviation(10);
+	cSpawner:add_component(pod)
+			
+	local bulletGComponents = ComponentGraphics.create("bullet_cross")
+	bulletGComponents:set_animation(1)
+	bulletGComponents:set_scale(0.7)
+	cSpawner:add_component(bulletGComponents)
+			
+	local bulletMComponent = ComponentMovement.create()
+	bulletMComponent:set_speed(27)
+	bulletMComponent:set_angle(angle + 2.5 * g_playerBulletOscillator)
+	cSpawner:add_component(bulletMComponent)
+
+	cSpawner:push_entity()
+
+end
+
+
+-- Standard bullet handler
+g_playerSpawnBullets = function()
 
 	--A component to look at movement
 	local cInput = this:get_component(ComponentInput)
@@ -217,33 +256,29 @@ g_playerSpawnBullets = function()
 	--create bullet entities
 	if cInput:query_down("shoot") == 1 and 
 			(cTiming:get_cycle() % PLAYER_SHOOT_TIMING) == 0 then
-		for bAngle in range(55, 126, 10) do
-			local cSpawner = this:get_component(ComponentSpawner)
-			cSpawner:create_entity(EntityPlayerBullets)
-			
-			cSpawner:add_component(ComponentPosition.create(0, 40, LAYER_PLAYER_BULLETS))
-			cSpawner:add_component(ComponentCollision.create(27))
-			cSpawner:add_component(ComponentDamage.create(10))
-			cSpawner:add_component(ComponentOffsetOnce.create())
-			cSpawner:add_component(ComponentMinAmbient.create(0.8))
-			cSpawner:add_component(ComponentRotation.create())
-			cSpawner:add_component(ComponentPointLight.create(1.0, 0.75, 0.05, 0.0015, 0.07, 3.2))
-			local pod = ComponentParticleOnDeath.create("death_gold_fragments")
-			pod:set_velocity_range(1.0, 1.3);
-			pod:set_direction_deviation(10);
-			cSpawner:add_component(pod)
-			
-			local bulletGComponents = ComponentGraphics.create("bullet_cross")
-			bulletGComponents:set_animation(1)
-			bulletGComponents:set_scale(0.7)
-			cSpawner:add_component(bulletGComponents)
-			
-			local bulletMComponent = ComponentMovement.create()
-			bulletMComponent:set_speed(27)
-			bulletMComponent:set_angle(bAngle + 2.5 * g_playerBulletOscillator)
-			cSpawner:add_component(bulletMComponent)
 
-			cSpawner:push_entity()
+		-- Generate target position
+		local ty = math.lerp(g_shiftFactor, PLAYER_FRIEND_RESTING_OFFSET, PLAYER_FRIEND_TARGET)
+
+		for i in range(1, g_power_level + 1) do
+
+			-- Generate desired point
+			local x, y = math.rotate_point(0, -PLAYER_FRIEND_FOCUS_OFFSET, PLAYER_FRIEND_FOCUS_ROTATION_MULTIPLIER * (i - 0.5))
+
+			-- lerp current position to tarrget
+			x = math.lerp(math.max(g_shiftFactor, 0.01), 0, x)
+			y = math.lerp(math.max(g_shiftFactor, 0.01), PLAYER_FRIEND_RESTING_OFFSET, y)
+
+			g_playerSpawnBullet(x, y, 0, ty)
+			
+			-- Generate desired point
+			local x, y = math.rotate_point(0, -PLAYER_FRIEND_FOCUS_OFFSET, -PLAYER_FRIEND_FOCUS_ROTATION_MULTIPLIER * (i - 0.5))
+
+			-- lerp current position to tarrget
+			x = math.lerp(math.max(g_shiftFactor, 0.01), 0, x)
+			y = math.lerp(math.max(g_shiftFactor, 0.01), PLAYER_FRIEND_RESTING_OFFSET, y)
+
+			g_playerSpawnBullet(x, y, 0, ty)
 		end
 	end
 
@@ -313,7 +348,9 @@ Player.add_friend_magic_circle = function(layer)
 	mc:add_component(ComponentNoBoundsControl.create())
 
 	mc:add_component(ComponentPointLight.create(1.0, 0.75, 0.05, 0.0015, 0.07, 3.2))
-	mc:add_component(ComponentMinAmbient.create(0.6))
+	mc:add_component(ComponentMinAmbient.create(1.1))
+
+	mc:add_component(ComponentTransparency.create(1.0, 0.005))
 
 	mc:add_component(ComponentName.create(tostring(layer)))
 
@@ -331,6 +368,8 @@ Player.add_friend_magic_circle = function(layer)
 
 	mc:add_component(ComponentPointLight.create(1.0, 0.75, 0.05, 0.0015, 0.07, 3.2))
 	mc:add_component(ComponentMinAmbient.create(1.1))
+
+	mc:add_component(ComponentTransparency.create(1.0, 0.005))
 
 	mc:add_component(ComponentName.create("-" .. tostring(layer)))
 
