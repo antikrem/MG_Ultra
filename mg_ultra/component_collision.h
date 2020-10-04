@@ -5,16 +5,16 @@
 #include "collision.h"
 #include "scriptable_class.h"
 
-//Allocates a collision to an entity
-//Collidable box can take multiple forms
+// Allocates a collision to an entity
+// Collidable box can take multiple forms
 class ComponentCollision : public Component, public ScriptableClass<ComponentCollision> {
 private:
-	//set to true when added to system
+	// Set to true when added to system
 	bool addedToSystem = false;
 	CollisionSpecification specification;
 
 public:
-	//default collision box of 10 units
+	// Default collision box of 10 units
 	ComponentCollision()
 		: specification(CollisionCircle(10)) {
 
@@ -30,36 +30,36 @@ public:
 
 	}
 
-	//Updates collision position
+	// Updates collision position
 	void update(Point3 position) {
 		specification.updatePosition(position);
 	}
 
-	//returns reference to CollisionSpecification, while updating
+	// Returns reference to CollisionSpecification, while updating
 	CollisionSpecification& getSpecification(const Point3& pos) {
 		specification.updatePosition(pos);
 		return specification;
 	}
 
-	//returns reference to CollisionSpecification, not updating
+	// Returns reference to CollisionSpecification, not updating
 	CollisionSpecification& getSpecification() {
 		return specification;
 	}
 
-	//sets radius only if this is a circle collision
+	// Sets radius only if this is a circle collision
 	void setCircleRadius(float radius) {
 		if (specification.collisionType == CollisionTypes::CoTy_Circle) {
 			specification.collidableInformation.circle.radius = radius;
 		}
 	}
 
-	//returns if the entity this component is added to is in system
-	//collision
+	// Returns if the entity this component is added to is in system
+	// collision
 	bool isAddedToSystem() {
 		return addedToSystem;
 	}
 
-	//sets addedToSystem to true
+	// Sets addedToSystem to true
 	void markAddedToSystem() {
 		addedToSystem = true;
 	}
