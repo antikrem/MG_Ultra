@@ -95,6 +95,9 @@ PLAYER_FOCUS_FRAGMENT_POINTS_DRAIN = 0.01
 g_power = 0
 g_power_level = 0
 
+-- Clear Radius
+PLAYER_CLEAR_RADIUS = 250
+PLAYER_CLEAR_FRAMES = 250
 
 --loading assets for player
 Audio.request_load_file("player_shoot_tick", "shoot_click.wav")
@@ -309,6 +312,8 @@ g_bulletPlayerCollision = function()
 		this:get_component(ComponentClampPosition):set_active(false)
 		g_sequentialDeadFrames = 0
 		GlobalRegistar.update("player_alive", false)
+
+		Player.add_clear_aura()
 	end
 end
 
@@ -471,6 +476,34 @@ Player.add_hitbox = function()
 	mc:add_component(ComponentTransparency.create(0.0, 0.005))
 
 	mc:add_component(ComponentName.create("hitbox"))
+
+	this:get_component(ComponentSpawner):add_entity(mc)
+
+end
+
+-- Attaches a clearing entitity
+Player.add_clear_aura = function()
+	-- Create timed death emmitter
+	local mc = Entity.create(EntityBulletClearer)
+
+	mc:add_component(ComponentPosition.create(0, 0, LAYER_PLAYER))
+
+	mc:add_component(ComponentOffsetMaster.create(true))
+	mc:add_component(ComponentDieWithMaster.create())
+	mc:add_component(ComponentNoBoundsControl.create())
+
+	mc:add_component(ComponentDeathEmitter.create())
+	mc:add_component(ComponentCollision.create(250))
+
+	mc:add_component(ComponentName.create("clearer"))
+
+	local timer = ComponentTimer.create()
+	timer:add_callback(
+		PLAYER_CLEAR_FRAMES, 
+		"this:kill()" 
+	)
+
+	mc:add_component(timer)
 
 	this:get_component(ComponentSpawner):add_entity(mc)
 
