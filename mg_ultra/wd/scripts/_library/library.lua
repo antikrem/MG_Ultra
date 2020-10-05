@@ -69,6 +69,15 @@ function print(...)
 	printPush()
 end
 
+-- Variadic to string
+function vtostring(val, ...)
+	if is_nil(val) then
+		return ""
+	else
+		return tostring(val) .. " " .. vtostring(...)
+	end
+end
+
 function typeof(a)
 	t = type(a)
 	--check if a is of userdata, and if so, check if it has a name
