@@ -11,6 +11,7 @@
 #include "component_transparency.h"
 #include "component_min_ambient.h"
 #include "component_collision.h"
+#include "component_offset_master.h"
 
 #include "camera.h"
 #include "graphics_state.h"
@@ -66,6 +67,11 @@ public:
 			auto gra = getComponent<ComponentGraphics>(components);
 			auto tra = getComponent<ComponentTransparency>(components);
 			auto amb = getComponent<ComponentMinAmbient>(components);
+			auto off = getComponent<ComponentOffsetMaster>(components);
+
+			if (off) {
+				off->updatePositionalOffset();
+			}
 
 			bool toDraw;
 			AnimationState state = gra->getAnimationState(&toDraw, pos->getPosition3());
@@ -77,6 +83,7 @@ public:
 			if (amb) {
 				state.minimumAmbient = amb->getValue();
 			}
+
 
 			if (toDraw && boxCount < bufferSize) {
 				if (gra->getRenderIn3D()) {
