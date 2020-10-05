@@ -12,7 +12,7 @@ this:get_component(ComponentPointLight):set_colour(0.9647, 0.8039, 0.3751)
 this:get_component(ComponentAudio):set_source("player_shoot_tick")
 this:get_component(ComponentAudio):set_repeat(true)
 
---Make new player scroll in
+-- Make new player scroll in
 this:get_component(ComponentClampPosition):set_active(false)
 this:get_component(ComponentPosition):set_position(0, -640)
 g_sequentialDeadFrames = 0
@@ -21,5 +21,8 @@ GlobalRegistar.update("player_alive", false)
 -- Set player lighting
 Weather.update_player_light()
 
---Make player visible
+-- Make player visible
 this:get_component(ComponentGraphics):set_visible(true)
+
+-- Add hitbox
+Player.add_hitbox()

@@ -41,7 +41,7 @@ PLAYER_MAX_TURN_VELOCITY = 7;
 PLAYER_QUICK_SHIFT_THRESHOLD = 70
 
 -- shooting timer
-PLAYER_SHOOT_TIMING = 13
+PLAYER_SHOOT_TIMING = 10
 
 -- Counter for number of dead frames
 g_sequentialDeadFrames = 0
@@ -452,4 +452,26 @@ Player.friend_handle = function(layer)
 	for i in range(1, g_power_level + 1) do
 		Player.update_a_friend_magic_circle(i)
 	end
+end
+
+-- Add hitbox child
+Player.add_hitbox = function()
+	-- Create freind magic circles
+	local mc = Entity.create(EntityGeneric)
+
+	mc:add_component(ComponentPosition.create(0, 0, LAYER_PLAYER - 5))
+	mc:add_component(ComponentGraphics.create("player_hitbox"))
+
+	mc:add_component(ComponentOffsetMaster.create(true))
+	mc:add_component(ComponentDieWithMaster.create())
+	mc:add_component(ComponentNoBoundsControl.create())
+
+	mc:add_component(ComponentMinAmbient.create(1))
+
+	mc:add_component(ComponentTransparency.create(0.0, 0.005))
+
+	mc:add_component(ComponentName.create("hitbox"))
+
+	this:get_component(ComponentSpawner):add_entity(mc)
+
 end
