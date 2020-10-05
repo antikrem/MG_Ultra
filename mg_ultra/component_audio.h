@@ -17,6 +17,10 @@ private:
 	// consider it a neccesary (but not sufficient) condition
 	// that audio is currently playing
 	atomic<bool> playRequested = false;
+
+	// If true this entity will be requested to die
+	// When it stops playing audio
+	atomic<bool> dieOnStop = false;
 public:
 
 	ComponentAudio() {
@@ -25,6 +29,11 @@ public:
 
 	ComponentAudio(string source) {
 		playAudio(source);
+	}
+
+	ComponentAudio(string source, bool dieOnStop) {
+		playAudio(source);
+		this->dieOnStop = dieOnStop;
 	}
 
 	// Sets to play a audio file
@@ -79,6 +88,14 @@ public:
 		source.alSideUpdate(audioFiles, position);
 	}
 
+	// Handle that will kill given entity if audio is stopped
+	// and appropiate flags are checked
+	void checkAndApplyDieOn(shared_ptr<Entity> ent) {
+		if (dieOnStop && source.getState() == AudioState::stop) {
+			ent->killEntity();
+		}
+	}
+
 	static void registerToLua(kaguya::State& state) {
 		state["ComponentAudio"].setClass(kaguya::UserdataMetatable<ComponentAudio, Component>()
 			.setConstructors<ComponentAudio()>()
@@ -96,7 +113,8 @@ public:
 			.addOverloadedFunctions(
 				"create",
 				&ScriptableClass::create<ComponentAudio>,
-				&ScriptableClass::create<ComponentAudio, string>
+				&ScriptableClass::create<ComponentAudio, string>,
+				&ScriptableClass::create<ComponentAudio, string, bool>
 			)
 			.addStaticFunction("type", &getType<ComponentAudio>)
 			.addStaticFunction("cast", &Component::castDown<ComponentAudio>)
