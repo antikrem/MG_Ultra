@@ -76,6 +76,8 @@ public:
 			else {
 				comAudio->alComponentHandle(audioMaster->getAudioFiles(), Point3(0,0,0));
 			}
+
+			comAudio->checkAndApplyDieOn(ent);
 		}
 		
 	}
