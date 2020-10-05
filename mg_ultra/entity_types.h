@@ -29,7 +29,8 @@ enum EntityTypes {
 	ETPowerBoard,
 	ETFragmentBoard,
 	ETPowerUp,
-	ETVariableTracker
+	ETVariableTracker,
+	ETAnonymousSoundSource
 };
 
 //String to Entity type

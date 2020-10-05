@@ -27,6 +27,18 @@ end
 -- prints a small report on Audio state
 Audio.print_report = printAudioReport
 
+-- Plays a single audio once
+Audio.play_once = function(audioName)
+	local e = Entity.create(EntityAnonymousSoundSource)
+	e:add_component(ComponentAudio.create(audioName, true))
+	EntityPool.add_entity(e)
+end
+
+-- Plays a single audio once
+Audio.stop_playing_once = function()
+	EntityPool.kill_by_type(EntityAnonymousSoundSource)
+end
+
 -- Global music player
 Music = {}
 
