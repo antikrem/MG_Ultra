@@ -6,6 +6,9 @@ void SystemCollision::handleCollision(shared_ptr<Entity> source, shared_ptr<Enti
 	standardCombatHandle(source, target);
 	standardCombatHandle(target, source);
 
+	deathEmitterHandle(source, target);
+	deathEmitterHandle(target, source);
+
 	if (collisionEvent.suplementaryScript.size()) {
 		ScriptUnit su(
 			SS_functionalCallBack,

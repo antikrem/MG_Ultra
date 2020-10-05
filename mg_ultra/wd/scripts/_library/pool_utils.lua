@@ -28,6 +28,7 @@ EntityFragmentBoard = 21
 EntityPowerUp = 22
 EntityVariableTracker = 23
 EntityAnonymousSoundSource = 24
+EntityBulletClearer = 25
 
 -- Adds to pool, returns boolean success
 function EntityPool.add_entity(entity)

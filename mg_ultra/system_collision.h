@@ -9,6 +9,7 @@
 #include "component_collision.h"
 #include "component_damage.h"
 #include "component_health.h"
+#include "component_death_emitter.h"
 
 #include "component_particle_on_death.h"
 
@@ -18,14 +19,14 @@
 
 
 class SystemCollision : public System {
-	//internal map of entity types used to internalEntityLists
+	// internal map of entity types used to internalEntityLists
 	MMap<int, shared_ptr<Entity>> internalEntityLists;
 
-	//vector of CollisionEvents
+	// vector of CollisionEvents
 	vector<CollisionEvent> collisionEvents;
 
-	//standard combat interaction
-	//will do nothing if correct components are not found
+	// standard combat interaction
+	// will do nothing if correct components are not found
 	void standardCombatHandle(shared_ptr<Entity> source, shared_ptr<Entity> target) {
 		auto sourceDamage = source->getComponent<ComponentDamage>();
 		auto targetHealth = target->getComponent<ComponentHealth>();
@@ -43,11 +44,25 @@ class SystemCollision : public System {
 		}
 	}
 
+	// Handles for death emiiter
+	void deathEmitterHandle(shared_ptr<Entity> source, shared_ptr<Entity> target) {
+		auto sourceDeath = source->getComponent<ComponentDeathEmitter>();
+		auto targetHealth = target->getComponent<ComponentHealth>();
 
-	//handles the collision between two collisions
+		if (sourceDeath) {
+			if (targetHealth) {
+				targetHealth->setHealth(0);
+			}
+			else {
+				target->killEntity();
+			}
+		}
+	}
+
+	// handles the collision between two collisions
 	void handleCollision(shared_ptr<Entity> source, shared_ptr<Entity> target, const CollisionEvent& collisionEvent);
 
-	//conducts collision comparison between two entity types
+	// conducts collision comparison between two entity types
 	void compareCollisionLists(const CollisionEvent& collisionEvent) {
 		for (auto source : internalEntityLists.get(collisionEvent.types[COLLISION_SOURCE])) {
 
