@@ -63,9 +63,10 @@ public:
 		}
 
 		if (!disabled) {
-			if (!master->getFlag) {
+			if (!master->getFlag()) {
 				disable();
 				master = nullptr;
+				return;
 			}
 
 			Point3 masterPosition = master->getComponent<ComponentPosition>()->getPosition3();
