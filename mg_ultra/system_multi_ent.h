@@ -24,7 +24,7 @@ public:
 		cMultiEnt->clearDeadEntities();
 
 		if (cPos) {
-			cMultiEnt->updateOffsetSubs(cPos->getPosition3());
+			cMultiEnt->updateOffsetSubs();
 		}
 	}
 

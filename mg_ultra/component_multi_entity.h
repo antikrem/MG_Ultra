@@ -91,7 +91,7 @@ public:
 	}
 
 	// Updates any sub entities with ComponentOffsetMaster
-	void updateOffsetSubs(Point3 masterPosition) {
+	void updateOffsetSubs() {
 		unique_lock<mutex> lck(lock);
 		for (auto i : internalEntities) {
 			auto subPos = i->getComponent<ComponentPosition>();
