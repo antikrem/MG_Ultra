@@ -39,6 +39,15 @@ private:
 			{AudioState::pause, alSourcePause},
 		};
 
+	// Translates a AL_STATE to AudioState
+	const map<int, AudioState> AUDIO_STATE_LOOKUP
+		= {
+			{AL_INITIAL, AudioState::none},
+			{AL_STOPPED, AudioState::stop},
+			{AL_PLAYING, AudioState::play},
+			{AL_PAUSED, AudioState::pause},
+		};
+
 	mutex lock;
 
 	bool initialised = false;
@@ -165,7 +174,11 @@ public:
 			requestedState = AudioState::none;
 		}
 		
-
+		int state = 0;
+		alGetSourcei(sourceID, AL_SOURCE_STATE, &state);
+		if (state == AL_STOPPED && currentState == AudioState::play) {
+			currentState = AudioState::stop;
+		}
 	}
 };
 
