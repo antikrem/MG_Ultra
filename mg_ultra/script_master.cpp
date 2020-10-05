@@ -39,6 +39,7 @@
 #include "component_death_script.h"
 #include "component_magnetise_to_player.h"
 #include "component_name.h"
+#include "component_death_emitter.h"
 
 #include "registar.h"
 #include "pool.h"
@@ -129,6 +130,7 @@ ScriptMaster::ScriptMaster()
 	ComponentDeathScript::registerToLua(kaguya);
 	ComponentMagnetiseToPlayer::registerToLua(kaguya);
 	ComponentName::registerToLua(kaguya);
+	ComponentDeathEmitter::registerToLua(kaguya);
 
 	// Set contextual script functions
 	kaguya["getEntityPool"] = getGlobalPool;
