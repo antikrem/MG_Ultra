@@ -42,12 +42,15 @@ void main() {
 
 	// Remove fully transparent parts
 	vec4 texel = texture(mgtSamplers[0], uv + ad_wl).rgba;
-	if (texel.a < 0.01) {
+
+	float trans = transparency * texel.a;
+
+	if (trans < 0.01) {
 		discard;
 	}
 
 	// Colours are pre multiplied by alpha
-	color =  transparency * texel.a * vec4(texel.rgb , 1.0);
+	color =  trans * vec4(texel.rgb , 1.0);
 	position = worldPosition;
 
 	// Normal for sprites always face towards the camera
