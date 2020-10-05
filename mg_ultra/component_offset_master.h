@@ -25,6 +25,10 @@ private:
 
 	atomic<Point3> masterLastPosition = Point3(0.0f);
 
+	shared_ptr<Entity> master = nullptr;
+
+	shared_ptr<ComponentPosition> componentPosition = nullptr;
+
 public:
 	ComponentOffsetMaster() {
 
@@ -38,28 +42,36 @@ public:
 		this->fullOffset = fullOffset;
 	}
 	
+	// Sets master and component position
+	void initialise(shared_ptr<Entity> master, shared_ptr<ComponentPosition> componentPosition) {
+		this->master = master;
+		this->componentPosition = componentPosition;
+
+		masterLastPosition = master->getComponent<ComponentPosition>()->getPosition3();
+		if (fullOffset) {
+			componentPosition->addPosition(masterLastPosition);
+		}
+
+		initialised = true;
+	}
 
 	// Returns new offset to be added to the position 
-	Point3 updatePositionalOffset(Point3& masterPosition) {
+	void updatePositionalOffset() {
+
 		if (!initialised) {
-
-			// initialise positions
-			initialised = true;
-			masterLastPosition = masterPosition;
-
-			// if full offseted, need to return the masters position as offset
-			return fullOffset ? masterPosition : Point3(0.0f);
+			return;
 		}
-		else {
-			if (!disabled) {
-				Point3 newOffset = masterPosition - masterLastPosition.load();
-				masterLastPosition = masterPosition;
-				return newOffset;
+
+		if (!disabled) {
+			if (!master->getFlag) {
+				disable();
+				master = nullptr;
 			}
-			else {
-				return Point3(0.0f);
-			}
-			
+
+			Point3 masterPosition = master->getComponent<ComponentPosition>()->getPosition3();
+			Point3 newOffset = masterPosition - masterLastPosition.load();
+			masterLastPosition = masterPosition;
+			componentPosition->addPosition(newOffset);
 		}
 
 	}

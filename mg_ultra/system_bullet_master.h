@@ -72,7 +72,7 @@ public:
 			if (evaluationSuccess 
 					&& registar->get("bullet_spawner_initialisation_success", &processSuccess) 
 					&& processSuccess) {
-				me->addEntity(subEnt);
+				me->addEntity(ent, subEnt);
 				entityPool->addEnt(subEnt);
 				bm->setInitialised();
 

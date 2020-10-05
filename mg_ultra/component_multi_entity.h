@@ -34,8 +34,6 @@ private:
 	// Entities with component name will be cached
 	map<string, shared_ptr<Entity>> namedLookup;
 
-	Point3 lastMasterPosition = Point3(0.0f);
-
 	// Static function to use on subents of killed entities
 	static void killDieWithMaster(shared_ptr<Entity> subEnt) {
 		auto dwm = subEnt->getComponent<ComponentDieWithMaster>();
@@ -49,8 +47,10 @@ public:
 	// Adds a shared_ptr to this MultiEntities' internal store
 	// Returns false if an entity already exists with the same name
 	// and will not add to named cache
-	bool addEntity(shared_ptr<Entity> newEnt) {
+	bool addEntity(shared_ptr<Entity> master, shared_ptr<Entity> newEnt) {
 		unique_lock<mutex> lck(lock);
+
+		auto masterPos = master->getComponent<ComponentPosition>();
 
 		auto subPos = newEnt->getComponent<ComponentPosition>();
 		auto subOff = newEnt->getComponent<ComponentOffsetMaster>();
@@ -58,13 +58,11 @@ public:
 		auto subName = newEnt->getComponent<ComponentName>();
 
 		if (subPos && subOff) {
-			subPos->setPosition(
-				subPos->getPosition3() + subOff->updatePositionalOffset(lastMasterPosition)
-			);
+			subOff->initialise(master, subPos);
 		}
 		else if (subPos && subOffOnce) {
 			subPos->setPosition(
-				subPos->getPosition3() + lastMasterPosition
+				subPos->getPosition3() + masterPos->getPosition3()
 			);
 		}
 
@@ -95,14 +93,11 @@ public:
 	// Updates any sub entities with ComponentOffsetMaster
 	void updateOffsetSubs(Point3 masterPosition) {
 		unique_lock<mutex> lck(lock);
-		lastMasterPosition = masterPosition;
 		for (auto i : internalEntities) {
 			auto subPos = i->getComponent<ComponentPosition>();
 			auto subOff = i->getComponent<ComponentOffsetMaster>();
 			if (subPos && subOff) {
-				subPos->setPosition(
-					subPos->getPosition3() + subOff->updatePositionalOffset(masterPosition)
-				);
+				subOff->updatePositionalOffset();
 			}
 		}
 	}
