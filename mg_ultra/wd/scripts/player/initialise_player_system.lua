@@ -254,11 +254,13 @@ g_playerSpawnBullets = function()
 	--Timing component
 	local cTiming = this:get_component(ComponentTimer)
 
-	g_playerBulletOscillator = g_playerBulletOscillator * -1
 
 	--create bullet entities
 	if cInput:query_down("shoot") == 1 and 
 			(cTiming:get_cycle() % PLAYER_SHOOT_TIMING) == 0 then
+
+		-- Oscilate bullet position
+		g_playerBulletOscillator = g_playerBulletOscillator * -1
 
 		-- Generate target position
 		local ty = math.lerp(g_shiftFactor, PLAYER_FRIEND_RESTING_OFFSET, PLAYER_FRIEND_TARGET)
