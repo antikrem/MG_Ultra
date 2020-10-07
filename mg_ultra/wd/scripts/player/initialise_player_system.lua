@@ -156,6 +156,8 @@ g_playerMovementUpdate = function()
 
 	local movementMode = g_inDash and "DASH" or (g_inFocus and "FOCUS" or "DEFAULT")
 
+	if g_inFocus then Player.tend_render_hitbox() else Player.tend_derender_hitbox() end
+
 	--calculate updated movement
 	local maxAcceleration = PLAYER_MAX_ACCELERATION_TABLE[movementMode]
 	local maxVelocity = PLAYER_MAX_VELOCITY_TABLE[movementMode]
@@ -481,6 +483,22 @@ Player.add_hitbox = function()
 
 	this:get_component(ComponentSpawner):add_entity(mc)
 
+end
+
+-- Tend hitbox towards rendering
+Player.tend_render_hitbox = function()
+	local hitbox = this:get_component(ComponentMultiEntity):get("hitbox")
+	if is_nil(hitbox) then return end
+	local trans = hitbox:get_component(ComponentTransparency)
+	if trans:get_target() < 0.5 then trans:set_target(1.0) trans:set_rate(0.01) end
+end
+
+-- Tend hitbox towards rendering
+Player.tend_derender_hitbox = function()
+	local hitbox = this:get_component(ComponentMultiEntity):get("hitbox")
+	if is_nil(hitbox) then return end
+	local trans = hitbox:get_component(ComponentTransparency)
+	if trans:get_target() > 0.5 then trans:set_target(0.0) trans:set_rate(0.2) end
 end
 
 -- Attaches a clearing entitity
