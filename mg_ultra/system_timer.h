@@ -21,17 +21,23 @@ public:
 	}
 
 	void handleComponentMap(map<type_index, shared_ptr<Component>>& components, shared_ptr<Entity> ent, int id) override {
-		auto comText = ent->getComponent<ComponentTimer>();
-		comText->updateTimer();
+		auto comTimer = ent->getComponent<ComponentTimer>();
+		comTimer->updateTimer();
 
-		auto callbacks = comText->getCallbacks(comText->getCycle());
+		// Apply callbacks
+		int cycle = comTimer->getCycle();
+		auto callbacks = comTimer->getCallbacks(cycle);
 		for (auto i : callbacks) {
 			ScriptUnit su(SS_timedCallBack, i);
 			su.attachEntity(ent);
-			su.addDebugData(to_string(id) + " " + to_string(comText->getCycle()));
+			su.addDebugData(to_string(id) + " " + to_string(comTimer->getCycle()));
 			g_script::executeScriptUnit(su);
 		}
 
+		// Kill after death timer
+		if (cycle >= comTimer->getKillCycle()) {
+			ent->killEntity();
+		}
 	}
 };
 
