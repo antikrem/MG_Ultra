@@ -110,13 +110,15 @@ namespace err {
 	}
 
 	void endLog() {
+		logMessage("Ending Log...");
+
 		// Stop receiving errors
 		errors.stop();
 
 		int count = 0;
 
 		loggingCycle.store(0);
-		logMessage("Ending Log...");
+
 		while (!safeToEnd) {
 			count++;
 		};
