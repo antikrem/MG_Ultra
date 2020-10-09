@@ -151,6 +151,10 @@ Debug.run_test = function()
 	load_state("level", "test", 1)
 end
 
+Debug.scroll_to = function(cycle)
+	GlobalRegistar.update("cycle", cycle)
+end
+
 run_test = Debug.run_test
 
 -- General function to load a level by setting the correct values in the Registar
