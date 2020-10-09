@@ -43,19 +43,20 @@ public:
 			}
 		);
 
-		if (stopFlag) {
-			return false;
-		}
-		else {
+		if (internalQueue.size()) {
 			*element = internalQueue.front();
 			internalQueue.pop();
 			return true;
+		}
+		else {
+			return false;
 		}
 	}
 
 	// Stop this queue
 	// This stops all future adds
-	// And makes future gets return false
+	// And makes future gets not wait
+	// On empty queue
 	void stop() {
 		std::unique_lock<mutex>(lock);
 		stopFlag = true;
