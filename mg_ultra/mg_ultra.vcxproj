@@ -252,6 +252,7 @@
     <ClInclude Include="ambient_illumination.h" />
     <ClInclude Include="animations.h" />
     <ClInclude Include="any_type.h" />
+    <ClInclude Include="atomic_queue.h" />
     <ClInclude Include="audio_file.h" />
     <ClInclude Include="audio_listener.h" />
     <ClInclude Include="audio_master.h" />
