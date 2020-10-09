@@ -8,8 +8,8 @@ GlobalRegistar.add("player_active", false)
 
 --Table used for gettings certain velocity values
 PLAYER_MAX_VELOCITY_TABLE = {
-	DEFAULT = 11.5,
-	DASH = 50,
+	DEFAULT = 9.5,
+	DASH = 40,
 	FOCUS = 4.3
 }
 
@@ -25,7 +25,7 @@ PLAYER_X_CLAMP = 960
 PLAYER_Y_CLAMP = 540
 
 -- Dash related variables
-PLAYER_DASH_LENGTH = 13
+PLAYER_DASH_LENGTH = 10
 PLAYER_DASH_COOLDOWN = 5
 
 -- Constants for dead player
