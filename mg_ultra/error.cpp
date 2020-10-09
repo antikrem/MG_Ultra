@@ -16,26 +16,25 @@
 #include <atomic>
 #include <algorithm>
 
+#include "atomic_queue.h"
+
 using namespace std;
 
 namespace err {
-	//Standard lock
-	mutex lock;
-	condition_variable cv;
-
-	//A lock used when forcing a write
-	mutex forceLock;
-
+	// Temporary representation of a error message
 	struct ErrorMessage {
 		int cycle = 0;
 		string message;
 	};
 
+	// Queue of error messages
+	AtomicQueue<ErrorMessage> errors;
+	
 	//console message buffer
 	mutex consoleLock;
 	vector<string> consoleMirror;
 
-	vector<ErrorMessage> messageBuffer;
+	// Set to true when logging thread is over
 	atomic<bool> safeToEnd = false;
 	atomic<bool> logActive = false;
 
@@ -68,54 +67,36 @@ namespace err {
 
 	void appendToErrorFile(std::ofstream* outfile, std::string message) {
 		*outfile << message << std::endl;
+		unique_lock<mutex>(consoleLock);
+		consoleMirror.push_back(message);
 	}
 
 	void appendToErrorFile(std::ofstream* outfile, int cycle, std::string message) {
 		*outfile << cycle << ": " << message << std::endl;
+		unique_lock<mutex>(consoleLock);
+		consoleMirror.push_back(to_string(cycle) + ": " + message);
 	}
 
-	bool checkSize() {
-		return messageBuffer.size();
+	bool getSize() {
+		return errors.size();
 	}
 
 	void loggingDuty() {
-		vector<ErrorMessage> localBuffer;
-		vector<string> consoleMessageBuffer;
+		ErrorMessage buffer;
 
-		while (logActive) {
-			//will not conflict in most cases
-			unique_lock<mutex> greaterLock(forceLock);
-			{
-				unique_lock<mutex> lck(lock);
-				cv.wait(lck, &checkSize);
-				//If safe to write and there is a message in the buffer
-				localBuffer = messageBuffer;
-				messageBuffer.clear();
-			}
-
+		while (errors.get(&buffer)) {
 			auto outfile = openErrorFile();
-			for (ErrorMessage i : localBuffer) {
-				if (i.cycle == 0) {
-					appendToErrorFile(outfile, i.message);
-					consoleMessageBuffer.push_back(i.message);
-				}
-				else {
-					appendToErrorFile(outfile, i.cycle, i.message);
-					consoleMessageBuffer.push_back(to_string(i.cycle) + ": " + i.message);
-				}
+
+			if (buffer.cycle == 0) {
+				appendToErrorFile(outfile, buffer.message);
+			}
+			else {
+				appendToErrorFile(outfile, buffer.cycle, buffer.message);
 			}
 			closeErrorFile(outfile);
-			localBuffer.clear();
-
-			//copy console message buffer to consoleMirror
-			{
-				unique_lock<mutex> lck(consoleLock);
-				consoleMirror.insert(consoleMirror.end(), consoleMessageBuffer.begin(), consoleMessageBuffer.end());
-			}
-			consoleMessageBuffer.clear();
 		}
-
 		safeToEnd = true;
+
 	}
 
 	void primeErrorFile() {
@@ -124,13 +105,14 @@ namespace err {
 		outfile << "LOG FILE FOR mgULTRA-INDEV INSTANCE RAN ON: " << currentTime() << std::endl;
 		outfile.close();
 
-		logActive = true;
 		std::thread logThread(&err::loggingDuty);
 		logThread.detach();
 	}
 
 	void endLog() {
-		logActive = false;
+		// Stop receiving errors
+		errors.stop();
+
 		int count = 0;
 
 		loggingCycle.store(0);
@@ -147,10 +129,7 @@ namespace err {
 	}
 
 	void logMessage(std::string message) {
-		unique_lock<mutex> lck(lock);
-		ErrorMessage toPush = { loggingCycle.load(), message };
-		messageBuffer.push_back(toPush);
-		cv.notify_one();
+		errors.add(ErrorMessage{ loggingCycle.load(), message });
 	}
 
 	vector<string> getConsoleMessage() {
@@ -162,7 +141,7 @@ namespace err {
 
 	void forceWrite() {
 		//lock
-		unique_lock<mutex> lck(lock);
+		//unique_lock<mutex> lck(lock);
 		//todo implement
 		cout << "147 error.cpp" << endl;
 
