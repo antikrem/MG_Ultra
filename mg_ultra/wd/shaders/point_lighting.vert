@@ -20,8 +20,8 @@ out float outA;
 out float outB;
 out float outC;
 
-flat out float outRange;
-flat out float outStrength;
+out float outRange;
+out float outStrength;
 
 out vec3 lightVolumeWorldPosition;
 out vec4 screenSpaceCenter;

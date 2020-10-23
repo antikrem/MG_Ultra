@@ -120,7 +120,7 @@ void main() {
 	//compute light scattering
 	vec4 volScatter = vec4(0);
 
-	if (enableVolumetricScattering) {
+	if (enableVolumetricScattering != 0) {
 		float lightScatter = calculateLightScattering(worldspace);
 		volScatter = vec4(outLightColour * fogColour * lightScatter, lightScatter);
 	}
