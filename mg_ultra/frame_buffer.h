@@ -4,6 +4,8 @@
 #include <vector>
 #include <tuple>
 
+#include "error.h"
+
 #include "_graphics_headers.h"
 #include "graphics_settings.h"
 #include "algorithm_ex.h"
@@ -137,6 +139,7 @@ public:
 		
 		//done, check and return
 		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+			err::logMessage("GL_HANDLER: could not complete framebuffer");
 			throw GraphicsException("Frame buffer failed creation");
 		}
 		unbindBuffer();
