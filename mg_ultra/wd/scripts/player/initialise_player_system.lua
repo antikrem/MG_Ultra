@@ -8,14 +8,14 @@ GlobalRegistar.add("player_active", false)
 
 --Table used for gettings certain velocity values
 PLAYER_MAX_VELOCITY_TABLE = {
-	DEFAULT = 9.5,
+	DEFAULT = 8.5,
 	DASH = 40,
 	FOCUS = 4.3
 }
 
 --Similar table for acceleration
 PLAYER_MAX_ACCELERATION_TABLE = {
-	DEFAULT = 1.5,
+	DEFAULT = 1.25,
 	DASH = 50,
 	FOCUS = 0.5
 }
@@ -513,7 +513,9 @@ Player.add_clear_aura = function()
 	mc:add_component(ComponentNoBoundsControl.create())
 
 	mc:add_component(ComponentDeathEmitter.create())
-	mc:add_component(ComponentCollision.create(250))
+	mc:add_component(ComponentCollision.create(PLAYER_CLEAR_RADIUS))
+
+	mc:add_component(ComponentGraphics.create("mc_elegant_circle_large"))
 
 	mc:add_component(ComponentName.create("clearer"))
 
