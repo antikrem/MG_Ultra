@@ -93,10 +93,16 @@ public:
 			newEnt->addComponent(newComponent13->pullForEntity());
 
 			newEnt->addComponent(new ComponentPointLight(1.0f, 0.75f, 0.05f));
-			int playspaceX = 960;
-			int playspaceY = 540;
+			
+			int playspaceX = 2 * 960;
+			int playspaceY = 2 * 540;
+			
 			registar->get<int>("play_space_x", &playspaceX);
 			registar->get<int>("play_space_y", &playspaceY);
+
+			playspaceX /= 2;
+			playspaceY /= 2;
+
 			newEnt->addComponent(new ComponentClampPosition((float)playspaceX, (float)playspaceY));
 
 			//execute a script to initialise the player
