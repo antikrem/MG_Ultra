@@ -4,6 +4,8 @@
 GlobalRegistar.add("player_alive", true)
 GlobalRegistar.add("player_active", false)
 
+Player = {}
+
 -- Player movement
 
 --Table used for gettings certain velocity values
@@ -98,6 +100,12 @@ g_power_level = 0
 -- Clear Radius
 PLAYER_CLEAR_RADIUS = 250
 PLAYER_CLEAR_FRAMES = 250
+
+-- Player magnet
+Player.MAGNET_Y = 300
+Player.MAGNET_RESET = 350
+Player.magnet_cooldown = Player.MAGNET_RESET
+
 
 --loading assets for player
 Audio.request_load_file("player_shoot_tick", "shoot_click.wav")
@@ -321,8 +329,6 @@ g_bulletPlayerCollision = function()
 	end
 end
 
-Player = {}
-
 -- Enables the player system
 Player.enable_player = function()
 	GlobalRegistar.add("player_active", true)
@@ -422,6 +428,27 @@ Player.update_a_friend_magic_circle = function(layer)
 		mc:get_component(ComponentPosition):set_position(offsetX + targetX, offsetY + targetY)
 	end
 
+end
+
+-- Handles power up screen wide magnet
+Player.player_magnet_check = function()
+	local _, y = this:get_component(ComponentPosition):get_position()
+	
+	if y < Player.MAGNET_Y  and Player.magnet_cooldown > 0 then
+		Player.magnet_cooldown = Player.magnet_cooldown - 1
+	end
+
+	if y > Player.MAGNET_Y and Player.magnet_cooldown <= 0 then
+		local powerups = EntityPool.get_by_type(EntityPowerUp)
+
+		for k, v in pairs(powerups) do
+			v:execute_against(PowerUp.apply_magnet)
+		end
+
+		Player.magnet_cooldown = Player.MAGNET_RESET
+
+	end
+	
 end
 
 -- Removes friend circles

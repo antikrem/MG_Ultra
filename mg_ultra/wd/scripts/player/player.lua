@@ -10,6 +10,7 @@ if GlobalRegistar.get("player_alive") then
 	g_playerSpawnBullets()
 	g_playerPowerUpdate()
 	Player.friend_handle()
+	Player.player_magnet_check()
 
 -- Dead player handle
 else
