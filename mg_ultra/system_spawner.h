@@ -26,11 +26,13 @@ public:
 
 		auto multient = getComponent<ComponentMultiEntity>(components);
 
+		auto dieWithMaster = getComponent<ComponentDieWithMaster>(components);
+
 		vector<Entity*> ents;
 		spawner->pullEnts(ents);
 
-		//algorithm is slightly different depending
-		//on if a multi ent exists
+		// Algorithm is slightly different depending
+		// on if a multi ent exists
 		if (!multient) {
 			for (auto i : ents) {
 				entityPool->addEnt(i, false);
@@ -42,6 +44,11 @@ public:
 				shared_ptr<Entity> subEnt = shared_ptr<Entity>(i);
 				multient->addEntity(ent, subEnt);
 				entityPool->addEnt(subEnt, false);
+
+				// Also add master pointer to die with entity
+				if (dieWithMaster) {
+					dieWithMaster->setMaster(ent);
+				}
 			}
 		}
 

@@ -18,6 +18,18 @@ class ComponentDieWithMaster : public Component, public ScriptableClass<Componen
 	atomic<int> deathStart = 0;
 	atomic<int> deathEnd = INT_MAX;
 
+	// An aditional check which will see if 
+	// the master is also dead, if masterDead doesn't get set
+	shared_ptr<Entity> master = nullptr;
+
+
+	// Double check with master
+	// Returns true if flag not set
+	// Or flag is set and master is dead
+	bool isMasterDeadDoubleCheck() {
+		return master && !master->getFlag();
+	}
+
 public:
 
 	ComponentDieWithMaster() {
@@ -35,7 +47,7 @@ public:
 
 	void update() {
 		cycle++;
-		if (masterDead 
+		if ((masterDead || isMasterDeadDoubleCheck())
 				&& deathStart < cycle
 				&& cycle < deathEnd) {
 			killEntity();
@@ -45,6 +57,10 @@ public:
 	void disableDieWithMaster() {
 		//set short death end to easily disable
 		deathEnd = cycle - 1;
+	}
+
+	void setMaster(shared_ptr<Entity> master) {
+		this->master = master;
 	}
 
 	void setMasterDead() {
