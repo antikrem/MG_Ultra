@@ -153,6 +153,20 @@ public:
 		return count;
 	}
 
+	// Returns a vector of all relevent type
+	vector<shared_ptr<Entity>> getByType(int entityType) {
+		auto list = subPools[0].getAllEnts();
+		vector<shared_ptr<Entity>> cleaned;
+		for (auto i : list) {
+			auto type = i->getType();
+			if (entityType == EntityTypes::ETNoType || type == entityType) {
+				cleaned.push_back(i);
+			}
+		}
+		return cleaned;
+
+	}
+
 	// Clear dead entities, needs to be sometimes, locks access to ents, so should only be done sometimes
 	// Returns how many ents were killed
 	int clearDeadEnts() {
@@ -259,6 +273,7 @@ public:
 			.addFunction("addMultiple", &EntityPool::l_addEnts)
 			.addFunction("addCached", &EntityPool::addCachedEnt)
 			.addFunction("killByType", &EntityPool::killByType)
+			.addFunction("getByType", &EntityPool::getByType)
 			.addFunction("getEntFromCache", &EntityPool::getCachedEnt)
 			.addFunction("getGraveyardSize", &EntityPool::getGraveyardSize)
 			.addFunction("getGraveyardPassed", &EntityPool::getGraveyardPassed)

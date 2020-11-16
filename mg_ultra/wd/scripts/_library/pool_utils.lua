@@ -76,6 +76,12 @@ end
 function EntityPool.kill_by_type(type)
 	 return pool:killByType(type)
 end
+
+-- Returns array of entities with given type
+function EntityPool.get_by_type(type)
+	return pool:getByType(type)
+end
+
 -- Attempts to get player, might get nil
 function EntityPool.get_player()
 	return EntityPool.get_cached_entity(EntityPlayer)
