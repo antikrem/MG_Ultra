@@ -25,6 +25,7 @@ private:
 
 	atomic<Point3> masterLastPosition = Point3(0.0f);
 
+	mutex masterLock;
 	shared_ptr<Entity> master = nullptr;
 
 	shared_ptr<ComponentPosition> componentPosition = nullptr;
@@ -44,7 +45,9 @@ public:
 	
 	// Sets master and component position
 	void initialise(shared_ptr<Entity> master, shared_ptr<ComponentPosition> componentPosition) {
+		unique_lock<mutex>(masterLock);
 		this->master = master;
+		
 		this->componentPosition = componentPosition;
 
 		masterLastPosition = master->getComponent<ComponentPosition>()->getPosition3();
@@ -62,18 +65,22 @@ public:
 			return;
 		}
 
-		if (!disabled) {
-			if (!master->getFlag()) {
-				disable();
-				master = nullptr;
-				return;
-			}
+		unique_lock<mutex>(masterLock);
 
-			Point3 masterPosition = master->getComponent<ComponentPosition>()->getPosition3();
-			Point3 newOffset = masterPosition - masterLastPosition.load();
-			masterLastPosition = masterPosition;
-			componentPosition->addPosition(newOffset);
+		if (disabled || !master) {
+			return;
 		}
+
+		if (!master->getFlag()) {
+			disable();
+			master = nullptr;
+			return;
+		}
+
+		Point3 masterPosition = master->getComponent<ComponentPosition>()->getPosition3();
+		Point3 newOffset = masterPosition - masterLastPosition.load();
+		masterLastPosition = masterPosition;
+		componentPosition->addPosition(newOffset);
 
 	}
 
@@ -83,6 +90,7 @@ public:
 
 	// Clean up removes all subents
 	void cleanup() override {
+		unique_lock<mutex>(masterLock);
 		master = nullptr;
 	}
 
