@@ -133,6 +133,9 @@ public:
 	// Kills entity directly
 	void killEntity();
 
+	// Clean up when entity gets to graveyard
+	void cleanup();
+
 	// Returns flag, if false, delete this ent
 	bool getFlag() {
 		return flag;

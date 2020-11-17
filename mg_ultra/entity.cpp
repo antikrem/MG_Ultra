@@ -26,3 +26,9 @@ void Entity::killEntity() {
 		componentCleanUpRequired = false;
 	}
 }
+
+void Entity::cleanup() {
+	for (auto i : components) {
+		i.second->cleanup();
+	}
+}

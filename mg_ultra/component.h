@@ -9,17 +9,18 @@
 
 using namespace std;
 
-//Components are not thread safe per se,
-//Each derivation will need to be implemented such that acccess is safe 
+/* Components are not thread safe per se,
+ * Each derivation will need to be implemented such that acccess is safe 
+ */
 class Component {
 private:
-	//Each component has its own flag
+	// Each component has its own flag
 	atomic<bool> flag = true;
 public:
 	virtual ~Component() {
 	}
 
-	//use to kill a entity
+	// Use to kill a entity
 	void killEntity() {
 		flag.store(false);
 	}
@@ -32,10 +33,15 @@ public:
 		return make_pair<type_index, Component*>(typeid(*this), this);
 	}
 
-	//Allows a component to cast itself into a derived type
+	// Allows a component to cast itself into a derived type
 	template <class T> 
 	static shared_ptr<T> castDown(shared_ptr<Component> in) {
 		return dynamic_pointer_cast<T>(in);
+	}
+
+	// Clean up for component
+	virtual void cleanup() {
+		// Default does nothing
 	}
 
 };

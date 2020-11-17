@@ -189,6 +189,8 @@ public:
 	// Sends the entity to the graveyard
 	void sendToGraveYard(shared_ptr<Entity> ent) {
 		unique_lock<mutex> glck(graveyardLock);
+		// Do a clean up
+		ent->cleanup();
 		graveyard.push_back(ent);
 	}
 
