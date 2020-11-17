@@ -81,6 +81,11 @@ public:
 		disabled = true;
 	}
 
+	// Clean up removes all subents
+	void cleanup() override {
+		master = nullptr;
+	}
+
 	static void registerToLua(kaguya::State& state) {
 		state["ComponentOffsetMaster"].setClass(kaguya::UserdataMetatable<ComponentOffsetMaster, Component>()
 			.setConstructors<ComponentOffsetMaster()>()

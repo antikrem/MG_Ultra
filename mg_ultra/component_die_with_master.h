@@ -67,6 +67,11 @@ public:
 		masterDead = true;
 	}
 
+	// Clean up removes all subents
+	void cleanup() override {
+		master = nullptr;
+	}
+
 	static void registerToLua(kaguya::State& state) {
 		state["ComponentDieWithMaster"].setClass(kaguya::UserdataMetatable<ComponentDieWithMaster, Component>()
 			.setConstructors<ComponentDieWithMaster()>()

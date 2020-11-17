@@ -86,6 +86,7 @@ public:
 		unsigned int count = internalEntities.size();
 		erase_sequential_if(internalEntities, [](shared_ptr<Entity> &ent) { return !ent->getFlag(); });
 		if (count != internalEntities.size()) {
+			std::cout << "pruned" << std::endl;
 			erase_associative_if(internalEntities, [](shared_ptr<Entity> &ent) { return !ent->getFlag(); });
 		}
 	}
@@ -168,11 +169,19 @@ public:
 
 	// Kill all children
 	void killAllChildren() {
-		applyFunction(
-			[](shared_ptr<Entity> subEnt) {
-				subEnt->killEntity();
-			}
-		);
+		unique_lock<mutex> lck(lock);
+		for (auto i : internalEntities) {
+			i->killEntity();
+		}
+		internalEntities.clear();
+		namedLookup.clear();
+	}
+
+	// Clean up removes all subents
+	void cleanup() override {
+		unique_lock<mutex> lck(lock);
+		internalEntities.clear();
+		namedLookup.clear();
 	}
 
 	static void registerToLua(kaguya::State& state) {
