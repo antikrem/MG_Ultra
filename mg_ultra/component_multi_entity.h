@@ -86,7 +86,6 @@ public:
 		unsigned int count = internalEntities.size();
 		erase_sequential_if(internalEntities, [](shared_ptr<Entity> &ent) { return !ent->getFlag(); });
 		if (count != internalEntities.size()) {
-			std::cout << "pruned" << std::endl;
 			erase_associative_if(internalEntities, [](shared_ptr<Entity> &ent) { return !ent->getFlag(); });
 		}
 	}
