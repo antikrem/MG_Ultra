@@ -82,7 +82,7 @@ Weather.start_heavy_rain = function()
 	EntityPool.get_cached_entity(EntityWeather):get_component(ComponentParticle):use_type("weather_frontcloud")
 	EntityPool.get_cached_entity(EntityWeather):get_component(ComponentParticle):spawn_uniformly(3)
 	EntityPool.get_cached_entity(EntityWeather):get_component(ComponentAudio):play("rain")
-	Drift.set_wind_speed(16, -20, 0)
+	Drift.set_wind_speed(12, -20, 0)
 
 	-- Moody lights and fog
 	PostEffects.Exposure.set(1.1)
