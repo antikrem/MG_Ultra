@@ -59,12 +59,12 @@ public:
 		
 		vector<string> ret;
 
-		if (timedCallbacks.count(cycle)) {
-			ret = timedCallbacks[cycle];
-		}
-
 		if (spamCallback.size()) {
 			ret.push_back(spamCallback);
+		}
+
+		if (timedCallbacks.count(cycle)) {
+			ret = timedCallbacks[cycle];
 		}
 
 		return ret;
