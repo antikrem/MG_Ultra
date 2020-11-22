@@ -76,12 +76,12 @@ registar:add("next_level", 0)
 --play space is horizontal/vertical area a player can move
 --Each unit is a single pixel full screen at 1080p
 --is also used fir cullling entities
-registar:add("play_space_x", 1920)
+registar:add("play_space_x", 1440)
 registar:add("play_space_y", 1080)
 
 --Used for culling entities that fall outside of the play space
 registar:add("culling_enable", true)
-registar:add("culling_padding", 100)
+registar:add("culling_padding", 340)
 
 --Sets the vertical camera view, how  much of the play_space_y
 --is viewable
