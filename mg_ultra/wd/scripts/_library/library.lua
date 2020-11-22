@@ -15,6 +15,11 @@ function is_nil(a)
 	return a == nil
 end
 
+-- Checks if value is not nil
+function is_not_nil(a)
+	return not is_nil(a)
+end
+
 -- Checks if value is numer
 function is_number(a)
 	return type(a) == "number"
@@ -88,6 +93,8 @@ function typeof(a)
 	end
 	print(t)
 end
+
+
 
 -- Checks element is in the provided list of elements
 function check_element_in_set(element, ...)
