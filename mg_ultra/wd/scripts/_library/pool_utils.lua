@@ -29,6 +29,8 @@ EntityPowerUp = 22
 EntityVariableTracker = 23
 EntityAnonymousSoundSource = 24
 EntityBulletClearer = 25
+EntityUILeftPane = 26
+EntityUIRightPane = 27
 
 -- Adds to pool, returns boolean success
 function EntityPool.add_entity(entity)

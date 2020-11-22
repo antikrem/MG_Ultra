@@ -31,7 +31,9 @@ enum EntityTypes {
 	ETPowerUp,
 	ETVariableTracker,
 	ETAnonymousSoundSource,
-	ETBulletClearer
+	ETBulletClearer,
+	ETUILeftPane,
+	ETUIRightPane
 };
 
 //String to Entity type

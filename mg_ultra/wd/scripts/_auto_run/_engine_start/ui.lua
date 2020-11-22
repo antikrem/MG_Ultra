@@ -57,6 +57,7 @@ UI.uiCreated = false
 -- True when ui is being drawn
 UI.uiVisible = false
 
+-- Starts UI
 UI.start_ui = function() 
 	local e = Entity.create(EntityScoreBoard)
 	e:add_component(ComponentPosition.create(-900, 500))
@@ -88,6 +89,9 @@ UI.start_ui = function()
 
 	EntityPool.add_cached_entity(e)
 
+	UI.create_panes()
+
+	UI.pane_hidden_value = 0
 	UI.uiCreated = true
 end
 
@@ -126,4 +130,76 @@ UI.update_ui = function()
 
 	local e = EntityPool.get_cached_entity(EntityPowerBoard)
 	e:get_component(ComponentText):set_text(tostring(g_power) .. "%")
+
+	UI.pane_update()
+end
+
+UI.PANEL_WIDTH = 240
+UI.SHOW_X_POSITION = 840
+UI.HIDDEN_X_POSITION = UI.PANEL_WIDTH + UI.SHOW_X_POSITION
+UI.PANEL_TRANSPARENCY = 0.7
+
+
+-- Ranged between 0 (show) and 1 (hidden)
+UI.pane_hidden_value = 1.0
+UI.pane_hidden_target = 1.0
+UI.pane_hidden_rate = 1.0
+
+-- Draws left and right panes
+UI.create_panes = function() 
+	local leftPane = Entity.create(EntityUILeftPane)
+	leftPane:add_component(ComponentPosition.create(-UI.SHOW_X_POSITION, 0, 10))
+	leftPane:add_component(ComponentNoBoundsControl.create())
+	local lc = ComponentGraphics.create("ui_left_pane")
+	lc:set_render_in_3D(false)
+	lc:set_transparency(UI.PANEL_TRANSPARENCY)
+	leftPane:add_component(lc)
+	EntityPool.add_cached_entity(leftPane)
+
+	local rightPane = Entity.create(EntityUIRightPane)
+	rightPane:add_component(ComponentPosition.create(UI.SHOW_X_POSITION, 0, 10))
+	rightPane:add_component(ComponentNoBoundsControl.create())
+	local rc = ComponentGraphics.create("ui_right_pane")
+	rc:set_render_in_3D(false)
+	rc:set_transparency(UI.PANEL_TRANSPARENCY)
+	rightPane:add_component(rc)
+	EntityPool.add_cached_entity(rightPane)
+	
+	UI.pane_update()
+end
+
+UI.pane_update = function()
+	UI.pane_hidden_value = math.tend_to(UI.pane_hidden_value, UI.pane_hidden_target, UI.pane_hidden_rate)
+
+	local leftPane = EntityPool.get_cached_entity(EntityUILeftPane)
+	if is_not_nil(leftPane) then
+		local pos = leftPane:get_component(ComponentPosition)
+		pos:set_position(-UI.SHOW_X_POSITION - UI.pane_hidden_value * UI.PANEL_WIDTH, 0, 10)
+	end
+
+	local rightPane = EntityPool.get_cached_entity(EntityUIRightPane)
+	if is_not_nil(rightPane) then
+		local pos = rightPane:get_component(ComponentPosition)
+		pos:set_position(UI.SHOW_X_POSITION + UI.pane_hidden_value * UI.PANEL_WIDTH, 0, 10)
+	end
+end
+
+UI.hide_panes_now = function() 
+	UI.pane_hidden_value = 1
+	UI.pane_update()
+end
+
+UI.show_panes = function(cycles)
+	if is_nil(cycles) then cycles = 100 end
+
+	UI.pane_hidden_target = 0.0
+	UI.pane_hidden_rate = 1.0/cycles
+end
+
+
+UI.hide_panes = function(cycles)
+	if is_nil(cycles) then cycles = 100 end
+
+	UI.pane_hidden_target = 1.0
+	UI.pane_hidden_rate = 1.0/cycles
 end
