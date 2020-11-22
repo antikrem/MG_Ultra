@@ -235,7 +235,7 @@ g_playerSpawnBullet = function(x, y, tx, ty)
 	cSpawner:add_component(ComponentRotation.create())
 	cSpawner:add_component(ComponentPointLight.create(1.0, 0.75, 0.05, 0.0015, 0.07, 3.2))
 
-	local pod = ComponentParticleOnDeath.create("death_gold_fragments")
+	local pod = ComponentParticleOnDeath.create("death_gold_fragments_subtle")
 	pod:set_velocity_range(1.0, 1.3);
 	pod:set_direction_deviation(10);
 	cSpawner:add_component(pod)
