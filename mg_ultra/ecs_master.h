@@ -352,8 +352,11 @@ private:
 			return;
 		}
 
-		if (g_events::queueSize() > 1000 && event->data.size()) {
-			cout << "cycleing " << event->data[0] << " " << g_events::queueSize() << endl;
+		if (g_events::queueSize() > 0
+				(g_events::queueSize() % 1000 == 0) 
+				&& event->data.size()
+			) {
+		 	cout << "cycleing " << event->data[0] << " " << g_events::queueSize() << endl;
 		}
 		
 
