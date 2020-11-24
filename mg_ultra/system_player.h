@@ -68,7 +68,7 @@ public:
 			newEnt->addComponent(new ComponentPosition(0, 0, 4.0f));
 
 			auto newComponent1 = new ComponentGraphics("player");
-			newComponent1->setScale(0.2f);
+			newComponent1->setScale(0.325f);
 			newComponent1->setAnimationType(1);
 			newComponent1->setVisible(false);
 			newEnt->addComponent(newComponent1->pullForEntity());
