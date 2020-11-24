@@ -48,6 +48,9 @@ public:
 				// Also add master pointer to die with entity
 				if (dieWithMaster) {
 					dieWithMaster->setMaster(ent);
+					if (!ent->getFlag()) {
+						dieWithMaster->setMasterDead();
+					}
 				}
 			}
 		}
