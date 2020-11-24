@@ -73,8 +73,8 @@ PLAYER_SHIFT_FACTOR_DELTA = 0.02
 PLAYER_POWER_LEVEL_THRESHOLD = 20
 
 -- Constants for bullet friend circle position
-PLAYER_FRIEND_RESTING_OFFSET = 150
-PLAYER_FRIEND_FOCUS_OFFSET = 150
+PLAYER_FRIEND_RESTING_OFFSET = 120
+PLAYER_FRIEND_FOCUS_OFFSET = 120
 PLAYER_FRIEND_FOCUS_ROTATION_MULTIPLIER = 17
 
 -- Constants for bullet targets when firing
@@ -246,7 +246,7 @@ g_playerSpawnBullet = function(x, y, tx, ty)
 	cSpawner:add_component(bulletGComponents)
 			
 	local bulletMComponent = ComponentMovement.create()
-	bulletMComponent:set_speed(27)
+	bulletMComponent:set_speed(36)
 	bulletMComponent:set_angle(angle + 2.5 * g_playerBulletOscillator)
 	cSpawner:add_component(bulletMComponent)
 
@@ -320,7 +320,6 @@ end
 g_bulletPlayerCollision = function() 
 	if GlobalRegistar.get("player_alive") then
 		g_power_level = 1
-		this:get_component(ComponentMultiEntity):kill_children()
 		this:get_component(ComponentClampPosition):set_active(false)
 		g_sequentialDeadFrames = 0
 		GlobalRegistar.update("player_alive", false)
@@ -357,7 +356,7 @@ Player.add_friend_magic_circle = function(layer)
 	local mc = Entity.create(EntityGeneric)
 
 	mc:add_component(ComponentPosition.create(0, PLAYER_FRIEND_RESTING_OFFSET, 0))
-	mc:add_component(ComponentGraphics.create("mc_fire_circle"))
+	mc:add_component(ComponentGraphics.create("mc_fire_circle", 0.8))
 	mc:add_component(ComponentRotation.create(0, 2))
 
 	mc:add_component(ComponentOffsetMaster.create(true))
@@ -376,7 +375,7 @@ Player.add_friend_magic_circle = function(layer)
 	mc = Entity.create(EntityGeneric)
 
 	mc:add_component(ComponentPosition.create(0, PLAYER_FRIEND_RESTING_OFFSET, 0))
-	mc:add_component(ComponentGraphics.create("mc_fire_circle"))
+	mc:add_component(ComponentGraphics.create("mc_fire_circle", 0.8))
 	mc:add_component(ComponentRotation.create(0, 2))
 
 	mc:add_component(ComponentOffsetMaster.create(true))
