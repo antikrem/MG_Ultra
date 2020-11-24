@@ -78,10 +78,6 @@ public:
 			bool toDraw;
 			AnimationState state = gra->getAnimationState(&toDraw, pos->getPosition3());
 
-			if (state.animationSetName == "bul_big_blank") {
-				std::cout << "hello " << mod << std::endl;
-			}
-			
 			if (tra) {
 				state.transparency = tra->getCurrent();
 			}
