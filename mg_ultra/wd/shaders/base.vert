@@ -12,6 +12,8 @@ layout(location = 5) in float wrapFactor; //will overshoot texturing to allow wr
 layout(location = 6) in float spriteTransparency; //transparency
 layout(location = 7) in float lightingSensitivity; //extra factor multiplied with lighting
 layout(location = 8) in float ambientMinimum; //minimum value of ambient lighting
+layout(location = 9) in float modulationStrength; // 0-1 strength of modulationStrength
+layout(location = 10) in vec3 modulationValues; // hsl for modulation
 
 //out
 out vec3 worldPosition;
@@ -22,6 +24,8 @@ out vec2 speenSpace; //screen space location
 out float transparency;
 out float inputLightSensitivity;
 out float inputAmbientMinimum;
+out float modulationStrengthOut;
+out vec3 modulationHSLValues;
 
 //MVP for sprites in 3D
 uniform mat4 MVP;
@@ -50,6 +54,9 @@ void main() {
 
 	inputLightSensitivity = lightingSensitivity;
 	inputAmbientMinimum = ambientMinimum;
+
+	modulationStrengthOut = modulationStrength;
+	modulationHSLValues = modulationValues;
 
 	gl_Position 
 		= MVP * vec4(worldPosition, 1);

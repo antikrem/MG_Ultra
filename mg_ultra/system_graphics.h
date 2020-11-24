@@ -12,6 +12,7 @@
 #include "component_min_ambient.h"
 #include "component_collision.h"
 #include "component_offset_master.h"
+#include "component_colour_modulation.h"
 
 #include "camera.h"
 #include "graphics_state.h"
@@ -68,6 +69,7 @@ public:
 			auto tra = getComponent<ComponentTransparency>(components);
 			auto amb = getComponent<ComponentMinAmbient>(components);
 			auto off = getComponent<ComponentOffsetMaster>(components);
+			auto mod = getComponent<ComponentColourModulation>(components);
 
 			if (off) {
 				off->updatePositionalOffset();
@@ -75,6 +77,10 @@ public:
 
 			bool toDraw;
 			AnimationState state = gra->getAnimationState(&toDraw, pos->getPosition3());
+
+			if (state.animationSetName == "bul_big_blank") {
+				std::cout << "hello " << mod << std::endl;
+			}
 			
 			if (tra) {
 				state.transparency = tra->getCurrent();
@@ -88,6 +94,11 @@ public:
 			if (toDraw && boxCount < bufferSize) {
 				if (gra->getRenderIn3D()) {
 					buffer[boxCount] = graphicsState->evaluateToBox(state, 1.0f);
+
+					if (mod) {
+						mod->populate(&buffer[boxCount].modulationStrength, buffer[boxCount].modulationValues);
+					}
+
 					boxCount++;
 				}
 				else {

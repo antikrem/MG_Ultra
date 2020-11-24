@@ -749,6 +749,9 @@
     <ClInclude Include="atomic_queue.h">
       <Filter>Header Files\Support</Filter>
     </ClInclude>
+    <ClInclude Include="component_colour_modulation.h">
+      <Filter>Header Files\ECS\Components\Graphics Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="wd\shaders\base.vert">
@@ -921,6 +924,9 @@
     </None>
     <None Include="wd\scripts\_initialise\death_scripts.lua">
       <Filter>Resource Files\scripts\_initialise</Filter>
+    </None>
+    <None Include="wd\shaders\conversion.glsl">
+      <Filter>Resource Files\shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

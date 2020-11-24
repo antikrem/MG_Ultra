@@ -49,7 +49,10 @@ struct BoxData {
 	float lightSensitivity;
 	//minimum of ambient
 	float ambientMin;
-
+	
+	// Colour modulation values
+	float modulationValues[3];
+	float modulationStrength = 0;
 
 	//rotation amount in degrees
 	float rotation = 0;

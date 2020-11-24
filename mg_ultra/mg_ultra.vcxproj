@@ -267,6 +267,7 @@
     <ClInclude Include="component_camera.h" />
     <ClInclude Include="component_clamp_position.h" />
     <ClInclude Include="component_collision.h" />
+    <ClInclude Include="component_colour_modulation.h" />
     <ClInclude Include="component_console.h" />
     <ClInclude Include="component_damage.h" />
     <ClInclude Include="component_death_emitter.h" />
@@ -461,6 +462,7 @@
     <None Include="wd\shaders\base.vert" />
     <None Include="wd\shaders\bloom.frag" />
     <None Include="wd\shaders\bloom.vert" />
+    <None Include="wd\shaders\conversion.glsl" />
     <None Include="wd\shaders\directional_lighting.frag" />
     <None Include="wd\shaders\directional_lighting.vert" />
     <None Include="wd\shaders\colour_correction.frag" />

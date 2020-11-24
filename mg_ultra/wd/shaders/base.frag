@@ -1,5 +1,7 @@
 #version 330 core
 
+#include "conversion.glsl"
+
 #define MAX_TEXTURES 16
 
 // Contains all currently loaded mgt
@@ -19,6 +21,8 @@ in vec2 texSize;
 in float transparency;
 in float inputLightSensitivity;
 in float inputAmbientMinimum;
+in float modulationStrengthOut;
+in vec3 modulationHSLValues;
 
 layout(location = 0) out vec4 color;
 layout(location = 1) out vec3 position;
@@ -26,6 +30,24 @@ layout(location = 2) out vec3 normals;
 layout(location = 3) out float lightingSensitivity;
 layout(location = 4) out float minimumAmbient;
 layout(location = 5) out float nextFrontDepthBuffer;
+
+// Conducts modulation
+vec3 conductModulation(vec3 texel) {
+	vec3 hsl = modulationHSLValues;
+	float lum = dot(texel, vec3(0.2126, 0.7152, 0.0722));
+    
+    hsl.b = 1.0 - 2.0 * hsl.b;
+    
+    if (hsl.b > 0.0) {
+    	lum = lum * (1.0 - hsl.b);
+        lum += 1.0 - (1.0 - hsl.b);
+    }
+    else if (hsl.b < 0.0) {
+        lum = lum * (hsl.b + 1.0);
+    }
+    
+    return hsl2rgb(vec3(hsl.rg, lum));
+}
 
 void main() {
 	// Check if this fragment is infront of the current closest fragment 
@@ -48,6 +70,10 @@ void main() {
 	if (trans < 0.01) {
 		discard;
 	}
+
+	// Compute and mix modulated color
+	vec3 modded = conductModulation(texel.rgb);
+	texel.rgb = mix(texel.rgb, modded, modulationStrengthOut);
 
 	// Colours are pre multiplied by alpha
 	color =  trans * vec4(texel.rgb , 1.0);
