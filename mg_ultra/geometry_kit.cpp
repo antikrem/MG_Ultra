@@ -13,8 +13,8 @@ void geom_kit::populate_sphere(vector<float>& vertices, vector<int>& indices, in
 
 	for (int i = 0; i <= stacks; i++) {
 		stackAngle = PI / 2 - i * stackStep;
-		xy = radius * cos(stackAngle);
-		z = radius * sin(stackAngle);
+		xy = radius * cosf(stackAngle);
+		z = radius * sinf(stackAngle);
 
 		k1 = i * (sectors + 1);
 		k2 = k1 + sectors + 1;

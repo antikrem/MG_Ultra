@@ -1,7 +1,7 @@
 #include "math_ex.h"
 
 float math_ex::to_principle(float angle) {
-	angle = fmod(angle, 360.0f);
+	angle = fmodf(angle, 360.0f);
 	return angle > 180.0f ? angle - 360.0f : angle;
 }
 
