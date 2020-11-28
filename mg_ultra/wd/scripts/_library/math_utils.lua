@@ -47,7 +47,13 @@ end
 
 -- Takes a polar vector, and returns cartesian
 function math.to_point(mag, ang)
-	return mag*math.cos(math.to_radians(ang)), mag*math.sin(math.to_radians(ang))
+	return mag * math.cos(math.to_radians(ang)), mag * math.sin(math.to_radians(ang))
+end
+
+-- Takes two positions and computes distance from one to another
+function math.distance_to(x1, y1, x2, y2) 
+	return math.sqrt((x2 - x1) ^ 2 + (y2 - y1) ^ 2)
+	
 end
 
 -- Takes two positions and compute angle from first to second
