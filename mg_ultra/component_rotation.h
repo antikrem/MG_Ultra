@@ -18,7 +18,7 @@ class ComponentRotation : public Component, public ScriptableClass<ComponentRota
 public:
 
 	ComponentRotation() {
-		faceMovement = true;
+		this->faceMovement = true;
 	}
 
 	ComponentRotation(bool faceMovement) {
@@ -27,6 +27,11 @@ public:
 
 	ComponentRotation(float rotation) {
 		this->rotation = rotation;
+	}
+
+	ComponentRotation(float rotation, bool faceMovement) {
+		this->rotation = rotation;
+		this->faceMovement = faceMovement;
 	}
 
 	ComponentRotation(float rotation, float speed) {
@@ -43,7 +48,6 @@ public:
 	}
 
 	void setRotation(float rotation) {
-		faceMovement = false;
 		this->rotation = rotation;
 	}
 
