@@ -16,6 +16,7 @@ class ComponentTimer : public Component, public ScriptableClass<ComponentTimer> 
 	atomic<int> cycle = -1;
 	mutex lock;
 
+	atomic<int> spamFrequency = 1;
 	string spamCallback;
 
 	MMap<int, string> timedCallbacks;
@@ -45,6 +46,20 @@ public:
 		spamCallback = callback;
 	}
 
+	void addSpamCallback(string callback, int frequency) {
+		lock_guard<mutex> lck(lock);
+		spamCallback = callback;
+		spamFrequency = frequency;
+	}
+
+	void l_addSpamCallback(string callback) {
+		addSpamCallback(callback);
+	}
+
+	void ll_addSpamCallback(string callback, int frequency) {
+		addSpamCallback(callback, frequency);
+	}
+
 	void setKillCycle(int killCycle) {
 		this->killCycle = killCycle;
 	}
@@ -59,7 +74,7 @@ public:
 		
 		vector<string> ret;
 
-		if (spamCallback.size()) {
+		if (spamCallback.size() && !(cycle % spamFrequency)) {
 			ret.push_back(spamCallback);
 		}
 
@@ -76,7 +91,11 @@ public:
 			.addFunction("get_cycle", &ComponentTimer::getCycle)
 			.addFunction("set_cycle", &ComponentTimer::setCycle)
 			.addFunction("add_callback", &ComponentTimer::addCallback)
-			.addFunction("add_spam_callback", &ComponentTimer::addSpamCallback)
+			.addOverloadedFunctions(
+				"add_spam_callback",
+				&ComponentTimer::l_addSpamCallback,
+				&ComponentTimer::ll_addSpamCallback
+			)
 			.addFunction("set_kill_cycle", &ComponentTimer::setKillCycle)
 			.addFunction("get_kill_cycle", &ComponentTimer::getKillCycle)
 			.addStaticFunction("type", &getType<ComponentTimer>)
