@@ -247,14 +247,19 @@ public:
 	void copyIn(FrameBuffer& source, GLenum mask = GL_COLOR_BUFFER_BIT, GLenum filter = GL_LINEAR) {
 		int sWidth, sHeight;
 		tie(sWidth, sHeight) = source.getResolution();
+
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, source.getID());
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo);
 		
-		glBlitNamedFramebuffer(
-			source.getID(), fbo,
+		glBlitFramebuffer(
 			0, 0, sWidth, sHeight,
   			0, 0, width, height,
   			mask,
   			filter
   		);
+
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	}
 };
 
