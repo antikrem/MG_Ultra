@@ -1,0 +1,1 @@
+copy Release\mg_ultra.exe mg_ultra\wd\mg_ultra.exe
