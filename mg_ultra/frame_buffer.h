@@ -90,7 +90,7 @@ public:
 		this->width = (int)(graphicsSettings->screenWidth * resolution);
 		this->height = (int)(graphicsSettings->screenHeight * resolution);
 		
-		bindBuffer();
+		bindBuffer(false);
 
 		//create all of the colour buffers desired
 		for (unsigned int i = 0; i < specifications.size(); i++) {
@@ -165,11 +165,14 @@ public:
 	}
 
 	//binds and clears depth buffer
-	void bindBuffer() {
+	void bindBuffer(bool clear = true) {
 		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-		//depth test
-		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		// depth test
+		if (clear) {
+			glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		}
+
 	}
 
 	//binds with no clear
