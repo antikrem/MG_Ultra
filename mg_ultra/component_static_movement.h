@@ -56,6 +56,14 @@ public:
 		movementCommander.addPolarAccelerateTo(time, duration, endingSpeed);
 	}
 
+	void addPointAccelerateTo(int time, Point3 acceleration) {
+		movementCommander.addPointAccelerateTo(time, acceleration);
+	};
+
+	void ll_addPointAccelerateTo(int time, float ax, float ay) {
+		movementCommander.addPointAccelerateTo(time, {ax, ay, 0});
+	};
+
 	Point3 getUpdatedPosition(shared_ptr<ComponentMovement> componentMovement, const Point3& position) {
 		return movementCommander.getUpdatedPosition(componentMovement, position);
 	}
@@ -88,6 +96,10 @@ public:
 			.addFunction(
 				"add_polar_accelerate_to",
 				&ComponentStaticMovement::addPolarAccelerateTo
+			)
+			.addFunction(
+				"add_point_accelerate",
+				&ComponentStaticMovement::ll_addPointAccelerateTo
 			)
 			.addOverloadedFunctions(
 				"create",

@@ -752,6 +752,9 @@
     <ClInclude Include="component_colour_modulation.h">
       <Filter>Header Files\ECS\Components\Graphics Component</Filter>
     </ClInclude>
+    <ClInclude Include="movement_point_accelerate.h">
+      <Filter>Header Files\Static Movement</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="wd\shaders\base.vert">
