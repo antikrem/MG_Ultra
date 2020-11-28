@@ -62,8 +62,8 @@ public:
 		*strength = this->strength.load();
 		Point3 modulation = this->modulation.load();
 		hsl[0] = modulation.x;
-		hsl[1] = modulation.x;
-		hsl[2] = modulation.x;
+		hsl[1] = modulation.y;
+		hsl[2] = modulation.z;
 	}
 
 	// Get modulation colour
@@ -72,12 +72,26 @@ public:
 		return make_tuple(value.x, value.y, value.z);
 	}
 
+	// Get hue
+	float getHue() {
+		return modulation.load().x;
+	}
+
+	// Set hue
+	void setHue(float hue) {
+		Point3 modulation = getModulation();
+		modulation.x = hue;
+		this->modulation.store(modulation);
+	}
+
 	static void registerToLua(kaguya::State& state) {
 		auto a = getType<ComponentColourModulation>();
 		state["ComponentColourModulation"].setClass(kaguya::UserdataMetatable<ComponentColourModulation, Component>()
 			.setConstructors<ComponentColourModulation()>()
 			.addFunction("set_modulation", &ComponentColourModulation::l_setModulation)
 			.addFunction("get_modulation", &ComponentColourModulation::l_getModulation)
+			.addFunction("set_hue", &ComponentColourModulation::setHue)
+			.addFunction("get_hue", &ComponentColourModulation::getHue)
 			.addOverloadedFunctions(
 				"create",
 				&ScriptableClass::create<ComponentColourModulation>,
