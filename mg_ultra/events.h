@@ -8,6 +8,7 @@ set
 using namespace std;
 
 #include <vector>
+#include <string>
 
 enum EventType {
 	EV_noEvent,
