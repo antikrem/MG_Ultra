@@ -119,7 +119,7 @@ private:
 public:
 	//Loads program, returns EXIT value, and success will update programMap
 	int loadProgramFromFile(string programName) {
-		err::logMessage("GRAPHICS: Compilling shader program: " + programName + "...");
+		err::logMessage("GRAPHICS: Compiling shader program: " + programName + "...");
 		// Create the shaders
 		GLuint vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
 		GLuint fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
