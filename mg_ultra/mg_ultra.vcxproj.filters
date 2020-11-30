@@ -931,6 +931,9 @@
     <None Include="wd\shaders\conversion.glsl">
       <Filter>Resource Files\shaders</Filter>
     </None>
+    <None Include="wd\scripts\_auto_run\_engine_start\gameplay.lua">
+      <Filter>Resource Files\scripts\_auto_run\_engine_start</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="wd\log.txt">
