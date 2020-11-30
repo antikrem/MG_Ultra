@@ -10,14 +10,14 @@ Player = {}
 
 --Table used for gettings certain velocity values
 PLAYER_MAX_VELOCITY_TABLE = {
-	DEFAULT = 8.5,
+	DEFAULT = 9.25,
 	DASH = 40,
 	FOCUS = 4.3
 }
 
 --Similar table for acceleration
 PLAYER_MAX_ACCELERATION_TABLE = {
-	DEFAULT = 1.25,
+	DEFAULT = 1.75,
 	DASH = 50,
 	FOCUS = 0.5
 }
@@ -27,7 +27,7 @@ PLAYER_X_CLAMP = 960
 PLAYER_Y_CLAMP = 540
 
 -- Dash related variables
-PLAYER_DASH_LENGTH = 10
+PLAYER_DASH_LENGTH = 12
 PLAYER_DASH_COOLDOWN = 5
 
 -- Constants for dead player
@@ -218,7 +218,7 @@ g_playerMovementUpdate = function()
 end
 
 -- spawn bullet at given layer
-g_playerSpawnBullet = function(x, y, tx, ty)
+g_playerSpawnBullet = function(x, y, tx, ty, i)
 	--The position of the player
 	local cPosition = this:get_component(ComponentPosition)
 
@@ -229,7 +229,7 @@ g_playerSpawnBullet = function(x, y, tx, ty)
 			
 	cSpawner:add_component(ComponentPosition.create(x, y, LAYER_PLAYER_BULLETS))
 	cSpawner:add_component(ComponentCollision.create(27))
-	cSpawner:add_component(ComponentDamage.create(10))
+	cSpawner:add_component(ComponentDamage.create(10 * (1.0 / i)))
 	cSpawner:add_component(ComponentOffsetOnce.create())
 	cSpawner:add_component(ComponentMinAmbient.create(0.8))
 	cSpawner:add_component(ComponentRotation.create())
@@ -284,7 +284,7 @@ g_playerSpawnBullets = function()
 			x = math.lerp(math.max(g_shiftFactor, 0.01), 0, x)
 			y = math.lerp(math.max(g_shiftFactor, 0.01), PLAYER_FRIEND_RESTING_OFFSET, y)
 
-			g_playerSpawnBullet(x, y, 0, ty)
+			g_playerSpawnBullet(x, y, 0, ty, i)
 			
 			-- Generate desired point
 			local x, y = math.rotate_point(0, -PLAYER_FRIEND_FOCUS_OFFSET, -PLAYER_FRIEND_FOCUS_ROTATION_MULTIPLIER * (i - 0.5))
@@ -293,7 +293,7 @@ g_playerSpawnBullets = function()
 			x = math.lerp(math.max(g_shiftFactor, 0.01), 0, x)
 			y = math.lerp(math.max(g_shiftFactor, 0.01), PLAYER_FRIEND_RESTING_OFFSET, y)
 
-			g_playerSpawnBullet(x, y, 0, ty)
+			g_playerSpawnBullet(x, y, 0, ty, i)
 		end
 	end
 
@@ -441,7 +441,7 @@ Player.player_magnet_check = function()
 		local powerups = EntityPool.get_by_type(EntityPowerUp)
 
 		for k, v in pairs(powerups) do
-			v:execute_against(PowerUp.apply_magnet)
+			v:execute_against(PowerUp.apply_magnet, true)
 		end
 
 		Player.magnet_cooldown = Player.MAGNET_RESET
