@@ -13,6 +13,6 @@ local player = EntityPool.get_cached_entity(EntityPlayer)
 if not is_nil(player) then
     --set camera x,y position to the player
     local x, y = player:get_component(ComponentPosition):get_position()
-    camPosition:set_position(x, 0)
-    camCamera:set_view_target(x, 0)
+    camPosition:set_position(0, 0)
+    camCamera:set_view_target(x, y)
 end
