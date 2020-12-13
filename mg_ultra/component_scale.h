@@ -64,6 +64,11 @@ public:
 		value.setRate(rate);
 	}
 
+	void set(float value) {
+		this->value.setCurrent(value);
+		this->value.setTarget(value);
+	}
+
 	// Updates values
 	void update() {
 		value.update();
@@ -78,6 +83,8 @@ public:
 			.addFunction("set_current", &ComponentScale::setCurrent)
 			.addFunction("get_rate", &ComponentScale::getRate)
 			.addFunction("set_rate", &ComponentScale::setRate)
+			.addFunction("set", &ComponentScale::set)
+			.addFunction("get", &ComponentScale::getCurrent)
 			.addOverloadedFunctions(
 				"create",
 				ScriptableClass::create<ComponentScale>,
