@@ -70,6 +70,14 @@ public:
 		this->rate = rate;
 	}
 
+
+	T getTarget() {
+		return target;
+	}
+
+	T getRate() {
+		return rate;
+	}
 };
 
 
