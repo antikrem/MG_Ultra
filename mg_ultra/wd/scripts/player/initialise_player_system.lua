@@ -71,6 +71,7 @@ PLAYER_SHIFT_FACTOR_DELTA = 0.02
 
 -- Variables for power 
 PLAYER_POWER_LEVEL_THRESHOLD = 20
+PLAYER_POWER_LEVEL_DRAIN_FACTOR = 0.8
 
 -- Constants for bullet friend circle position
 PLAYER_FRIEND_RESTING_OFFSET = 120
@@ -92,8 +93,8 @@ g_fragments = 0
 g_nextFragments = FRAGMENT_PERIOD
 
 -- Power of player
-PLAYER_RESTING_FRAGMENT_POINTS_DRAIN = 0.05
-PLAYER_FOCUS_FRAGMENT_POINTS_DRAIN = 0.01
+PLAYER_RESTING_FRAGMENT_POINTS_DRAIN = 0.5
+PLAYER_FOCUS_FRAGMENT_POINTS_DRAIN = 0.1
 g_power = 0
 g_power_level = 0
 
@@ -312,7 +313,7 @@ end
 g_playerPowerUpdate = function()
 	local drain = 0
 	if g_inFocus then drain = PLAYER_FOCUS_FRAGMENT_POINTS_DRAIN else drain = PLAYER_RESTING_FRAGMENT_POINTS_DRAIN end
-	g_power = g_power - drain
+	g_power = g_power - PLAYER_POWER_LEVEL_DRAIN_FACTOR * drain * (g_power / 100) ^ 2
 	g_power = math.max(0, g_power)
 end
 
