@@ -1,4 +1,5 @@
-/*handles updating transparency components*/
+/* Handles updating transparency components
+ */
 #ifndef __SYSTEM_TRANSPARENCY__
 #define __SYSTEM_TRANSPARENCY__
 
