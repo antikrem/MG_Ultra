@@ -79,17 +79,24 @@ public:
 	}
 
 	// Add multiple entities in a single cached add
-	void addEnts(vector<shared_ptr<Entity>> ents) {
+	bool addEnts(vector<shared_ptr<Entity>> ents) {
 		if (!ents.size()) {
-			return;
+			return false;
 		}
 
 		set<type_index> signature = ents[0]->getComponentSignature();
 
-		for (unsigned int i = 1; i < ents.size(); i++) {
+		for (unsigned int i = 0; i < ents.size(); i++) {
 			if (signature != ents[i]->getComponentSignature()) {
 				err::logMessage("POOL: Error, add_entities contained entities with different signatures");
-				return;
+				return false;
+			}
+			else if (ents[i]->isInPool()) {
+				err::logMessage("POOL: Error, entity already in pool, operation aborted");
+				return false;
+			}
+			else {
+				ents[i]->markAddToPool();
 			}
 		}
 
@@ -99,6 +106,8 @@ public:
 				i.second.addEnts(ents);
 			}
 		}
+
+		return true;
 	}
 
 	shared_ptr<Entity> addEnt(Entity* ent, bool cacheEnt = false) {
@@ -109,13 +118,12 @@ public:
 		return addEnt(shared_ptr<Entity>(ent), false);
 	}
 
-	vector<shared_ptr<Entity>> l_addEnts(vector<Entity*> ents) {
+	bool l_addEnts(const vector<Entity*>& ents) {
 		vector<shared_ptr<Entity>> processed;
 		for (auto i : ents) {
 			processed.push_back(shared_ptr<Entity>(i));
 		}
-		addEnts(processed);
-		return processed;
+		return addEnts(processed);
 	}
 
 	// Adds a cached entity through lua
