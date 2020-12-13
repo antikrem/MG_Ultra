@@ -83,7 +83,7 @@ public:
 			newEnt->addComponent(new ComponentSpawner());
 			newEnt->addComponent(new ComponentMultiEntity());
 			newEnt->addComponent(new ComponentTimer());
-			newEnt->addComponent(new ComponentCollision(15.0f));
+			newEnt->addComponent(new ComponentCollision(5.0f));
 			newEnt->addComponent(new ComponentAudio());
 			newEnt->addComponent(new ComponentListener());
 			newEnt->addComponent(new ComponentParticle("gold"));
