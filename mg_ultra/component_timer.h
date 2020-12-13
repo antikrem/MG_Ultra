@@ -60,6 +60,11 @@ public:
 		addSpamCallback(callback, frequency);
 	}
 
+	void clearSpamCallback() {
+		lock_guard<mutex> lck(lock);
+		spamCallback = "";
+	}
+
 	void setKillCycle(int killCycle) {
 		this->killCycle = killCycle;
 	}
@@ -96,6 +101,7 @@ public:
 				&ComponentTimer::l_addSpamCallback,
 				&ComponentTimer::ll_addSpamCallback
 			)
+			.addFunction("clear_spam_callback", &ComponentTimer::clearSpamCallback)
 			.addFunction("set_kill_cycle", &ComponentTimer::setKillCycle)
 			.addFunction("get_kill_cycle", &ComponentTimer::getKillCycle)
 			.addStaticFunction("type", &getType<ComponentTimer>)
