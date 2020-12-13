@@ -36,6 +36,14 @@ public:
 		speedChange = 0;
 	}
 
+	ComponentMovement(float speed, float angle) : velocity({ 0,0,0 }), acceleration({ 0,0,0 }) {
+		this->angle = angle;
+		this->speed = speed;
+
+		angleChange = 0;
+		speedChange = 0;
+	}
+
 	//updates all given values and returns new value
 	Point3 getUpdatedPosition(Point3 position) {
 		//move acceleration values to velocity
@@ -218,7 +226,12 @@ public:
 			.addFunction("get_angle_cap", &ComponentMovement::getAngleCap)
 
 			.addFunction("set_update_manually", &ComponentMovement::updateManually)
-			.addStaticFunction("create", ScriptableClass::create<ComponentMovement>)
+
+			.addOverloadedFunctions(
+				"create",
+				&ScriptableClass::create<ComponentMovement>,
+				&ScriptableClass::create<ComponentMovement, float, float>
+			)
 			.addStaticFunction("type", &getType<ComponentMovement>)
 			.addStaticFunction("cast", &Component::castDown<ComponentMovement>)
 		);
