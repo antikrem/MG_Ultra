@@ -12,7 +12,7 @@ Handles dialogue
 #include "component_text.h"
 #include "component_dialogue.h"
 
-#define DIALOGUE_NEXT_CHAR_CD 5
+#define DIALOGUE_NEXT_CHAR_CD 4
 #define DIALOGUE_NEXT_FRAME_NP 100
 #define DIALOGUE_NEXT_FRAME_P 1000
 
@@ -131,7 +131,7 @@ public:
 		newEnt->addComponent(new ComponentPosition(-930, -500, 2));
 
 		auto newComponent = new ComponentText();
-		newComponent->setText("Console");
+		newComponent->setText("");
 		newComponent->setFont("text_consolas58");
 		newComponent->setVisible(false);
 		newComponent->setRenderIn3D(false);
