@@ -114,6 +114,14 @@ function math.sample_uniform_circle(radius)
 	return r * math.cos(t), r * math.sin(t)
 end
 
+-- Sine with a period
+-- Defaults to a period of 1
+function math.sin_period(x, period) 
+	period = period or 1
+	return math.sin((x * 2 * math.pi) / period)
+
+end
+
 --- The array class of functions deal with handling arrays
 --- framed as n-dimensional vectors of numbers
 arrays = {}
