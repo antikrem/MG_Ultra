@@ -1,5 +1,7 @@
-/*A Component that can be attached to graphics to
-get more control over transparency*/
+/*
+ * A Component that can be attached to graphics to
+ * get more control over transparency
+  */
 #ifndef __COMPONENT_TRANSPARENCY__
 #define __COMPONENT_TRANSPARENCY__
 
@@ -9,67 +11,63 @@ get more control over transparency*/
 #include "scriptable_class.h"
 
 #include "math_ex.h"
+#include "trending_value.h"
 
-/*Mostly workes by settings a target and speed
-which will be tended to by the current*/
+/* Mostly workes by settings a target and speed
+ * which will be tended to by the current
+ */
 class ComponentTransparency : public Component, public ScriptableClass<ComponentTransparency> {
 private:
-	atomic<float> target = 1.0f;
-	atomic<float> current = 1.0f;
-	atomic<float> rate = 1.0f;
+
+	TrendingValue<float> value;
 
 public:
-	ComponentTransparency() {
+	ComponentTransparency() : value(1.0f, 1.0f, 1.0f) {
 
 	}
 
-	//set directly
-	ComponentTransparency(float value) {
-		target = value;
-		current = value;
+	// Set directly
+	ComponentTransparency(float value) : value(value, 1.0f, value) {
+
 	}
 
-	//set to fade into final target from 0
-	ComponentTransparency(float target, float rate) {
-		current = 0;
-		this->target = target;
-		this->rate = rate;
+	// Set to fade into final target from 0
+	ComponentTransparency(float target, float rate) : value(0, rate, target) {
+
 	}
 
-	//set all parameters
-	ComponentTransparency(float target, float rate, float current) {
-		this->current = current;
-		this->target = target;
-		this->rate = rate;
+	// Set all parameters
+	ComponentTransparency(float target, float rate, float current) : value(current, rate, target) {
+
 	}
 
 	float getTarget() {
-		return target;
+		return value.getTarget();
 	}
 
 	void setTarget(float target) {
-		this->target = target;
+		value.setTarget(target);
 	}
 
 	float getCurrent() { 
-		return current; 
+		return value.get();
 	}
 
 	void setCurrent(float current) { 
-		this->current = current;
+		value.set(current);
 	}
 
 	float getRate() { 
-		return rate; 
+		return value.getRate();
 	}
 
 	void setRate(float rate) { 
-		this->rate = rate; 
+		value.setRate(rate);
 	}
 
-	//updates values
+	// Updates values
 	void update() {
-		current = math_ex::tend_to(current.load(), rate.load(), target.load());
+		value.update();
 	}
 
 	static void registerToLua(kaguya::State& state) {
