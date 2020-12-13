@@ -542,12 +542,6 @@
     <ClInclude Include="component_listener.h">
       <Filter>Header Files\ECS\Components</Filter>
     </ClInclude>
-    <ClInclude Include="system_transparency.h">
-      <Filter>Header Files\ECS\Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="component_transparency.h">
-      <Filter>Header Files\ECS\Components</Filter>
-    </ClInclude>
     <ClInclude Include="particle_spawner.h">
       <Filter>Header Files\Particles</Filter>
     </ClInclude>
@@ -754,6 +748,18 @@
     </ClInclude>
     <ClInclude Include="movement_point_accelerate.h">
       <Filter>Header Files\Static Movement</Filter>
+    </ClInclude>
+    <ClInclude Include="component_transparency.h">
+      <Filter>Header Files\ECS\Components\Graphics Component</Filter>
+    </ClInclude>
+    <ClInclude Include="component_scale.h">
+      <Filter>Header Files\ECS\Components\Graphics Component</Filter>
+    </ClInclude>
+    <ClInclude Include="system_transparency.h">
+      <Filter>Header Files\ECS\Systems\Graphics System</Filter>
+    </ClInclude>
+    <ClInclude Include="system_scale.h">
+      <Filter>Header Files\ECS\Systems\Graphics System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

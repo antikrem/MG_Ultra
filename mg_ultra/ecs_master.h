@@ -139,6 +139,7 @@ class ECSMaster {
 		master->createSystem<SystemDriftable>(registar);
 		master->createSystem<SystemHealth>(registar);
 		master->createSystem<SystemTransparency>(registar);
+		master->createSystem<SystemScale>(registar);
 		master->createSystem<SystemWeather>(registar);
 		master->createSystem<SystemPointLightUpdate>(registar);
 		master->createSystem<SystemColourModulation>(registar);

@@ -284,6 +284,7 @@
     <ClInclude Include="component_particle_on_death.h" />
     <ClInclude Include="component_point_light.h" />
     <ClInclude Include="component_rotation.h" />
+    <ClInclude Include="component_scale.h" />
     <ClInclude Include="component_spawn_protection.h" />
     <ClInclude Include="component_static_movement.h" />
     <ClInclude Include="component_extended_scripting.h" />
@@ -389,6 +390,7 @@
     <ClInclude Include="system_point_lighting_update.h" />
     <ClInclude Include="system_profiler.h" />
     <ClInclude Include="system_rotation.h" />
+    <ClInclude Include="system_scale.h" />
     <ClInclude Include="system_spawner.h" />
     <ClInclude Include="system_spawn_protection.h" />
     <ClInclude Include="system_text.h" />

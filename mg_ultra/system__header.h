@@ -23,6 +23,7 @@
 #include "system_driftable.h"
 #include "system_health.h"
 #include "system_transparency.h"
+#include "system_scale.h"
 #include "system_weather.h"
 #include "system_point_lighting_update.h"
 #include "system_colour_modulation.h"

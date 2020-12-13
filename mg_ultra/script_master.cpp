@@ -41,6 +41,7 @@
 #include "component_name.h"
 #include "component_death_emitter.h"
 #include "component_colour_modulation.h"
+#include "component_scale.h"
 
 #include "registar.h"
 #include "pool.h"
@@ -133,6 +134,7 @@ ScriptMaster::ScriptMaster()
 	ComponentName::registerToLua(kaguya);
 	ComponentDeathEmitter::registerToLua(kaguya);
 	ComponentColourModulation::registerToLua(kaguya);
+	ComponentScale::registerToLua(kaguya);
 
 	// Set contextual script functions
 	kaguya["getEntityPool"] = getGlobalPool;
