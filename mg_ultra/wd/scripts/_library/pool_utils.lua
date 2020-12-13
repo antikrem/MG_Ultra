@@ -37,6 +37,12 @@ function EntityPool.add_entity(entity)
 	return pool:addSingular(entity)
 end
 
+-- Adds multiple to pool
+function EntityPool.add_entities(entities)
+	return pool:addMultiple(entities)
+end
+
+
 -- Adds to pool and cache, returns boolean success
 function EntityPool.add_cached_entity(entity)
 	return pool:addCached(entity)
