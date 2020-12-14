@@ -89,13 +89,23 @@ class SystemLoader : public System {
 	}
 
 	//transfers ents from cycle ents to game
-	void transferBufferedEntsToGame(EntityPool* pool, int cycle) {		
+	void transferBufferedEntsToGame(EntityPool* pool, int cycle) {
+		// Check registar for player entity spawning flag
+		bool spawnEnts = true;
+		registar->get("cycle_spawn_ents", &spawnEnts);
+
 		//get ents equal to cycle
 		for (auto it = cycleEnts.begin(); it != cycleEnts.end() && it->first < cycle; it = cycleEnts.begin()) {
 			auto ents = cycleEnts.peel(it->first);
-			for (auto i : ents) {
-				pool->addEnt(i);
+			if (spawnEnts) {
+				for (auto i : ents) {
+					pool->addEnt(i);
+				}
 			}
+		}
+
+		if (!spawnEnts) {
+			registar->update("cycle_spawn_ents", true);
 		}
 	}
 

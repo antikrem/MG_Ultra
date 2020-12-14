@@ -153,6 +153,7 @@ end
 
 Debug.scroll_to = function(cycle)
 	GlobalRegistar.update("cycle", cycle)
+	GlobalRegistar.update("cycle_spawn_ents", false)
 end
 
 run_test = Debug.run_test
