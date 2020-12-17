@@ -31,8 +31,8 @@ layout(location = 3) out float lightingSensitivity;
 layout(location = 4) out float minimumAmbient;
 layout(location = 5) out float nextFrontDepthBuffer;
 
-// Conducts modulation
-vec3 conductModulation(vec3 texel) {
+// Conducts hsl colorisation
+vec3 colourise(vec3 texel) {
 	vec3 hsl = modulationHSLValues;
 	float lum = dot(texel, vec3(0.2126, 0.7152, 0.0722));
     
@@ -72,7 +72,7 @@ void main() {
 	}
 
 	// Compute and mix modulated color
-	vec3 modded = conductModulation(texel.rgb);
+	vec3 modded = colourise(texel.rgb);
 	texel.rgb = mix(texel.rgb, modded, modulationStrengthOut);
 
 	// Colours are pre multiplied by alpha
