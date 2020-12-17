@@ -9,6 +9,12 @@ bool os_kit::fileExists(const std::string& name) {
 	return file.good();
 }
 
+bool os_kit::folderExists(const std::string& name) {
+	DWORD dwAttrib = GetFileAttributes(name.c_str());
+	return (dwAttrib != INVALID_FILE_ATTRIBUTES &&
+		(dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
+}
+
 string os_kit::getFileAsString(const std::string& filePath) {
 	ifstream in;
 	in.open(filePath);

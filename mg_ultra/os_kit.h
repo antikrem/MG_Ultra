@@ -1,4 +1,5 @@
-/*Bunch of useful os stuff*/
+/* Bunch of useful os stuff
+ */
 
 #ifndef __OS_KIT__
 #define __OS_KIT__
@@ -8,35 +9,39 @@
 
 using namespace std;
 
-/*All methods are in the str_kit namespace*/
+/* All methods are in the str_kit namespace
+ */
 namespace os_kit {
-	//checks if file exists
+	// Checks if file exists
 	bool fileExists(const std::string& name);
 
-	//loads all the contents of a file from a script
-	//empty string on faliure
+	// Checks if folder exists
+	bool folderExists(const std::string& name);
+
+	// Loads all the contents of a file from a script
+	// empty string on faliure
 	string getFileAsString(const std::string& filePath);
 
-	//similar to getFileAsString, but sets each line
-	//as a new element in string
+	// Similar to getFileAsString, but sets each line
+	// as a new element in string
 	void getFileAsString(const std::string& filePath, vector<string>& results);
 
-	//counts number of new lines within a file
-	//returns -1 if file does not exist
+	// Counts number of new lines within a file
+	// returns -1 if file does not exist
 	int countNewLinesInFile(const std::string& filePath);
 
-	//returns a vector of all file names in a folder
+	// Returns a vector of all file names in a folder
 	vector<string> getFilesInFolder(const std::string& filePath);
 
-	//returns what evers currently in the clipboard
-	//returns empty string on error
+	// Returns what evers currently in the clipboard
+	// Returns empty string on error
 	string getClipboard();
 
-	//returns size of memory use
+	// Returns size of memory use
 	int getVMemUsed();
 
-	//will attempt getting the terminal width in character columns
-	//-1 return value on missing terminal or general failures
+	// Will attempt getting the terminal width in character columns
+	// -1 return value on missing terminal or general failures
 	int getTerminalWidth();
 }
 
