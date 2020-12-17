@@ -36,7 +36,7 @@ vec3 colourise(vec3 texel) {
 	vec3 hsl = modulationHSLValues;
 	float lum = dot(texel, vec3(0.2126, 0.7152, 0.0722));
     
-    hsl.b = 1.0 - 2.0 * hsl.b;
+    hsl.b = 2.0 * hsl.b - 1.0;
     
     if (hsl.b > 0.0) {
     	lum = lum * (1.0 - hsl.b);
