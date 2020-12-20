@@ -11,11 +11,13 @@
 #include "glm/glm.hpp"
 
 class ComponentPointLight : public Component, public ScriptableClass<ComponentPointLight> {
+	const float OUT_OF_VIEW = 10000000000.0f;
+	
 	PointLight pointLight;
 
 public:
 	ComponentPointLight()
-		: pointLight(Point3(0.0f), Point3(0.0f)) {
+		: pointLight(Point3(OUT_OF_VIEW), Point3(OUT_OF_VIEW)) {
 	}
 
 	ComponentPointLight(const Point3& position, const Point3& colour)
@@ -23,11 +25,11 @@ public:
 	}
 
 	ComponentPointLight(float r, float g, float b)
-		: pointLight(Point3(0, 0, 0), Point3(r, g, b)) {
+		: pointLight(Point3(OUT_OF_VIEW, OUT_OF_VIEW, OUT_OF_VIEW), Point3(r, g, b)) {
 	}
 
 	ComponentPointLight(float r, float g, float b, float aP, float bP, float cP)
-		: pointLight(Point3(0, 0, 0), Point3(r, g, b)) {
+		: pointLight(Point3(OUT_OF_VIEW, OUT_OF_VIEW, OUT_OF_VIEW), Point3(r, g, b)) {
 		setParameters(aP, bP, cP);
 	}
 
