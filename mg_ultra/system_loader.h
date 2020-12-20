@@ -43,8 +43,9 @@
 
 #define REPLACEMENT_TOKEN "%"
 
-//token for prelevel script
+// Token for prelevel script
 #define PRELEVL_SCRIPT "prelevel.lua" 
+#define PRELEVL_FOLDER "prelevel" 
 
 enum TargetSpecification {
 	TaSp_noTarget,
@@ -109,15 +110,15 @@ class SystemLoader : public System {
 		}
 	}
 
-	//executes a script
-	//returns sucess
-	bool executeScript(const string& script, bool isPreLevel = false) {
+	// Executes a script
+	// returns sucess
+	bool executeScript(const string& script, string prelevelLocation = "") {
 		ScriptUnit su(SS_inlineLoader, script);
-		if (!isPreLevel) {
+		if (!prelevelLocation.size()) {
 			su.addDebugData(" in " + file + " at line " + to_string(lineNumber) + " ");
 		}
 		else {
-			su.addDebugData(" in level preload");
+			su.addDebugData(" in level preload: " + prelevelLocation);
 		}
 		
 		sc.reset();
@@ -193,14 +194,23 @@ class SystemLoader : public System {
 
 	}
 
-	//returns a string to pre level script
-	string getPrelevelScript(const string& loadFolder) {
-		if not(os_kit::fileExists(loadFolder + PRELEVL_SCRIPT)) {
-			return "";
+	// Loads and executes all prelevel scripts
+	void executePrelevelScripts(const string& loadFolder) {
+		string prelevelFolder = loadFolder + PRELEVL_FOLDER + "\\";
+
+		// Check prelevel folder exists
+		if (!os_kit::folderExists(prelevelFolder)) {
+			return;
 		}
-		else {
-			return loadFolder + PRELEVL_SCRIPT;
+
+		// Load prelevel script locations
+		vector<string> scriptLocations = os_kit::getFilesInFolder(prelevelFolder);
+
+		// Execute scripts
+		for (auto i : scriptLocations) {
+			executeScript(os_kit::getFileAsString(prelevelFolder + i), prelevelFolder + i);
 		}
+
 	}
 
 	//error stuff
@@ -652,11 +662,8 @@ public:
 			return;
 		}
 
-		// Check for prelevel tables
-		string preLevelPath = getPrelevelScript(loadFolder);
-		if (preLevelPath.size()) {
-			executeScript(os_kit::getFileAsString(preLevelPath));
-		}
+		// Load and execute prelevel scripts
+		executePrelevelScripts(loadFolder);
 
 		// Check for templates
 		string templatePath = getTemplateTablePath(loadFolder);
