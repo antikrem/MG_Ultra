@@ -122,6 +122,13 @@ function math.sin_period(x, period)
 
 end
 
+-- Solve quadratic
+function math.solve_quadratic(a, b, c)
+	local d = math.sqrt(b^2 - 4 * a * c)
+
+	return (-b + d) / (2 * a),  (-b - d) / (2 * a)
+end
+
 --- The array class of functions deal with handling arrays
 --- framed as n-dimensional vectors of numbers
 arrays = {}
