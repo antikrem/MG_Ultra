@@ -1,4 +1,6 @@
-/*Iterates system timer*/
+/**
+ * Handler for component timer
+ */
 #ifndef __SYSTEM_TIMER__
 #define __SYSTEM_TIMER__
 
@@ -34,10 +36,6 @@ public:
 			g_script::executeScriptUnit(su);
 		}
 
-		// Kill after death timer
-		if (cycle >= comTimer->getKillCycle()) {
-			ent->killEntity();
-		}
 	}
 };
 

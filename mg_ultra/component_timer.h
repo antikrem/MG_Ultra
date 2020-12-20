@@ -21,8 +21,6 @@ class ComponentTimer : public Component, public ScriptableClass<ComponentTimer> 
 
 	MMap<int, string> timedCallbacks;
 
-	int killCycle = INT_MAX;
-
 public:
 	void updateTimer() {
 		cycle++;
@@ -65,14 +63,6 @@ public:
 		spamCallback = "";
 	}
 
-	void setKillCycle(int killCycle) {
-		this->killCycle = killCycle;
-	}
-
-	int getKillCycle() {
-		return killCycle;
-	}
-
 	// Get vector of all callback string for this timer
 	vector<string> getCallbacks(int cycle) {
 		lock_guard<mutex> lck(lock);
@@ -102,8 +92,6 @@ public:
 				&ComponentTimer::ll_addSpamCallback
 			)
 			.addFunction("clear_spam_callback", &ComponentTimer::clearSpamCallback)
-			.addFunction("set_kill_cycle", &ComponentTimer::setKillCycle)
-			.addFunction("get_kill_cycle", &ComponentTimer::getKillCycle)
 			.addStaticFunction("type", &getType<ComponentTimer>)
 			.addStaticFunction("create", &ScriptableClass::create<ComponentTimer>)
 			.addStaticFunction("cast", &Component::castDown<ComponentTimer>)

@@ -152,6 +152,7 @@ class ECSMaster {
 		master = newSystemsMaster("m_gameplay");
 		master->setTimer(100, true);
 		master->createSystem<SystemTimer>(registar);
+		master->createSystem<SystemDieOnCycle>(registar);
 		master->createSystem<SystemPlayer>(registar);
 		auto cameraSystem = master->createSystem<SystemCamera>(registar);
 		cameraSystem->setGState(gMaster->getGraphicsState());
