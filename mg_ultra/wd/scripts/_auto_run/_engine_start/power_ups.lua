@@ -1,8 +1,9 @@
--- \scripts\_initialise\power_ups.lua.
+-- \scripts\_initialise\power_ups.lua
 
 PowerUp = {}
 
 POWER_UP_SPAWN_RADIUS = 80
+POWER_UP_START_SPEED = 1.0
 POWER_UP_SPEED_CAP = 4.3
 POWER_UP_ACCELERATION = 0.023
 
@@ -39,6 +40,7 @@ g_spawn_individual_powerup = function(powerupType)
 	compMove:set_speed_cap(POWER_UP_SPEED_CAP)
 	compMove:set_speed_change(POWER_UP_ACCELERATION)
 	compMove:set_angle(-90)
+	compMove:set_speed(-POWER_UP_START_SPEED)
 	e:add_component(compMove)
 
 	EntityPool.add_entity(e)
@@ -66,11 +68,11 @@ end
 DeathScripts.add_callback(12, g_spawn_powerup)
 
 -- Applys to a power up entity the magnet
-PowerUp.apply_magnet = function()
+PowerUp.apply_magnet = function(magic)
 	this:get_component(ComponentMagnetiseToPlayer):magnetise()
 	this:get_component(ComponentCollision):set_circle_radius(POWER_UP_COLLISION_RANGE)
 
-	if this:get_component(ComponentMultiEntity):count_children() == 0 then
+	if this:get_component(ComponentMultiEntity):count_children() == 0 and magic then
 		attach_visual_sprite("mc_elegant_circle", 2.0, 0.0, 0, 30, 0, 0, 0, 0.4)
 	end
 end
@@ -84,7 +86,7 @@ g_powerup_collision_handle = function()
 
 	local distance = math.to_magnitude(x1 - x2, y1 - y2);
 
-	PowerUp.apply_magnet()
+	PowerUp.apply_magnet(false)
 
 	if distance < POWER_UP_COLLISION_RANGE then
 
