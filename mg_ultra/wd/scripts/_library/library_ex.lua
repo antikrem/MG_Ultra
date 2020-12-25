@@ -52,6 +52,49 @@ function get_angle_to_player(x, y)
 	return angle
 end
 
+-- Solves for the angle required by a bullet starting at x, y at speed s
+-- To hit the player
+-- Returns -450 if player isn't alive
+function solve_angle_to_moving_player(bx, by, s)
+	local player = EntityPool.get_player()
+
+	if is_nil(player) then return -450 end
+
+	local px, py = player:get_component(ComponentPosition):get_position()
+	local cMovement = player:get_component(ComponentMovement)
+	local vx, vy = math.to_point(cMovement:get_speed(), cMovement:get_angle())
+
+	local j = px - bx;
+	local k = py - by;
+
+	-- Solution is in the form of a quadratic
+	local a = (vy^2 + vx^2 - s^2);
+	local b = (2*j*vx + 2*k*vy);
+	local c = (j^2 + k^2);
+
+	local t0, t1 = math.solve_quadratic(a, b, c)
+
+	-- Select smallest non negative solution
+	local solutions = {math.strip_negatives(t0, t1)}
+	local t_star = nil
+	if #solutions > 0 then
+		t_star = math.min(unpack(solutions))
+	end
+
+	local theta = 0
+
+	-- If the player is moving away faster than s, there will be no real non-negative solution
+	-- In such a case, fallback to non-predictive target
+	if is_nil(t_star) then
+		theta = get_angle_to_player(bx, by)
+	else
+		theta = math.to_degrees(math.atan2((k + t_star * vy), (j + t_star * vx)))
+	end
+
+	return theta
+
+end
+
 -- Creates a sprite and attaches it to calling entities multi ent
 -- Requires this to have a ComponentSpawner and ComponentMultiEnt
 function attach_visual_sprite(aniSetName, zOffset, rotationSpeed, minAmbient, fadeIn, rotation, offsetX, offsetY, scale) 
@@ -149,6 +192,10 @@ run_demo = Debug.run_demo
 
 Debug.run_test = function()
 	load_state("level", "test", 1)
+end
+
+Debug.run_example = function()
+	load_state("level", "example", 1)
 end
 
 Debug.scroll_to = function(cycle)
