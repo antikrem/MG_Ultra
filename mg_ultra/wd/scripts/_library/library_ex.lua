@@ -21,6 +21,10 @@ end
 -- will not attach them for modification from associated systems
 -- will return false if operation failed
 function Entity.add_component(self, component)
+    if is_nil(component) then 
+		print("Error, component was nil, did you use \".\" instead of \":\"?") 
+		return 
+	end
 	return self:addComponent(component.type(), component)
 end
 
