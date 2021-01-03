@@ -4,6 +4,8 @@
 #include <windows.h>
 #include "psapi.h"
 
+using namespace std;
+
 bool os_kit::fileExists(const std::string& name) {
 	ifstream file(name.c_str());
 	return file.good();
