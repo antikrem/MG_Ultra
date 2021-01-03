@@ -141,6 +141,22 @@ function math.solve_quadratic(a, b, c)
 	return (-b + d) / (2 * a),  (-b - d) / (2 * a)
 end
 
+-- Given two points, inclusivly places n number of points
+function math.distribute_between_points(ax, ay, bx, by, count)
+	local points = {}
+
+	local dx = (bx - ax) / (count)
+	local dy = (by - ay) / (count)
+
+	for i in irange(0, count) do
+		arrays.append(points, {ax + i * dx, ay + i * dy})
+	end
+	
+
+
+	return points
+end
+
 --- The array class of functions deal with handling arrays
 --- framed as n-dimensional vectors of numbers
 arrays = {}
@@ -158,6 +174,13 @@ end
 -- Adds an element to the end of a new array
 function arrays.append(current, element)
 	current[#current + 1] = element
+end
+
+-- Extends an array to the end of a new array
+function arrays.extend(current, next)
+	for i in irange(1, #next) do
+		arrays.append(current, next[i])
+	end
 end
 
 -- Takes multiple n-d arrays and composes into a single (n+1)-d array 
