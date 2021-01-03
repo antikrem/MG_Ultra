@@ -217,7 +217,11 @@ end
 
 Debug.tracker_offset = 0
 
-Debug.track_variable = function(name)
+Debug.track_variable = function(name, granularity)
+	if is_nil(granularity) then
+		granularity = 5
+	end
+
 	local e = Entity.create(EntityVariableTracker)
 	e:add_component(ComponentPosition.create(-900, 56 * Debug.tracker_offset, -5))
 	local c = ComponentText.create("text_consolas58")
@@ -228,8 +232,7 @@ Debug.track_variable = function(name)
 
 	local tim = ComponentTimer.create()
 	tim:add_spam_callback(
-		"local value = vtostring(" .. name .. ") this:get_component(ComponentText):set_text(\"" .. name .. ": \" .. value)" 
-		
+		"local value = vtostring(" .. name .. ") this:get_component(ComponentText):set_text(\"" .. name .. ": \" .. value)", granularity
 	)
 	e:add_component(tim)
 
