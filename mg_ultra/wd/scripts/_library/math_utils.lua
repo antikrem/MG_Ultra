@@ -11,6 +11,18 @@ function math.clamp(value, min, max)
 	end
 end
 
+-- Strips a vector of all entries less than zero
+-- Including nan
+function math.strip_negatives(x, ...)
+	if is_nil(x) then return end
+
+	if x >= 0 then
+		return x, math.strip_negatives(...)
+	else
+		return math.strip_negatives(...)
+	end
+end
+
 -- Implementation of tend to
 function math.tend_to(current, target, step)
 	local difference = math.min(math.abs(target - current), step)
