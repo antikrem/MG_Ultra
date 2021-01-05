@@ -22,14 +22,14 @@ namespace os_kit {
 
 	// Similar to getFileAsString, but sets each line
 	// as a new element in string
-	void getFileAsString(const std::string& filePath, vector<std::string>& results);
+	void getFileAsString(const std::string& filePath, std::vector<std::string>& results);
 
 	// Counts number of new lines within a file
 	// returns -1 if file does not exist
 	int countNewLinesInFile(const std::string& filePath);
 
 	// Returns a vector of all file names in a folder
-	vector<std::string> getFilesInFolder(const std::string& filePath);
+	std::vector<std::string> getFilesInFolder(const std::string& filePath);
 
 	// Returns what evers currently in the clipboard
 	// Returns empty string on error
