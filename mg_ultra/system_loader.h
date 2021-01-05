@@ -89,8 +89,8 @@ class SystemLoader : public System {
 		return name;
 	}
 
-	//transfers ents from cycle ents to game
-	void transferBufferedEntsToGame(EntityPool* pool, int cycle) {
+	// Transfers ents from cycle ents to game
+	bool transferBufferedEntsToGame(EntityPool* pool, int cycle) {
 		// Check registar for player entity spawning flag
 		bool spawnEnts = true;
 		registar->get("cycle_spawn_ents", &spawnEnts);
@@ -108,6 +108,8 @@ class SystemLoader : public System {
 		if (!spawnEnts) {
 			registar->update("cycle_spawn_ents", true);
 		}
+
+		return spawnEnts;
 	}
 
 	// Executes a script
@@ -128,12 +130,12 @@ class SystemLoader : public System {
 	}
 
 	//execute cycle scipts to game
-	void executeBufferedCycleScripts(int cycle) {
+	void executeBufferedCycleScripts(int cycle, bool skip) {
 		for (auto it = cycleStrings.begin(); 
 				it != cycleStrings.end() && it->first < cycle; 
 				it = cycleStrings.begin()) {
 			auto& cycleScript = it->second;
-			executeScript(cycleScript);
+			skip || executeScript(cycleScript);
 			cycleStrings.erase(it);
 		}
 	}
@@ -640,9 +642,9 @@ public:
 		registar->get("cycle", &cycle);
 
 		// Push current cycle of ents
-		transferBufferedEntsToGame(pool, cycle);
+		bool skip = !transferBufferedEntsToGame(pool, cycle);
 		// Execute buffered scripts
-		executeBufferedCycleScripts(cycle);
+		executeBufferedCycleScripts(cycle, skip);
 
 		// Check if loading is requested
 		bool loading = false;
