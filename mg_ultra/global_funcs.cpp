@@ -145,6 +145,7 @@ void registerGlobalFunctions(kaguya::State &kaguya) {
 
 	//audio
 	kaguya["addAudioFile"] = g_audio::addAudioFile;
+	kaguya["changeAudioLoadContext"] = g_audio::setLoadContext;
 	kaguya["printAudioReport"] = g_audio::print;
 	kaguya["flushAudioLoadRequests"] = g_audio::flushAudioLoadRequests;
 
