@@ -6,6 +6,10 @@ shared_mutex audioPtrLock;
 AudioMaster* globalAudioMaster = nullptr;
 bool activePipeline = false;
 
+// Default to global
+string loadcontext = "sounds\\";
+AudioFileLifecycle contextLifecycle = AuFiLi_Global;
+
 void g_audio::setAudioMaster(AudioMaster* audioMaster) {
 	unique_lock<shared_mutex> lck(audioPtrLock);
 	globalAudioMaster = audioMaster;
@@ -26,10 +30,16 @@ void g_audio::disposeSource(ALint buffer) {
 	
 }
 
+void g_audio::setLoadContext(const string& location, int lifeCycle) {
+	unique_lock<shared_mutex> lck(audioPtrLock);
+	loadcontext = location;
+	contextLifecycle = (AudioFileLifecycle)lifeCycle;
+}
+
 void g_audio::addAudioFile(const string& fileName, const string& fileLocation) {
 	shared_lock<shared_mutex> lck(audioPtrLock);
 	if (activePipeline) {
-		globalAudioMaster->queueAssetLoad(fileName, fileLocation, AuFiLi_Global);
+		globalAudioMaster->queueAssetLoad(fileName, loadcontext + fileLocation, contextLifecycle);
 	}
 }
 

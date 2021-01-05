@@ -26,6 +26,9 @@ class AudioMaster {
 	vector<tuple<string, string, AudioFileLifecycle>> requestedLoads;
 	condition_variable assetsQueueCondition;
 
+	// When loading assets, looks at this directory for sources
+	string location = "/sounds/";
+
 	int queuedAssetsCounts() {
 		return (int)requestedLoads.size();
 	}
@@ -80,6 +83,8 @@ public:
 		unique_lock<mutex> lck(sourceDispositionLock);
 		sourcesToDispose.push_back(buffer);
 	}
+
+
 
 	// Queues a audio file to be added
 	void queueAssetLoad(const string& audioName, const string& audioLocation, AudioFileLifecycle lifeCycle) {
@@ -145,6 +150,9 @@ public:
 namespace g_audio {
 	// Sets global audio master
 	void setAudioMaster(AudioMaster* audioMaster);
+
+	// Sets next load context
+	void setLoadContext(const string& location, int lifeCycle);
 
 	// Adds an audio to the audio master when AL is next updated
 	void addAudioFile(const string& fileName, const string& fileLocation);
