@@ -44,11 +44,15 @@ public:
 
 	}
 
-	//loads audio from a file
-	//returns true if file loaded correctly
+	// Loads audio from a file
+	// returns true if file loaded correctly
 	bool loadAudioFile(const string& fileLocation) {
 		this->fileLocation = fileLocation;
 		SNDFILE* sndfile = sf_open(fileLocation.c_str(), SFM_READ, &fileInfo);
+
+		if (!sndfile) {
+			return false;
+		}
 		
 		int frameCount = (int)(fileInfo.frames * fileInfo.channels);
 		short* data = new short[frameCount];
