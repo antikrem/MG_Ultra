@@ -1,5 +1,15 @@
 -- \scripts\_initialise\audio.lua
 
+-- Sets up Audio interface, which allows loading of audio files
+-- and some general interactions
+Audio = {}
+
+-- Different load levels, which define the life time of resources
+Audio.LoadLevel = {}
+Audio.LoadLevel.GLOBAL = 0
+Audio.LoadLevel.CAMPAIGN = 1
+Audio.LoadLevel.LEVEL = 2
+
 -- Enumeration of states an audio state can be in
 AudioState = {}
 AudioState.NONE = -1
@@ -7,13 +17,12 @@ AudioState.STOP = 0
 AudioState.PLAY = 1 
 AudioState.PAUSE = 2 
 
--- Sets up Audio interface, which allows loading of audio files
--- and some general interactions
-Audio = {}
-
 -- loads an audio file for usage
 -- does not load instantly
 Audio.request_load_file = addAudioFile
+
+-- Change audio load levels
+Audio.change_audio_load_level = changeAudioLoadContext
 
 -- flushses the load request queue
 Audio.flush_queue = flushAudioLoadRequests
