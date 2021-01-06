@@ -189,11 +189,31 @@ function irange(from, to, step)
 	end, nil, from - step
 end
 
--- repeats a function a number of given times
+-- Repeats a function a number of given times
 function replicate(n, f, ...)
 	for i in range(0, n) do
 		f(...)
 	end
+end
+
+-- Action for arg_to_string
+function arg_to_string_sub(str, arg, ...)
+
+	if is_nil(arg) then
+		return str
+	elseif str == "" then
+		return arg_to_string_sub(tostring(arg) .. str, ...)
+	
+	else
+		return arg_to_string_sub(str .. ", ".. tostring(arg), ...)
+	end
+
+end
+
+-- Given a set of variables produces a string of args
+-- i.e. "arg1, arg2, arg3"
+function arg_to_string(...)
+	return arg_to_string_sub("", ...)
 end
 
 -- Requests engine shutdown by emmiting a quit event
