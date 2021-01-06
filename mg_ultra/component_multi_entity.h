@@ -9,6 +9,7 @@
 #include <atomic>
 #include <shared_mutex>
 #include <functional>
+#include <tuple>
 
 #include "component.h"
 #include "constants.h"
@@ -91,9 +92,9 @@ public:
 	}
 
 	// Counts the number of children
-	int countChildren() {
+	tuple<int, int> countChildren() {
 		unique_lock<mutex> lck(lock);
-		return internalEntities.size();
+		return make_tuple(internalEntities.size(), namedLookup.size());
 	}
 
 	// Updates any sub entities with ComponentOffsetMaster
@@ -190,6 +191,7 @@ public:
 			.addFunction("reset_iterator", &ComponentMultiEntity::resetIterator)
 			.addFunction("get_next", &ComponentMultiEntity::nextEntity)
 			.addFunction("get", &ComponentMultiEntity::getByName)
+
 			.addFunction("count_children", &ComponentMultiEntity::countChildren)
 			.addStaticFunction("create",ScriptableClass::create<ComponentMultiEntity>)
 			.addStaticFunction("type", &getType<ComponentMultiEntity>)
