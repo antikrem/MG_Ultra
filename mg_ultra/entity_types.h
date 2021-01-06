@@ -25,15 +25,13 @@ enum EntityTypes {
 	ETEnemyBullet,
 	ETDialogue,
 	ETDebugCycle,
-	ETScoreBoard,
-	ETPowerBoard,
-	ETFragmentBoard,
+	UIManager,
+	UIElement,
+	__padding,
 	ETPowerUp,
 	ETVariableTracker,
 	ETAnonymousSoundSource,
-	ETBulletClearer,
-	ETUILeftPane,
-	ETUIRightPane
+	ETBulletClearer
 };
 
 //String to Entity type

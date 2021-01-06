@@ -22,15 +22,13 @@ EntityBulletSpawner = 15
 EntityEnemyBullet = 16
 EntityDialogue = 17
 EntityDebugCycle = 18
-EntityScoreBoard = 19
-EntityPowerBoard = 20
-EntityFragmentBoard = 21
+EntityUIManager = 19
+EntityUIElement = 20
+-- Padding
 EntityPowerUp = 22
 EntityVariableTracker = 23
 EntityAnonymousSoundSource = 24
 EntityBulletClearer = 25
-EntityUILeftPane = 26
-EntityUIRightPane = 27
 
 -- Adds to pool, returns boolean success
 function EntityPool.add_entity(entity)

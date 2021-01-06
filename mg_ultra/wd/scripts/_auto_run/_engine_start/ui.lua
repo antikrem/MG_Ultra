@@ -57,9 +57,23 @@ UI.uiCreated = false
 -- True when ui is being drawn
 UI.uiVisible = false
 
+-- Get a ui item from UI master by Namespace
+UI._get_item = function(name)
+	return EntityPool.get_cached_entity(EntityUIManager):get_component(ComponentMultiEntity):get(name)
+end
+
 -- Starts UI
 UI.start_ui = function() 
-	local e = Entity.create(EntityScoreBoard)
+	-- Single entity that manages all other entities
+	local master = Entity.create(EntityUIManager)
+	master:add_component(ComponentMultiEntity.create())
+	local manager = ComponentSpawner.create()
+	master:add_component(manager)
+	EntityPool.add_cached_entity(master)
+
+
+	local e = Entity.create(EntityUIElement)
+	e:add_component(ComponentName.create("ScoreBoard"))
 	e:add_component(ComponentPosition.create(-900, 500))
 	local c = ComponentText.create("text_consolas58")
 	c:set_render_in_3D(false)
@@ -67,9 +81,10 @@ UI.start_ui = function()
 	c:set_visible(false)
 	e:add_component(c)
 
-	EntityPool.add_cached_entity(e)
+	manager:add_entity(e)
 
-	local e = Entity.create(EntityFragmentBoard)
+	local e = Entity.create(EntityUIElement)
+	e:add_component(ComponentName.create("FragmentBoard"))
 	e:add_component(ComponentPosition.create(-900, 450))
 	local c = ComponentText.create("text_consolas58")
 	c:set_render_in_3D(false)
@@ -77,9 +92,10 @@ UI.start_ui = function()
 	c:set_visible(false)
 	e:add_component(c)
 
-	EntityPool.add_cached_entity(e)
+	manager:add_entity(e)
 
-	local e = Entity.create(EntityPowerBoard)
+	local e = Entity.create(EntityUIElement)
+	e:add_component(ComponentName.create("PowerBoard"))
 	e:add_component(ComponentPosition.create(-900, 400))
 	local c = ComponentText.create("text_consolas58")
 	c:set_render_in_3D(false)
@@ -87,49 +103,40 @@ UI.start_ui = function()
 	c:set_visible(false)
 	e:add_component(c)
 
-	EntityPool.add_cached_entity(e)
+	manager:add_entity(e)
 
-	UI.create_panes()
+	UI.create_panes(manager)
 
 	UI.pane_hidden_value = 0
 	UI.uiCreated = true
 end
 
 UI.show_ui = function()
-	local e = EntityPool.get_cached_entity(EntityScoreBoard)
-	e:get_component(ComponentText):set_visible(true)
+	UI._get_item("ScoreBoard"):get_component(ComponentText):set_visible(true)
 
-	local e = EntityPool.get_cached_entity(EntityFragmentBoard)
-	e:get_component(ComponentText):set_visible(true)
+	UI._get_item("FragmentBoard"):get_component(ComponentText):set_visible(true)
 
-	local e = EntityPool.get_cached_entity(EntityPowerBoard)
-	e:get_component(ComponentText):set_visible(true)
+	UI._get_item("PowerBoard"):get_component(ComponentText):set_visible(true)
 
 	UI.uiVisible = true
 end
 
 UI.hide_ui = function()
-	local e = EntityPool.get_cached_entity(EntityScoreBoard)
-	e:get_component(ComponentText):set_visible(false)
+	UI._get_item("ScoreBoard"):get_component(ComponentText):set_visible(false)
 
-	local e = EntityPool.get_cached_entity(EntityFragmentBoard)
-	e:get_component(ComponentText):set_visible(false)
+	UI._get_item("FragmentBoard"):get_component(ComponentText):set_visible(false)
 
-	local e = EntityPool.get_cached_entity(EntityPowerBoard)
-	e:get_component(ComponentText):set_visible(false)
+	UI._get_item("PowerBoard"):get_component(ComponentText):set_visible(false)
 
 	UI.uiVisible = false
 end
 
 UI.update_ui = function()
-	local e = EntityPool.get_cached_entity(EntityScoreBoard)
-	e:get_component(ComponentText):set_text(string.pad_string(tostring(g_points), 9, "0", true))
+	UI._get_item("ScoreBoard"):get_component(ComponentText):set_text(string.pad_string(tostring(g_points), 9, "0", true))
 
-	local e = EntityPool.get_cached_entity(EntityFragmentBoard)
-	e:get_component(ComponentText):set_text(tostring(g_fragments) .. "/" .. tostring(g_nextFragments))
+	UI._get_item("FragmentBoard"):get_component(ComponentText):set_text(tostring(g_fragments) .. "/" .. tostring(g_nextFragments))
 
-	local e = EntityPool.get_cached_entity(EntityPowerBoard)
-	e:get_component(ComponentText):set_text(tostring(g_power) .. "%")
+	UI._get_item("PowerBoard"):get_component(ComponentText):set_text(tostring(g_power) .. "%")
 
 	UI.pane_update()
 end
@@ -146,24 +153,26 @@ UI.pane_hidden_target = 1.0
 UI.pane_hidden_rate = 1.0
 
 -- Draws left and right panes
-UI.create_panes = function() 
-	local leftPane = Entity.create(EntityUILeftPane)
+UI.create_panes = function(manager) 
+	local leftPane = Entity.create(EntityUIElement)
+	leftPane:add_component(ComponentName.create("LeftPane"))
 	leftPane:add_component(ComponentPosition.create(-UI.SHOW_X_POSITION, 0, 10))
 	leftPane:add_component(ComponentNoBoundsControl.create())
 	local lc = ComponentGraphics.create("ui_left_pane")
 	lc:set_render_in_3D(false)
 	lc:set_transparency(UI.PANEL_TRANSPARENCY)
 	leftPane:add_component(lc)
-	EntityPool.add_cached_entity(leftPane)
+	manager:add_entity(leftPane)
 
-	local rightPane = Entity.create(EntityUIRightPane)
+	local rightPane = Entity.create(EntityUIElement)
+	rightPane:add_component(ComponentName.create("RightPane"))
 	rightPane:add_component(ComponentPosition.create(UI.SHOW_X_POSITION, 0, 10))
 	rightPane:add_component(ComponentNoBoundsControl.create())
 	local rc = ComponentGraphics.create("ui_right_pane")
 	rc:set_render_in_3D(false)
 	rc:set_transparency(UI.PANEL_TRANSPARENCY)
 	rightPane:add_component(rc)
-	EntityPool.add_cached_entity(rightPane)
+	manager:add_entity(rightPane)
 	
 	UI.pane_update()
 end
@@ -171,13 +180,13 @@ end
 UI.pane_update = function()
 	UI.pane_hidden_value = math.tend_to(UI.pane_hidden_value, UI.pane_hidden_target, UI.pane_hidden_rate)
 
-	local leftPane = EntityPool.get_cached_entity(EntityUILeftPane)
+	local leftPane = UI._get_item("LeftPane")
 	if is_not_nil(leftPane) then
 		local pos = leftPane:get_component(ComponentPosition)
 		pos:set_position(-UI.SHOW_X_POSITION - UI.pane_hidden_value * UI.PANEL_WIDTH, 0, 10)
 	end
 
-	local rightPane = EntityPool.get_cached_entity(EntityUIRightPane)
+	local rightPane = UI._get_item("RightPane")
 	if is_not_nil(rightPane) then
 		local pos = rightPane:get_component(ComponentPosition)
 		pos:set_position(UI.SHOW_X_POSITION + UI.pane_hidden_value * UI.PANEL_WIDTH, 0, 10)
