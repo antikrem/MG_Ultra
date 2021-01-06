@@ -67,8 +67,8 @@ public:
 			auto newEnt = shared_ptr<Entity>(new Entity(ETPlayer));
 			newEnt->addComponent(new ComponentPosition(0, 0, 4.0f));
 
-			auto newComponent1 = new ComponentGraphics("player");
-			newComponent1->setScale(0.325f);
+			auto newComponent1 = new ComponentGraphics("sanae");
+			newComponent1->setScale(1.25f);
 			newComponent1->setAnimationType(1);
 			newComponent1->setVisible(false);
 			newEnt->addComponent(newComponent1->pullForEntity());
