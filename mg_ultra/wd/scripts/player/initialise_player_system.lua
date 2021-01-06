@@ -81,7 +81,7 @@ PLAYER_FRIEND_FOCUS_ROTATION_MULTIPLIER = 17
 PLAYER_FRIEND_TARGET = 550
 
 -- Variables about health
-g_lives = 3
+Player.lives = 99
 
 -- Total point
 g_points = 0
@@ -323,7 +323,7 @@ end
 -- Handler function when player is hit
 g_bulletPlayerCollision = function() 
 	if GlobalRegistar.get("player_alive") then
-		g_power_level = 1
+		Player.lives = Player.lives - 1
 		this:get_component(ComponentClampPosition):set_active(false)
 		Player.clearOnDeath = true
 		GlobalRegistar.update("player_alive", false)
