@@ -31,6 +31,7 @@ PLAYER_DASH_LENGTH = 12
 PLAYER_DASH_COOLDOWN = 5
 
 -- Constants for dead player
+Player.PRE_DEAD_SCROLL = 50
 PLAYER_DEAD_SCROLL = 70
 PLAYER_DEAD_SCROLL_START_Y = -640
 PLAYER_DEAD_SCROLL_END_Y = -270
@@ -46,7 +47,8 @@ PLAYER_QUICK_SHIFT_THRESHOLD = 70
 PLAYER_SHOOT_TIMING = 10
 
 -- Counter for number of dead frames
-g_sequentialDeadFrames = 0
+Player.preDeadFrames = 0
+Player.sequentialDeadFrames = 0
 
 --Flip for player
 g_playerBulletOscillator = -1
@@ -97,9 +99,10 @@ PLAYER_FOCUS_FRAGMENT_POINTS_DRAIN = 0.1
 g_power = 0
 g_power_level = 0
 
--- Clear Radius
+-- Clear variables and constants
 PLAYER_CLEAR_RADIUS = 250
 PLAYER_CLEAR_FRAMES = 250
+Player.clearOnDeath = false
 
 -- Player magnet
 Player.MAGNET_Y = 300
@@ -109,6 +112,7 @@ Player.magnet_cooldown = Player.MAGNET_RESET
 
 --loading assets for player
 Audio.request_load_file("player_shoot_tick", "shoot_click.wav")
+Audio.request_load_file("player_death_sound", "old_gauge_sc_f.wav")
 Audio.flush_queue()
 
 -- Functions used to update player during regular gameplay
@@ -321,10 +325,10 @@ g_bulletPlayerCollision = function()
 	if GlobalRegistar.get("player_alive") then
 		g_power_level = 1
 		this:get_component(ComponentClampPosition):set_active(false)
-		g_sequentialDeadFrames = 0
+		Player.clearOnDeath = true
 		GlobalRegistar.update("player_alive", false)
 
-		Player.add_clear_aura()
+		Audio.play_once("player_death_sound")
 	end
 end
 

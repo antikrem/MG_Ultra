@@ -5,7 +5,8 @@
 
 -- Standard player handle
 if GlobalRegistar.get("player_alive") then
-	g_sequentialDeadFrames = 0
+	Player.sequentialDeadFrames = 0
+	Player.preDeadFrames = 0
 	g_playerMovementUpdate()
 	g_playerSpawnBullets()
 	g_playerPowerUpdate()
@@ -14,15 +15,23 @@ if GlobalRegistar.get("player_alive") then
 
 -- Dead player handle
 else
-	g_sequentialDeadFrames = g_sequentialDeadFrames + 1
+	local y = 0
 
-	local y 
-		= (g_sequentialDeadFrames / PLAYER_DEAD_SCROLL) * PLAYER_DEAD_SCROLL_END_Y
-		+ (1 - g_sequentialDeadFrames / PLAYER_DEAD_SCROLL) * PLAYER_DEAD_SCROLL_START_Y
+	if Player.preDeadFrames < Player.PRE_DEAD_SCROLL then 
+		Player.preDeadFrames = Player.preDeadFrames + 1
+		y = 1000
+	else 
+		if Player.sequentialDeadFrames == 5 and Player.clearOnDeath then Player.add_clear_aura() Player.clearOnDeath  = false end
+
+		Player.sequentialDeadFrames = Player.sequentialDeadFrames + 1
+
+		y = (Player.sequentialDeadFrames / PLAYER_DEAD_SCROLL) * PLAYER_DEAD_SCROLL_END_Y
+		  + (1 - Player.sequentialDeadFrames / PLAYER_DEAD_SCROLL) * PLAYER_DEAD_SCROLL_START_Y
+	end
 
 	this:get_component(ComponentPosition):set_position(0, y, LAYER_PLAYER_BULLETS)
 
-	if (PLAYER_DEAD_SCROLL < g_sequentialDeadFrames) then
+	if (PLAYER_DEAD_SCROLL < Player.sequentialDeadFrames) then
 		this:get_component(ComponentClampPosition):set_active(true)
 		GlobalRegistar.update("player_alive", true)
 	end
