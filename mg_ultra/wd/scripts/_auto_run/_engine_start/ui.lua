@@ -88,7 +88,7 @@ UI.start_ui = function()
 	e:add_component(ComponentPosition.create(-900, 450))
 	local c = ComponentText.create("text_consolas58")
 	c:set_render_in_3D(false)
-	c:set_text(tostring(g_fragments) .. "/" .. tostring(g_nextFragments))
+	c:set_text("")
 	c:set_visible(false)
 	e:add_component(c)
 
@@ -107,7 +107,6 @@ UI.start_ui = function()
 
 	UI.create_panes(manager)
 
-	UI.pane_hidden_value = 0
 	UI.uiCreated = true
 end
 
@@ -134,13 +133,14 @@ end
 UI.update_ui = function()
 	UI._get_item("ScoreBoard"):get_component(ComponentText):set_text(string.pad_string(tostring(g_points), 9, "0", true))
 
-	UI._get_item("FragmentBoard"):get_component(ComponentText):set_text(tostring(g_fragments) .. "/" .. tostring(g_nextFragments))
+	UI._get_item("FragmentBoard"):get_component(ComponentText):set_text("Lives: " .. tostring(Player.lives) .. "	|	" .. tostring(g_fragments) .. "/" .. tostring(g_nextFragments))
 
 	UI._get_item("PowerBoard"):get_component(ComponentText):set_text(tostring(g_power) .. "%")
 
 	UI.pane_update()
 end
 
+-- UI constants
 UI.PANEL_WIDTH = 240
 UI.SHOW_X_POSITION = 840
 UI.HIDDEN_X_POSITION = UI.PANEL_WIDTH + UI.SHOW_X_POSITION
@@ -156,7 +156,7 @@ UI.pane_hidden_rate = 1.0
 UI.create_panes = function(manager) 
 	local leftPane = Entity.create(EntityUIElement)
 	leftPane:add_component(ComponentName.create("LeftPane"))
-	leftPane:add_component(ComponentPosition.create(-UI.SHOW_X_POSITION, 0, 10))
+	leftPane:add_component(ComponentPosition.create(-UI.HIDDEN_X_POSITION, 0, 10))
 	leftPane:add_component(ComponentNoBoundsControl.create())
 	local lc = ComponentGraphics.create("ui_left_pane")
 	lc:set_render_in_3D(false)
@@ -166,7 +166,7 @@ UI.create_panes = function(manager)
 
 	local rightPane = Entity.create(EntityUIElement)
 	rightPane:add_component(ComponentName.create("RightPane"))
-	rightPane:add_component(ComponentPosition.create(UI.SHOW_X_POSITION, 0, 10))
+	rightPane:add_component(ComponentPosition.create(UI.HIDDEN_X_POSITION, 0, 10))
 	rightPane:add_component(ComponentNoBoundsControl.create())
 	local rc = ComponentGraphics.create("ui_right_pane")
 	rc:set_render_in_3D(false)
@@ -174,7 +174,7 @@ UI.create_panes = function(manager)
 	rightPane:add_component(rc)
 	manager:add_entity(rightPane)
 	
-	UI.pane_update()
+	UI.hide_panes_now()
 end
 
 UI.pane_update = function()
