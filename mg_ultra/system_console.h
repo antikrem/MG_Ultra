@@ -106,7 +106,7 @@ public:
 		// Create a console entity
 		auto newEnt = new Entity(ETConsole);
 
-		newEnt->addComponent(new ComponentPosition(-930, 510, 2));
+		newEnt->addComponent(new ComponentPosition(-930, 510, -10));
 		newEnt->addComponent(new ComponentConsole());
 
 		auto newComponent = new ComponentText();
