@@ -36,6 +36,10 @@ public:
 		: modulation(value) {
 	}
 
+	ComponentColourModulation(Point3 value, float strength)
+		: modulation(value) {
+		this->strength = strength;
+	}
 
 	// Sets current modulation
 	void setModulation(float value) {
@@ -72,6 +76,16 @@ public:
 		return make_tuple(value.x, value.y, value.z);
 	}
 
+	// Set strength
+	void setStrength(float strength) {
+		this->strength = strength;
+	}
+
+	// Get strength
+	float getStrength() {
+		return strength;
+	}
+
 	// Get hue
 	float getHue() {
 		return modulation.load().x;
@@ -92,6 +106,8 @@ public:
 			.addFunction("get_modulation", &ComponentColourModulation::l_getModulation)
 			.addFunction("set_hue", &ComponentColourModulation::setHue)
 			.addFunction("get_hue", &ComponentColourModulation::getHue)
+			.addFunction("set_strength", &ComponentColourModulation::setStrength)
+			.addFunction("get_strength", &ComponentColourModulation::getStrength)
 			.addOverloadedFunctions(
 				"create",
 				&ScriptableClass::create<ComponentColourModulation>,
