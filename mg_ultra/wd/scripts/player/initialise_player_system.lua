@@ -83,6 +83,14 @@ PLAYER_FRIEND_TARGET = 550
 -- Variables about health
 Player.lives = 99
 
+-- Players current meter
+-- A bar is 100, Maxes at 300
+Player.meter = 0
+Player.METER_DASH_COST = 100
+Player.MAX_METER = 300
+Player.inShiftDash = false
+Player.SHIFT_DASH_LINGER = 30
+
 -- Total point
 g_points = 0
 
@@ -109,10 +117,15 @@ Player.MAGNET_Y = 300
 Player.MAGNET_RESET = 350
 Player.magnet_cooldown = Player.MAGNET_RESET
 
+-- Power bouses for certain events
+Player.POWER_BONUS_PICKUP = 1
+Player.POWER_BONUS_VELOCITY = 0.02
+
 
 --loading assets for player
 Audio.request_load_file("player_shoot_tick", "shoot_click.wav")
 Audio.request_load_file("player_death_sound", "old_gauge_sc_f.wav")
+Audio.request_load_file("player_meter_up", "old_gauge_sc_r.wav")
 Audio.flush_queue()
 
 -- Functions used to update player during regular gameplay
@@ -132,7 +145,9 @@ g_playerMovementUpdate = function()
 	if cInput:query_down("up")    == 1 then iy = iy + 1 end
 	if cInput:query_down("down")  == 1 then iy = iy - 1 end
 
-	local isDashInput = cInput:query_down("dash") == 1 
+	local isDashInput = cInput:query_down("dash")
+
+	local isFocusInput = cInput:query_down("focus")
 
 	--Update dash variables
 	if g_dashCooldown > 0 then g_dashCooldown = g_dashCooldown - 1 end
@@ -144,12 +159,17 @@ g_playerMovementUpdate = function()
 		if ix ~= lx or iy ~= ly or g_dashDuration <= 0 then
 			g_dashDuration = 0
 			g_inDash = false
+
+			if Player.inShiftDash then
+				Player.deshade_shift_dash()
+			end
+			
 			g_dashCooldown = PLAYER_DASH_COOLDOWN
 		end
 	end
 
 	--check if key input will allow for dash
-	if isDashInput then
+	if isDashInput == 1 then
 		--handle case where dash input recieved out of dash 
 		if not g_inDash and g_dashReleased and g_dashCooldown <= 0 then
 			g_inDash = true
@@ -158,13 +178,20 @@ g_playerMovementUpdate = function()
 
 			g_dashDuration = PLAYER_DASH_LENGTH
 			g_dashReleased = false;
+
+			-- Check if this is a shift dash
+			if isFocusInput == 1 then
+				-- Shade player and apply shift dash
+				Player.shade_shift_dash()
+
+			end
 		end
 	else
 		g_dashReleased = true
 	end
 
-	local focusValue = cInput:query_down("focus")
-	g_inFocus = focusValue == 1 and not g_inDash
+	
+	g_inFocus = isFocusInput == 1 and not g_inDash
 
 	local movementMode = g_inDash and "DASH" or (g_inFocus and "FOCUS" or "DEFAULT")
 
@@ -218,7 +245,7 @@ g_playerMovementUpdate = function()
 	end
 
 	-- Modify shift factor
-	g_shiftFactor = math.tend_to(g_shiftFactor, focusValue, PLAYER_SHIFT_FACTOR_DELTA)
+	g_shiftFactor = math.tend_to(g_shiftFactor, isFocusInput, PLAYER_SHIFT_FACTOR_DELTA)
 end
 
 -- spawn bullet at given layer
@@ -320,9 +347,58 @@ g_playerPowerUpdate = function()
 	g_power = math.max(0, g_power)
 end
 
+-- Function to increment meter
+-- Will do fancy effects on meter up
+Player.add_meter = function(meter)
+	if is_nil(meter) then meter = 1 end
+	local oldMeter = Player.meter
+	Player.meter = Player.meter + meter
+
+	-- Check floor division
+	if oldMeter // Player.METER_DASH_COST ~= Player.meter // Player.METER_DASH_COST then
+		Audio.play_once("player_meter_up")
+	end
+end
+
+-- Effect for when 
+
+-- Shades player when shift dashing
+Player.shade_shift_dash = function()
+	if Player.meter > Player.METER_DASH_COST then
+		Player.meter = Player.meter - Player.METER_DASH_COST
+		Player.inShiftDash = true
+		EntityPool.get_player():get_component(ComponentColourModulation):set_strength(1.0)
+	end
+end
+
+-- Deshade player and set dash invinc off
+Player.deshade_shift_dash = function()
+	-- Done with Entity
+	local e = Entity.create(EntityGeneric)
+	local t = ComponentTimer.create()
+	t:add_spam_callback(
+		[[
+			local strength = EntityPool.get_player():get_component(ComponentColourModulation):get_strength()
+			strength = strength - 2.0 / Player.SHIFT_DASH_LINGER
+			if strength <= 0 then
+				Player.inShiftDash = false
+				EntityPool.get_player():get_component(ComponentColourModulation):set_strength(0)
+				this:kill()
+			else
+				EntityPool.get_player():get_component(ComponentColourModulation):set_strength(strength)
+			end
+		]],
+		2
+	)
+	e:add_component(t)
+	EntityPool.add_entity(e)
+end
+
+
+
 -- Handler function when player is hit
 g_bulletPlayerCollision = function() 
-	if GlobalRegistar.get("player_alive") then
+	if GlobalRegistar.get("player_alive") and not Player.inShiftDash then
 		Player.lives = Player.lives - 1
 		this:get_component(ComponentClampPosition):set_active(false)
 		Player.clearOnDeath = true
@@ -330,6 +406,9 @@ g_bulletPlayerCollision = function()
 
 		Audio.play_once("player_death_sound")
 	end
+	
+	-- Kill bullet
+	target1:kill()
 end
 
 -- Enables the player system
