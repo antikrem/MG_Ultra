@@ -51,6 +51,18 @@ public:
 		return dimensions;
 	}
 
+	void ll_setDimensions(float x, float y) {
+		dimensions = Point3(x, y, 0);
+	}
+
+	void lll_setDimensions(float x, float y, float z) {
+		dimensions = Point3(x, y, z);
+	}
+
+	tuple<float, float, float> l_getDimensions() {
+		return make_tuple(dimensions.x, dimensions.y, dimensions.z);
+	}
+
 	//applies clamping
 	Point3 applyClamp(Point3 pos) {
 		return Point3(
@@ -64,6 +76,10 @@ public:
 		state["ComponentClampPosition"].setClass(kaguya::UserdataMetatable<ComponentClampPosition, Component>()
 			.setConstructors<ComponentClampPosition()>()
 			.addFunction("set_active", &ComponentClampPosition::setActive)
+			.addOverloadedFunctions(
+				"set_dimensions", &ComponentClampPosition::ll_setDimensions, &ComponentClampPosition::lll_setDimensions
+			)
+			.addFunction("get_dimensions", &ComponentClampPosition::l_getDimensions)
 			.addOverloadedFunctions(
 				"create",
 				ScriptableClass::create<ComponentClampPosition, float, float>,
