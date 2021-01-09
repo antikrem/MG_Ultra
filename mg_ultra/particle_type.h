@@ -9,7 +9,7 @@
 #include "particle.h"
 
 struct ParticleType {
-	//set to true on good construction
+		//set to true on good construction
 	bool wellformed = false;
 
 	string animation;
@@ -81,6 +81,10 @@ struct ParticleType {
 	//takes a reference to a particle and returns the associated box
 	//returns true if valid and ready to spawn
 	bool evaluateBox(ParticleSpecification& particle, BoxData& box) {
+		if (!particle.lifetimeFactor || !frameSkip) {
+			return false;
+		}
+
 		int frame = (int)(particle.lifetime / particle.lifetimeFactor) / frameSkip;
 		if (frame >= frameCount) {
 			return false;
