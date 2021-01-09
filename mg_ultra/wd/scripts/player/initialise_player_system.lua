@@ -118,8 +118,9 @@ Player.MAGNET_RESET = 350
 Player.magnet_cooldown = Player.MAGNET_RESET
 
 -- Power bouses for certain events
-Player.POWER_BONUS_PICKUP = 1
-Player.POWER_BONUS_VELOCITY = 0.02
+Player.METER_BONUS_PICKUP = 0.5
+Player.METER_BONUS_VELOCITY = 0.0005
+Player.METER_BONUS_MAGNET = 2.0
 
 
 --loading assets for player
@@ -244,6 +245,12 @@ g_playerMovementUpdate = function()
 		this:get_component(ComponentParticle):spawn(1)	
 	end
 
+	-- Add meter based on velocity
+	local speed = cMovement:get_speed()
+	if speed > 0.1 then 
+		Player.add_meter(speed * Player.METER_BONUS_VELOCITY)
+	end
+	
 	-- Modify shift factor
 	g_shiftFactor = math.tend_to(g_shiftFactor, isFocusInput, PLAYER_SHIFT_FACTOR_DELTA)
 end

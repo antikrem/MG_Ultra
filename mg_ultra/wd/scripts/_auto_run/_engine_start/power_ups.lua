@@ -102,6 +102,9 @@ g_powerup_collision_handle = function()
 				g_nextFragments = g_nextFragments + FRAGMENT_PERIOD
 			end
 		end
+		
+		-- Increment meter for dashing
+		Player.add_meter(Player.METER_BONUS_PICKUP)
 
 		-- Kill powerup
 		this:kill()
