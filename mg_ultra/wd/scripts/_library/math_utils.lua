@@ -65,7 +65,6 @@ end
 -- Takes two positions and computes distance from one to another
 function math.distance_to(x1, y1, x2, y2) 
 	return math.sqrt((x2 - x1) ^ 2 + (y2 - y1) ^ 2)
-	
 end
 
 -- Takes two positions and compute angle from first to second
@@ -126,6 +125,16 @@ function math.sample_uniform_circle(radius)
 	return r * math.cos(t), r * math.sin(t)
 end
 
+-- Returns a point from a random sphere
+function math.sample_uniform_circle(radius)
+	local theta = 2 * math.pi * math.random()
+	local phi = math.acos(1 - 2 * math.random())
+	local x = math.sin(phi) * math.cos(theta)
+	local y = math.sin(phi) * math.sin(theta)
+	local z = math.cos(phi)
+	return radius * x, radius * y, radius * z
+end
+
 -- Sine with a period
 -- Defaults to a period of 1
 function math.sin_period(x, period) 
@@ -152,8 +161,6 @@ function math.distribute_between_points(ax, ay, bx, by, count)
 		arrays.append(points, {ax + i * dx, ay + i * dy})
 	end
 	
-
-
 	return points
 end
 
