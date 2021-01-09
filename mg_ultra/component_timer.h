@@ -17,6 +17,7 @@ class ComponentTimer : public Component, public ScriptableClass<ComponentTimer> 
 	mutex lock;
 
 	atomic<int> spamFrequency = 1;
+	atomic<int> spamOffset = 0;
 	string spamCallback;
 
 	MMap<int, string> timedCallbacks;
@@ -32,6 +33,14 @@ public:
 
 	void setCycle(int cycle) {
 		this->cycle = cycle;
+	}
+
+	int getSpamOffset() {
+		return spamOffset;
+	}
+
+	void setSpamOffset(int cycle) {
+		this->spamOffset = cycle;
 	}
 
 	void addCallback(int cycle, string callback) {
@@ -69,7 +78,7 @@ public:
 		
 		vector<string> ret;
 
-		if (spamCallback.size() && !(cycle % spamFrequency)) {
+		if (spamCallback.size() && !(cycle % spamFrequency) && spamOffset <= cycle) {
 			ret.push_back(spamCallback);
 		}
 
@@ -85,6 +94,8 @@ public:
 			.setConstructors<ComponentTimer()>()
 			.addFunction("get_cycle", &ComponentTimer::getCycle)
 			.addFunction("set_cycle", &ComponentTimer::setCycle)
+			.addFunction("set_spam_offset", &ComponentTimer::setSpamOffset)
+			.addFunction("get_spam_offset", &ComponentTimer::getSpamOffset)
 			.addFunction("add_callback", &ComponentTimer::addCallback)
 			.addOverloadedFunctions(
 				"add_spam_callback",
