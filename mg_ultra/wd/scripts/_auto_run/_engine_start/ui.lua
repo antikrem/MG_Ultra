@@ -105,6 +105,17 @@ UI.start_ui = function()
 
 	manager:add_entity(e)
 
+	local e = Entity.create(EntityUIElement)
+	e:add_component(ComponentName.create("MeterBoard"))
+	e:add_component(ComponentPosition.create(-900, 350))
+	local c = ComponentText.create("text_consolas58")
+	c:set_render_in_3D(false)
+	c:set_text("0")
+	c:set_visible(false)
+	e:add_component(c)
+
+	manager:add_entity(e)
+
 	UI.create_panes(manager)
 
 	UI.uiCreated = true
@@ -117,6 +128,8 @@ UI.show_ui = function()
 
 	UI._get_item("PowerBoard"):get_component(ComponentText):set_visible(true)
 
+	UI._get_item("MeterBoard"):get_component(ComponentText):set_visible(true)
+
 	UI.uiVisible = true
 end
 
@@ -127,6 +140,8 @@ UI.hide_ui = function()
 
 	UI._get_item("PowerBoard"):get_component(ComponentText):set_visible(false)
 
+	UI._get_item("MeterBoard"):get_component(ComponentText):set_visible(false)
+
 	UI.uiVisible = false
 end
 
@@ -135,7 +150,9 @@ UI.update_ui = function()
 
 	UI._get_item("FragmentBoard"):get_component(ComponentText):set_text("Lives: " .. tostring(Player.lives) .. "	|	" .. tostring(g_fragments) .. "/" .. tostring(g_nextFragments))
 
-	UI._get_item("PowerBoard"):get_component(ComponentText):set_text(tostring(g_power) .. "%")
+	UI._get_item("PowerBoard"):get_component(ComponentText):set_text("Power: " .. tostring(g_power) .. "%")
+
+	UI._get_item("MeterBoard"):get_component(ComponentText):set_text("Meter: " .. tostring(Player.meter))
 
 	UI.pane_update()
 end

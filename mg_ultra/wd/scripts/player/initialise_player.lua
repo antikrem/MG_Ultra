@@ -26,3 +26,7 @@ this:get_component(ComponentGraphics):set_visible(true)
 
 -- Add hitbox
 Player.add_hitbox()
+
+-- Add meter power up particle spawner and meter effecter
+Player.add_hitbox()
+Player.add_meter_effecter()

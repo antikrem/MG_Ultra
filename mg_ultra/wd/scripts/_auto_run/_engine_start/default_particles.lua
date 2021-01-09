@@ -23,3 +23,8 @@ Particles.set_max_life_deviation("death_gold_fragments_subtle", 2.5)
 Particles.set_featherness("death_gold_fragments_subtle", 0.012, 0.025)
 Particles.set_rotate_to_face("death_gold_fragments_subtle", true)
 
+Particles.add_new_type("meter_up_blue_sparks", "particle_blue_sparks")
+Particles.set_bloom_factor("meter_up_blue_sparks", 1.5)
+Particles.set_max_life_deviation("meter_up_blue_sparks", 5)
+Particles.set_featherness("meter_up_blue_sparks", 0.002, 0.004)
+Particles.set_rotate_to_face("meter_up_blue_sparks", true)

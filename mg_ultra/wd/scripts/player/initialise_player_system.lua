@@ -354,6 +354,15 @@ g_playerPowerUpdate = function()
 	g_power = math.max(0, g_power)
 end
 
+-- Creates some particles at player location
+Player.meter_up_particle_burst = function()
+	local x, y, z = EntityPool.get_player():get_component(ComponentPosition):get_position()
+	for _ in range(0, 9) do
+		local ox, oy, oz = math.sample_uniform_circle(50)
+		EntityPool.get_player():get_component(ComponentMultiEntity):get("meter"):get_component(ComponentParticle):spawn_at(x + ox, y + oy, z + oz)
+	end
+end
+
 -- Function to increment meter
 -- Will do fancy effects on meter up
 Player.add_meter = function(meter)
@@ -362,8 +371,24 @@ Player.add_meter = function(meter)
 	Player.meter = Player.meter + meter
 
 	-- Check floor division
-	if oldMeter // Player.METER_DASH_COST ~= Player.meter // Player.METER_DASH_COST then
-		Audio.play_once("player_meter_up")
+	if oldMeter // Player.METER_DASH_COST ~= Player.meter // Player.METER_DASH_COST then	
+		local e = Entity.create(EntityGeneric)
+		local s = ComponentTimer.create()
+		s:set_spam_offset(15)
+		s:add_spam_callback("Player.meter_up_particle_burst()", 4)
+		s:add_callback(15, "this:kill()")
+		e:add_component(s)
+
+		EntityPool.add_entity(e)
+
+		e = Entity.create(EntityGeneric)
+		local s = ComponentTimer.create()
+		s:add_callback(10, "Audio.play_once(\"player_meter_up\")")
+		s:add_callback(25, "this:kill()")
+		e:add_component(s)
+
+		EntityPool.add_entity(e)
+
 	end
 end
 
@@ -596,6 +621,25 @@ Player.add_hitbox = function()
 	mc:add_component(ComponentTransparency.create(0.0, 0.005))
 
 	mc:add_component(ComponentName.create("hitbox"))
+
+	this:get_component(ComponentSpawner):add_entity(mc)
+
+end
+
+-- Add meter particle spawner
+Player.add_meter_effecter = function()
+	-- Create freind magic circles
+	local mc = Entity.create(EntityGeneric)
+
+	mc:add_component(ComponentPosition.create(0, 0, -1))
+
+	mc:add_component(ComponentOffsetMaster.create(true))
+	mc:add_component(ComponentDieWithMaster.create())
+	mc:add_component(ComponentNoBoundsControl.create())
+
+	mc:add_component(ComponentParticle.create("meter_up_blue_sparks"))
+
+	mc:add_component(ComponentName.create("meter"))
 
 	this:get_component(ComponentSpawner):add_entity(mc)
 

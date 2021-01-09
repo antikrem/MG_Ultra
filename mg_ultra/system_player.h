@@ -6,6 +6,7 @@
 
 #include "component_position.h"
 #include "component_graphics.h"
+#include "component_colour_modulation.h"
 #include "component_input.h"
 #include "component_movement.h"
 #include "component_animation.h"
@@ -72,6 +73,7 @@ public:
 			newComponent1->setAnimationType(1);
 			newComponent1->setVisible(false);
 			newEnt->addComponent(newComponent1->pullForEntity());
+			newEnt->addComponent(new ComponentColourModulation({ 0.6f, 0.85f, 0.6f }, 0));
 
 			auto newComponent2 = new ComponentAnimation();
 			newComponent2->changeDefaultAnimation(1);
