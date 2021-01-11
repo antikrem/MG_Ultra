@@ -46,3 +46,13 @@ Gameplay.extend = function(frames)
 
 	EntityPool.add_entity(e)
 end
+
+-- Pauses the gameplay, i.e. the spawning of future enemies
+Gameplay.pause = function()
+	GlobalRegistar.update("cycle_progress", false)
+end
+
+-- Unauses the gameplay, i.e. the spawning of future enemies
+Gameplay.unpause = function()
+	GlobalRegistar.update("cycle_progress", true)
+end
