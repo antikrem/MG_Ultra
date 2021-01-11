@@ -332,9 +332,6 @@
     <ClInclude Include="error.h">
       <Filter>Header Files\Support</Filter>
     </ClInclude>
-    <ClInclude Include="component_text.h">
-      <Filter>Header Files\ECS\Components</Filter>
-    </ClInclude>
     <ClInclude Include="system_text.h">
       <Filter>Header Files\ECS\Systems</Filter>
     </ClInclude>
@@ -767,6 +764,9 @@
     <ClInclude Include="system_die_on_cycle.h">
       <Filter>Header Files\ECS\Systems</Filter>
     </ClInclude>
+    <ClInclude Include="component_text.h">
+      <Filter>Header Files\ECS\Components\Graphics Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="wd\shaders\base.vert">
@@ -812,9 +812,6 @@
       <Filter>Resource Files\scripts\_initialise</Filter>
     </None>
     <None Include="wd\scripts\backgrounds\initialise_background_master.lua">
-      <Filter>Resource Files\scripts\backgrounds</Filter>
-    </None>
-    <None Include="wd\scripts\backgrounds\background_master.lua">
       <Filter>Resource Files\scripts\backgrounds</Filter>
     </None>
     <None Include="wd\shaders\unified_lighting.frag">
@@ -945,6 +942,12 @@
     </None>
     <None Include="wd\scripts\_auto_run\_engine_start\gameplay.lua">
       <Filter>Resource Files\scripts\_auto_run\_engine_start</Filter>
+    </None>
+    <None Include="wd\scripts\_auto_run\_on_cycle\menu.lua">
+      <Filter>Resource Files\scripts\_auto_run\_on_cycle</Filter>
+    </None>
+    <None Include="wd\scripts\_auto_run\_on_cycle\background_master.lua">
+      <Filter>Resource Files\scripts\_auto_run\_on_cycle</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

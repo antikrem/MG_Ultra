@@ -24,7 +24,7 @@ EntityDialogue = 17
 EntityDebugCycle = 18
 EntityUIManager = 19
 EntityUIElement = 20
--- Padding
+EntityFocusedMenu = 21
 EntityPowerUp = 22
 EntityVariableTracker = 23
 EntityAnonymousSoundSource = 24

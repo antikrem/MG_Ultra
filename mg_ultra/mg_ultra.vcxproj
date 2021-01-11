@@ -425,7 +425,6 @@
     <ClInclude Include="_graphics_headers.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="wd\scripts\backgrounds\background_master.lua" />
     <None Include="wd\scripts\backgrounds\initialise_background_master.lua" />
     <None Include="wd\scripts\camera\camera.lua" />
     <None Include="wd\scripts\camera\initialise_camera.lua" />
@@ -444,6 +443,8 @@
     <None Include="wd\scripts\_auto_run\_engine_start\ui.lua" />
     <None Include="wd\scripts\_auto_run\_engine_start\weather.lua" />
     <None Include="wd\scripts\_auto_run\_engine_start\wind_burst.lua" />
+    <None Include="wd\scripts\_auto_run\_on_cycle\background_master.lua" />
+    <None Include="wd\scripts\_auto_run\_on_cycle\menu.lua" />
     <None Include="wd\scripts\_auto_run\_on_cycle\ui_update.lua" />
     <None Include="wd\scripts\_auto_run\_on_cycle\wind_burst_update.lua" />
     <None Include="wd\scripts\_auto_run\_state_change\ui_change.lua" />

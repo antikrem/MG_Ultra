@@ -27,7 +27,7 @@ enum EntityTypes {
 	ETDebugCycle,
 	UIManager,
 	UIElement,
-	__padding,
+	ETFocusedMenu,
 	ETPowerUp,
 	ETVariableTracker,
 	ETAnonymousSoundSource,
