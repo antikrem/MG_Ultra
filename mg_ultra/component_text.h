@@ -175,6 +175,11 @@ public:
 		validCache.store(false);
 	}
 
+	string getText() {
+		lock_guard<mutex>lck(textLock);
+		return this->text;
+	}
+
 	void setFont(string fontName) {
 		lock_guard<mutex>lck(textLock);
 		this->animationSet = fontName;
@@ -211,6 +216,7 @@ public:
 			.setConstructors<ComponentText()>()
 			.addFunction("set_visible", &ComponentText::setVisible)
 			.addFunction("set_text", &ComponentText::setText)
+			.addFunction("get_text", &ComponentText::getText)
 			.addFunction("set_scale", &ComponentText::setScale)
 			.addFunction("get_scale", &ComponentText::getScale)
 			.addFunction("set_font", &ComponentText::setFont)
