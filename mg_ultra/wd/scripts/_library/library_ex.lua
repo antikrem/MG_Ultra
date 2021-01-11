@@ -157,6 +157,9 @@ getGlobalRegistar():add("debug_render_hitbox", false)
 
 Debug = {}
 
+-- If set to true, bullet spawner's print their name
+Debug.bullet_spawner_debug = false
+
 g_isRenderingHitbox = false;
 
 Debug.set_render_hitbox = function(value)
@@ -217,7 +220,7 @@ function load_state(...)
 	--Handling erreoneos event parameters will be handled by the engine's event handler
 	emit_event(EventStateChange, ...)
 end
- 
+
 
 Debug.tracker_offset = 0
 

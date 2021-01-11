@@ -60,6 +60,9 @@ BulletSpawnerList = {
 	-- Takes a blank entity and initialises its
 	-- will set the success value in Flag
 	_initialise = function(blankEntity, name)
+		
+		if Debug.bullet_spawner_debug then print("BulletMaster: ", name) end
+
 		if BulletSpawnerList[name] ~= nil then
 			BulletSpawnerList[name]:initialise(blankEntity,name)
 			registar:update("bullet_spawner_initialisation_success", 1)
