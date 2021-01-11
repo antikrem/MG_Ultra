@@ -40,8 +40,13 @@ public:
 	static void registerToLua(kaguya::State& state) {
 		state["ComponentInput"].setClass(kaguya::UserdataMetatable<ComponentInput, Component>()
 			.setConstructors<ComponentInput()>()
+			.addFunction("update", &ComponentInput::update)
 			.addFunction("query_press", &ComponentInput::queryPress)
 			.addFunction("query_down", &ComponentInput::queryDown)
+			.addOverloadedFunctions(
+				"create",
+				ScriptableClass::create<ComponentInput>
+			)
 			.addStaticFunction("type", &getType<ComponentInput>)
 			.addStaticFunction("cast", &Component::castDown<ComponentInput>)
 		);
