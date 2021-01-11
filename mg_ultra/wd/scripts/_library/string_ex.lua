@@ -1,7 +1,7 @@
---extra string functionality
+-- extra string functionality
 
---pads a string with spaces until it reaches the given length
---returns new string
+-- Pads a string with spaces until it reaches the given length
+-- returns new string
 function string.pad_string(string, paddedLength, token, reverse)
 	if is_nil(token) then token = " " end
 	if is_nil(reverse) then reverse = false end
@@ -15,13 +15,19 @@ function string.pad_string(string, paddedLength, token, reverse)
 	end
 end
 
---takes a substring of a string from start to length
+-- Takes a substring of a string from start to length
 function string.sub_string(str, length)
 	return string.sub(str, 0, length)
 end
 
---combined substring and pad 
---i.e. will pad if substring is too short
+-- Combined substring and pad 
+-- i.e. will pad if substring is too short
 function string.pad_sub(str, length, token)
 	return string.sub_string(string.pad_string(str, length, token), length)
+end
+
+
+-- Replaces a string with chacter at position
+function string.replace_char(str, pos, r)
+    return str:sub(1, pos-1) .. r .. str:sub(pos+1)
 end
