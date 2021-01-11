@@ -8,6 +8,14 @@ Gameplay.HEIGHT = 1080 / 2
 Gameplay.GENERAL_WIDTH = 1440 / 2
 Gameplay.EXTEND_WIDTH = 1920 / 2
 
+-- Constants for gameplay difficulty
+Gameplay.EASY = -1
+Gameplay.HARD = 0
+Gameplay.HELL = 1
+
+-- Current difficulty of gameplay
+Gameplay.difficulty = Gameplay.HARD
+
 -- Deletes all bullets
 Gameplay.clear_bullets = function()
 	EntityPool.kill_by_type(EntityEnemyBullet)
