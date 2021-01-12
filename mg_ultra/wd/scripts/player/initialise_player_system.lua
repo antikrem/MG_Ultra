@@ -83,6 +83,9 @@ PLAYER_FRIEND_TARGET = 550
 -- Variables about health
 Player.lives = 99
 
+-- Sets godmode
+Player.godmode = false
+
 -- Players current meter
 -- A bar is 100, Maxes at 300
 Player.meter = 0
@@ -430,7 +433,7 @@ end
 
 -- Handler function when player is hit
 g_bulletPlayerCollision = function() 
-	if GlobalRegistar.get("player_alive") and not Player.inShiftDash then
+	if GlobalRegistar.get("player_alive") and not Player.inShiftDash and not Player.godmode then
 		Player.lives = Player.lives - 1
 		this:get_component(ComponentClampPosition):set_active(false)
 		Player.clearOnDeath = true
