@@ -11,14 +11,14 @@ Player = {}
 --Table used for gettings certain velocity values
 PLAYER_MAX_VELOCITY_TABLE = {
 	DEFAULT = 9.25,
-	DASH = 40,
+	DASH = 50,
 	FOCUS = 4.3
 }
 
 --Similar table for acceleration
 PLAYER_MAX_ACCELERATION_TABLE = {
 	DEFAULT = 1.75,
-	DASH = 50,
+	DASH = 55,
 	FOCUS = 0.5
 }
 
@@ -27,8 +27,8 @@ PLAYER_X_CLAMP = 960
 PLAYER_Y_CLAMP = 540
 
 -- Dash related variables
-PLAYER_DASH_LENGTH = 12
-PLAYER_DASH_COOLDOWN = 5
+PLAYER_DASH_LENGTH = 11
+PLAYER_DASH_COOLDOWN = 4
 
 -- Constants for dead player
 Player.PRE_DEAD_SCROLL = 50
