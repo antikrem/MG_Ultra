@@ -114,6 +114,15 @@ public:
 		return true;
 	}
 
+	// Prints out a string of attached componenets
+	string getComponentReport() {
+		string report = "Components Attached:";
+		for (auto& i : components) {
+			report += (string("\n") + string(i.first.name()));
+		}
+		return report;
+	}
+
 	// A general update to set entity flag
 	void entityUpdate() {
 		bool tempFlag = true;
@@ -172,6 +181,7 @@ public:
 			.setConstructors<Entity(int)>()
 			.addFunction("getComponent", &Entity::l_getComponent)
 			.addFunction("addComponent", &Entity::l_addComponent)
+			.addFunction("report_components", &Entity::getComponentReport)
 			.addFunction("kill", &Entity::killEntity)
 			.addFunction("is_alive", &Entity::getFlag)
 			.addStaticFunction("create", &Entity::createEntity)
