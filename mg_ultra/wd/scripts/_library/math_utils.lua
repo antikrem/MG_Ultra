@@ -150,6 +150,11 @@ function math.solve_quadratic(a, b, c)
 	return (-b + d) / (2 * a),  (-b - d) / (2 * a)
 end
 
+-- Given an target change of acceleration
+-- Returns distance to execute
+function solve_distance_on_acceleration(acceleration, time)
+	return -acceleration * time / 2 + acceleration * time;
+end
 -- Given two points, inclusivly places n number of points
 function math.distribute_between_points(ax, ay, bx, by, count)
 	local points = {}
