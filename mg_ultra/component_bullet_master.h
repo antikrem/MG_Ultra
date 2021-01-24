@@ -21,7 +21,7 @@ private:
 
 public:
 	ComponentBulletMaster() {
-
+		valid = false;
 	}
 
 	ComponentBulletMaster(string bulletMasterName) {
@@ -75,13 +75,20 @@ public:
 		state["ComponentBulletMaster"].setClass(kaguya::UserdataMetatable<ComponentBulletMaster, Component>()
 			.setConstructors<ComponentBulletMaster()>()
 			.addFunction("get_name", &ComponentBulletMaster::getBulletMasterName)
-			.addStaticFunction("generate", ScriptableClass::create<ComponentBulletMaster, string, int, string>)
+			.addOverloadedFunctions(
+				"generate",
+				&ScriptableClass::create<ComponentBulletMaster, string, int, string>,
+				&ScriptableClass::create<ComponentBulletMaster>
+			)
 			.addStaticFunction("type", &getType<ComponentBulletMaster>)
 			.addStaticFunction("cast", &Component::castDown<ComponentBulletMaster>)
 		);
 		//Additionally, add this extra function for a templated constructor
 		state.dostring(
 			"function ComponentBulletMaster.create(name, startingTick, ...) \n"
+			"	if is_nil(name) then"
+			"		return ComponentBulletMaster.generate() \n"
+			"	end"
 			"	if is_nil(startingTick) then startingTick = 0 end \n"
 			"	first = true \n"
 			"	pack = \"\" \n"
@@ -96,6 +103,7 @@ public:
 			"	end \n"
 			"	return ComponentBulletMaster.generate(name, startingTick, pack) \n"
 			"end"
+
 		);
 	}
 };
