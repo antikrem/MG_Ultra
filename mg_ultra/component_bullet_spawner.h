@@ -39,6 +39,16 @@ public:
 		cycle++;
 	}
 
+	void reset() {
+		lastActiveScript = -1;
+		this->cycle = 0;
+	}
+
+	void setCycle(int cycle) {
+		lastActiveScript = -1;
+		this->cycle = cycle;
+	}
+
 	int getLastActiceScript() {
 		return lastActiveScript;
 	}
@@ -59,6 +69,8 @@ public:
 		state["ComponentBulletSpawner"].setClass(kaguya::UserdataMetatable<ComponentBulletSpawner, Component>()
 			.setConstructors<ComponentBulletSpawner()>()
 			.addFunction("setLastActive", &ComponentBulletSpawner::setLastActiceScript)
+			.addFunction("reset", &ComponentBulletSpawner::reset)
+			.addFunction("set_cycle", &ComponentBulletSpawner::setCycle)
 			.addOverloadedFunctions(
 				"create",
 				ScriptableClass::create<ComponentBulletSpawner, string>
