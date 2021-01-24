@@ -55,6 +55,17 @@ public:
 		this->valid = valid;
 	}
 
+	// Set to play this bullet master
+	// Does not check if a previous bullet spawners
+	// Are deleted
+	string resetTo(string name) {
+		bulletMasterName = name;
+		initialised = false;
+		currentTick = -1;
+
+		valid = true;
+	}
+
 	string getBulletMasterName() {
 		return bulletMasterName;
 	}
@@ -75,6 +86,7 @@ public:
 		state["ComponentBulletMaster"].setClass(kaguya::UserdataMetatable<ComponentBulletMaster, Component>()
 			.setConstructors<ComponentBulletMaster()>()
 			.addFunction("get_name", &ComponentBulletMaster::getBulletMasterName)
+			.addFunction("reset_to", &ComponentBulletMaster::resetTo)
 			.addOverloadedFunctions(
 				"generate",
 				&ScriptableClass::create<ComponentBulletMaster, string, int, string>,
