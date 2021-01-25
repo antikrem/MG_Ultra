@@ -87,11 +87,11 @@ public:
 		unsigned int count = internalEntities.size();
 		erase_sequential_if(internalEntities, [](shared_ptr<Entity> &ent) { return !ent->getFlag(); });
 		if (count != internalEntities.size()) {
-			erase_associative_if(internalEntities, [](shared_ptr<Entity> &ent) { return !ent->getFlag(); });
+			erase_associative_if(namedLookup, [](pair<const string, shared_ptr<Entity>> &p) { return !p.second->getFlag(); });
 		}
 	}
 
-	// Counts the number of children
+	// Counts the number of children and number with names
 	tuple<int, int> countChildren() {
 		unique_lock<mutex> lck(lock);
 		return make_tuple(internalEntities.size(), namedLookup.size());
