@@ -36,11 +36,12 @@ public:
 			return;
 		}
 
-		if (!bm->isInitialised() 
+		if (!bm->isInitialised()
 				&& (bm->incrementAndGetCurrentTick() >= bm->getStartingTick())) {
 			//need to check this entity has a component_multi_ent
 			if (!me) {
 				bm->setValid(false);
+				err::logMessage("WARNING: Bullet Master attached to entity without a Component Multientity: " + bm->getBulletMasterName());
 				return;
 			}
 
@@ -82,6 +83,7 @@ public:
 				}
 			}
 			else {
+				err::logMessage("WARNING: Bullet Master failed an initialiser script: " + bm->getBulletMasterName());
 				bm->setValid(false);
 			}
 
