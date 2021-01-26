@@ -433,6 +433,7 @@
     <None Include="wd\scripts\player\player.lua" />
     <None Include="wd\scripts\profiler\initialise_profiling.lua" />
     <None Include="wd\scripts\profiler\profiler.lua" />
+    <None Include="wd\scripts\_auto_run\_engine_start\boss.lua" />
     <None Include="wd\scripts\_auto_run\_engine_start\bullet_spawners.lua" />
     <None Include="wd\scripts\_auto_run\_engine_start\default_collision.lua" />
     <None Include="wd\scripts\_auto_run\_engine_start\default_particles.lua" />
@@ -444,6 +445,7 @@
     <None Include="wd\scripts\_auto_run\_engine_start\weather.lua" />
     <None Include="wd\scripts\_auto_run\_engine_start\wind_burst.lua" />
     <None Include="wd\scripts\_auto_run\_on_cycle\background_master.lua" />
+    <None Include="wd\scripts\_auto_run\_on_cycle\boss_update.lua" />
     <None Include="wd\scripts\_auto_run\_on_cycle\menu.lua" />
     <None Include="wd\scripts\_auto_run\_on_cycle\ui_update.lua" />
     <None Include="wd\scripts\_auto_run\_on_cycle\wind_burst_update.lua" />

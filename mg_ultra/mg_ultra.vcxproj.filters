@@ -949,6 +949,12 @@
     <None Include="wd\scripts\_auto_run\_on_cycle\background_master.lua">
       <Filter>Resource Files\scripts\_auto_run\_on_cycle</Filter>
     </None>
+    <None Include="wd\scripts\_auto_run\_engine_start\boss.lua">
+      <Filter>Resource Files\scripts\_auto_run\_engine_start</Filter>
+    </None>
+    <None Include="wd\scripts\_auto_run\_on_cycle\boss_update.lua">
+      <Filter>Resource Files\scripts\_auto_run\_on_cycle</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="wd\log.txt">
