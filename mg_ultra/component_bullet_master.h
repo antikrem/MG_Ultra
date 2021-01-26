@@ -58,7 +58,7 @@ public:
 	// Set to play this bullet master
 	// Does not check if a previous bullet spawners
 	// Are deleted
-	string resetTo(string name) {
+	void resetTo(string name) {
 		bulletMasterName = name;
 		initialised = false;
 		currentTick = -1;
